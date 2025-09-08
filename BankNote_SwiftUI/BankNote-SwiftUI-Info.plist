@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Cairo-Black.ttf</string>
+		<string>Cairo-Bold.ttf</string>
+		<string>Cairo-ExtraBold.ttf</string>
+		<string>Cairo-ExtraLight.ttf</string>
+		<string>Cairo-Light.ttf</string>
+		<string>Cairo-Medium.ttf</string>
+		<string>Cairo-Regular.ttf</string>
+		<string>Cairo-SemiBold.ttf</string>
+		<string>NotoSansArabic-Black.ttf</string>
+		<string>NotoSansArabic-Bold.ttf</string>
+		<string>NotoSansArabic-ExtraBold.ttf</string>
+		<string>NotoSansArabic-ExtraLight.ttf</string>
+		<string>NotoSansArabic-Light.ttf</string>
+		<string>NotoSansArabic-Medium.ttf</string>
+		<string>NotoSansArabic-Regular.ttf</string>
+		<string>NotoSansArabic-SemiBold.ttf</string>
+		<string>NotoSansArabic-Thin.ttf</string>
+		<string>Inter_28pt-Black.ttf</string>
+		<string>Inter_28pt-Bold.ttf</string>
+		<string>Inter_28pt-ExtraBold.ttf</string>
+		<string>Inter_28pt-ExtraLight.ttf</string>
+		<string>Inter_28pt-Light.ttf</string>
+		<string>Inter_28pt-Medium.ttf</string>
+		<string>Inter_28pt-Regular.ttf</string>
+		<string>Inter_28pt-SemiBold.ttf</string>
+		<string>Inter_28pt-Thin.ttf</string>
+	</array>
+</dict>
+</plist>

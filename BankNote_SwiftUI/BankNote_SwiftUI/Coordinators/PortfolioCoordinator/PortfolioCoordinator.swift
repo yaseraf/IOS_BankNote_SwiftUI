@@ -20,7 +20,7 @@ class PortfolioCoordinator:  ObservableObject {
 
     func start() {
         self.navigationController.viewControllers = []
-//        openPortfolioScene()
+        openPortfolioScene()
     }
 
     func restart() {
@@ -29,12 +29,12 @@ class PortfolioCoordinator:  ObservableObject {
 }
 extension PortfolioCoordinator:PortfolioCoordinatorProtocol{
 
-//    func openPortfolioScene() {
-//        let viewModel = PortfolioViewModel(coordinator: self)
-//        let view = PortfolioScene(viewModel: viewModel)
-//        let viewWithCoordinator = view.withThemeEnvironment
-//        let viewController = UIHostingController(rootView: viewWithCoordinator)
-//        self.navigationController.pushViewController(viewController, animated: true)
-//    }
+    func openPortfolioScene() {
+        let viewModel = PortfolioViewModel(coordinator: self)
+        let view = PortfolioScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
 
 }

@@ -145,42 +145,42 @@ enum PasswordValidationType{
         }
     }
 }
-enum HomeTabBarItem{
-    case pricing
+enum HomeTabBarItem: CaseIterable{
+    case home
     case portfolio
+    case trade
     case orders
-    case favourite
-    case menu
+    case settings
 
     var title:String {
         get{
             switch self {
-            case .pricing:
-                "pricing".localized
+            case .home:
+                "home".localized
             case .portfolio:
                 "portfolio".localized
+            case .trade:
+                "trade".localized
             case .orders:
                 "orders".localized
-            case .favourite:
-                "favourite".localized
-            case .menu:
-                "menu".localized
+            case .settings:
+                "settings".localized
             }
         }
     }
     var iconName:String {
         get{
             switch self {
-            case .pricing:
-                "ic_pricing".localized
+            case .home:
+                "ic_home".localized
             case .portfolio:
                 "ic_portfolio".localized
+            case .trade:
+                "ic_trade".localized
             case .orders:
                 "ic_orders".localized
-            case .favourite:
-                "ic_favorite".localized
-            case .menu:
-                "ic_menu".localized
+            case .settings:
+                "ic_settings".localized
             }
 
         }

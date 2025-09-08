@@ -49,8 +49,6 @@ struct BaseScene <Content:View> :View{
             }
         }
     }
-    
-    
 
     private var gradientBgView:some View {
         if AppUtility.shared.isDarkTheme{

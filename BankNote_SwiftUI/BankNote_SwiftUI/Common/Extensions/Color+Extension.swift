@@ -55,6 +55,7 @@ extension Color {
 //-------------------------------------------------------------------------------
     
 // MARK: LIGHT
+  private static let colorPrimary_9C4EF7: Color = Color.init(hex: "#9C4EF7")
   private static let colorTextPrimaryLight: Color = Color.init(hex: "#24180E")
   private static let colorPrimaryLight: Color = Color.init(hex: "#374FA3")
   private static let colorBorderLight: Color = Color.init(hex: "#F0EEED")
@@ -182,7 +183,8 @@ extension Color {
     
     static var colorPrimary: Color {
         get {
-            AppUtility.shared.isDarkTheme ? colorPrimaryDark : colorPrimaryLight
+//            AppUtility.shared.isDarkTheme ? colorPrimaryDark : colorPrimaryLight
+            AppUtility.shared.isDarkTheme ? colorPrimary_9C4EF7 : colorPrimary_9C4EF7
         }
     }
     

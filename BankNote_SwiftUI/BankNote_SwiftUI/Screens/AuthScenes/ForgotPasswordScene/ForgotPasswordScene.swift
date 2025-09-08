@@ -16,11 +16,17 @@ struct ForgotPasswordScene: BaseSceneType {
     
     var body: some View {
         BaseScene(contentView: {
-            BaseContentView(withScroll:false, content: {
+            BaseContentView(withScroll:false, backgroundType: .gradient, content: {
                 ForgotPasswordContentView(forgotType: $viewModel.forgotType, nin: "", qid: "", onBack: {
                     viewModel.onBack()
                 }, onSubmit: {
                     viewModel.onSubmit()
+                }, onLoginTap: {
+                    
+                }, onCountryPickerTap: {
+                    viewModel.openCountryPickerScene()
+                }, onResendLinkTap: {
+                    
                 })
             })
         })

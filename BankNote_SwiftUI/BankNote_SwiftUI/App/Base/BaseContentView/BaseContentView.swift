@@ -206,6 +206,17 @@ struct BaseContentView <Content: View>: View  {
         }
     }
     
+    private var gradientBgView: some View {
+        VStack {
+             Image("loginBackground")
+                .resizable()
+                .scaledToFit()
+            
+            Spacer()
+        }
+        .background(Color(hex: "#EBEBEB"))
+    }
+    
     private func recordLastActiveTime() {
         lastActiveTime = Date()
         UserDefaultController().hasCheckedInactivity = false
@@ -225,11 +236,11 @@ struct BaseContentView <Content: View>: View  {
         }
     }
 
-    private var gradientBgView:some View {
-        let imageName = AppUtility.shared.isDarkTheme ? "babground_gradiant_dark" : "babground_gradiant_light"
-      return Image(imageName)
-            .resizable()
-    }
+//    private var gradientBgView:some View {
+//        let imageName = AppUtility.shared.isDarkTheme ? "babground_gradiant_dark" : "babground_gradiant_light"
+//      return Image(imageName)
+//            .resizable()
+//    }
 
     private var gradientPreviewOrderView:some View {
         ZStack(alignment: .top){

@@ -16,9 +16,13 @@ struct LandingScene: BaseSceneType {
     
     var body: some View {
         BaseScene(contentView: {
-            BaseContentView(withScroll:false, paddingValue: 0, content: {
+            BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 LandingContentView(onLanguageSelected: {
                     viewModel.openLoginScene()
+                }, onForgotPasswordTap: {
+                    viewModel.openForgotPasswordScene()
+                }, onLoginTap: {
+                    viewModel.openHomeScene()
                 })
             })
         })

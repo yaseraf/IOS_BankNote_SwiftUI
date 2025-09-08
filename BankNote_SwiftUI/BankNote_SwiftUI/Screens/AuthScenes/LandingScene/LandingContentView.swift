@@ -15,26 +15,36 @@ struct LandingContentView: View {
     }
     
     @State var selectedLanguage: languages = .english
+    
+    @State var username: String = ""
+    @State var password:String = ""
+    @State var isRememberMe:Bool = false
+    @State var isPasswordHidden:Bool = true
+    
     var onLanguageSelected: (() -> Void)
+    var onForgotPasswordTap:()->Void
+    var onLoginTap:()->Void
 
     var body: some View {
         ZStack {
-            VStack(alignment: .center) {
-                                
-                headerView
+            VStack(spacing: 0) {
+                logoView
                 
-                chooseLanguageView
+                fieldsView
+                    .padding(.bottom, 24)
+
+                
+                loginButtonView
+                    .padding(.bottom, 24)
+                
+                signupView
                 
                 Spacer()
-                
-               contactInformationView
-
-                versionNumberView
             }
-            .frame(maxWidth: .infinity)
-
+            .padding(.top, 24)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .padding()
+        .ignoresSafeArea()
         .onAppear {
             if UserDefaultController().appLanguage == "ar" {
                 selectedLanguage = .arabic
@@ -44,144 +54,123 @@ struct LandingContentView: View {
         }
     }
     
-    @ViewBuilder
-    private var headerView: some View {
-        Image("ic_logo")
-            .resizable()
-            .scaledToFit()
-            .padding(.top, 60)
-        
-        VStack(spacing: 10) {
-            Text("powerful_trading_platform".localized)
-                .foregroundStyle(Color.colorTextPrimary)
-                .font(.apply(.bold, size: 20))
-            Text("enhance_your_trading_experience".localized)
-                .foregroundStyle(Color.colorTextPrimary)
-                .font(.apply(.bold, size: 20))
+    private var logoView: some View {
+        VStack(spacing: 0) {
+            Image("ic_logo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 225, maxHeight: 225)
+            
+            Text("bank_note".localized)
+                .textCase(.uppercase)
+                .font(.cairoFont(.extraBold, size: 40))
+                .padding(.bottom, 60)
         }
-        
-        Spacer()
     }
     
-    @ViewBuilder
-    private var chooseLanguageView: some View {
-        VStack(alignment: .leading) {
-            Text("choose_the_application_language".localized)
-                .foregroundStyle(Color.colorTextPrimary)
-                .font(.apply(.bold, size: 14))
+    private var fieldsView: some View {
+        var forgetPasswordAttribute: AttributedString {
+            var str = AttributedString("\("forgot_password".localized)?")
+            str.underlineStyle = .single
+            return str
+        }
+        return VStack {
+            VStack(alignment: .leading) {
+                TextField("enter_your_user_name".localized, text: $username)
+                    .font(.cairoFont(.semiBold, size: 12))
+                    .foregroundStyle(Color(hex: "#1C1C1C"))
+                    .padding(.horizontal, 16)
+                    .frame(height: 56)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                    .padding(.bottom, 8)
 
-            HStack(alignment: .center) {
-                Text("arabic_language".localized)
-                    .font(.apply(size: 16))
-                    .foregroundStyle(selectedLanguage == .arabic ? Color.white : Color.colorTextPrimary)
-                    .padding(.horizontal, 20.25)
-                    .padding(.vertical, 6)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 36)
-                    .background(
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8).fill(selectedLanguage == .arabic ? Color.colorPrimary : .clear)
-                            
-                            RoundedRectangle(cornerRadius: 8).stroke(lineWidth: 1).fill(selectedLanguage == .arabic ? Color.colorPrimary : Color.colorBorder)
-                        }
-                    )
-                    .onTapGesture {
-                        AppUtility.shared.updateAppLanguage(language: .arabic)
-//                        SceneDelegate.getAppCoordinator()?.restart()
-                        selectedLanguage = .arabic
-                        onLanguageSelected()
+            }
+            
+            VStack(alignment: .leading) {
+                HStack {
+                    if isPasswordHidden {
+                        SecureField("password".localized, text: $password)
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(Color(hex: "#1C1C1C"))
+
+                    } else {
+                        TextField("password".localized, text: $password)
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(Color(hex: "#1C1C1C"))
+
                     }
-
-
-                Spacer()
-                
-                Text("English Language")
-//                    .font(.apply(size: 16))
-                    .foregroundStyle(selectedLanguage == .english ? Color.white : Color.colorTextPrimary)
-                    .padding(.horizontal, 20.25)
-                    .padding(.vertical, 6)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 36)
-                    .background(
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8).fill(selectedLanguage == .english ? Color.colorPrimary : .clear)
-                            
-                            RoundedRectangle(cornerRadius: 8).stroke(lineWidth: 1).fill(selectedLanguage == .english ? Color.colorPrimary : Color.colorBorder)
+                    
+                    Image(isPasswordHidden ? "ic_eyeInvisible" : "ic_eyeVisible")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .onTapGesture {
+                            isPasswordHidden.toggle()
                         }
-                    )
-                    .onTapGesture {
-                        AppUtility.shared.updateAppLanguage(language: .english)
-//                        SceneDelegate.getAppCoordinator()?.restart()
-                        selectedLanguage = .english
-                        onLanguageSelected()
-                    }
-
+                        
+                }
+                .padding(.horizontal, 16)
+                .frame(height: 56)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                .padding(.bottom, 8)
+                
+                HStack {
+                    
+                    Spacer()
+                    
+                    Text("\(forgetPasswordAttribute)")
+                        .font(.cairoFont(.semiBold, size: 12))
+                        .foregroundStyle(Color.colorPrimary)
+                        .onTapGesture {
+                            onForgotPasswordTap()
+                        }
+                }
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 36)
 
+        }
+        .padding(.horizontal, 17.5)
+
+    }
+    
+    private var loginButtonView: some View {
+        Button {
+            onLoginTap()
+        } label: {
+            Text("login".localized)
+                .font(.cairoFont(.semiBold, size: 14))
+                .foregroundStyle(.white)
+                .frame(minWidth: 169, minHeight: 51)
+                .background(RoundedRectangle(cornerRadius: 99).fill(Color.colorPrimary))
         }
 
     }
     
-    @ViewBuilder
-    private var contactInformationView: some View {
-        VStack(alignment: .leading, spacing:0) {
-            Text("contact_us_for_further_assistance".localized)
-                .foregroundStyle(Color.colorTextPrimary)
-                .font(.apply(.bold, size: 14))
-            
-            Divider()
-                .padding(.vertical, 10)
-            
-            HStack {
-                Image("ic_phone")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-                
-                Text("(+974)44255273")
-                    .foregroundStyle(Color.colorTextPrimary)
-                    .font(.apply(size: 14))
-
-            }
-            
-            HStack {
-                Image("ic_mail")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-                
-                Text(verbatim: "info@qsc.qa")
-                    .font(.apply(size: 14))
-                    .foregroundStyle(Color.colorTextPrimary)
-
-            }
+    private var signupView: some View {
+        var signUpAttribute: AttributedString {
+            var str = AttributedString("sign_up".localized)
+            str.underlineStyle = .single
+            return str
         }
-        .padding(16)
-        .frame(maxWidth: .infinity)
-        .frame(height: 134)
-        .background(RoundedRectangle(cornerRadius: 8).stroke(lineWidth: 1).fill(Color.colorBorder))
-    }
-    
-    @ViewBuilder
-    private var versionNumberView: some View {
-        HStack {
-            Text("application_version_number".localized)
-                .foregroundStyle(Color.colorTextPrimary)
-                .font(.apply(.bold, size: 14))
-            
-            Spacer()
-            
-            Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")")
-                .foregroundStyle(Color.colorTextPrimary)
-                .font(.apply(.bold, size: 14))
 
+        return HStack {
+            Text("\("you_dont_have_an_account".localized)?")
+                .font(.cairoFont(.semiBold, size:  12))
+            
+            
+            Text(signUpAttribute)
+                .font(.interFont(.regular, size:  12))
+                .foregroundStyle(Color(hex: "#629AF9"))
 
         }
-        .padding(.horizontal, 16)
-        .frame(maxWidth: .infinity)
-        .frame(height: 56)
-        .background(RoundedRectangle(cornerRadius: 16).stroke(lineWidth: 1).fill(Color.colorBorder))
     }
+}
+
+#Preview {
+    LandingContentView(selectedLanguage: .english, username: "", password: "", isRememberMe: false, isPasswordHidden: false, onLanguageSelected: {
+        
+    }, onForgotPasswordTap: {
+        
+    }, onLoginTap: {
+        
+    })
 }

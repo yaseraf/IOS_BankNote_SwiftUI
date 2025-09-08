@@ -10,5 +10,5 @@ import Foundation
 import FlagAndCountryCode
 
 protocol HomeCoordinatorProtocol: AnyObject,Coordinator {
-
+    func openHomeScene()
 }

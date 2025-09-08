@@ -13,142 +13,165 @@ struct ForgotPasswordContentView: View {
     var forgotType:Binding<ForgotDataEnum>
     @State var nin:String = ""
     @State var qid:String = ""
+    @State var username: String = ""
     var onBack:()->Void
     var onSubmit:()->Void
+    var onLoginTap:()->Void
+    var onCountryPickerTap:()->Void
+    var onResendLinkTap:()->Void
+    
     
     var body: some View {
-        VStack {
-                        
-            headerView
+        ZStack {
+            VStack {
+                            
+                headerView
+                
+                logoView
+                
+                titleView
+                
+                fieldView
+                
+                bottomView
+                
+                Spacer()
+            }
+        }
+    }
+    
+    private var logoView: some View {
+        VStack(spacing: 0) {
+            Image("ic_logo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 225, maxHeight: 225)
             
-            Spacer().frame(height: 20)
-            
-            inputFieldsView
-            
-            Spacer().frame(height: 20)
-            
-            contactInformationView
-            
-            Spacer()
-            
-            submitView
-            
-            Spacer().frame(height: 20)
+            Text("bank_note".localized)
+                .textCase(.uppercase)
+                .font(.cairoFont(.extraBold, size: 40))
         }
     }
     
     private var headerView: some View {
         HStack {
-            Circle()
-                .frame(width: 40, height: 40)
-                .foregroundColor(Color(hex: "#EDEEF6"))
-                .overlay {
-                    Image("ic_back")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                        .scaleEffect(AppUtility.shared.isRTL ? -1 : 1)
-                }
+            Image("ic_close")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 38, height: 38)
                 .onTapGesture {
                     onBack()
                 }
-            
             Spacer()
-            
-            Text(forgotType.wrappedValue == .forgotPassword ? "forgot_password".localized : forgotType.wrappedValue == .forgotName ? "forgot_name".localized : forgotType.wrappedValue == .forgotPin ? "forgot_pin".localized : "")
-                .font(.apply(.medium, size: 16))
-                .foregroundStyle(Color.colorTextPrimary)
-            
-            Spacer()
-            
-            Circle()
-                .frame(width: 40, height: 40)
-                .opacity(0)
-            
         }
+        .padding(.horizontal, 18)
     }
     
-    private var inputFieldsView: some View {
+    private var titleView: some View {
         VStack {
-            VStack(alignment: .leading) {
-                Text("nin".localized)
-                    .font(.apply(.bold, size: 14))
-                    .foregroundStyle(Color.colorTextPrimary)
-                
-                TextField("type_nin".localized, text: $nin)
-                    .font(.apply(size: 14))
-                    .padding(.horizontal, 16)
-                    .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 8).stroke(lineWidth: 1).fill(Color.colorBorder))
-                    .padding(.bottom, 8)
+            Text("\("forgot_password".localized)?")
+                .font(.cairoFont(.semiBold, size: 18))
+            Text("please_enter_your_phone_number_and_well_send_you_a_link_to_change_password")
+                .font(.cairoFont(.light, size: 12))
+                .padding(.horizontal, 77)
+                .multilineTextAlignment(.center)
+            
+        }
+    }
+    
+    private var fieldView: some View {
+        HStack(spacing: 8) {
+            Button(action: {
+                onCountryPickerTap()
+            }, label: {
+                HStack {
+                    Text("🇪🇬 +20")
+                        .font(.cairoFont(.semiBold, size: 12))
+                    Image("ic_downArrow")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12, height: 6)
+                }
+                .foregroundStyle(Color(hex: "#1C1C1C"))
+                .padding(.horizontal, 16)
+                .frame(height: 56)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                .padding(.bottom, 24)
+            })
+            
+            TextField("enter_your_user_name".localized, text: $username)
+                .font(.cairoFont(.semiBold, size: 12))
+                .foregroundStyle(Color(hex: "#1C1C1C"))
+                .padding(.horizontal, 16)
+                .frame(height: 56)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                .padding(.bottom, 24)
+
+            
+
+        }
+        .padding(.horizontal, 18)
+
+    }
+    
+    private var bottomView: some View {
+        var resentAttribute: AttributedString {
+            var str = AttributedString("\("resend_link".localized) in 02:41")
+            str.underlineStyle = .single
+            return str
+        }
+        
+        var continueWithPhoneNumberAttribute: AttributedString {
+            var str = AttributedString("continue_with_phone_number".localized)
+            str.underlineStyle = .single
+            return str
+        }
+        
+        return VStack {
+            Button {
+                onLoginTap()
+            } label: {
+                Text("continue".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+                    .foregroundStyle(.white)
+                    .frame(minWidth: 357, minHeight: 51)
+                    .background(RoundedRectangle(cornerRadius: 99).fill(Color.colorPrimary))
             }
             
-            VStack(alignment: .leading) {
-                Text("qid".localized)
-                    .font(.apply(.bold, size: 14))
-                    .foregroundStyle(Color.colorTextPrimary)
-                
-                TextField("type_your_national_identity_number".localized, text: $qid)
-                    .font(.apply(size: 14))
-                    .padding(.horizontal, 16)
-                    .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 8).stroke(lineWidth: 1).fill(Color.colorBorder))
-                    .padding(.bottom, 8)
+            Spacer().frame(height: 24)
+            
+            Button {
+                onLoginTap()
+            } label: {
+                Text(resentAttribute)
+                    .font(.cairoFont(.semiBold, size: 14))
+                    .foregroundStyle(Color(hex: "#828282"))
+            }
+            
+            Spacer().frame(height: 34)
+            
+            Button {
+                onLoginTap()
+            } label: {
+                Text(continueWithPhoneNumberAttribute)
+                    .font(.cairoFont(.semiBold, size: 14))
+                    .foregroundStyle(Color(hex: "#629AF9"))
             }
 
         }
     }
-    
-    private var contactInformationView: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("contact_us_for_further_assistance".localized)
-                .foregroundStyle(Color.colorTextPrimary)
-                .font(.apply(.medium, size: 14))
+}
 
-            Divider()
-                .padding(.vertical, 10)
-            
-            HStack {
-                Image("ic_phone")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-                
-                Text("(+974)44255273")
-                    .foregroundStyle(Color.colorTextPrimary)
-                    .font(.apply(size: 14))
-
-            }
-            
-            HStack {
-                Image("ic_mail")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-                
-                Text(verbatim: "info@qsc.qa")
-                    .font(.apply(size: 14))
-                    .foregroundStyle(Color.colorTextPrimary)
-
-            }
-        }
-        .padding(16)
-        .frame(maxWidth: .infinity)
-        .frame(height: 134)
-        .background(RoundedRectangle(cornerRadius: 8).stroke(lineWidth: 1).fill(Color.colorBorder))
-    }
-    
-    private var submitView: some View {
-        Text("submit".localized)
-            .font(.apply(.medium, size: 18))
-            .foregroundStyle(.white)
-            .frame(height: 48)
-            .frame(maxWidth: .infinity)
-            .foregroundStyle(.white)
-            .background(RoundedRectangle(cornerRadius: 16).fill(Color.colorPrimary).opacity(nin.isEmpty == false && qid.isEmpty == false ? 1 : 0.5))
-            .padding(.horizontal, 20)
-            .onTapGesture {
-                onSubmit()
-            }
-    }
+#Preview {
+    ForgotPasswordContentView(forgotType: .constant(.forgotPassword), nin: "", qid: "", username: "", onBack: {
+        
+    }, onSubmit: {
+        
+    }, onLoginTap: {
+        
+    }, onCountryPickerTap: {
+        
+    }, onResendLinkTap: {
+        
+    })
 }

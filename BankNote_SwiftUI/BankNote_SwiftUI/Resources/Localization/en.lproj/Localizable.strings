@@ -6,6 +6,30 @@
   Copyright © 2024 FIT. All rights reserved.
 */
 
+// MARK: Login Screen
+"bank_note" = "Bank Note";
+"enter_your_user_name" = "Enter Your User Name";
+"enter_your_password" = "Enter Your Password";
+"forgot_password" = "Forgot Password";
+"login" = "Login";
+"you_dont_have_an_account" = "You Don't Have An Account";
+"sign_up" = "Sign Up";
+
+// MARK: Bottom Bar
+"home" = "Home";
+"portfolio" = "Portfolio";
+"trade" = "Trade";
+"orders" = "Orders";
+"settings" = "Settings";
+
+// MARK: Home Screen
+"total_investment_value" = "Total Investment Value";
+"top_up" = "TopUp";
+"withdrawal" = "Withdrawal";
+"view_history" = "View History";
+"my_portfolio" = "My Portfolio";
+"view_all" = "View All";
+"egp" = "EGP";
 
 
 // MARK: Countries

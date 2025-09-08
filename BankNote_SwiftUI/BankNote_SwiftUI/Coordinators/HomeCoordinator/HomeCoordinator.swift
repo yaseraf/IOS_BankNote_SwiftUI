@@ -20,7 +20,7 @@ class HomeCoordinator:  ObservableObject {
 
     func start() {
         self.navigationController.viewControllers = []
-//        openHomeScene()
+        openHomeScene()
     }
 
     func restart() {
@@ -96,5 +96,11 @@ class HomeCoordinator:  ObservableObject {
 }
 extension HomeCoordinator:HomeCoordinatorProtocol{
 
-
+    func openHomeScene() {
+        let viewModel = HomeViewModel(coordinator: self)
+        let view = HomeScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
 }

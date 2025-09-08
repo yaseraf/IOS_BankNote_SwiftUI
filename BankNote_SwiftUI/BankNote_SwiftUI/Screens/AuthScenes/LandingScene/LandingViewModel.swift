@@ -25,4 +25,12 @@ class LandingViewModel:ObservableObject {
 //        coordinator.openLoginScene()
         SceneDelegate.getAppCoordinator()?.startFlow(startWith: .login)
     }
+    
+    func openForgotPasswordScene() {
+        coordinator.openForgotPasswordScene(forgotType: .forgotPassword)
+    }
+    
+    func openHomeScene() {
+        SceneDelegate.getAppCoordinator()?.showHomeFlow()
+    }
 }

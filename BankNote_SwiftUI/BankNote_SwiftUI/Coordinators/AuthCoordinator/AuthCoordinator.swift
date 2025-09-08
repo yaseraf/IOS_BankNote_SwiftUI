@@ -68,6 +68,16 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func openCountryPickerScene() {
+        let viewModel = CountryPickerViewModel(coordinator: self)
+        let view = CountryPickerScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        viewController.view.backgroundColor = .clear
+        viewController.modalPresentationStyle = .pageSheet
+        self.navigationController.topViewController?.present(viewController, animated: true)
+    }
+    
     func openVerifyOtpScene(username: String, password: String) {
         let useCase = LoginUseCase()
         let viewModel = VerifyOtpPopupViewModel(coordinator: self, useCase: useCase, username: username, password: password)

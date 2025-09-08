@@ -138,8 +138,10 @@ struct LoginContentView: View {
                     }
                     
                     Image(isPasswordHidden ? "ic_eyeInvisible" : "ic_eyeVisible")
+                        .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
+                        .foregroundStyle(Color(hex: "#828282"))
                         .frame(width: 20, height: 20)
                         .onTapGesture {
                             isPasswordHidden.toggle()

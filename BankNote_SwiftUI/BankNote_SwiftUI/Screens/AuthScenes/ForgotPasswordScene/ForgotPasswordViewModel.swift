@@ -22,6 +22,10 @@ class ForgotPasswordViewModel:ObservableObject {
     }
     
     func onSubmit() {
-        coordinator.openConfirmOtpScene(forgotType: forgotType)
+//        coordinator.openConfirmOtpScene(forgotType: forgotType)
+    }
+    
+    func openCountryPickerScene() {
+        coordinator.openCountryPickerScene()
     }
 }

@@ -15,6 +15,46 @@
 "you_dont_have_an_account" = "ليس لديك حساب";
 "sign_up" = "اشتراك";
 
+// MARK: Forgot Password Screen
+"please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "الرجاء إدخال رقم هاتفك وسنرسل لك رابطًا لتغيير كلمة المرور";
+"resend_link" = "إعادة إرسال الرابط";
+"continue_with_email" = "المتابعة باستخدام البريد الإلكتروني";
+"continue_with_phone_number" = "المتابعة باستخدام رقم الهاتف";
+
+// MARK: Payment Method Screen
+"payment_method" = "طريقة الدفع";
+"debit_card" = "بطاقة خصم";
+"credit_card" = "بطاقة ائتمان";
+"fawry" = "فوري";
+"instapay" = "إنستاباي";
+"add_new_card" = "إضافة بطاقة جديدة";
+"pay" = "دفع";
+
+
+// MARK: Bottom Bar
+"home" = "الصفحة الرئيسية";
+"portfolio" = "المحفظة";
+"trade" = "التداول";
+"orders" = "الطلبات";
+"settings" = "الإعدادات";
+
+// MARK: Home Screen
+"total_investment_value" = "إجمالي قيمة الاستثمار";
+"top_up" = "إيداع";
+"withdrawal" = "سحب";
+"view_history" = "عرض السجل";
+"my_portfolio" = "محفظتي";
+"view_all" = "عرض الكل";
+"egp" = "جنيه مصري";
+
+// MARK: Top Up Screen
+"top_up_balance" = "إيداع رصيد";
+"enter_amount" = "أدخل المبلغ";
+"service_fees" = "رسوم الخدمة";
+"total_amount" = "إجمالي المبلغ";
+"continue" = "متابعة";
+
+
 // MARK: Countries
 "Afghanistan" = "أفغانستان";
 "Aland Islands" = "جزر آلاند";

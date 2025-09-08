@@ -15,6 +15,21 @@
 "you_dont_have_an_account" = "You Don't Have An Account";
 "sign_up" = "Sign Up";
 
+// MARK: Forgot Password Screen
+"please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "Please Enter your Phone Number and we'll send you a link to change Password";
+"resend_link" = "Resend link";
+"continue_with_email" = "Continue with E-mail";
+"continue_with_phone_number" = "Continue with Phone Number";
+
+// MARK: Payment Method Screen
+"payment_method" = "Payment Method";
+"debit_card" = "Debit card";
+"credit_card" = "Credit card";
+"fawry" = "Fawry";
+"instapay" = "Instapay";
+"add_new_card" = "ADD New Card";
+"pay"; = "Pay";
+
 // MARK: Bottom Bar
 "home" = "Home";
 "portfolio" = "Portfolio";
@@ -31,6 +46,12 @@
 "view_all" = "View All";
 "egp" = "EGP";
 
+// MARK: Top Up Screen
+"top_up_balance" = "TopUp Balance";
+"enter_amount" = "Enter Amount";
+"service_fees" = "Service fees";
+"total_amount" = "Total Amount";
+"continue" = "Continue";
 
 // MARK: Countries
 "Afghanistan" = "Afghanistan";

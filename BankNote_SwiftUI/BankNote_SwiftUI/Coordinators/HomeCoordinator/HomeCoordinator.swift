@@ -103,4 +103,20 @@ extension HomeCoordinator:HomeCoordinatorProtocol{
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openTopUpScene() {
+        let viewModel = TopUpViewModel(coordinator: self)
+        let view = TopUpScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openPaymentMethodScene() {
+        let viewModel = PaymentMethodViewModel(coordinator: self)
+        let view = PaymentMethodScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
 }

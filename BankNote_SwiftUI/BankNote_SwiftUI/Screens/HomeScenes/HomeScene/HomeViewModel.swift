@@ -28,4 +28,8 @@ class HomeViewModel: ObservableObject {
         
         portfoliosData = data
     }
+    
+    func openTopUpScene() {
+        coordinator.openTopUpScene()
+    }
 }

@@ -11,4 +11,6 @@ import FlagAndCountryCode
 
 protocol HomeCoordinatorProtocol: AnyObject,Coordinator {
     func openHomeScene()
+    func openTopUpScene()
+    func openPaymentMethodScene()
 }

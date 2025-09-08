@@ -13,6 +13,9 @@ struct HomeContentView: View {
     var portfoliosData:Binding<[PortfolioUIModel]?>
     @State var isBalanceHidden:Bool = false
     
+    var onTopUpTap:()->Void
+    var onWithdrawalTap:()->Void
+    
     var body: some View {
         VStack {
             headerView
@@ -114,33 +117,41 @@ struct HomeContentView: View {
             }
             
             HStack(spacing: 21) {
-                VStack(spacing: 4) {
-                    Image("ic_topUp")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    
-                    Text("top_up".localized)
-                        .font(.cairoFont(.semiBold, size: 10))
-                        .foregroundStyle(Color(hex: "#629AF9"))
+                Button {
+                    onTopUpTap()
+                } label: {
+                    VStack(spacing: 4) {
+                        Image("ic_topUp")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                        
+                        Text("top_up".localized)
+                            .font(.cairoFont(.semiBold, size: 10))
+                            .foregroundStyle(Color(hex: "#629AF9"))
+                    }
+                    .padding(.horizontal, 23)
+                    .padding(.vertical, 2)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(.white))
                 }
-                .padding(.horizontal, 23)
-                .padding(.vertical, 2)
-                .background(RoundedRectangle(cornerRadius: 10).fill(.white))
 
-                VStack(spacing: 4) {
-                    Image("ic_withdrawal")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    
-                    Text("withdrawal".localized)
-                        .font(.cairoFont(.semiBold, size: 10))
-                        .foregroundStyle(Color(hex: "#9C4EF7"))
+                Button {
+                    onWithdrawalTap()
+                } label: {
+                    VStack(spacing: 4) {
+                        Image("ic_withdrawal")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                        
+                        Text("withdrawal".localized)
+                            .font(.cairoFont(.semiBold, size: 10))
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 2)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(.white))
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 2)
-                .background(RoundedRectangle(cornerRadius: 10).fill(.white))
             }
             
             Text(viewHistoryAttribute)
@@ -238,5 +249,9 @@ struct PortfolioCell: View {
 
 
 #Preview {
-    HomeContentView(portfoliosData: .constant([]))
+    HomeContentView(portfoliosData: .constant([]), onTopUpTap: {
+        
+    }, onWithdrawalTap: {
+        
+    })
 }

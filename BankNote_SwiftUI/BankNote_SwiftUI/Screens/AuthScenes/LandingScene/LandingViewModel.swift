@@ -14,11 +14,12 @@ class LandingViewModel:ObservableObject {
     init(coordinator: AuthCoordinatorProtocol) {
         self.coordinator = coordinator
         
-        for family in UIFont.familyNames {
-            for name in UIFont.fontNames(forFamilyName: family) {
-                print(name)
-            }
-        }
+//        for family in UIFont.familyNames {
+//            for name in UIFont.fontNames(forFamilyName: family) {
+//                print(name)
+//            }
+//        }
+        
     }
     
     func openLoginScene() {

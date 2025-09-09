@@ -59,7 +59,8 @@ struct HomeBottomBarView: View {
             } label: {
                 VStack(alignment: .center, spacing: 0){
                     if selectedItem == item {
-                        Image("ic_circle")
+                        
+                        Image(selectedItem == .home ? "ic_homeSelected" : selectedItem == .portfolio ? "ic_portfolioSelected" : selectedItem == .trade ? "ic_tradeSelected" : selectedItem == .orders ? "ic_ordersSelected" : selectedItem == .settings ? "ic_settingsSelected" : "")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 80, height: 80)
@@ -92,6 +93,8 @@ struct HomeBottomBarView: View {
             SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().start()
 //            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().start()
         case .trade:
+            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getTradeCoordinator().start()
+
             debugPrint("")
 //            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getTradeCoordinator().start()
         case .orders:

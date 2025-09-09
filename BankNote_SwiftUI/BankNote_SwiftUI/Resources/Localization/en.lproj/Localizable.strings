@@ -53,6 +53,15 @@
 "total_amount" = "Total Amount";
 "continue" = "Continue";
 
+// MARK: Trade Screen
+"index" = "Index";
+"view_all" = "View All";
+"watchlist" = "Watchlist";
+"news" = "News";
+"all" = "All";
+"stocks" = "Stocks";
+"markets" = "Markets";
+
 // MARK: Countries
 "Afghanistan" = "Afghanistan";
 "Åland Islands" = "Åland Islands";

@@ -54,6 +54,15 @@
 "total_amount" = "إجمالي المبلغ";
 "continue" = "متابعة";
 
+// MARK: Trade Screen
+"index" = "المؤشر";
+"view_all" = "عرض الكل";
+"watchlist" = "قائمة المراقبة";
+"news" = "الأخبار";
+"all" = "الكل";
+"stocks" = "الأسهم";
+"markets" = "الأسواق";
+
 
 // MARK: Countries
 "Afghanistan" = "أفغانستان";

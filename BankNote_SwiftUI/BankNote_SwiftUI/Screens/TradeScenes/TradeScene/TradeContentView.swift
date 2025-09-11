@@ -21,9 +21,13 @@ struct TradeContentView: View {
     
     @State var selectedNewsType: SelectedNewsType = .all
     
+    var onIndexViewAllTap:()->Void
+    var onWatchlistViewAllTap:()->Void
+    var onNewsViewAllTap:()->Void
+    
     var body: some View {
         VStack {
-            headerView
+            HeaderView()
             
             ScrollView(.vertical, showsIndicators: false) {
                 indexView
@@ -40,34 +44,7 @@ struct TradeContentView: View {
             Spacer()
         }
     }
-    
-    private var headerView: some View {
-        HStack {
-            VStack(spacing: 0) {
-                Image("ic_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
-                
-                Text("BANKNOTE")
-                    .font(.cairoFont(.extraBold, size: 14))
-            }
-            
-            Spacer()
-            
-            Circle()
-                .fill(.white)
-                .frame(width: 40, height: 40)
-                .overlay(
-                    Image("ic_notification")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                )
-        }
-        .padding(.horizontal, 18)
-    }
-    
+        
     private var indexView: some View {
         VStack {
             HStack {
@@ -77,12 +54,17 @@ struct TradeContentView: View {
                 
                 Spacer()
                 
-                Text("view_all".localized)
-                    .font(.cairoFont(.semiBold, size: 14))
-                    .foregroundStyle(.black)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 3)
-                    .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                Button {
+                    onIndexViewAllTap()
+                } label: {
+                    Text("view_all".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                }
+
             }
             .padding(.horizontal, 18)
             
@@ -91,7 +73,6 @@ struct TradeContentView: View {
                     IndexCell(indexData: element)
                 }
             }
-            
         }
     }
     
@@ -104,12 +85,16 @@ struct TradeContentView: View {
                 
                 Spacer()
                 
-                Text("view_all".localized)
-                    .font(.cairoFont(.semiBold, size: 14))
-                    .foregroundStyle(.black)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 3)
-                    .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                Button {
+                    onWatchlistViewAllTap()
+                } label: {
+                    Text("view_all".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                }
             }
             .padding(.horizontal, 18)
             
@@ -131,12 +116,16 @@ struct TradeContentView: View {
                 
                 Spacer()
                 
-                Text("view_all".localized)
-                    .font(.cairoFont(.semiBold, size: 14))
-                    .foregroundStyle(.black)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 3)
-                    .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                Button {
+                    onNewsViewAllTap()
+                } label: {
+                    Text("view_all".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                }
             }
             .padding(.horizontal, 18)
             
@@ -299,5 +288,11 @@ struct newsCell: View {
 
 
 #Preview {
-    TradeContentView(indexData: .constant([IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 30", changePerc: 0.016, value: 2262.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 70", changePerc: -0.20, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43)]), watchlistData: .constant([WatchlistUIModel(image: "ic_fawry", name: "FWRY", fullName: "Fawry For Banking Technology", change: 35, changePerc: 3.01), WatchlistUIModel(image: "ic_etel", name: "ETEL", fullName: "Telecom Egypt", change: 35, changePerc: -2.1)]), newsData: .constant([NewsUIModel(indexName: "EGX", time: "2 hours ago", title: "ADNOC Distribution Expands to Saudi Arabia", desc: "ADNOCDIST announces new fuel stations in KSA as..."), NewsUIModel(indexName: "EGX", time: "Yesterday", title: "Emaar Properties Reports 12% Profit Growth in Q1 2025", desc: "Strong performance driven by Dubai’s real estate..."), NewsUIModel(indexName: "EGX", time: "3 days ago", title: "UAE Central Bank Holds Interest Rates Steady", desc: "Decision aligns with US Fed Pol policy amid stable ...")]))
+    TradeContentView(indexData: .constant([IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 30", changePerc: 0.016, value: 2262.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 70", changePerc: -0.20, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43)]), watchlistData: .constant([WatchlistUIModel(image: "ic_fawry", name: "FWRY", fullName: "Fawry For Banking Technology", change: 35, changePerc: 3.01), WatchlistUIModel(image: "ic_etel", name: "ETEL", fullName: "Telecom Egypt", change: 35, changePerc: -2.1)]), newsData: .constant([NewsUIModel(indexName: "EGX", time: "2 hours ago", title: "ADNOC Distribution Expands to Saudi Arabia", desc: "ADNOCDIST announces new fuel stations in KSA as..."), NewsUIModel(indexName: "EGX", time: "Yesterday", title: "Emaar Properties Reports 12% Profit Growth in Q1 2025", desc: "Strong performance driven by Dubai’s real estate..."), NewsUIModel(indexName: "EGX", time: "3 days ago", title: "UAE Central Bank Holds Interest Rates Steady", desc: "Decision aligns with US Fed Pol policy amid stable ...")]), onIndexViewAllTap: {
+        
+    }, onWatchlistViewAllTap: {
+        
+    }, onNewsViewAllTap: {
+        
+    })
 }

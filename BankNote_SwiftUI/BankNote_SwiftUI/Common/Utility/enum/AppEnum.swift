@@ -505,20 +505,17 @@ enum  SubscriptionOfStocksType:String{
 
 enum TransactionTypes {
     case none
-    case cashIn
-    case cashOut
-    case shareTransfer
+    case topUp
+    case withdrawal
     
     var name:String{
         switch self {
         case .none:
             ""
-        case .cashIn:
-            "cash_in".localized
-        case .cashOut:
-            "cash_out".localized
-        case .shareTransfer:
-            "share_transfer".localized
+        case .topUp:
+            "topUp".localized
+        case .withdrawal:
+            "withdrawal".localized
         }
     }
 }

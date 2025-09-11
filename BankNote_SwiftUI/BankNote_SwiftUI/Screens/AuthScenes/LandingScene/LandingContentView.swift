@@ -46,11 +46,11 @@ struct LandingContentView: View {
         }
         .ignoresSafeArea()
         .onAppear {
-            if UserDefaultController().appLanguage == "ar" {
-                selectedLanguage = .arabic
-            } else {
-                selectedLanguage = .english
-            }
+//            if UserDefaultController().appLanguage == "ar" {
+//                selectedLanguage = .arabic
+//            } else {
+//                selectedLanguage = .english
+//            }
         }
     }
     

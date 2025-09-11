@@ -37,4 +37,29 @@ extension TradeCoordinator:TradeCoordinatorProtocol{
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func openIndexScene() {
+        let viewModel = IndexViewModel(coordinator: self)
+        let view = IndexScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openWatchlistScene() {
+        let viewModel = WatchlistViewModel(coordinator: self)
+        let view = WatchlistScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openNewsScene() {
+        let viewModel = NewsViewModel(coordinator: self)
+        let view = NewsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+
 }

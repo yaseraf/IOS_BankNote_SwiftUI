@@ -89,20 +89,13 @@ struct HomeBottomBarView: View {
         case .home:
             SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getHomeCoordinator().start()
         case .portfolio:
-            debugPrint("")
             SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().start()
-//            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().start()
         case .trade:
             SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getTradeCoordinator().start()
-
-            debugPrint("")
-//            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getTradeCoordinator().start()
         case .orders:
-            debugPrint("")
-//            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getFavoriteCoordinator().start()
+            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getOrdersCoordinator().start()
         case .settings:
-            debugPrint("")
-//            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getManageCoordinator().start()
+            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getSettingsCoordinator().start()
         }
 
     }

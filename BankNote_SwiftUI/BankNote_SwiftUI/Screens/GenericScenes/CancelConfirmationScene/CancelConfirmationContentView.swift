@@ -72,11 +72,11 @@ struct CancelConfirmationContentView: View {
                 .scaledToFit()
                 .frame(width: 100, height: 100)
             
-            Text(transactionTypes == .cashIn ? "are_you_sure_you_want_to_delete_your_cash_in_request".localized : transactionTypes == .cashOut ? "are_you_sure_you_want_to_delete_your_cash_out_request".localized : transactionTypes == .shareTransfer ? "are_you_sure_you_want_to_delete_your_share_transfer_request".localized : "")
-                .font(.apply(.regular, size: 16))
-                .foregroundStyle(Color.colorTextSecondary)
-                .padding(.horizontal, 20)
-                .multilineTextAlignment(.center)
+//            Text(transactionTypes == .cashIn ? "are_you_sure_you_want_to_delete_your_cash_in_request".localized : transactionTypes == .cashOut ? "are_you_sure_you_want_to_delete_your_cash_out_request".localized : transactionTypes == .shareTransfer ? "are_you_sure_you_want_to_delete_your_share_transfer_request".localized : "")
+//                .font(.apply(.regular, size: 16))
+//                .foregroundStyle(Color.colorTextSecondary)
+//                .padding(.horizontal, 20)
+//                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, alignment: .center)
     }

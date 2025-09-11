@@ -12,10 +12,14 @@ class HomeViewModel: ObservableObject {
     
     @Published var portfoliosData: [PortfolioUIModel]?
     
+        
+    @Published var transactionType: TransactionTypes?
+    
     init(coordinator: HomeCoordinatorProtocol) {
         self.coordinator = coordinator
         
         self.portfoliosData = []
+
     }
     
     func getPortfolioData() {
@@ -29,7 +33,7 @@ class HomeViewModel: ObservableObject {
         portfoliosData = data
     }
     
-    func openTopUpScene() {
-        coordinator.openTopUpScene()
+    func openTopUpScene(transactionType: TransactionTypes) {
+        coordinator.openTopUpScene(transactionType: transactionType)
     }
 }

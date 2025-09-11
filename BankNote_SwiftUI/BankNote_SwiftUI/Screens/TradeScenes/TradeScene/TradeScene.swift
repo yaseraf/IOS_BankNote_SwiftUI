@@ -17,7 +17,13 @@ struct TradeScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                TradeContentView(indexData: $viewModel.indexData, watchlistData: $viewModel.watchlistData, newsData: $viewModel.newsData)
+                TradeContentView(indexData: $viewModel.indexData, watchlistData: $viewModel.watchlistData, newsData: $viewModel.newsData, onIndexViewAllTap: {
+                    viewModel.openIndexScene()
+                }, onWatchlistViewAllTap: {
+                    viewModel.openWatchlistScene()
+                }, onNewsViewAllTap: {
+                    viewModel.openNewsScene()
+                })
             })
             .onAppear {
                 viewModel.getIndexData()

@@ -14,6 +14,7 @@ struct TopUpContentView: View {
     @State var feesAmount: Double = 0
     @State var totalAmount: Double = 0
     
+    var transactionType: Binding<TransactionTypes?>
     
     
     var onContinueTap:()->Void
@@ -21,49 +22,26 @@ struct TopUpContentView: View {
     
     var body: some View {
         VStack {
-            headerView
+            HeaderView()
             
             dismissView
             
             amountView
             
-            serviceFeesView
-            
-            totalAmountView
-            
+            if transactionType.wrappedValue == .topUp {
+                serviceFeesView
+                
+                totalAmountView
+            } else {
+                Spacer()
+            }
+
             numberPadView
             
             Spacer()
         }
     }
-    
-    private var headerView: some View {
-        HStack {
-            VStack(spacing: 0) {
-                Image("ic_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
-                
-                Text("BANKNOTE")
-                    .font(.cairoFont(.extraBold, size: 14))
-            }
-            
-            Spacer()
-            
-            Circle()
-                .fill(.white)
-                .frame(width: 40, height: 40)
-                .overlay(
-                    Image("ic_notification")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                )
-        }
-        .padding(.horizontal, 18)
-    }
-    
+        
     private var dismissView: some View {
         Button(action: {
             onBackTap()
@@ -83,7 +61,7 @@ struct TopUpContentView: View {
     
     private var amountView: some View {
         VStack(spacing: 0) {
-            Text("top_up_balance".localized)
+            Text(transactionType.wrappedValue == .topUp ? "top_up_balance".localized : "balance".localized)
                 .font(.cairoFont(.bold, size: 32))
                 .foregroundStyle(.black)
             
@@ -339,7 +317,7 @@ struct TopUpContentView: View {
 }
 
 #Preview {
-    TopUpContentView(onContinueTap: {
+    TopUpContentView(transactionType: .constant(.withdrawal), onContinueTap: {
         
     }, onBackTap: {
         

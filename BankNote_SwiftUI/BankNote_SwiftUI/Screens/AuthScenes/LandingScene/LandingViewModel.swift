@@ -23,7 +23,6 @@ class LandingViewModel:ObservableObject {
     }
     
     func openLoginScene() {
-//        coordinator.openLoginScene()
         SceneDelegate.getAppCoordinator()?.startFlow(startWith: .login)
     }
     
@@ -32,6 +31,7 @@ class LandingViewModel:ObservableObject {
     }
     
     func openHomeScene() {
+        AppUtility.shared.updateAppLanguage(language: .english)
         SceneDelegate.getAppCoordinator()?.showHomeFlow()
     }
 }

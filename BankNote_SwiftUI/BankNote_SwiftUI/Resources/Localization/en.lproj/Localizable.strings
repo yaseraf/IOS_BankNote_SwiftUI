@@ -62,6 +62,116 @@
 "stocks" = "Stocks";
 "markets" = "Markets";
 
+// MARK: Orders Screen
+"pending" = "Pending";
+"completed" = "Completed";
+"buy" = "Buy";
+"sell" = "Sell";
+
+// MARK: Settings Screen
+"bank_notes" = "BankNotes";
+"view_details" = "View Details";
+"account_info" = "Account Info";
+"tiers" = "Tiers";
+"rookie" = "rookie";
+"casual" = "Casual";
+"pro" = "Pro";
+"rolling_star" = "Rolling Star";
+"tycoon" = "Tycoon";
+"phone_number" = "Phone Number";
+"name" = "Name";
+"date_of_birth" = "Date of birth";
+"gender" = "Gender";
+"statement" = "Statement";
+"invoice" = "Invoice";
+"badges" = "Badges";
+"app_info_and_help" = "App info & help";
+"help_and_feedback" = "Help and feedback";
+"terms_of_service" = "Terms of Service";
+"privacy_policy" = "Privacy Policy";
+"about_us" = "About us";
+"help" = "Help";
+"rating_app" = "Rating app";
+
+
+// MARK: Tiers Screen
+// Tier names
+"tier_rookie" = "Rookie";
+"tier_casual" = "Casual";
+"tier_pro" = "Pro";
+"tier_rolling_star" = "Rolling Star";
+"tier_tycoon" = "Tycoon";
+
+// Section titles
+"who_is" = "Who is %@";
+"how_to_become" = "How to become %@";
+"benefits" = "Benefits";
+
+// Rookie
+"rookie_desc1" = "Person who is still testing water";
+"rookie_desc2" = "Everyone starts here for 50 transactions to upgrade";
+
+"rookie_benefit1" = "Updated trading screen";
+"rookie_benefit2" = "T+2, T+0 and T+1";
+"rookie_benefit3" = "Fees: 0.05% + 2 EGP";
+
+// Casual
+"casual_desc1" = "Someone who is more skilled";
+"casual_desc2" = "There are two ways to end up in this tier";
+
+"casual_how1" = "Do 200 transactions";
+"casual_how2" = "Buy coins worth 200 EGP";
+
+"casual_benefit1" = "Updated trading screen";
+"casual_benefit2" = "T+0, T+1 and T+2";
+"casual_benefit3" = "Weekly overlook";
+"casual_benefit4" = "T+0 up to 2 times";
+"casual_benefit5" = "Fees: 0.05% + 2 EGP";
+
+// Pro
+"pro_desc1" = "A person that does multiple trades weekly";
+"pro_desc2" = "There are two ways to end up in this tier";
+
+"pro_how1" = "Do 500 transactions";
+"pro_how2" = "Buy coins worth 500 EGP";
+
+"pro_benefit1" = "Updated trading screen";
+"pro_benefit2" = "T+0, T+1 and T+2";
+"pro_benefit3" = "Daily technical reports";
+"pro_benefit4" = "T+0 up to 4 times";
+"pro_benefit5" = "Fees: 0.05% + 2 EGP";
+
+// Rolling Star
+"rolling_desc1" = "Someone who does multiple transactions daily";
+"rolling_desc2" = "There are two ways to end up in this tier";
+
+"rolling_how1" = "Do 600 transactions";
+"rolling_how2" = "Buy coins worth 600 EGP";
+
+"rolling_benefit1" = "Updated trading screen";
+"rolling_benefit2" = "T+0, T+1 and T+2";
+"rolling_benefit3" = "Daily insights";
+"rolling_benefit4" = "T+0 up to 4 times";
+"rolling_benefit5" = "Margin up to 50%";
+"rolling_benefit6" = "Fees: 0.05% + 2 EGP";
+
+// Tycoon
+"tycoon_desc1" = "Someone who invests a big amount of money";
+"tycoon_desc2" = "There are two ways to end up in this tier";
+
+"tycoon_how1" = "Do 1200 transactions";
+"tycoon_how2" = "Buy coins worth 1200 EGP";
+
+"tycoon_benefit1" = "Updated trading screen";
+"tycoon_benefit2" = "T+0, T+1 and T+2";
+"tycoon_benefit3" = "Daily insights and recommendations";
+"tycoon_benefit4" = "Special reports once a month (tailored)";
+"tycoon_benefit5" = "T+0 up to 4 times";
+"tycoon_benefit6" = "Margin up to 50%";
+"tycoon_benefit7" = "International Markets";
+"tycoon_benefit8" = "Fees: 0.05% + 2 EGP";
+
+
 // MARK: Countries
 "Afghanistan" = "Afghanistan";
 "Åland Islands" = "Åland Islands";

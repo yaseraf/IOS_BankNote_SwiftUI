@@ -17,7 +17,7 @@ struct TopUpScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                TopUpContentView(onContinueTap: {
+                TopUpContentView(transactionType: $viewModel.transactionTypes, onContinueTap: {
                     viewModel.openPaymentMethodScene()
                 }, onBackTap: {
                     viewModel.popViewController()

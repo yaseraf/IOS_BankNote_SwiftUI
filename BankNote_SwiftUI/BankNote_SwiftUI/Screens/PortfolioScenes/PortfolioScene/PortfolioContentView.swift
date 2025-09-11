@@ -23,7 +23,7 @@ struct PortfolioContentView: View {
     var body: some View {
         VStack {
             
-            headerView
+            HeaderView()
             
             PieChartView(data: sample)
                 .frame(maxWidth: 250, maxHeight: 250)
@@ -36,34 +36,7 @@ struct PortfolioContentView: View {
         }
 
     }
-    
-    private var headerView: some View {
-        HStack {
-            VStack(spacing: 0) {
-                Image("ic_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
-                
-                Text("BANKNOTE")
-                    .font(.cairoFont(.extraBold, size: 14))
-            }
-            
-            Spacer()
-            
-            Circle()
-                .fill(.white)
-                .frame(width: 40, height: 40)
-                .overlay(
-                    Image("ic_notification")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                )
-        }
-        .padding(.horizontal, 18)
-    }
-    
+        
     private var portfolioView: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ForEach(Array((portfoliosData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in

@@ -10,8 +10,12 @@ import Foundation
 class TopUpViewModel: ObservableObject {
     private let coordinator: HomeCoordinatorProtocol
     
-    init(coordinator: HomeCoordinatorProtocol) {
+    @Published var transactionTypes: TransactionTypes?
+    
+    init(coordinator: HomeCoordinatorProtocol, transactionTypes: TransactionTypes?) {
         self.coordinator = coordinator
+        
+        self.transactionTypes = transactionTypes
     }
     
     func popViewController() {
@@ -19,6 +23,6 @@ class TopUpViewModel: ObservableObject {
     }
     
     func openPaymentMethodScene() {
-        coordinator.openPaymentMethodScene()
+        coordinator.openPaymentMethodScene(transactionType: transactionTypes ?? .topUp)
     }
 }

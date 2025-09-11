@@ -17,8 +17,32 @@ class TradeViewModel: ObservableObject {
         self.coordinator = coordinator
         
         indexData = []
+        watchlistData = []
+        newsData = []
     }
     
+    
+    
+    
+}
+
+// MARK: Routing
+extension TradeViewModel {
+    func openIndexScene() {
+        coordinator.openIndexScene()
+    }
+    
+    func openWatchlistScene() {
+        coordinator.openWatchlistScene()
+    }
+    
+    func openNewsScene() {
+        coordinator.openNewsScene()
+    }
+}
+
+// MARK: Mock Data Fetch
+extension TradeViewModel {
     func getIndexData() {
         var data: [IndexUIModel] = []
         

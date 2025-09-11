@@ -18,7 +18,7 @@ struct HomeContentView: View {
     
     var body: some View {
         VStack {
-            headerView
+            HeaderView()
             
             totalInvestmentView
             
@@ -33,33 +33,7 @@ struct HomeContentView: View {
 //        .background(Color(hex: "#EBEBEB"))
     }
     
-    private var headerView: some View {
-        HStack {
-            VStack(spacing: 0) {
-                Image("ic_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
-                
-                Text("BANKNOTE")
-                    .font(.cairoFont(.extraBold, size: 14))
-            }
-            
-            Spacer()
-            
-            Circle()
-                .fill(.white)
-                .frame(width: 40, height: 40)
-                .overlay(
-                    Image("ic_notification")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                )
-        }
-        .padding(.horizontal, 18)
-    }
-    
+        
     private var totalInvestmentView: some View {
         HStack {
             Text("total_investment_value".localized)

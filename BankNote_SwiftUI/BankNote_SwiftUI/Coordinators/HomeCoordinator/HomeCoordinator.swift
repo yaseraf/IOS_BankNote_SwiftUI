@@ -71,9 +71,9 @@ class HomeCoordinator:  ObservableObject {
       return coordinator
     }
     
-    func getFavoriteCoordinator() -> FavoriteCoordinator {
-        let  coordinator:FavoriteCoordinator
-        if let  childCoordinator = self.getChildCoordinator(coordinator: FavoriteCoordinator.self) as? FavoriteCoordinator {
+    func getOrdersCoordinator() -> OrdersCoordinator {
+        let  coordinator:OrdersCoordinator
+        if let  childCoordinator = self.getChildCoordinator(coordinator: OrdersCoordinator.self) as? OrdersCoordinator {
             coordinator = childCoordinator
         }else{
             coordinator =  .init(navigationController: navigationController)
@@ -82,6 +82,18 @@ class HomeCoordinator:  ObservableObject {
       return coordinator
     }
     
+    func getSettingsCoordinator() -> SettingsCoordinator {
+        let  coordinator:SettingsCoordinator
+        if let  childCoordinator = self.getChildCoordinator(coordinator: SettingsCoordinator.self) as? SettingsCoordinator {
+            coordinator = childCoordinator
+        }else{
+            coordinator =  .init(navigationController: navigationController)
+            childCoordinator.append(coordinator)
+        }
+      return coordinator
+    }
+
+        
     func getGenericCoordinator() -> GenericCoordinator {
         let  coordinator:GenericCoordinator
         if let  childCoordinator = self.getChildCoordinator(coordinator: GenericCoordinator.self) as? GenericCoordinator {
@@ -104,19 +116,28 @@ extension HomeCoordinator:HomeCoordinatorProtocol{
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openTopUpScene() {
-        let viewModel = TopUpViewModel(coordinator: self)
+    func openTopUpScene(transactionType: TransactionTypes) {
+        let viewModel = TopUpViewModel(coordinator: self, transactionTypes: transactionType)
         let view = TopUpScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openPaymentMethodScene() {
-        let viewModel = PaymentMethodViewModel(coordinator: self)
+    func openPaymentMethodScene(transactionType: TransactionTypes) {
+        let viewModel = PaymentMethodViewModel(coordinator: self, transactionType: transactionType)
         let view = PaymentMethodScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openTransactionSuccessfulScreen(transactionType: TransactionTypes) {
+        let viewModel = TransactionSuccessfulViewModel(coordinator: self, transactionType: transactionType)
+        let view = TransactionSuccessfulScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
 }

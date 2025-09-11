@@ -9,15 +9,19 @@ import Foundation
 class PaymentMethodViewModel: ObservableObject {
     private let coordinator: HomeCoordinatorProtocol
     
-    init(coordinator: HomeCoordinatorProtocol) {
+    @Published var transactionType: TransactionTypes?
+    
+    init(coordinator: HomeCoordinatorProtocol, transactionType: TransactionTypes) {
         self.coordinator = coordinator
+        
+        self.transactionType = transactionType
     }
     
     func popViewController() {
         coordinator.popViewController()
     }
     
-    func openSuccessTopUpScene() {
-        
+    func openTransactionSuccessfulScreen() {
+        coordinator.openTransactionSuccessfulScreen(transactionType: transactionType ?? .topUp)
     }
 }

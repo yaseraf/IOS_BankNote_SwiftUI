@@ -14,12 +14,14 @@ struct PaymentMethodContentView: View {
     @State private var selectedCard: String = "**** - **** - **** - 1234"
     @State private var totalAmount: Double = 0.0
     
+    var transactionType: Binding<TransactionTypes?>
+    
     var onBackTap:()->Void
     var onPayTap:()->Void
     
     var body: some View {
         VStack {
-            headerView
+            HeaderView()
             
             dismissView
             
@@ -30,34 +32,7 @@ struct PaymentMethodContentView: View {
             Spacer()
         }
     }
-    
-    private var headerView: some View {
-        HStack {
-            VStack(spacing: 0) {
-                Image("ic_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
-                
-                Text("BANKNOTE")
-                    .font(.cairoFont(.extraBold, size: 14))
-            }
-            
-            Spacer()
-            
-            Circle()
-                .fill(.white)
-                .frame(width: 40, height: 40)
-                .overlay(
-                    Image("ic_notification")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                )
-        }
-        .padding(.horizontal, 18)
-    }
-    
+        
     private var dismissView: some View {
         Button(action: {
             onBackTap()
@@ -95,26 +70,77 @@ struct PaymentMethodContentView: View {
                         paymentMethodRow(.debitCard)
                         if selectedMethod == .debitCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Image("ic_radioSelected")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                    Text(selectedCard)
-                                        .font(.cairoFont(.semiBold, size: 14))
-                                        .foregroundColor(.black)
-                                    Spacer()
-                                    Button("CVV") {}
-                                        .disabled(true)
-                                        .frame(width: 60, height: 35)
-                                        .background(Color.gray.opacity(0.2))
-                                        .foregroundColor(.gray)
-                                        .cornerRadius(6)
+                                if transactionType.wrappedValue == .topUp {
+                                    HStack {
+                                        Image("ic_radioSelected")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 25, height: 25)
+                                        Text(selectedCard)
+                                            .font(.cairoFont(.semiBold, size: 14))
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                        Button("CVV") {}
+                                            .disabled(true)
+                                            .frame(width: 60, height: 35)
+                                            .background(Color.gray.opacity(0.2))
+                                            .foregroundColor(.gray)
+                                            .cornerRadius(6)
+                                    }
+                                } else {
+                                    HStack {
+                                        Image("ic_radioSelected")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 25, height: 25)
+                                        Text(selectedCard)
+                                            .font(.cairoFont(.semiBold, size: 14))
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                        Button("CVV") {}
+                                            .disabled(true)
+                                            .frame(width: 60, height: 35)
+                                            .background(Color.gray.opacity(0.2))
+                                            .foregroundColor(.gray)
+                                            .cornerRadius(6)
+                                    }
+                                    HStack {
+                                        Image("ic_radioSelected")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 25, height: 25)
+                                        Text(selectedCard)
+                                            .font(.cairoFont(.semiBold, size: 14))
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                        Button("CVV") {}
+                                            .disabled(true)
+                                            .frame(width: 60, height: 35)
+                                            .background(Color.gray.opacity(0.2))
+                                            .foregroundColor(.gray)
+                                            .cornerRadius(6)
+                                    }
+                                    HStack {
+                                        Image("ic_radioSelected")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 25, height: 25)
+                                        Text(selectedCard)
+                                            .font(.cairoFont(.semiBold, size: 14))
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                        Button("CVV") {}
+                                            .disabled(true)
+                                            .frame(width: 60, height: 35)
+                                            .background(Color.gray.opacity(0.2))
+                                            .foregroundColor(.gray)
+                                            .cornerRadius(6)
+                                    }
                                 }
                                 HStack {
+                                    
                                     Spacer()
                                     
-
                                     Button(action: {
                                         
                                     }, label: {
@@ -122,15 +148,16 @@ struct PaymentMethodContentView: View {
                                             .font(.cairoFont(.medium, size: 8))
                                             .foregroundColor(Color(hex: "#9C4EF7"))
                                     })
-                                        
                                 }
                             }
                             .padding(.leading, 30)
                         }
                         
-                        paymentMethodRow(.creditCard)
-                        paymentMethodRow(.fawry)
-                        paymentMethodRow(.instapay)
+                        if transactionType.wrappedValue != .withdrawal {
+                            paymentMethodRow(.creditCard)
+                            paymentMethodRow(.fawry)
+                            paymentMethodRow(.instapay)
+                        }
                     }
                     .padding()
                     
@@ -150,7 +177,7 @@ struct PaymentMethodContentView: View {
                     Button(action: {
                         onPayTap()
                     }) {
-                        Text("pay".localized)
+                        Text(transactionType.wrappedValue == .topUp ? "pay".localized : "withdraw".localized)
                             .font(.cairoFont(.semiBold, size: 18))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -193,7 +220,7 @@ struct PaymentMethodContentView: View {
 }
 
 #Preview {
-    PaymentMethodContentView(onBackTap: {
+    PaymentMethodContentView(transactionType: .constant(.topUp), onBackTap: {
         
     }, onPayTap: {
         

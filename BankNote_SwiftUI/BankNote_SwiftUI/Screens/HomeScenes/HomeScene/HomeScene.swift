@@ -20,9 +20,9 @@ struct HomeScene: BaseSceneType {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 HomeContentView(portfoliosData: $viewModel.portfoliosData, onTopUpTap: {
-                    viewModel.openTopUpScene()
+                    viewModel.openTopUpScene(transactionType: .topUp)
                 }, onWithdrawalTap: {
-                    
+                    viewModel.openTopUpScene(transactionType: .withdrawal)
                 })
             })
             .onAppear {

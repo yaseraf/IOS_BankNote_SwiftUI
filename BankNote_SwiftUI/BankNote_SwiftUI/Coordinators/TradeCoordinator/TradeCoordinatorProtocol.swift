@@ -11,4 +11,7 @@ import FlagAndCountryCode
 
 protocol TradeCoordinatorProtocol: AnyObject,Coordinator {
     func openTradeScene()
+    func openIndexScene()
+    func openWatchlistScene()
+    func openNewsScene()
 }

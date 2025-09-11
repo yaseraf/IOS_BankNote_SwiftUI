@@ -17,10 +17,10 @@ struct PaymentMethodScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                PaymentMethodContentView(onBackTap: {
+                PaymentMethodContentView(transactionType: $viewModel.transactionType, onBackTap: {
                     viewModel.popViewController()
                 }, onPayTap: {
-                    viewModel.openSuccessTopUpScene()
+                    viewModel.openTransactionSuccessfulScreen()
                 })
             })
         })

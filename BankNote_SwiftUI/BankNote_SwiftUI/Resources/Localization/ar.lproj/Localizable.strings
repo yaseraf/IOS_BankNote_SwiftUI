@@ -63,6 +63,115 @@
 "stocks" = "الأسهم";
 "markets" = "الأسواق";
 
+// MARK: Orders Screen
+"pending" = "قيد الانتظار";
+"completed" = "مكتمل";
+"buy" = "شراء";
+"sell" = "بيع";
+
+// MARK: Settings Screen
+"bank_notes" = "الأوراق المالية";
+"view_details" = "عرض التفاصيل";
+"account_info" = "معلومات الحساب";
+"tiers" = "المستويات";
+"rookie" = "مبتدئ";
+"casual" = "عادي";
+"pro" = "محترف";
+"rolling_star" = "النجم المتألق";
+"tycoon" = "رجل أعمال";
+"phone_number" = "رقم الهاتف";
+"name" = "الاسم";
+"date_of_birth" = "تاريخ الميلاد";
+"gender" = "الجنس";
+"statement" = "الكشف";
+"invoice" = "الفاتورة";
+"badges" = "الشارات";
+"app_info_and_help" = "معلومات وتطبيق المساعدة";
+"help_and_feedback" = "المساعدة والتعليقات";
+"terms_of_service" = "شروط الخدمة";
+"privacy_policy" = "سياسة الخصوصية";
+"about_us" = "من نحن";
+"help" = "مساعدة";
+"rating_app" = "تقييم التطبيق";
+
+
+// MARK: Tiers Screen
+// Tier names
+"tier_rookie" = "مبتدئ";
+"tier_casual" = "عادي";
+"tier_pro" = "محترف";
+"tier_rolling_star" = "النجم المتألق";
+"tier_tycoon" = "رجل أعمال";
+
+// Section titles
+"who_is" = "من هو %@";
+"how_to_become" = "كيف تصبح %@";
+"benefits" = "الفوائد";
+
+// Rookie
+"rookie_desc1" = "شخص ما زال يجرب";
+"rookie_desc2" = "يبدأ الجميع هنا بعد 50 عملية للترقية";
+
+"rookie_benefit1" = "شاشة تداول محدثة";
+"rookie_benefit2" = "T+2 و T+0 و T+1";
+"rookie_benefit3" = "الرسوم: 0.05% + 2 جنيه";
+
+// Casual
+"casual_desc1" = "شخص أكثر مهارة";
+"casual_desc2" = "هناك طريقتان للوصول إلى هذه الفئة";
+
+"casual_how1" = "قم بـ 200 عملية";
+"casual_how2" = "اشترِ عملات بقيمة 200 جنيه";
+
+"casual_benefit1" = "شاشة تداول محدثة";
+"casual_benefit2" = "T+0 و T+1 و T+2";
+"casual_benefit3" = "مراجعة أسبوعية";
+"casual_benefit4" = "T+0 حتى مرتين";
+"casual_benefit5" = "الرسوم: 0.05% + 2 جنيه";
+
+// Pro
+"pro_desc1" = "شخص يقوم بعدة صفقات أسبوعياً";
+"pro_desc2" = "هناك طريقتان للوصول إلى هذه الفئة";
+
+"pro_how1" = "قم بـ 500 عملية";
+"pro_how2" = "اشترِ عملات بقيمة 500 جنيه";
+
+"pro_benefit1" = "شاشة تداول محدثة";
+"pro_benefit2" = "T+0 و T+1 و T+2";
+"pro_benefit3" = "تقارير فنية يومية";
+"pro_benefit4" = "T+0 حتى 4 مرات";
+"pro_benefit5" = "الرسوم: 0.05% + 2 جنيه";
+
+// Rolling Star
+"rolling_desc1" = "شخص يقوم بعدة صفقات يومياً";
+"rolling_desc2" = "هناك طريقتان للوصول إلى هذه الفئة";
+
+"rolling_how1" = "قم بـ 600 عملية";
+"rolling_how2" = "اشترِ عملات بقيمة 600 جنيه";
+
+"rolling_benefit1" = "شاشة تداول محدثة";
+"rolling_benefit2" = "T+0 و T+1 و T+2";
+"rolling_benefit3" = "رؤى يومية";
+"rolling_benefit4" = "T+0 حتى 4 مرات";
+"rolling_benefit5" = "رافعة مالية حتى 50%";
+"rolling_benefit6" = "الرسوم: 0.05% + 2 جنيه";
+
+// Tycoon
+"tycoon_desc1" = "شخص يستثمر مبلغاً كبيراً من المال";
+"tycoon_desc2" = "هناك طريقتان للوصول إلى هذه الفئة";
+
+"tycoon_how1" = "قم بـ 1200 عملية";
+"tycoon_how2" = "اشترِ عملات بقيمة 1200 جنيه";
+
+"tycoon_benefit1" = "شاشة تداول محدثة";
+"tycoon_benefit2" = "T+0 و T+1 و T+2";
+"tycoon_benefit3" = "رؤى وتوصيات يومية";
+"tycoon_benefit4" = "تقارير خاصة مرة شهرياً (مخصصة)";
+"tycoon_benefit5" = "T+0 حتى 4 مرات";
+"tycoon_benefit6" = "رافعة مالية حتى 50%";
+"tycoon_benefit7" = "الأسواق الدولية";
+"tycoon_benefit8" = "الرسوم: 0.05% + 2 جنيه";
+
 
 // MARK: Countries
 "Afghanistan" = "أفغانستان";

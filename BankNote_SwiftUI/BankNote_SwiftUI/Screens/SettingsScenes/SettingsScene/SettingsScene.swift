@@ -17,7 +17,9 @@ struct SettingsScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                SettingsContentView(onTiersTap: {
+                SettingsContentView(onBankNotesTap: {
+                    viewModel.openBankNotesScene()
+                }, onTiersTap: {
                     viewModel.openTiersScene()
                 }, onBadgesTap: {
                     viewModel.openBadgesScene()

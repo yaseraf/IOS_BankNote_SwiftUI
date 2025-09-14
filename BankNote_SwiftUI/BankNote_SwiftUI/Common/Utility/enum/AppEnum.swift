@@ -145,12 +145,15 @@ enum PasswordValidationType{
         }
     }
 }
-enum HomeTabBarItem: CaseIterable{
+enum HomeTabBarItem: CaseIterable, Identifiable{
     case home
     case portfolio
     case trade
     case orders
     case settings
+    
+    var id: String { self.title }
+
 
     var title:String {
         get{

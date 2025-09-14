@@ -171,6 +171,15 @@
 "tycoon_benefit7" = "International Markets";
 "tycoon_benefit8" = "Fees: 0.05% + 2 EGP";
 
+// MARK: Bank Notes Scene
+"you_have" = "لديك";
+"coins" = "عملات";
+"bn" = "بن";
+"insufficient_funds_top_up" = "رصيد غير كافٍ، قم بالشحن";
+"to_continue_purchase" = "للاستمرار في الشراء";
+"top_up_now" = "اشحن الآن";
+
+
 
 // MARK: Countries
 "Afghanistan" = "Afghanistan";

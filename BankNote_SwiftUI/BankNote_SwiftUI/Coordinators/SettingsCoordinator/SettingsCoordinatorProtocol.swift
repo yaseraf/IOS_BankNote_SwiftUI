@@ -14,4 +14,5 @@ protocol SettingsCoordinatorProtocol: AnyObject,Coordinator {
     func openTiersScene()
     func openBadgesScene()
     func openHelpScene()
+    func openBankNotesScene()
 }

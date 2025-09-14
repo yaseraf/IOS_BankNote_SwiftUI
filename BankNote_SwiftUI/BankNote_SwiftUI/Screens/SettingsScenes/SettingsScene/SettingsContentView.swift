@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SettingsContentView: View {
     
+    var onBankNotesTap:()->Void
     var onTiersTap:()->Void
     var onBadgesTap:()->Void
     var onHelpTap:()->Void
@@ -70,18 +71,24 @@ struct SettingsContentView: View {
             }
             
             HStack {
-                Image("ic_bnCoin")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 45, height: 45)
-                
-                VStack(spacing: 0) {
-                    Text("bank_notes".localized)
-                        .font(.cairoFont(.semiBold, size: 18))
+                Button {
+                    onBankNotesTap()
+                } label: {
+                    Image("ic_bnCoin")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 45, height: 45)
                     
-                    Text("1,500.00 BN")
-                        .font(.cairoFont(.semiBold, size: 18))
+                    VStack(spacing: 0) {
+                        Text("bank_notes".localized)
+                            .font(.cairoFont(.semiBold, size: 18))
+                        
+                        Text("1,500.00 BN")
+                            .font(.cairoFont(.semiBold, size: 18))
+                    }
+                    .foregroundStyle(.black)
                 }
+
                 
                 Spacer()
                 
@@ -461,7 +468,9 @@ struct SettingsContentView: View {
 }
 
 #Preview {
-    SettingsContentView(onTiersTap: {
+    SettingsContentView(onBankNotesTap: {
+        
+    }, onTiersTap: {
         
     }, onBadgesTap: {
         

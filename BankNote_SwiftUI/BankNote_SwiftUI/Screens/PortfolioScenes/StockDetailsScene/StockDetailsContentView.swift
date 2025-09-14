@@ -105,13 +105,14 @@ struct StockDetailsContentView: View {
                 // Segmented control.
                 HStack(spacing: 0) {
                     ForEach(StockSegment.allCases, id: \.self) { segment in
-                        VStack(spacing: 5) {
+                        VStack(spacing: 0) {
                             if selectedSegment == segment {
                                 LinearGradient(
                                     gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
+                                .frame(maxHeight: 50)
                                 .mask(
                                     Text(segment.rawValue)
                                         .font(.cairoFont(.semiBold, size: 12))
@@ -128,7 +129,7 @@ struct StockDetailsContentView: View {
 //                                    .foregroundColor(.purple)
 //                            }
                         }
-                        .padding(.vertical, 10)
+//                        .padding(.vertical, 10)
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
                             withAnimation {

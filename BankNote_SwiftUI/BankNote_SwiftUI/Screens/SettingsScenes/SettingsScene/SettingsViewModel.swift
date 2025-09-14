@@ -30,4 +30,8 @@ extension SettingsViewModel {
     func openHelpScene() {
         coordinator.openHelpScene()
     }
+    
+    func openBankNotesScene() {
+        coordinator.openBankNotesScene()
+    }
 }

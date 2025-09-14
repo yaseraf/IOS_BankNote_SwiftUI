@@ -20,22 +20,9 @@
 		4811E33C2E68312A0010D8F6 /* BankNote_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BankNote_SwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4811EF9C2E685CAA0010D8F6 /* Exceptions for "BankNote_SwiftUI" folder in "BankNote_SwiftUI" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"BankNote-SwiftUI-Info.plist",
-			);
-			target = 4811E33B2E68312A0010D8F6 /* BankNote_SwiftUI */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4811E33E2E68312A0010D8F6 /* BankNote_SwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				4811EF9C2E685CAA0010D8F6 /* Exceptions for "BankNote_SwiftUI" folder in "BankNote_SwiftUI" target */,
-			);
 			path = BankNote_SwiftUI;
 			sourceTree = "<group>";
 		};
@@ -128,6 +115,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
 			);
 			mainGroup = 4811E3332E68312A0010D8F6;
 			minimizedProjectReferenceProxies = 1;

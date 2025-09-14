@@ -1,29 +1,26 @@
 //
-//  PortfolioScene.swift
+//  OrderEntryScene.swift
 //  BankNote_SwiftUI
 //
-//  Created by FIT on 08/09/2025.
+//  Created by FIT on 14/09/2025.
 //
 
 import Foundation
 import SwiftUI
 import Combine
 
-struct PortfolioScene: BaseSceneType {
-    @ObservedObject var viewModel: PortfolioViewModel
+struct OrderEntryScene: BaseSceneType {
+    @ObservedObject var viewModel: OrderEntryViewModel
     @State var anyCancellable = Set<AnyCancellable>()
     @State var viewTypeAction:BaseSceneViewType = DefaultBaseSceneViewType()
     
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                PortfolioContentView(portfoliosData: $viewModel.portfoliosData, onPortfolioTap: {
-                    viewModel.openStockDetailsScene()
+                OrderEntryContentView(onContinueTap: {
+                    viewModel.openPaymentMethodScene()
                 })
             })
-            .onAppear {
-                viewModel.getPortfolioData()
-            }
         })
     }
 }

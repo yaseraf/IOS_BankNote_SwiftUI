@@ -21,21 +21,24 @@ struct StockDetailsContentView: View {
     // A state variable to keep track of the currently selected segment.
     @State private var selectedSegment: StockSegment = .details
     
+    var onBackTap:()->Void
+    var onBuyTap:() -> Void
+    var onSellTap:() -> Void
 
     var body: some View {
         ZStack {
-            // Background gradient, matching the previous screens.
-            LinearGradient(gradient: Gradient(colors: [Color.purple.opacity(0.2), Color.white.opacity(0.5)]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                .edgesIgnoringSafeArea(.all)
-            
             VStack(spacing: 0) {
                 // Header section.
                 VStack(alignment: .leading, spacing: 5) {
                     HStack {
-                        Image("ic_leftArrow")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
+                        Button {
+                            onBackTap()
+                        } label: {
+                            Image("ic_leftArrow")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
+                        }
 
                         Spacer()
                         
@@ -161,7 +164,7 @@ struct StockDetailsContentView: View {
                 // Buy/Sell buttons.
                 HStack(spacing: 20) {
                     Button(action: {
-                        print("Buy button tapped!")
+                        onBuyTap()
                     }) {
                         HStack {
                             Image(systemName: "plus")
@@ -179,7 +182,7 @@ struct StockDetailsContentView: View {
                     }
                     
                     Button(action: {
-                        print("Sell button tapped!")
+                        onSellTap()
                     }) {
                         HStack {
                             Image(systemName: "minus")
@@ -532,5 +535,11 @@ struct OrderRow: View {
 }
 
 #Preview {
-    StockDetailsContentView()
+    StockDetailsContentView(onBackTap: {
+        
+    }, onBuyTap: {
+        
+    }, onSellTap: {
+        
+    })
 }

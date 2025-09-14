@@ -14,4 +14,5 @@ protocol TradeCoordinatorProtocol: AnyObject,Coordinator {
     func openIndexScene()
     func openWatchlistScene()
     func openNewsScene()
+    func openOrderEntryScene()
 }

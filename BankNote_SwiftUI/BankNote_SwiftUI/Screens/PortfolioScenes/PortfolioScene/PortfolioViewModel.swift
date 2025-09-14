@@ -29,3 +29,10 @@ class PortfolioViewModel: ObservableObject {
         portfoliosData = data
     }
 }
+
+// MARK: Routing
+extension PortfolioViewModel {
+    func openStockDetailsScene() {
+        coordinator.openStockDetailsScene()
+    }
+}

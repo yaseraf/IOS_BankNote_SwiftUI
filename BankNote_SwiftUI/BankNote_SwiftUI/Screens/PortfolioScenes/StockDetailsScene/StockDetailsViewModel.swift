@@ -17,7 +17,15 @@ class StockDetailsViewModel: ObservableObject {
 
 // MARK: Routing
 extension StockDetailsViewModel {
+    func popViewController() {
+        coordinator.popViewController()
+    }
+    
     func goBack() {
         coordinator.popViewController()
+    }
+    
+    func openOrderEntryScene() {
+        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getTradeCoordinator().openOrderEntryScene()
     }
 }

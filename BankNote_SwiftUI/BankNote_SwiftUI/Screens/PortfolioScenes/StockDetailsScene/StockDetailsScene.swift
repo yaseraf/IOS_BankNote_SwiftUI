@@ -17,7 +17,13 @@ struct StockDetailsScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                StockDetailsContentView()
+                StockDetailsContentView(onBackTap: {
+                    viewModel.popViewController()
+                }, onBuyTap: {
+                    viewModel.openOrderEntryScene()
+                }, onSellTap: {
+                    viewModel.openOrderEntryScene()
+                })
             })
         })
     }

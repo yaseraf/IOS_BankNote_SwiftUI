@@ -17,7 +17,9 @@ struct PortfolioContentView: View {
                 PieSliceData(value: 25, color: Color(hex: "#FC814B"), label: "Green"),
                 PieSliceData(value: 28, color: Color(hex: "#9C4EF7"), label: "Orange"),
                 PieSliceData(value: 7, color: Color(hex: "#4A7061"), label: "Pink"),
-            ]
+    ]
+    
+    var onPortfolioTap:()->Void
 
     
     var body: some View {
@@ -40,7 +42,12 @@ struct PortfolioContentView: View {
     private var portfolioView: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ForEach(Array((portfoliosData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in
-                PortfolioCell(portfolioData: element)
+                Button {
+                    onPortfolioTap()
+                } label: {
+                    PortfolioCell(portfolioData: element)
+                }
+
             }
         }
     }
@@ -64,6 +71,7 @@ struct PortfolioContentView: View {
                     Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: portfolioData.price ?? 0))")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
+                .foregroundStyle(.black)
             }
             
             Spacer()
@@ -293,5 +301,7 @@ struct PieChartView: View {
 }
 
 #Preview {
-    PortfolioContentView(portfoliosData: .constant([]))
+    PortfolioContentView(portfoliosData: .constant([]), onPortfolioTap: {
+        
+    })
 }

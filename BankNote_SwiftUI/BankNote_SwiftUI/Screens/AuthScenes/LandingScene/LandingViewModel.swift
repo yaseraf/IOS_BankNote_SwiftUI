@@ -35,3 +35,10 @@ class LandingViewModel:ObservableObject {
         SceneDelegate.getAppCoordinator()?.showHomeFlow()
     }
 }
+
+// MARK: Routing
+extension LandingViewModel {
+    func openSignUpScene() {
+        coordinator.openSignUpScene(verificationType: .phone)
+    }
+}

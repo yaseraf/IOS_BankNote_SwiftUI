@@ -24,6 +24,7 @@ struct LandingContentView: View {
     var onLanguageSelected: (() -> Void)
     var onForgotPasswordTap:()->Void
     var onLoginTap:()->Void
+    var onSignUpTap:()->Void
 
     var body: some View {
         ZStack {
@@ -157,9 +158,14 @@ struct LandingContentView: View {
                 .font(.cairoFont(.semiBold, size:  12))
             
             
-            Text(signUpAttribute)
-                .font(.interFont(.regular, size:  12))
-                .foregroundStyle(Color(hex: "#629AF9"))
+            Button {
+                onSignUpTap()
+            } label: {
+                Text(signUpAttribute)
+                    .font(.interFont(.regular, size:  12))
+                    .foregroundStyle(Color(hex: "#629AF9"))
+            }
+
 
         }
     }
@@ -171,6 +177,8 @@ struct LandingContentView: View {
     }, onForgotPasswordTap: {
         
     }, onLoginTap: {
+        
+    }, onSignUpTap: {
         
     })
 }

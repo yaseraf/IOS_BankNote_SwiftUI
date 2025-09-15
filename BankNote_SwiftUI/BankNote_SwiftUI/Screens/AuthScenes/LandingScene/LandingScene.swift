@@ -23,6 +23,8 @@ struct LandingScene: BaseSceneType {
                     viewModel.openForgotPasswordScene()
                 }, onLoginTap: {
                     viewModel.openHomeScene()
+                }, onSignUpTap: {
+                    viewModel.openSignUpScene()
                 })
             })
         })

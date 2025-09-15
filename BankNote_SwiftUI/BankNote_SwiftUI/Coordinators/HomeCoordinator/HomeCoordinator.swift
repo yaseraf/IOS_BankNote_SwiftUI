@@ -92,7 +92,6 @@ class HomeCoordinator:  ObservableObject {
         }
       return coordinator
     }
-
         
     func getGenericCoordinator() -> GenericCoordinator {
         let  coordinator:GenericCoordinator

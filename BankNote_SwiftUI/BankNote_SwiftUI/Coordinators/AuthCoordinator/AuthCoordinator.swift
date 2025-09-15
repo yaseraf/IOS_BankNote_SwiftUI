@@ -50,7 +50,6 @@ class AuthCoordinator:  ObservableObject {
 }
 
 extension AuthCoordinator: AuthCoordinatorProtocol {
-    
     func openLoginScene() {
         let useCase = LoginUseCase()
         let viewModel = LoginViewModel(coordinator: self, useCase: useCase)
@@ -125,22 +124,76 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-//    func openBoardingScene() {
-//        let viewModel = BoardingViewModel(coordinator: self)
-//        let view =   BoardingScene(viewModel: viewModel)
-//        let viewWithCoordinator = view.withThemeEnvironment
-//        let viewController = UIHostingController(rootView: viewWithCoordinator)
-//        self.navigationController.pushViewController(viewController, animated: true)
-//    }
+    func openSignUpScene(verificationType: VerificationType) {
+        let viewModel = SignUpViewModel(coordinator: self, verificationType: verificationType)
+        let view = SignUpScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
     
-//    func openCountiesScene(delegate: CountriesListDelegate,selectCountry:CountryFlagInfo?) {
-//        let viewModel = CountriesListViewModel(coordinator:self,delegate: delegate, selectCountry: selectCountry)
-//        let view =  CountriesListScene(viewModel: viewModel)
-//        let viewWithCoordinator = view.withThemeEnvironment
-//        let viewController = UIHostingController(rootView: viewWithCoordinator)
-//        viewController.view.backgroundColor = .clear
-//        viewController.modalPresentationStyle = .pageSheet
-//        SceneDelegate.getAppCoordinator()?.topViewController()?.present(viewController, animated: true)
-//    }
+    func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String) {
+        let viewModel = VerifySignUpViewModel(coordinator: self, verificationType: verificationType, phone: phone, email: email)
+        let view = VerifySignUpScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func openChooseNationalityScene() {
+        let viewModel = ChooseNationalityViewModel(coordinator: self)
+        let view = ChooseNationalityScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func openLoginInformationScene() {
+        let viewModel = LoginInformationViewModel(coordinator: self)
+        let view = LoginInformationScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openScanIDFrontScene() {
+        let viewModel = ScanIDFrontViewModel(coordinator: self)
+        let view = ScanIDFrontScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openVerifyScanIDFrontScene() {
+        let viewModel = VerifyScanIDFrontViewModel(coordinator: self)
+        let view = VerifyScanIDFrontScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func openScanIDBackScene() {
+        let viewModel = ScanIDBackViewModel(coordinator: self)
+        let view = ScanIDBackScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openVerifyScanIDBackScene() {
+        let viewModel = VerifyScanIDBackViewModel(coordinator: self)
+        let view = VerifyScanIDBackScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func openLivenessCheckScene() {
+        let viewModel = LivenessCheckViewModel(coordinator: self)
+        let view = LivenessCheckScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
 
 }

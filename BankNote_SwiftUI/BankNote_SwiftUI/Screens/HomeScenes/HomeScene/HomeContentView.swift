@@ -17,20 +17,25 @@ struct HomeContentView: View {
     var onWithdrawalTap:()->Void
     
     var body: some View {
-        VStack {
-            HeaderView()
-            
-            totalInvestmentView
-            
-            balanceView
-            
-            portfolioView
-            
-            Spacer()
-            
-            HomeBottomBarView(selectedItem: .home)
+        ZStack {
+            VStack {
+                HeaderView()
+                
+                totalInvestmentView
+                
+                balanceView
+                
+                portfolioView
+                
+                Spacer()
+                
+            }
+            VStack {
+                Spacer()
+                
+                HomeBottomBarView(selectedItem: .home)
+            }
         }
-//        .background(Color(hex: "#EBEBEB"))
     }
     
         

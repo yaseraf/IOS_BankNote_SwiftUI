@@ -19,14 +19,6 @@ struct HomeBottomBarView: View {
     var body: some View {
 
         ZStack {
-            Image(
-                selectedItem == .home ? "homeSubtract" :
-                    selectedItem == .portfolio ? "portfolioSubtract" : selectedItem == .trade ? "tradeSubtract" : selectedItem == .orders ? "ordersSubtract" : "settingsSubtract"
-            )
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-
             HStack(alignment: .bottom, spacing: 0){
                 getItemView(item: .home)
                 Spacer()
@@ -38,17 +30,14 @@ struct HomeBottomBarView: View {
                 Spacer()
                 getItemView(item: .settings)
             }
-            .padding(.horizontal, selectedItem == .home ? 15 : selectedItem == .portfolio ? 37 : 0)
-            .padding(.bottom, 35)
+            .padding(.horizontal, 25)
             .frame(maxWidth: .infinity)
-//            .background(.white)
-            
-//            VStack(spacing: 0) {
-//                Spacer()
-//                Color.red
-//                    .ignoresSafeArea()
-//                    .frame(height: 33)
-//            }
+            .background(
+                Color.white
+                    .offset(y: 30)
+//                    .shadow(radius: 3)
+                    
+            )
         }
     }
 
@@ -63,15 +52,20 @@ struct HomeBottomBarView: View {
                         Image(selectedItem == .home ? "ic_homeSelected" : selectedItem == .portfolio ? "ic_portfolioSelected" : selectedItem == .trade ? "ic_tradeSelected" : selectedItem == .orders ? "ic_ordersSelected" : selectedItem == .settings ? "ic_settingsSelected" : "")
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            
+                            .frame(width: 71, height: 71)
+                            .background(
+                                Color(hex: "#EBEBEB")
+                                    .frame(width: 70, height: 70)
+                                    .clipShape(UpperHalfCircle())
+                                    .offset(y: -6)
+                            )
+                        
                         
                     } else {
                         Image(item.iconName)
                             .resizable()
                             .frame(width: 24)
                             .frame(height: 24)
-
                     }
                     
                     Text(item.title)
@@ -101,6 +95,21 @@ struct HomeBottomBarView: View {
     }
 }
 
+// Custom shape for upper half-circle
+struct UpperHalfCircle: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY),
+                    radius: rect.width / 2,
+                    startAngle: .degrees(0),
+                    endAngle: .degrees(180),
+                    clockwise: false)
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.midY))
+        path.closeSubpath()
+        return path
+    }
+}
+
 #Preview {
-    HomeBottomBarView(selectedItem: .trade)
+    HomeBottomBarView(selectedItem: .settings)
 }

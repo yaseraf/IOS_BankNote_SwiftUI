@@ -8,9 +8,7 @@
 import Foundation
 class ChooseNationalityViewModel: ObservableObject {
     private let coordinator: AuthCoordinatorProtocol
-    
-    @Published var stepNumber: Int = 0
-    
+        
     init(coordinator: AuthCoordinatorProtocol) {
         self.coordinator = coordinator
     }

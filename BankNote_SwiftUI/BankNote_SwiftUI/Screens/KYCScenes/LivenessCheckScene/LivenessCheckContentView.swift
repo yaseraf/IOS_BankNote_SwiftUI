@@ -10,7 +10,7 @@ import SwiftUI
 
 struct LivenessCheckContentView: View {
     
-    @State var stepNumber:Int = 3
+    @State var stepNumber:Int = 5
     
     var onContinueTap:()->Void
     
@@ -18,9 +18,11 @@ struct LivenessCheckContentView: View {
         VStack {
             logoView
             
-            segmentsView
+            SegmentsView(stepNumber: stepNumber)
             
             contentView
+            
+            pointsView
                         
             Spacer()
             
@@ -41,22 +43,6 @@ struct LivenessCheckContentView: View {
         }
     }
     
-    private var segmentsView: some View {
-        HStack(spacing: 4) {
-            ForEach(0...6, id: \.self) { index in
-                if stepNumber > index {
-                    LinearGradient( gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing)
-                    
-                        .cornerRadius(12)
-                } else {
-                    RoundedRectangle(cornerRadius: 12).fill(Color(hex: "#DDDDDD"))
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: 6)
-        .padding(.horizontal, 18)
-    }
-    
     private var contentView: some View {
         VStack(spacing: 0) {
             Text("liveness_check".localized)
@@ -69,7 +55,7 @@ struct LivenessCheckContentView: View {
     }
     
     private var pointsView: some View {
-        VStack {
+        VStack(spacing: 10) {
             HStack {
                 Image("ic_questionMark")
                     .resizable()
@@ -108,6 +94,7 @@ struct LivenessCheckContentView: View {
             }
 
         }
+        .padding(.horizontal, 18)
     }
     
     

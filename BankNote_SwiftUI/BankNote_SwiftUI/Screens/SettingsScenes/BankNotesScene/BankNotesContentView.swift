@@ -199,9 +199,12 @@ struct BankNotesContentView: View {
             .padding(.horizontal, 38)
             .frame(maxWidth: .infinity)
             .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(.white)
-                    .stroke(Color(hex: "#AA1A1A"), lineWidth: 2)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(hex: "#AA1A1A"), lineWidth: 2)
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.white)
+                }
             )
 
             Button {

@@ -17,7 +17,7 @@ struct LoginInformationScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                LoginInformationContentView(stepNumber: $viewModel.stepNumber, onContinueTap: {
+                LoginInformationContentView(onContinueTap: {
                     viewModel.openScanIDFrontScene()
                 })
             })

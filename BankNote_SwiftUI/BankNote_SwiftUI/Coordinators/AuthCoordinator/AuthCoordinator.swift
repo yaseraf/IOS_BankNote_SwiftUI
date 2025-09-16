@@ -195,5 +195,30 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openLivenessScanScene() {
+        let viewModel = LivenessScanViewModel(coordinator: self)
+        let view = LivenessScanScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+
+    func openQuestioneerScene() {
+        let viewModel = QuestioneerViewModel(coordinator: self)
+        let view = QuestioneerScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func openThanksForRegisteringScene() {
+        let viewModel = ThanksForRegisteringViewModel(coordinator: self)
+        let view = ThanksForRegisteringScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
 
 }

@@ -14,3 +14,9 @@ class LivenessCheckViewModel: ObservableObject {
     }
 }
 
+// MARK: Routing
+extension LivenessCheckViewModel {
+    func openLivenessScanScene() {
+        coordinator.openLivenessScanScene()
+    }
+}

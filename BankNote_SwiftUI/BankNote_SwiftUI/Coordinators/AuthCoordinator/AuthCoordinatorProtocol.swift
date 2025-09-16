@@ -28,4 +28,7 @@ protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openScanIDBackScene()
     func openVerifyScanIDBackScene()
     func openLivenessCheckScene()
+    func openLivenessScanScene()
+    func openQuestioneerScene()
+    func openThanksForRegisteringScene()
 }

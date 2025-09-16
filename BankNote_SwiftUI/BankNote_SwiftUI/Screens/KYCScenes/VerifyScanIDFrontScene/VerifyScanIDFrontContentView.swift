@@ -10,7 +10,7 @@ import SwiftUI
 
 struct VerifyScanIDFrontContentView: View {
     
-    var stepNumber:Binding<Int>
+    @State var stepNumber:Int = 3
     
     @State private var username = "John Dohh"
     @State private var password = "password123"
@@ -64,8 +64,8 @@ struct VerifyScanIDFrontContentView: View {
     
     private var segmentsView: some View {
         HStack(spacing: 4) {
-            ForEach(0...6, id: \.self) { index in
-                if stepNumber.wrappedValue > index {
+            ForEach(0...5, id: \.self) { index in
+                if stepNumber > index {
                     LinearGradient( gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing)
                     
                         .cornerRadius(12)
@@ -156,7 +156,7 @@ struct VerifyScanIDFrontContentView: View {
 }
 
 #Preview {
-    VerifyScanIDFrontContentView(stepNumber: .constant(3), onNextTap: {
+    VerifyScanIDFrontContentView(onNextTap: {
         
     }, onRetakeTap: {
         

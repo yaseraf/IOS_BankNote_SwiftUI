@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ChooseNationalityContentView: View {
     
-    var stepNumber:Binding<Int>
+    @State var stepNumber:Int = 1
     
     var onContinueTap:()->Void
     
@@ -46,8 +46,8 @@ struct ChooseNationalityContentView: View {
     
     private var segmentsView: some View {
         HStack(spacing: 4) {
-            ForEach(0...6, id: \.self) { index in
-                if stepNumber.wrappedValue > index {
+            ForEach(0...5, id: \.self) { index in
+                if stepNumber > index {
                     LinearGradient( gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing)
                     
                         .cornerRadius(12)
@@ -122,7 +122,7 @@ struct ChooseNationalityContentView: View {
 }
 
 #Preview {
-    ChooseNationalityContentView(stepNumber: .constant(1), onContinueTap: {
+    ChooseNationalityContentView(onContinueTap: {
         
     })
 }

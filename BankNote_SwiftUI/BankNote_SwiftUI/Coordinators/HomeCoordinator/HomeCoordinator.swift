@@ -108,7 +108,8 @@ class HomeCoordinator:  ObservableObject {
 extension HomeCoordinator:HomeCoordinatorProtocol{
 
     func openHomeScene() {
-        let viewModel = HomeViewModel(coordinator: self)
+        let useCase = HomeUseCase()
+        let viewModel = HomeViewModel(coordinator: self, useCase: useCase)
         let view = HomeScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

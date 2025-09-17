@@ -25,6 +25,7 @@ enum CachingKey: String {
     case hasCheckedInactivity
     case priceAlertOption
     case signalRConnected
+    case isBiometricEnabled
     
     // MARK: Strings
     
@@ -40,6 +41,10 @@ enum CachingKey: String {
     case marketStatusTitle
     case selectedSymbol
     case selectedSymbolType
+    case iconPath
+    case BackgroundWatchList
+    case currentDate
+    case yesterdayDate
     
     // MARK: Other
     
@@ -63,12 +68,12 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<Bool>(.isHeadHorizontalMovement) var isHeadHorizontalMovement
     @CachingCodable<Bool>(.priceAlertOption) var priceAlertOption
     @CachingCodable<Bool>(.signalRConnected) var signalRConnected
-    
+    @CachingCodable<Bool>(.isBiometricEnabled) var isBiometricEnabled
+
     // MARK: Strings
 
     @CachingCodable<String>(.appLanguage) var appLanguage
     @CachingCodable<String>(.currentDeviceLanguage) var currentDeviceLanguage
-    @CachingCodable<String>(.sessiontimeoutPerSec) var sessiontimeoutPerSec
     @CachingCodable<String>(.username) var username
     @CachingCodable<String>(.lastColorScheme) var lastColorScheme
     @CachingCodable<String>(.marketStatusCode) var marketStatusCode
@@ -78,7 +83,12 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.marketStatusTitle) var marketStatusTitle
     @CachingCodable<String>(.selectedSymbol) var selectedSymbol
     @CachingCodable<String>(.selectedSymbolType) var selectedSymbolType
-    
+    @CachingCodable<String>(.iconPath) var iconPath
+    @CachingCodable<String>(.BackgroundWatchList) var BackgroundWatchList
+    @CachingCodable<String>(.sessiontimeoutPerSec) var sessiontimeoutPerSec
+    @CachingCodable<String>(.currentDate) var currentDate
+    @CachingCodable<String>(.yesterdayDate) var yesterdayDate
+
     // MARK: Others
 
     @CachingCodable<GetUserAccountsUIModel>(.selectedUserAccount) var selectedUserAccount

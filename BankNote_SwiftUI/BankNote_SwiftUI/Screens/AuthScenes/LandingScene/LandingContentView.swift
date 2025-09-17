@@ -23,7 +23,7 @@ struct LandingContentView: View {
     
     var onLanguageSelected: (() -> Void)
     var onForgotPasswordTap:()->Void
-    var onLoginTap:()->Void
+    var onLoginTap:(_ email: String, _ password: String, _ isRememberMe: Bool)->Void
     var onSignUpTap:()->Void
 
     var body: some View {
@@ -135,7 +135,7 @@ struct LandingContentView: View {
     
     private var loginButtonView: some View {
         Button {
-            onLoginTap()
+            onLoginTap(username, password, isRememberMe)
         } label: {
             Text("login".localized)
                 .font(.cairoFont(.semiBold, size: 14))
@@ -176,7 +176,7 @@ struct LandingContentView: View {
         
     }, onForgotPasswordTap: {
         
-    }, onLoginTap: {
+    }, onLoginTap: { email, password, isRememberMe in
         
     }, onSignUpTap: {
         

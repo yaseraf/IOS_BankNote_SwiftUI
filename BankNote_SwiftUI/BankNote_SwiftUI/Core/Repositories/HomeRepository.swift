@@ -10,9 +10,20 @@ protocol HomeRepositoryProtocol {
     func GetAllProfilesLookupsByUserCode (route:HomeRoute, completion: @escaping(Result<[GetAllProfilesLookupsByUserCodeResponseModel], NetworkError>) -> Void) async
     func GetMarketWatchByProfileID(route: HomeRoute, completion: @escaping(Result<[GetMarketWatchByProfileIDResponseModel], NetworkError>) -> Void) async
     func GetExchangeSummary(route: HomeRoute, completion: @escaping(Result<[GetExchangeSummaryResponseModel], NetworkError>) -> Void) async
+    func getUserAccounts(route: HomeRoute, completion: @escaping(Result<[GetUserAccountsResponseModel], NetworkError>) -> Void) async
+    func getPortfolio(route: HomeRoute, completion: @escaping(Result<GetPortfolioResponseModel, NetworkError>) -> Void) async
+
 }
 
 class HomeRepository: HomeRepositoryProtocol {
+    func getPortfolio(route: HomeRoute, completion: @escaping (Result<GetPortfolioResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: GetPortfolioResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func getUserAccounts(route: HomeRoute, completion: @escaping (Result<[GetUserAccountsResponseModel], NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: [GetUserAccountsResponseModel].self, completion: completion).requestApi()
+    }
+    
     func GetExchangeSummary(route: HomeRoute, completion: @escaping (Result<[GetExchangeSummaryResponseModel], NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: [GetExchangeSummaryResponseModel].self, completion: completion).requestApi()
     }

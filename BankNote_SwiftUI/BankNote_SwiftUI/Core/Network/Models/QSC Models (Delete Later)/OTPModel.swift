@@ -14,26 +14,24 @@ class OTPRequestModel : Codable {
     var isAuthorizeOnly, fingerPrintID, fingerPrintLevel: String
     var FingerPrintEnabled , RegistrationId : String
 
-    init(emailAddress: String, hdnKey: String, fingerPrintId: String, mainClientID: String, mobileNo: String, mobileType: String, newUser: String, oldPassword: String, password: String, password2: String, registrationId: String, sessionID: String, tokenID: String, touchToken: String, tradingNo: String, userIPAddress: String, userName: String, versionNumber: String, webCode: String, isAuthorizeOnly: String, fingerPrintID: String, fingerPrintLevel: String, FingerPrintEnabled : String, RegistrationId : String) {
-           
-           self.emailAddress = emailAddress
-           self.hdnKey = hdnKey
-           self.fingerPrintID = fingerPrintId
-           self.mobileNo = mobileNo
-           self.mobileType = mobileType
-           self.password = password
-           self.sessionID = sessionID
-           self.tokenID = tokenID
-           self.tradingNo = tradingNo
-           self.userIPAddress = userIPAddress
-           self.userName = userName
-           self.versionNumber = versionNumber
-           self.isAuthorizeOnly = isAuthorizeOnly
-           self.fingerPrintID = fingerPrintID
-           self.fingerPrintLevel = fingerPrintLevel
-           self.FingerPrintEnabled = FingerPrintEnabled
-           self.RegistrationId = RegistrationId
-       }
+    init(emailAddress: String, hdnKey: String, mobileNo: String, mobileType: String, password: String, sessionID: String, tokenID: String, tradingNo: String, userIPAddress: String, userName: String, versionNumber: String, isAuthorizeOnly: String, fingerPrintID: String, fingerPrintLevel: String , FingerPrintEnabled : String , RegistrationId : String) {
+        self.emailAddress = emailAddress
+        self.hdnKey = hdnKey
+        self.mobileNo = mobileNo
+        self.mobileType = mobileType
+        self.password = password
+        self.sessionID = sessionID
+        self.tokenID = tokenID
+        self.tradingNo = tradingNo
+        self.userIPAddress = userIPAddress
+        self.userName = userName
+        self.versionNumber = versionNumber
+        self.isAuthorizeOnly = isAuthorizeOnly
+        self.fingerPrintID = fingerPrintID
+        self.fingerPrintLevel = fingerPrintLevel
+        self.FingerPrintEnabled = FingerPrintEnabled
+        self.RegistrationId = RegistrationId
+    }
 
     enum CodingKeys: String, CodingKey {
         case emailAddress = "Email_Address"

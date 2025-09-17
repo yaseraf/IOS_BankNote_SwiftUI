@@ -7,10 +7,11 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct HomeContentView: View {
     
-    var portfoliosData:Binding<[PortfolioUIModel]?>
+    var portfolioData:Binding<GetPortfolioUIModel?>
     @State var isBalanceHidden:Bool = false
     
     var onTopUpTap:()->Void
@@ -147,7 +148,7 @@ struct HomeContentView: View {
                     .foregroundStyle(.black)
                 
                 ZStack {
-                    Text("4")
+                    Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
                 .padding(.horizontal, 4)
@@ -167,10 +168,11 @@ struct HomeContentView: View {
             .padding(.horizontal, 18)
             
             ScrollView(.vertical, showsIndicators: false) {
-                ForEach(Array((portfoliosData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in
+                ForEach(Array((portfolioData.wrappedValue?.portfolioes ?? []).enumerated()), id: \.offset) { idnex, element in
                     PortfolioCell(portfolioData: element)
                 }
             }
+            .padding(.bottom, 80)
         }
     }
     
@@ -178,20 +180,46 @@ struct HomeContentView: View {
 
 struct PortfolioCell: View {
     
-    var portfolioData: PortfolioUIModel
+    var portfolioData: Portfolio
     
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                Image(portfolioData.image ?? "")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 45, height: 45)
-                
+                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(portfolioData.symbol ?? "").png")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .failure:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .empty:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    @unknown default:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    }
+                }
+                    
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("\(portfolioData.name ?? "")")
+                    Text("\(portfolioData.symbol ?? "")")
                         .font(.cairoFont(.semiBold, size: 14))
-                    Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: portfolioData.price ?? 0))")
+                    Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: portfolioData.prClosePrice ?? 0))")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
             }
@@ -200,21 +228,21 @@ struct PortfolioCell: View {
             
             VStack(alignment: .trailing, spacing: 0) {
                 HStack(spacing: 4) {
-                    Image(portfolioData.changePerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
+                    Image(portfolioData.pPerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     
-                    Text("\(portfolioData.changePerc ?? 0 >= 0 ? "+" : "-") \(AppUtility.shared.formatThousandSeparator(number: portfolioData.changePerc ?? 0))%")
+                    Text("\(portfolioData.pPerc ?? 0 >= 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pPerc ?? 0))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: portfolioData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                        .foregroundStyle(Color(hex: portfolioData.pPerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
                 }
                 
                 
                 
-                Text("\("egp".localized) \(portfolioData.change ?? 0 >= 0 ? "+" : "-") \(AppUtility.shared.formatThousandSeparator(number: portfolioData.change ?? 0))")
+                Text("\("egp".localized) \(portfolioData.pProf ?? 0 >= 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pProf ?? 0))")
                     .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundStyle(Color(hex: portfolioData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                    .foregroundStyle(Color(hex: portfolioData.pPerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
 
             }
         }
@@ -228,7 +256,7 @@ struct PortfolioCell: View {
 
 
 #Preview {
-    HomeContentView(portfoliosData: .constant([]), onTopUpTap: {
+    HomeContentView(portfolioData: .constant(GetPortfolioUIModel.testUIModel()), onTopUpTap: {
         
     }, onWithdrawalTap: {
         

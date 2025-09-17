@@ -32,9 +32,9 @@ enum AuthRoute:APITargetType{
     var path: String{
         switch self {
         case .login:
-            return "GeneralWServices/UserAuthintications"
+            return "GeneralWServices/UsrAuthinticationByEmailAndMobile"
         case .OTP:
-           return  "GeneralWServices/RegistrationsOTP"
+           return  "GeneralWServices/RegistrationsOTPByEmailAndMobile"
         case .GetDeviceConfigs:
             return "GeneralWServices/GetDeviceConfigs"
         }

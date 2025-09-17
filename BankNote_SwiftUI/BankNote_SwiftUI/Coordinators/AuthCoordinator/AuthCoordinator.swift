@@ -35,11 +35,11 @@ class AuthCoordinator:  ObservableObject {
         self.navigationController.viewControllers = []
         switch startViewType {
         case .login:
-            openLoginScene()
+            openLandingScene()
         case .boarding:
             openLandingScene()
         case .register:
-            openLoginScene()
+            openLandingScene()
         }
     }
 
@@ -50,17 +50,9 @@ class AuthCoordinator:  ObservableObject {
 }
 
 extension AuthCoordinator: AuthCoordinatorProtocol {
-    func openLoginScene() {
-        let useCase = LoginUseCase()
-        let viewModel = LoginViewModel(coordinator: self, useCase: useCase)
-        let view = LoginScene(viewModel: viewModel)
-        let viewWithCoordinator = view.withThemeEnvironment
-        let viewController = UIHostingController(rootView: viewWithCoordinator)
-        self.navigationController.pushViewController(viewController, animated: true)
-    }
-    
     func openLandingScene() {
-        let viewModel = LandingViewModel(coordinator: self)
+        let useCase = AuthUseCase()
+        let viewModel = LandingViewModel(coordinator: self, useCase: useCase)
         let view = LandingScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -74,18 +66,6 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         viewController.view.backgroundColor = .clear
         viewController.modalPresentationStyle = .pageSheet
-        self.navigationController.topViewController?.present(viewController, animated: true)
-    }
-    
-    func openVerifyOtpScene(username: String, password: String) {
-        let useCase = LoginUseCase()
-        let viewModel = VerifyOtpPopupViewModel(coordinator: self, useCase: useCase, username: username, password: password)
-        let view = VerifyOtpPopupScene(viewModel: viewModel)
-        let viewWithCoordinator = view.withThemeEnvironment
-        let viewController = UIHostingController(rootView: viewWithCoordinator)
-        viewController.view.backgroundColor = .clear
-        viewController.modalPresentationStyle = .pageSheet
-        viewController.sheetPresentationController?.detents = [.medium()]
         self.navigationController.topViewController?.present(viewController, animated: true)
     }
     
@@ -220,5 +200,16 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openPinScene() {
+        let useCase = AuthUseCase()
+        let deviceConfigsUseCase = GetDeviceConfigsUseCase()
+        let viewModel = PinViewModel(coordinator: self, useCase: useCase, getDeviceConfigsUseCase: deviceConfigsUseCase)
+        let view = PinScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
 
 }

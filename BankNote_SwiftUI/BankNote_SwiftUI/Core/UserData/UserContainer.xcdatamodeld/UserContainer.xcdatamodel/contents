@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24A348" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CompanyEntity" representedClassName="CompanyEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="aboutDescA" optional="YES" attributeType="String"/>
+        <attribute name="aboutDescE" optional="YES" attributeType="String"/>
+        <attribute name="allowdBuyLimit" optional="YES" attributeType="String"/>
+        <attribute name="allowShortSell" optional="YES" attributeType="String"/>
+        <attribute name="companyA" optional="YES" attributeType="String"/>
+        <attribute name="companyE" optional="YES" attributeType="String"/>
+        <attribute name="currCode" optional="YES" attributeType="String"/>
+        <attribute name="exchange" optional="YES" attributeType="String"/>
+        <attribute name="ipoValidityDate" optional="YES" attributeType="String"/>
+        <attribute name="isCryptoSymbol" optional="YES" attributeType="String"/>
+        <attribute name="isDerivative" optional="YES" attributeType="String"/>
+        <attribute name="isFund" optional="YES" attributeType="String"/>
+        <attribute name="isinCode" optional="YES" attributeType="String"/>
+        <attribute name="isIPOQuickSell" optional="YES" attributeType="String"/>
+        <attribute name="isMargin" optional="YES" attributeType="String"/>
+        <attribute name="isUsOnline" optional="YES" attributeType="String"/>
+        <attribute name="isValidateMinMax" optional="YES" attributeType="String"/>
+        <attribute name="lastDay" optional="YES" attributeType="String"/>
+        <attribute name="marketType" optional="YES" attributeType="String"/>
+        <attribute name="precision" optional="YES" attributeType="String"/>
+        <attribute name="shortNameA" optional="YES" attributeType="String"/>
+        <attribute name="shortNameE" optional="YES" attributeType="String"/>
+        <attribute name="symbol" optional="YES" attributeType="String"/>
+        <attribute name="symbolCompanyA" optional="YES" attributeType="String"/>
+        <attribute name="symbolCompanyDesc" optional="YES" attributeType="String"/>
+        <attribute name="symbolCompanyE" optional="YES" attributeType="String"/>
+        <attribute name="symbolID" optional="YES" attributeType="String"/>
+        <attribute name="templateMargin" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="UserEntity" representedClassName="UserEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="userWithSelection" optional="YES" attributeType="String"/>
+    </entity>
+</model>

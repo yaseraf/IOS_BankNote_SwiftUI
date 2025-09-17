@@ -9,7 +9,8 @@
 import Foundation
 enum HomeRoute:APITargetType{
     
-//    case updateInvestmentType(requestModel: UpdateInvestmentTypeRequestModel)
+    case getUserAccounts(requestModel: GetUserAccountsRequestModel)
+    case getPortfolio(requestModel: GetPortfolioRequestModel)
     case GetAllProfilesLookupsByUserCode(requestModel: GetAllProfilesLookupsByUserCodeRequestModel)
     case GetMarketWatchByProfileID(requestModel: GetMarketWatchByProfileIDRequestModel)
     case GetExchangeSummary(requestModel: GetExchangeSummaryRequestModel)
@@ -34,6 +35,10 @@ enum HomeRoute:APITargetType{
     
     var path: String{
         switch self {
+        case .getUserAccounts:
+            return "GeneralWServices/GetUserAccounts/\(KeyChainController().webCode ?? "")"
+        case .getPortfolio:
+            return "FinancialWServices/GetPortfolioAndAccSumAndChart/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().clientID ?? "")/\(KeyChainController().webCode ?? "")/\(UserDefaultController().currentDate ?? "")/\(KeyChainController().brokerID ?? "")/\(KeyChainController().UCODE ?? "")"
         case .GetAllProfilesLookupsByUserCode:
             return "MarektWServices/GetAllProfilesLookupsByUSerCode/\(KeyChainController().webCode ?? "")"
         case .GetMarketWatchByProfileID:
@@ -47,7 +52,7 @@ enum HomeRoute:APITargetType{
     var method: APIMethodType{
         get{
             switch self {
-            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary:
+            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio:
                 return .get
             }
         }
@@ -55,7 +60,7 @@ enum HomeRoute:APITargetType{
     
     var requestType: APITypeOfRequest{
         switch self {
-        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary:
+        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio:
                 .requestPlain
         }
     }

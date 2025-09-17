@@ -17,7 +17,8 @@ struct HeaderView: View {
                     .scaledToFit()
                     .frame(width: 40, height: 40)
                 
-                Text("BANKNOTE")
+                Text("bank_note".localized)
+                    .textCase(.uppercase)
                     .font(.cairoFont(.extraBold, size: 14))
             }
             

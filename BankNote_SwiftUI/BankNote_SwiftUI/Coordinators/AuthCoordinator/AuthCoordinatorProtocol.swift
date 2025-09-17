@@ -11,10 +11,8 @@ import SwiftUI
 import FlagAndCountryCode
 
 protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
-    func openLoginScene()
     func openLandingScene()
     func openCountryPickerScene()
-    func openVerifyOtpScene(username: String, password: String)
     func openForgotPasswordScene(forgotType:ForgotDataEnum)
     func openConfirmOtpScene(forgotType:ForgotDataEnum)
     func openChangePasswordScene()
@@ -31,4 +29,5 @@ protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openLivenessScanScene()
     func openQuestioneerScene()
     func openThanksForRegisteringScene()
+    func openPinScene()
 }

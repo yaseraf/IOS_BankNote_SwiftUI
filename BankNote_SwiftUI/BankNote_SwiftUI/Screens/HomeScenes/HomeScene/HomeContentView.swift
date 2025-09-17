@@ -65,12 +65,20 @@ struct HomeContentView: View {
             return str
         }
         
+        let accountCurrency = UserDefaultController().selectedUserAccount?.CUR_CODE ?? ""
+        let marketValue = Double(portfolioData.wrappedValue?.accountSummaries.marketValue ?? "0")
+        let balance = Double(portfolioData.wrappedValue?.accountSummaries.balance ?? "0")
+        
+        let totalAsset: Double = (marketValue ?? 0) + (balance ?? 0)
+        let accountPnL = portfolioData.wrappedValue?.accountSummaries.expectedProfitLoss ?? ""
+
+        
         return VStack(spacing: 8) {
             HStack {
-                Text(isBalanceHidden ? "EGP 50,430.00" : "*******")
+                Text(isBalanceHidden ? "*******" : "\(accountCurrency) \(AppUtility.shared.formatThousandSeparator(number: totalAsset))")
                     .font(.cairoFont(.bold, size: 32))
                 
-                Image(isBalanceHidden ? "ic_eyeInvisible" : "ic_eyeVisible")
+                Image(isBalanceHidden ? "ic_eyeVisible" : "ic_eyeInvisible")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
@@ -82,7 +90,7 @@ struct HomeContentView: View {
             }
             
             HStack {
-                Text("EGP +450.34")
+                Text("\(accountCurrency) \(AppUtility.shared.formatThousandSeparator(number: Double(accountPnL) ?? 0))")
                     .font(.cairoFont(.semiBold, size: 12))
                     .foregroundStyle(Color(hex: "#1E961E"))
                 

@@ -7,10 +7,11 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct TradeContentView: View {
-    var indexData: Binding<[IndexUIModel]?>
-    var watchlistData: Binding<[WatchlistUIModel]?>
+    var indexData: Binding<[GetExchangeSummaryUIModel]?>
+    var watchlistData: Binding<[GetAllProfilesLookupsByUserCodeUIModel]?>
     var newsData: Binding<[NewsUIModel]?>
     
     enum SelectedNewsType {
@@ -173,20 +174,20 @@ struct TradeContentView: View {
 
 struct IndexCell: View {
     
-    var indexData: IndexUIModel
+    var indexData: GetExchangeSummaryUIModel
     
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                Image(indexData.image ?? "")
+                Image("ic_indexPlaceholder")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 45, height: 45)
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("\(indexData.name ?? "")")
+                    Text("\(indexData.eMName ?? "")")
                         .font(.cairoFont(.semiBold, size: 14))
-                    Text("\(AppUtility.shared.formatThousandSeparator(number: indexData.value ?? 0)) \("points".localized)")
+                    Text("\(AppUtility.shared.formatThousandSeparator(number: Double(indexData.currentValue ?? "") ?? 0)) \("points".localized)")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
             }
@@ -195,14 +196,14 @@ struct IndexCell: View {
             
             VStack(alignment: .trailing, spacing: 0) {
                 HStack(spacing: 4) {
-                    Image(indexData.changePerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
+                    Image(Double(indexData.netChangePerc ?? "") ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     
-                    Text("\(indexData.changePerc ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: indexData.changePerc ?? 0))%")
+                    Text("\(Double(indexData.netChangePerc ?? "") ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: Double(indexData.netChangePerc ?? "") ?? 0))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: indexData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                        .foregroundStyle(Color(hex: Double(indexData.netChangePerc ?? "") ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
                 }
             }
         }
@@ -215,15 +216,41 @@ struct IndexCell: View {
 
 struct WatchlistCell: View {
     
-    var watchlistData: WatchlistUIModel
+    var watchlistData: GetAllProfilesLookupsByUserCodeUIModel
     
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                Image(watchlistData.image ?? "")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 45, height: 45)
+                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(portfolioData.symbol ?? "").png")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .failure:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .empty:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    @unknown default:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    }
+                }
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(watchlistData.name ?? "")")
@@ -237,7 +264,8 @@ struct WatchlistCell: View {
             
             VStack(alignment: .trailing, spacing: 0) {
                 Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: watchlistData.change ?? 0))")
-                
+                    .font(.cairoFont(.semiBold, size: 12))
+
                 HStack(spacing: 4) {
                     Image(watchlistData.changePerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
                         .resizable()
@@ -288,7 +316,7 @@ struct newsCell: View {
 
 
 #Preview {
-    TradeContentView(indexData: .constant([IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 30", changePerc: 0.016, value: 2262.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 70", changePerc: -0.20, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43)]), watchlistData: .constant([WatchlistUIModel(image: "ic_fawry", name: "FWRY", fullName: "Fawry For Banking Technology", change: 35, changePerc: 3.01), WatchlistUIModel(image: "ic_etel", name: "ETEL", fullName: "Telecom Egypt", change: 35, changePerc: -2.1)]), newsData: .constant([NewsUIModel(indexName: "EGX", time: "2 hours ago", title: "ADNOC Distribution Expands to Saudi Arabia", desc: "ADNOCDIST announces new fuel stations in KSA as..."), NewsUIModel(indexName: "EGX", time: "Yesterday", title: "Emaar Properties Reports 12% Profit Growth in Q1 2025", desc: "Strong performance driven by Dubai’s real estate..."), NewsUIModel(indexName: "EGX", time: "3 days ago", title: "UAE Central Bank Holds Interest Rates Steady", desc: "Decision aligns with US Fed Pol policy amid stable ...")]), onIndexViewAllTap: {
+    TradeContentView(indexData: .constant([]), watchlistData: .constant([]), newsData: .constant([]), onIndexViewAllTap: {
         
     }, onWatchlistViewAllTap: {
         

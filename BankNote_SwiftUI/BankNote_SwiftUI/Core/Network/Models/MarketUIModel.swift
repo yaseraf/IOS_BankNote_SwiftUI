@@ -1,9 +1,11 @@
 //
-//  GetAllProfilesLookupsByUserCodeModel.swift
-//  QSC_SwiftUI
+//  MarketUIModel.swift
+//  BankNote_SwiftUI
 //
-//  Created by FIT on 21/08/2025.
+//  Created by FIT on 18/09/2025.
 //
+
+import Foundation
 
 struct GetAllProfilesLookupsByUserCodeRequestModel {
     
@@ -26,12 +28,14 @@ struct GetAllProfilesLookupsByUserCodeResponseModel: Codable {
         }
 }
 
+
 struct GetAllProfilesLookupsByUserCodeUIModel {
     var isDefault, bgName, profileType, profileID, profileName: String?
-    var profileSettings, stockCount, userCode, Symbols: String?
-
-    static func mapToUIModel(_ model: GetAllProfilesLookupsByUserCodeResponseModel) -> Self {
-        return GetAllProfilesLookupsByUserCodeUIModel(isDefault: model.isDefault, bgName: model.bgName, profileType: model.profileType, profileID: model.profileID, profileName: model.profileName, profileSettings: model.profileSettings, stockCount: model.stockCount, userCode: model.userCode, Symbols: model.Symbols)
+    var profileSettings, stockCount, userCode: String?
+    var Symbols: String?
+    
+    static func mapToUIModel(_ model:GetAllProfilesLookupsByUserCodeResponseModel)->Self {
+        return  GetAllProfilesLookupsByUserCodeUIModel(isDefault: model.isDefault ?? "", bgName: model.bgName ?? "", profileType: model.profileType ?? "", profileID: model.profileID ?? "", profileName: model.profileName ?? "", profileSettings: model.profileSettings ?? "", stockCount: model.stockCount ?? "", userCode: model.userCode ?? "", Symbols: model.Symbols ?? "")
     }
     
     static func initializer() -> Self {

@@ -30,7 +30,9 @@ class TradeCoordinator:  ObservableObject {
 extension TradeCoordinator:TradeCoordinatorProtocol{
     
     func openTradeScene() {
-        let viewModel = TradeViewModel(coordinator: self)
+        let useCase = TradeUseCase()
+        let lookupsUseCase = LookupsUseCase()
+        let viewModel = TradeViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase)
         let view = TradeScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

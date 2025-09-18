@@ -17,13 +17,33 @@ struct PortfolioScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                PortfolioContentView(portfoliosData: $viewModel.portfoliosData, onPortfolioTap: {
+                PortfolioContentView(portfolioData: $viewModel.portfolioData, pieChartData: $viewModel.pieChartData, onPortfolioTap: {
                     viewModel.openStockDetailsScene()
                 })
             })
             .onAppear {
-                viewModel.getPortfolioData()
+                viewModel.callGetPortfolioAPI(success: true)
             }
-        })
+        }, showLoading: .constant(viewTypeAction.showLoading))
+        .onViewDidLoad {
+            portfolioAPI()
+
+        }
     }
+    
+    private func portfolioAPI() {
+        viewModel.$getPortfolioAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
 }

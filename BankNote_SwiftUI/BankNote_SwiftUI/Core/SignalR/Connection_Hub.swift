@@ -501,7 +501,7 @@ class Connection_Hub {
 extension Connection_Hub {
     func callGetLookupsAPI() {
         let requestModel = GetLookupsRequestModel()
-        let useCase = GenericUseCase()
+        let useCase = LookupsUseCase()
         
         getLookupsAPIResult = .onLoading(show: true)
         
@@ -522,13 +522,13 @@ extension Connection_Hub {
     }
     
     private func tryUpdateMarketStatus() {
-            // Only update when BOTH are ready
-            guard let lookups = getLookupsList,
-                  let marketData = exchangeMarketSummaryData else {
-                return
-            }
-            updateMarketStatus(using: marketData, lookups: lookups)
+        // Only update when BOTH are ready
+        guard let lookups = getLookupsList,
+              let marketData = exchangeMarketSummaryData else {
+            return
         }
+        updateMarketStatus(using: marketData, lookups: lookups)
+    }
 
     
     func updateMarketStatus(using marketData: [GetExchangeSummaryUIModel], lookups: [GetLookupsUIModel]) {

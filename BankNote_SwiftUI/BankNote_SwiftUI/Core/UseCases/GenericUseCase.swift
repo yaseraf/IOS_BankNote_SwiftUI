@@ -7,18 +7,18 @@
 
 import Foundation
 
-protocol GenericUseCaseProtocol{
+protocol LookupsUseCaseProtocol{
     func GetLookups(requestModel: GetLookupsRequestModel, completion: @escaping(Result<[GetLookupsUIModel], NetworkError>) -> Void) async
 }
 
-class GenericUseCase {
-    private let repository: GenericRepositoryProtocol
-    init(repository: GenericRepositoryProtocol = GenericRepository()) {
+class LookupsUseCase {
+    private let repository: LookupsRepositoryProtocol
+    init(repository: LookupsRepositoryProtocol = LookupsRepository()) {
         self.repository = repository
     }
 }
 
-extension GenericUseCase: GenericUseCaseProtocol {
+extension LookupsUseCase: LookupsUseCaseProtocol {
     func GetLookups(requestModel: GetLookupsRequestModel, completion: @escaping (Result<[GetLookupsUIModel], NetworkError>) -> Void) async {
         let route = GenericRoute.GetLookups(requestModel: requestModel)
         await repository.GetLookups(route: route) { result in

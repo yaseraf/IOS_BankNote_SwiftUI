@@ -30,7 +30,8 @@ class PortfolioCoordinator:  ObservableObject {
 extension PortfolioCoordinator:PortfolioCoordinatorProtocol{
 
     func openPortfolioScene() {
-        let viewModel = PortfolioViewModel(coordinator: self)
+        let useCase = HomeUseCase()
+        let viewModel = PortfolioViewModel(coordinator: self, useCase: useCase)
         let view = PortfolioScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

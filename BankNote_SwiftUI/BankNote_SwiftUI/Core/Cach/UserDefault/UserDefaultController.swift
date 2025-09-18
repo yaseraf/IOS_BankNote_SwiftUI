@@ -26,6 +26,7 @@ enum CachingKey: String {
     case priceAlertOption
     case signalRConnected
     case isBiometricEnabled
+    case isMarketOpen
     
     // MARK: Strings
     
@@ -45,6 +46,8 @@ enum CachingKey: String {
     case BackgroundWatchList
     case currentDate
     case yesterdayDate
+    case marketStatusTitleE
+    case marketStatusTitleA
     
     // MARK: Other
     
@@ -69,6 +72,7 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<Bool>(.priceAlertOption) var priceAlertOption
     @CachingCodable<Bool>(.signalRConnected) var signalRConnected
     @CachingCodable<Bool>(.isBiometricEnabled) var isBiometricEnabled
+    @CachingCodable<Bool>(.isMarketOpen) var isMarketOpen
 
     // MARK: Strings
 
@@ -88,6 +92,8 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.sessiontimeoutPerSec) var sessiontimeoutPerSec
     @CachingCodable<String>(.currentDate) var currentDate
     @CachingCodable<String>(.yesterdayDate) var yesterdayDate
+    @CachingCodable<String>(.marketStatusTitleE) var marketStatusTitleE
+    @CachingCodable<String>(.marketStatusTitleA) var marketStatusTitleA
 
     // MARK: Others
 
@@ -106,6 +112,7 @@ class UserDefaultController: ObservableObject {
         marketStatusTitle = nil
         selectedSymbol = nil
         selectedSymbolType = nil
+        isMarketOpen = nil
     }
 }
 

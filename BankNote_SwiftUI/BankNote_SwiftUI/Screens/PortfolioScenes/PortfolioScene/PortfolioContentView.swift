@@ -7,41 +7,42 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct PortfolioContentView: View {
     
-    var portfoliosData:Binding<[PortfolioUIModel]?>
-    
-    let sample = [
-                PieSliceData(value: 40, color: Color(hex: "#629AF9"), label: "Blue"),
-                PieSliceData(value: 25, color: Color(hex: "#FC814B"), label: "Green"),
-                PieSliceData(value: 28, color: Color(hex: "#9C4EF7"), label: "Orange"),
-                PieSliceData(value: 7, color: Color(hex: "#4A7061"), label: "Pink"),
-    ]
-    
+    var portfolioData:Binding<GetPortfolioUIModel?>
+    var pieChartData:Binding<[PieSliceData]?>
+        
     var onPortfolioTap:()->Void
 
     
     var body: some View {
-        VStack {
-            
-            HeaderView()
-            
-            PieChartView(data: sample)
-                .frame(maxWidth: 250, maxHeight: 250)
-            
-            portfolioView
+        ZStack {
+            VStack {
+                
+                HeaderView()
+                
+                PieChartView(data: pieChartData.wrappedValue ?? [], portfolioData: portfolioData)
+                    .frame(maxWidth: 250, maxHeight: 250)
+                
+                portfolioView
 
-            Spacer()
-            
-            HomeBottomBarView(selectedItem: .portfolio)
+                Spacer()
+                
+            }
+            VStack {
+                Spacer()
+                
+                HomeBottomBarView(selectedItem: .portfolio)
+            }
         }
 
     }
         
     private var portfolioView: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            ForEach(Array((portfoliosData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in
+            ForEach(Array((portfolioData.wrappedValue?.portfolioes ?? []).enumerated()), id: \.offset) { idnex, element in
                 Button {
                     onPortfolioTap()
                 } label: {
@@ -50,25 +51,52 @@ struct PortfolioContentView: View {
 
             }
         }
+        .padding(.bottom, 80)
+
     }
     
 
     struct PortfolioCell: View {
     
-    var portfolioData: PortfolioUIModel
+    var portfolioData: Portfolio
     
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                Image(portfolioData.image ?? "")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 45, height: 45)
-                
+                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(portfolioData.symbol ?? "").png")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .failure:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .empty:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    @unknown default:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    }
+                }
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("\(portfolioData.name ?? "")")
+                    Text("\(portfolioData.symbol ?? "")")
                         .font(.cairoFont(.semiBold, size: 14))
-                    Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: portfolioData.price ?? 0))")
+                    Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: portfolioData.prClosePrice ?? 0))")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
                 .foregroundStyle(.black)
@@ -78,21 +106,19 @@ struct PortfolioContentView: View {
             
             VStack(alignment: .trailing, spacing: 0) {
                 HStack(spacing: 4) {
-                    Image(portfolioData.changePerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
+                    Image(portfolioData.pPerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     
-                    Text("\(portfolioData.changePerc ?? 0 >= 0 ? "+" : "-") \(AppUtility.shared.formatThousandSeparator(number: portfolioData.changePerc ?? 0))%")
+                    Text("\(portfolioData.pPerc ?? 0 >= 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pPerc ?? 0))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: portfolioData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                        .foregroundStyle(Color(hex: portfolioData.pPerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
                 }
                 
-                
-                
-                Text("\("egp".localized) \(portfolioData.change ?? 0 >= 0 ? "+" : "-") \(AppUtility.shared.formatThousandSeparator(number: portfolioData.change ?? 0))")
+                Text("\("egp".localized) \(portfolioData.pProf ?? 0 >= 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pProf ?? 0))")
                     .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundStyle(Color(hex: portfolioData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                    .foregroundStyle(Color(hex: portfolioData.pPerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
 
             }
         }
@@ -145,6 +171,7 @@ struct PieSlice: Shape {
 // MARK: - Pie Chart View
 struct PieChartView: View {
     var data: [PieSliceData]
+    var portfolioData:Binding<GetPortfolioUIModel?>
     var showPercentages: Bool = true
     var innerRadiusFraction: CGFloat = 0 // 0 = full pie, >0 = donut (0.6 typical)
     @State private var selectedSlice: UUID? = nil
@@ -206,15 +233,16 @@ struct PieChartView: View {
                 VStack {
                     if let selected = data.first(where: { $0.id == selectedSlice }) {
                         Text(selected.label)
-                            .font(.headline)
+                            .font(.cairoFont(.semiBold, size: 14))
+                            .multilineTextAlignment(.center)
                         if showPercentages {
                             let pct = total > 0 ? selected.value / total * 100 : 0
                             Text(String(format: "%.1f%%", pct))
-                                .font(.subheadline)
+                                .font(.cairoFont(.semiBold, size: 14))
                                 .foregroundColor(.secondary)
                         } else {
                             Text("\(Int(selected.value))")
-                                .font(.subheadline)
+                                .font(.cairoFont(.semiBold, size: 14))
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -274,7 +302,7 @@ struct PieChartView: View {
                             .foregroundStyle(.black)
                         
                         ZStack {
-                            Text("4")
+                            Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
                                 .font(.cairoFont(.semiBold, size: 12))
                         }
                         .padding(.horizontal, 4)
@@ -301,7 +329,7 @@ struct PieChartView: View {
 }
 
 #Preview {
-    PortfolioContentView(portfoliosData: .constant([]), onPortfolioTap: {
+    PortfolioContentView(portfolioData: .constant(GetPortfolioUIModel.testUIModel()), pieChartData: .constant([]), onPortfolioTap: {
         
     })
 }

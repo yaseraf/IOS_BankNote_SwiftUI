@@ -6,11 +6,11 @@
 //
 
 import Foundation
-protocol GenericRepositoryProtocol {
+protocol LookupsRepositoryProtocol {
     func GetLookups(route: GenericRoute, completion: @escaping(Result<[GetLookupsResponseModel], NetworkError>) -> Void) async
 }
 
-class GenericRepository: GenericRepositoryProtocol {
+class LookupsRepository: LookupsRepositoryProtocol {
     func GetLookups(route: GenericRoute, completion: @escaping (Result<[GetLookupsResponseModel], NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: [GetLookupsResponseModel].self, completion: completion).requestApi()
     }

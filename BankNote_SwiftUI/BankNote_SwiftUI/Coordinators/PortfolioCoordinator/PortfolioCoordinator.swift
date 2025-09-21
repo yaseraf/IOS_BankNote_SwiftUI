@@ -38,8 +38,9 @@ extension PortfolioCoordinator:PortfolioCoordinatorProtocol{
         self.navigationController.pushViewController(viewController, animated: true)
     }
 
-    func openStockDetailsScene() {
-        let viewModel = StockDetailsViewModel(coordinator: self)
+    func openStockDetailsScene(symbol: String, marketType: String) {
+        let useCase = HomeUseCase()
+        let viewModel = StockDetailsViewModel(coordinator: self, useCase: useCase, symbol: symbol, marketType: marketType)
         let view = StockDetailsScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

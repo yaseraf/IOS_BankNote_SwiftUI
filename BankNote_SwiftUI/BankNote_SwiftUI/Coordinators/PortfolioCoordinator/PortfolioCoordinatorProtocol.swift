@@ -11,5 +11,5 @@ import FlagAndCountryCode
 
 protocol PortfolioCoordinatorProtocol: AnyObject,Coordinator {
     func openPortfolioScene()
-    func openStockDetailsScene()
+    func openStockDetailsScene(symbol:String, marketType: String)
 }

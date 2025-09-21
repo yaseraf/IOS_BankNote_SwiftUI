@@ -16,6 +16,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var getUserAccountsAPIResult:APIResultType<[GetUserAccountsUIModel]>?
     @Published var getPortfolioAPIResult:APIResultType<GetPortfolioUIModel>?
+    @Published var getCompaniesLookupsAPIResult:APIResultType<[GetCompaniesLookupsUIModel]>?
 
     
     init(coordinator: HomeCoordinatorProtocol, useCase: HomeUseCaseProtocol) {
@@ -55,7 +56,7 @@ extension HomeViewModel {
     }
 }
 
-// MARK: API CALLS
+// MARK: API Calls
 extension HomeViewModel {
     func callGetUserAccountsAPI(success: Bool) {
                 
@@ -65,13 +66,6 @@ extension HomeViewModel {
         
         Task.init {
             await useCase.getUserAccounts(requestModel: requestModel) {[weak self] result in
-                
-//                if self?.loadingArray.count == 1 && self?.loadingArray.contains("userAccounts") == true {
-//                    self?.loadingArray.removeAll(where: { $0 == "userAccounts" })
-//                    self?.getUserAccountsAPIResult = .onLoading(show: self?.mandatoryLoading ?? false)
-//                } else {
-//                    self?.loadingArray.removeAll(where: { $0 == "userAccounts" })
-//                }
 
                 switch result {
                 case .success(let success):
@@ -134,5 +128,27 @@ extension HomeViewModel {
         }
     }
 
+    func GetCompaniesLookupsAPI(success:Bool) {
+        
+        let requestModel = GetCompaniesLookupsRequestModel()
+        getCompaniesLookupsAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await useCase.GetCompaniesLookups(requestModel: requestModel) {[weak self] result in
+                self?.getCompaniesLookupsAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.getCompaniesLookupsAPIResult = .onSuccess(response: success)
+                    
+                    UserData.shared.saveCompanies(newCompanies: success)
+
+                case .failure(let failure):
+                        self?.getCompaniesLookupsAPIResult = .onFailure(error: failure)
+                    debugPrint("Edit watchlist list failure: \(failure)")
+
+                }
+            }
+        }
+    }
 
 }

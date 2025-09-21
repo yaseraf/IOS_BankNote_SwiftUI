@@ -301,6 +301,8 @@ extension TradeViewModel: MarketWatchDelegate {
     }
 }
 
+
+
 // MARK: Functions
 extension TradeViewModel {
     

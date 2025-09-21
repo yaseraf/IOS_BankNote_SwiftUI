@@ -14,7 +14,8 @@ class PortfolioViewModel: ObservableObject {
 
     @Published var portfolioData: GetPortfolioUIModel?
     @Published var pieChartData: [PieSliceData]?
-    
+    @Published var stockData:GetALLMarketWatchBySymbolUIModel?
+
     @Published var getPortfolioAPIResult:APIResultType<GetPortfolioUIModel>?
 
     
@@ -44,8 +45,10 @@ extension PortfolioViewModel {
 
 // MARK: Routing
 extension PortfolioViewModel {
-    func openStockDetailsScene() {
-        coordinator.openStockDetailsScene()
+    func openStockDetailsScene(symbol: String, marketType: String) {
+        UserDefaultController().selectedSymbol = symbol
+        UserDefaultController().selectedSymbolType = marketType
+        coordinator.openStockDetailsScene(symbol: symbol, marketType: marketType)
     }
 }
 
@@ -79,7 +82,7 @@ extension PortfolioViewModel {
         }
     }
 
-
+    
 }
 
 // MARK: Functions

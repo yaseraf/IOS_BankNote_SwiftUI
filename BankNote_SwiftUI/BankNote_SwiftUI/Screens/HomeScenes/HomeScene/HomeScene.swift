@@ -25,6 +25,7 @@ struct HomeScene: BaseSceneType {
             })
             .onAppear {
                 viewModel.callGetUserAccountsAPI(success: true)
+                viewModel.GetCompaniesLookupsAPI(success: true)
             }
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad {

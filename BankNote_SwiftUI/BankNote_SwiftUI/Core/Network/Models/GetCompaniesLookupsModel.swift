@@ -13,44 +13,44 @@ struct GetCompaniesLookupsRequestModel {
 
 struct GetCompaniesLookupsResponseModel: Codable {
     let aboutDescE, aboutDescA: String?
-        let allowdBuyLimit, companyA, companyE, currCode: String?
-        let exchange, ipoValidityDate, isCryptoSymbol, isDerivative: String?
-        let isUsOnline, isFund, isIPOQuickSell, isMargin: String?
-        let isValidateMinMax, isinCode, lastDay, marketType, precision: String?
-        let shortName, shortNamea, symbol, symbolCompanyA: String?
-        let symbolCompanyDesc, symbolCompanyE, symbolID, templateMargin: String?
-        let allowShortSell: String?
+    let allowdBuyLimit, companyA, companyE, currCode: String?
+    let exchange, ipoValidityDate, isCryptoSymbol, isDerivative: String?
+    let isUsOnline, isFund, isIPOQuickSell, isMargin: String?
+    let isValidateMinMax, isinCode, lastDay, marketType, precision: String?
+    let shortName, shortNamea, symbol, symbolCompanyA: String?
+    let symbolCompanyDesc, symbolCompanyE, symbolID, templateMargin: String?
+    let allowShortSell: String?
 
-        enum CodingKeys: String, CodingKey {
-            case aboutDescE = "ABOUT_DESC_E"
-            case aboutDescA = "ABOUT_DESC_A"
-            case allowdBuyLimit = "AllowdBuyLimit"
-            case companyA = "CompanyA"
-            case companyE = "CompanyE"
-            case currCode = "CurrCode"
-            case exchange = "Exchange"
-            case ipoValidityDate = "IPOValidityDate"
-            case isCryptoSymbol = "IS_CRYPTO_SYMBOL"
-            case isDerivative = "IS_DERIVATIVE"
-            case isUsOnline = "IS_US_ONLINE"
-            case isFund = "IsFund"
-            case isIPOQuickSell = "IsIPOQuickSell"
-            case isMargin = "IsMargin"
-            case isValidateMinMax = "IsValidateMinMax"
-            case isinCode = "IsinCode"
-            case lastDay = "LastDay"
-            case marketType = "MarketType"
-            case precision = "Precision"
-            case shortName = "SHORT_NAME"
-            case shortNamea = "SHORT_NAMEA"
-            case symbol = "Symbol"
-            case symbolCompanyA = "SymbolCompanyA"
-            case symbolCompanyDesc = "SymbolCompanyDesc"
-            case symbolCompanyE = "SymbolCompanyE"
-            case symbolID = "SymbolID"
-            case templateMargin = "TemplateMargin"
-            case allowShortSell = "allow_short_sell"
-        }
+    enum CodingKeys: String, CodingKey {
+        case aboutDescE = "ABOUT_DESC_E"
+        case aboutDescA = "ABOUT_DESC_A"
+        case allowdBuyLimit = "AllowdBuyLimit"
+        case companyA = "CompanyA"
+        case companyE = "CompanyE"
+        case currCode = "CurrCode"
+        case exchange = "Exchange"
+        case ipoValidityDate = "IPOValidityDate"
+        case isCryptoSymbol = "IS_CRYPTO_SYMBOL"
+        case isDerivative = "IS_DERIVATIVE"
+        case isUsOnline = "IS_US_ONLINE"
+        case isFund = "IsFund"
+        case isIPOQuickSell = "IsIPOQuickSell"
+        case isMargin = "IsMargin"
+        case isValidateMinMax = "IsValidateMinMax"
+        case isinCode = "IsinCode"
+        case lastDay = "LastDay"
+        case marketType = "MarketType"
+        case precision = "Precision"
+        case shortName = "SHORT_NAME"
+        case shortNamea = "SHORT_NAMEA"
+        case symbol = "Symbol"
+        case symbolCompanyA = "SymbolCompanyA"
+        case symbolCompanyDesc = "SymbolCompanyDesc"
+        case symbolCompanyE = "SymbolCompanyE"
+        case symbolID = "SymbolID"
+        case templateMargin = "TemplateMargin"
+        case allowShortSell = "allow_short_sell"
+    }
 }
 
 

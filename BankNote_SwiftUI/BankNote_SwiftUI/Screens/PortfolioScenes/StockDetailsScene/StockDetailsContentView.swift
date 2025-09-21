@@ -7,6 +7,38 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
+import WebKit
+
+final class WebViewStore: ObservableObject {
+    let webView: WKWebView = {
+        let config = WKWebViewConfiguration()
+        config.websiteDataStore = .default()
+        return WKWebView(frame: .zero, configuration: config)
+    }()
+}
+
+struct WebView: UIViewRepresentable {
+    @ObservedObject var store: WebViewStore
+    var chartLoaded:Binding<Bool?>
+    let url: URL?
+    
+    func makeUIView(context: Context) -> WKWebView {
+        return store.webView
+    }
+    
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        if let url = url {
+            if chartLoaded.wrappedValue == true {return}
+            DispatchQueue.main.async {
+                chartLoaded.wrappedValue = true
+                uiView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"
+                uiView.load(URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad))
+            }
+            
+        }
+    }
+}
 
 struct StockDetailsContentView: View {
     
@@ -20,6 +52,21 @@ struct StockDetailsContentView: View {
     
     // A state variable to keep track of the currently selected segment.
     @State private var selectedSegment: StockSegment = .details
+    @StateObject var webViewStore = WebViewStore()
+
+    var stockData:Binding<GetALLMarketWatchBySymbolUIModel?>
+    var chartLoaded:Binding<Bool?>
+
+    enum selectedChartPeriod: String {
+        case dayChart = "1D"
+        case weekChart = "1W"
+        case monthChart = "1M"
+        case yearChart = "1Y"
+    }
+
+    @State var selectedChartPeriod:selectedChartPeriod = .dayChart
+
+
     
     var onBackTap:()->Void
     var onBuyTap:() -> Void
@@ -52,16 +99,42 @@ struct StockDetailsContentView: View {
                     .padding(.vertical, 12)
                     
                     HStack(alignment: .center) {
-                        Image("ic_fawry")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 45, height: 45)
-                        
+                        WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(stockData.wrappedValue?.symbol ?? "").png")) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .padding(.horizontal, 4)
+                                    .foregroundStyle(.gray)
+                            case .failure:
+                                Image("ic_selectStock")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .padding(.horizontal, 4)
+                                    .foregroundStyle(.gray)
+                            case .empty:
+                                Image("ic_selectStock")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .foregroundStyle(.gray)
+                            @unknown default:
+                                Image("ic_selectStock")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+
                         VStack(alignment: .leading, spacing: 0) {
-                            Text("FWRY")
+                            Text(stockData.wrappedValue?.symbol ?? "")
                                 .font(.cairoFont(.semiBold, size: 18))
                             
-                            Text("Fawry For Banking Technology")
+                            Text(AppUtility.shared.isRTL ? stockData.wrappedValue?.symbolNameA ?? "" : stockData.wrappedValue?.symbolNameE ?? "")
                                 .font(.cairoFont(.semiBold, size: 12))
                         }
                         
@@ -70,10 +143,10 @@ struct StockDetailsContentView: View {
                     .padding(.horizontal)
                     
                     HStack(alignment: .lastTextBaseline, spacing: 6) {
-                        Text("EGP")
+                        Text("egp".localized)
                             .font(.cairoFont(.semiBold, size: 14))
                         
-                        Text("22.3")
+                        Text(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.lastTradePrice ?? "") ?? 0))
                             .font(.cairoFont(.bold, size: 32))
 
                     }
@@ -88,7 +161,7 @@ struct StockDetailsContentView: View {
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Color(hex: "#1E961E"))
                         
-                        Text("+3.01% (EGP +0.06)")
+                        Text("\(Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0 > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0))% (\("egp".localized) \(Double(stockData.wrappedValue?.netChange ?? "") ?? 0 > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChange ?? "") ?? 0)))")
                             .font(.cairoFont(.semiBold, size: 12))
                             .foregroundStyle(Color(hex: "#1E961E"))
                         
@@ -100,10 +173,7 @@ struct StockDetailsContentView: View {
                 }
                 .padding(.bottom, 20)
                 
-                // Placeholder for the chart.
-                Rectangle()
-                    .foregroundColor(Color.gray.opacity(0.1))
-                    .frame(height: 200)
+                chartView
                 
                 // Segmented control.
                 HStack(spacing: 0) {
@@ -203,6 +273,18 @@ struct StockDetailsContentView: View {
             }
         }
     }
+    
+    private var chartView: some View {
+        let chartURL:String = "https://mahfaztyplus.cicapital.com/MobileServices/tradingView/mobile_Green.html?symbol=\(UserDefaultController().selectedSymbol ?? "")&theme=\(AppUtility.shared.isDarkTheme ? "NIGHT" : "DAY")&ChartType=mountain&period=1D&color=\(Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0 > 0 ? "B" : "R")"
+
+        return VStack {
+            WebView(store: webViewStore, chartLoaded: chartLoaded, url: URL(string: chartURL)!)
+        }
+        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 200,  alignment: .center)
+        .padding(.horizontal, 18)
+
+
+    }
 }
 
 // MARK: - Details View
@@ -213,7 +295,6 @@ struct DetailsView: View {
                 .font(.cairoFont(.semiBold, size: 18))
                 .foregroundStyle(.secondary)
                 .padding(.top)
-            
             
             
             VStack(spacing: 1) {
@@ -535,7 +616,7 @@ struct OrderRow: View {
 }
 
 #Preview {
-    StockDetailsContentView(onBackTap: {
+    StockDetailsContentView(stockData: .constant(.initializer()), chartLoaded: .constant(false), onBackTap: {
         
     }, onBuyTap: {
         

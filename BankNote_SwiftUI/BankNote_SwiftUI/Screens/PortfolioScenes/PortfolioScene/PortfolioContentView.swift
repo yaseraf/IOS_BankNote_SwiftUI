@@ -14,7 +14,7 @@ struct PortfolioContentView: View {
     var portfolioData:Binding<GetPortfolioUIModel?>
     var pieChartData:Binding<[PieSliceData]?>
         
-    var onPortfolioTap:()->Void
+    var onPortfolioTap:((String,String)->Void)
 
     
     var body: some View {
@@ -58,7 +58,7 @@ struct PortfolioContentView: View {
            ScrollView(.vertical, showsIndicators: false) {
                 ForEach(0...3, id: \.self) { id in
                     Button {
-                        onPortfolioTap()
+                        onPortfolioTap(portfolioData.wrappedValue?.portfolioes[id].symbol ?? "", portfolioData.wrappedValue?.portfolioes[id].marketType ?? "")
                     } label: {
                         PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
                     }
@@ -342,8 +342,8 @@ struct PieChartView: View {
     }
 }
 
-#Preview {
-    PortfolioContentView(portfolioData: .constant(.initializer()), pieChartData: .constant([]), onPortfolioTap: {
-        
-    })
-}
+//#Preview {
+//    PortfolioContentView(portfolioData: .constant(.initializer()), pieChartData: .constant([]), onPortfolioTap: { symbol, marketType in
+//        
+//    })
+//}

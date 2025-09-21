@@ -14,6 +14,8 @@ enum HomeRoute:APITargetType{
     case GetAllProfilesLookupsByUserCode(requestModel: GetAllProfilesLookupsByUserCodeRequestModel)
     case GetMarketWatchByProfileID(requestModel: GetMarketWatchByProfileIDRequestModel)
     case GetExchangeSummary(requestModel: GetExchangeSummaryRequestModel)
+    case GetCompaniesLookups(requestModel: GetCompaniesLookupsRequestModel)
+    case GetALLMarketWatchBySymbol(requestModel: GetALLMarketWatchBySymbolRequestModel)
 
     var baseURL: URL{
         get{
@@ -45,6 +47,10 @@ enum HomeRoute:APITargetType{
             return "MarektWServices/GetMarketWatchByProfileID/\(UserDefaultController().profileID ?? "")/\(KeyChainController().webCode ?? "")"
         case .GetExchangeSummary:
             return "MarektWServices/GetExchangeSummary/\(KeyChainController().webCode ?? "")"
+        case .GetCompaniesLookups:
+            return "GeneralWServices/GetCompaniesLookups/\(KeyChainController().webCode ?? "")"
+        case .GetALLMarketWatchBySymbol:
+            return "MarektWServices/GetALLMarketWatchBySymbol/\(KeyChainController().webCode ?? "")/\(UserDefaultController().selectedSymbol ?? "")/\(UserDefaultController().selectedSymbolType ?? "")"
 
         }
     }
@@ -52,7 +58,7 @@ enum HomeRoute:APITargetType{
     var method: APIMethodType{
         get{
             switch self {
-            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio:
+            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol:
                 return .get
             }
         }
@@ -60,7 +66,7 @@ enum HomeRoute:APITargetType{
     
     var requestType: APITypeOfRequest{
         switch self {
-        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio:
+        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol:
                 .requestPlain
         }
     }

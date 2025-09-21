@@ -17,7 +17,7 @@ struct StockDetailsScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                StockDetailsContentView(onBackTap: {
+                StockDetailsContentView(stockData: $viewModel.stockData, chartLoaded: $viewModel.chartLoaded, onBackTap: {
                     viewModel.popViewController()
                 }, onBuyTap: {
                     viewModel.openOrderEntryScene()
@@ -25,6 +25,9 @@ struct StockDetailsScene: BaseSceneType {
                     viewModel.openOrderEntryScene()
                 })
             })
+            .onAppear {
+                viewModel.GetAllMarketWatchBySymbolAPI(success: true)
+            }
         })
     }
 }

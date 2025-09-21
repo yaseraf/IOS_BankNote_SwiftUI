@@ -10,7 +10,7 @@ import SwiftUI
 
 struct NewsContentView: View {
     
-    var newsData:Binding<[NewsUIModel]?>
+    var newsData:Binding<[GetAllMarketNewsUIModel]?>
     
     enum SelectedNewsType {
         case all
@@ -72,24 +72,45 @@ struct NewsContentView: View {
     private var newsView: some View {
         VStack {
             HStack {
-                Text(selectedNewsType == .all ? "\("•" + " " + "all".localized)" : "all".localized)
-                    .font(.cairoFont(.regular, size: 18))
-                    .foregroundStyle(selectedNewsType == .all ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
-                    .onTapGesture {
-                        selectedNewsType = .all
+                HStack(alignment: .center, spacing: 6){
+                    if selectedNewsType == .all {
+                        Circle()
+                            .frame(width: 5, height: 5)
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
                     }
-                Text(selectedNewsType == .stocks ? "\("•" + " "  + "stocks".localized)" : "stocks".localized)
-                    .font(.cairoFont(.regular, size: 18))
-                    .foregroundStyle(selectedNewsType == .stocks ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
-                    .onTapGesture {
-                        selectedNewsType = .stocks
+                    Text("all".localized)
+                        .font(.cairoFont(.regular, size: 18))
+                        .foregroundStyle(selectedNewsType == .all ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
+                        .onTapGesture {
+                            selectedNewsType = .all
+                        }
+                }
+                HStack(alignment: .center, spacing: 6){
+                    if selectedNewsType == .stocks {
+                        Circle()
+                            .frame(width: 5, height: 5)
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
                     }
-                Text(selectedNewsType == .markets ? "\("•" + " "  + "markets".localized)" : "markets".localized)
-                    .font(.cairoFont(.regular, size: 18))
-                    .foregroundStyle(selectedNewsType == .markets ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
-                    .onTapGesture {
-                        selectedNewsType = .markets
+                    Text("stocks".localized)
+                        .font(.cairoFont(.regular, size: 18))
+                        .foregroundStyle(selectedNewsType == .stocks ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
+                        .onTapGesture {
+                            selectedNewsType = .stocks
+                        }
+                }
+                HStack(alignment: .center, spacing: 6){
+                    if selectedNewsType == .markets {
+                        Circle()
+                            .frame(width: 5, height: 5)
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
                     }
+                    Text("markets".localized)
+                        .font(.cairoFont(.regular, size: 18))
+                        .foregroundStyle(selectedNewsType == .markets ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
+                        .onTapGesture {
+                            selectedNewsType = .markets
+                        }
+                }
                 
                 Spacer()
 

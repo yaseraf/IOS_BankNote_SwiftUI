@@ -19,6 +19,8 @@ struct OrderEntryScene: BaseSceneType {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 OrderEntryContentView(onContinueTap: {
                     viewModel.openPaymentMethodScene()
+                }, onBackTap: {
+                    viewModel.popViewController()
                 })
             })
         })

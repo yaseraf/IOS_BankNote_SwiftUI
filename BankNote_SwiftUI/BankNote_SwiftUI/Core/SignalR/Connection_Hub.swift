@@ -16,6 +16,7 @@ class Connection_Hub {
     var marketWatchDelegate: MarketWatchDelegate?
     var topActivitiesDelegate: TopActivitiesDelegate?
     var orderListDelegate: OrderListDelegate?
+    var exchangeSummaryDelegate: ExchangeSummaryDelegate?
     
     var userDefaultController = UserDefaultController.instance
     
@@ -66,15 +67,15 @@ class Connection_Hub {
 
         connection.queryString = [
             "ischat": true
-            , "username": "" //HubUtility.shared.userName // "FIT"
+            , "username": "\(KeyChainController().username ?? "")" //HubUtility.shared.userName // "FIT"
             , "password": "" //HubUtility.shared.password // "FIT"
             , "webCode": "" //Int(HubUtility.shared.WebCode) ?? 0
             , "baseurl": "123"
-            , "key":  "\(KeyChainController().loginCookieName ?? "-")"
-            , "value":  "\(KeyChainController().loginCookieValue ?? "-")"
+            , "key":  "-"
+            , "value":  "-"
             // , "cookies": cookieSession
         ]
-        
+
         
         //MARK: SignalR events
         connection.starting = {
@@ -262,7 +263,9 @@ class Connection_Hub {
 
             self.exchangeMarketSummaryData = uiModel
             
-            self.connectionDelegate?.onSendExchangeMarketObject(data: uiModel ?? [])
+//            self.connectionDelegate?.onSendExchangeMarketObject(data: uiModel ?? [])
+            
+            self.exchangeSummaryDelegate?.onDataFetch(model: uiModel ?? [])
             
         }
         

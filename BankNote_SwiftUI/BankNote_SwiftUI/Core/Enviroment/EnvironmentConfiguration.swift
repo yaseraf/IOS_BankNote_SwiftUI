@@ -23,7 +23,8 @@ class NetworkConfiguration{
     
    var signalRBasePath:String{
         get{
-             signalRDomain + sr +  signalr + hubs
+//             signalRDomain + sr +  signalr + hubs
+            signalRDomain + mobileServices + sr +  signalr
         }
     }
 

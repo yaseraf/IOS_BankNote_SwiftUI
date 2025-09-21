@@ -11,6 +11,3 @@ protocol MarketWatchDelegate {
     func onWatchlistDataReceive(data: GetMarketWatchByProfileIDUIModel)
 }
 
-extension MarketWatchDelegate {
-    func onWatchlistDataReceive(data: GetMarketWatchByProfileIDUIModel) {}
-}

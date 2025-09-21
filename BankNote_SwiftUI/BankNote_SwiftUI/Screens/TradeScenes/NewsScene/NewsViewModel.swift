@@ -9,11 +9,16 @@ import Foundation
 
 class NewsViewModel: ObservableObject {
     private let coordinator: TradeCoordinatorProtocol
-    
+    private let useCase: TradeUseCaseProtocol
+
     @Published var newsData: [NewsUIModel]?
-    
-    init(coordinator: TradeCoordinatorProtocol) {
+    @Published var marketNews:[GetAllMarketNewsUIModel]?
+
+    @Published var getAllMarketNewsAPIResult:APIResultType<[GetAllMarketNewsUIModel]>?
+
+    init(coordinator: TradeCoordinatorProtocol, useCase: TradeUseCaseProtocol) {
         self.coordinator = coordinator
+        self.useCase = useCase
         
         newsData = []
     }
@@ -38,3 +43,29 @@ extension NewsViewModel {
         newsData = data
     }
 }
+
+// MARK: API Calls
+extension NewsViewModel {
+    func GetFullMarketNews(success:Bool) {
+        let requestModel = GetAllMarketNewsRequestModel()
+        getAllMarketNewsAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await useCase.GetFullMarketNews(requestModel: requestModel) {[weak self] result in
+                self?.getAllMarketNewsAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.getAllMarketNewsAPIResult = .onSuccess(response: success)
+                    debugPrint("market news succcess")
+                    
+                    self?.marketNews = success
+                    
+                case .failure(let failure):
+                        self?.getAllMarketNewsAPIResult = .onFailure(error: failure)
+                    debugPrint("market news failure: \(failure)")
+                }
+            }
+        }
+    }
+}
+

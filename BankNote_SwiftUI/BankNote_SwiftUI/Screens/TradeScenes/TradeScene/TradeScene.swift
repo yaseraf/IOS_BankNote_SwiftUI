@@ -17,7 +17,7 @@ struct TradeScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                TradeContentView(indexData: $viewModel.listMarketOverView, watchlistData: $viewModel.watchlistData, newsData: $viewModel.newsData, onIndexViewAllTap: {
+                TradeContentView(indexData: $viewModel.listMarketOverView, watchlistData: $viewModel.list, newsData: $viewModel.marketNews, onIndexViewAllTap: {
                     viewModel.openIndexScene()
                 }, onWatchlistViewAllTap: {
                     viewModel.openWatchlistScene()
@@ -27,7 +27,11 @@ struct TradeScene: BaseSceneType {
             })
             .onAppear {
                 viewModel.GetExchangeSummaryAPI(success: true)
-                viewModel.GetAllProfilesLookupsByUserCodeAPI(success: true)
+                viewModel.GetMarketWatchByProfileIDAPI(success: true)
+                viewModel.GetFullMarketNews(success: true)
+            }
+            .onDisappear {
+                viewModel.UnSubscribleMarketWatchSymbols()
             }
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad {

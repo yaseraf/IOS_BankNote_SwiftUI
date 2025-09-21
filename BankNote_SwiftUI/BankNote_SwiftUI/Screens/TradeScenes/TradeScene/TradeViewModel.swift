@@ -15,15 +15,25 @@ class TradeViewModel: ObservableObject {
     @Published var listMarketOverView:[GetExchangeSummaryUIModel]?
     @Published var getLookupsList: [GetLookupsUIModel]?
     @Published var watchlistData:[GetAllProfilesLookupsByUserCodeUIModel]?
+    @Published var list:[GetMarketWatchByProfileIDUIModel]?
+    @Published var marketNews:[GetAllMarketNewsUIModel]?
 
     @Published var getExchangeSummaryAPIResult:APIResultType<[GetExchangeSummaryUIModel]>?
     @Published var getLookupsAPIResult:APIResultType<[GetLookupsUIModel]>?
     @Published var getAllProfilesLookupsByUserCodeAPIResult:APIResultType<[GetAllProfilesLookupsByUserCodeUIModel]>?
+    @Published var getMarketWatchByProfileIDAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
+    @Published var getAllMarketNewsAPIResult:APIResultType<[GetAllMarketNewsUIModel]>?
+    @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
 
     init(coordinator: TradeCoordinatorProtocol, useCase: TradeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
         self.lookupsUseCase = lookupsUseCase
+        
+        Connection_Hub.shared.exchangeSummaryDelegate = self
+        Connection_Hub.shared.marketWatchDelegate = self
+        
+        connectSignalR()
         
         watchlistData = []
         newsData = []
@@ -92,7 +102,7 @@ extension TradeViewModel {
 
                 switch result {
                 case .success(let success):
-                    self?.getExchangeSummaryAPIResult = .onSuccess(response: success)
+                     self?.getExchangeSummaryAPIResult = .onSuccess(response: success)
                     debugPrint("Exchange summary success")
 
                     self?.listMarketOverView = success
@@ -105,24 +115,71 @@ extension TradeViewModel {
         }
     }
     
-    func GetAllProfilesLookupsByUserCodeAPI(success:Bool) {
-        let requestModel = GetAllProfilesLookupsByUserCodeRequestModel()
+//    func GetAllProfilesLookupsByUserCodeAPI(success:Bool) {
+//        let requestModel = GetAllProfilesLookupsByUserCodeRequestModel()
+//        
+//        getAllProfilesLookupsByUserCodeAPIResult = .onLoading(show: true)
+//        
+//        Task.init {
+//            await useCase.GetAllProfilesLookupsByUserCode(requestModel: requestModel) {[weak self] result in
+//
+//                switch result {
+//                case .success(let success):
+//                    self?.getAllProfilesLookupsByUserCodeAPIResult = .onSuccess(response: success)
+//                    debugPrint("Watchlist success")
+//                    
+//                    self?.watchlistData = success.reversed()
+//                    
+//                case .failure(let failure):
+//                        self?.getAllProfilesLookupsByUserCodeAPIResult = .onFailure(error: failure)
+//                    debugPrint("Watchlist failure: \(failure)")
+//                }
+//            }
+//        }
+//    }
+    
+    func GetMarketWatchByProfileIDAPI(success:Bool) {
+        let requestModel = GetMarketWatchByProfileIDRequestModel()
+        getMarketWatchByProfileIDAPIResult = .onLoading(show: true)
         
-        getAllProfilesLookupsByUserCodeAPIResult = .onLoading(show: true)
+        UserDefaultController().profileID = "2"
         
         Task.init {
-            await useCase.GetAllProfilesLookupsByUserCode(requestModel: requestModel) {[weak self] result in
-
+            await useCase.GetMarketWatchByProfileID(requestModel: requestModel) {[weak self] result in
+                self?.getMarketWatchByProfileIDAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
-                    self?.getAllProfilesLookupsByUserCodeAPIResult = .onSuccess(response: success)
-                    debugPrint("Watchlist success")
+                    self?.getMarketWatchByProfileIDAPIResult = .onSuccess(response: success)
+                    debugPrint("market overview stocks success")
+                    self?.list = success
                     
-                    self?.watchlistData = success.reversed()
+                    self?.getSubscribeMarketWatchSymbols()
+
+                case .failure(let failure):
+                        self?.getMarketWatchByProfileIDAPIResult = .onFailure(error: failure)
+                    debugPrint("market overview stocks failure: \(failure)")
+                }
+            }
+        }
+    }
+    
+    func GetFullMarketNews(success:Bool) {
+        let requestModel = GetAllMarketNewsRequestModel()
+        getAllMarketNewsAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await useCase.GetFullMarketNews(requestModel: requestModel) {[weak self] result in
+                self?.getAllMarketNewsAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.getAllMarketNewsAPIResult = .onSuccess(response: success)
+                    debugPrint("market news succcess")
+                    
+                    self?.marketNews = success
                     
                 case .failure(let failure):
-                        self?.getAllProfilesLookupsByUserCodeAPIResult = .onFailure(error: failure)
-                    debugPrint("Watchlist failure: \(failure)")
+                        self?.getAllMarketNewsAPIResult = .onFailure(error: failure)
+                    debugPrint("market news failure: \(failure)")
                 }
             }
         }
@@ -150,12 +207,64 @@ extension TradeViewModel {
             }
         }
     }
-
 }
 
 // MARK: SignalR
 extension TradeViewModel {
+    func getSubscribeMarketWatchSymbols(){
+        if list?.count ?? 0 <= 0 {return}
+
+        var arraySymbols: [String] = []
+        
+        for i in 0...(list?.count ?? 0) - 1 {
+            if i == 4 { break }
+            arraySymbols.append(list?[i].symbol ?? "")
+        }
+        
+        subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  true)
+        
+        debugPrint("Username sent SignalR: \(UserDefaultController().username ?? "")")
+        debugPrint("symbols sent SignalR: \(arraySymbols)")
     
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                printToLog("test invoke subscribeMarketWatchSymbols '\(arraySymbols)'")
+                try Connection_Hub.shared.chatHub?.invoke("SubscribeMarketWatchSymbols", arguments: [UserDefaultController().username ?? "", arraySymbols]) { (result, error) in
+                    if let e = error {
+                        printToLog("SubscribeMarketWatchSymbols invoke '\(arraySymbols)' Error: \(e)")
+                        self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
+                    } else {
+                        printToLog("SubscribeMarketWatchSymbols invoke '\(arraySymbols)' Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+                        self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
+                    }
+                }
+            } catch let error {
+                printToLog("SubscribeMarketWatchSymbols chatHub '\(arraySymbols)' error: \(error.localizedDescription)")
+                self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
+
+            }
+        }
+    }
+    
+    func UnSubscribleMarketWatchSymbols() {
+        subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  true)
+        
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                printToLog("test invoke unSubscribeMarketWatchSymbols")
+                try Connection_Hub.shared.chatHub?.invoke(HubMethodType.unSubscribeMarketWatchSymbols.rawValue, arguments: [UserDefaultController().username ?? ""]) { (result, error) in
+                    if let e = error {
+                        printToLog("unSubscribeMarketWatchSymbols invoke Error: \(e)")
+                    } else {
+                        printToLog("unSubscribeMarketWatchSymbols invoke Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+                        printToLog("unSubscribeMarketWatchSymbols invoke result: \(result)")
+                    }
+                }
+            } catch let error {
+                printToLog("unSubscribeMarketWatchSymbols chatHub error: \(error.localizedDescription)")
+            }
+        }
+    }
 }
 
 
@@ -176,11 +285,30 @@ extension TradeViewModel: ExchangeSummaryDelegate {
             }
         }
     }
+}
 
+extension TradeViewModel: MarketWatchDelegate {
+    func onWatchlistDataReceive(data: GetMarketWatchByProfileIDUIModel) {
+        self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
+
+        for (index, listItem) in (list ?? []).enumerated() {
+            if listItem.symbol == data.symbol {
+                list?[index].lastTradePrice = data.lastTradePrice
+                list?[index].netChange = data.netChange
+                list?[index].netChangePerc = data.netChangePerc
+            }
+        }
+    }
 }
 
 // MARK: Functions
 extension TradeViewModel {
+    
+    private func connectSignalR() {
+        if !Connection_Hub.shared.isConnected() {
+            Connection_Hub.shared.connection?.start()
+        }
+    }
     
     // Handled in Coonection_Hub
     

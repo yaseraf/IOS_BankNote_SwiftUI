@@ -107,27 +107,27 @@ struct GetPortfolioResponseModel: Codable {
        let id = UUID().uuidString
        
        let assetNameE, companyShortA, companyShortE, contractSize: String?
-           let custodianA, custodianE, clientID, compID: String?
-           let companyNameA, companyNameE, countryCode, curCode: String?
-           let currDiff: Double?
-           let custodianID: String?
-           let ePrice: Double?
-           let exchange, isderivative, isin, islamic: String?
-           let locBookedPSValue, locNValue: Double?
-           let mainClinetID, marketType: String?
-           let nValue, pCost: Double?
-           let portID, portName: String?
-           let pPerc, pProf, prClosePrice: Double?
-           let prPriceDate, precision: String?
-           let profit: Double?
-           let profitLossInAED: String?
-           let psValue, qtySettled, qtyT0, qtyT1: Double?
-           let qtyT2, qtyUnsettled, qty, qtyToTransfer: Double?
-           let rate: Double?
-           let realizedToday, sectorA, sectorE, symbol: String?
-           let totalEPLossPerc, totalExpectedProfitLoss, totalExpectedSellComm, totalMarketValue: Double?
-           let totalNetProfitLoss, totalRealizedProfitLoss: Double?
-           let tradingProfitLOC, typeA, typeE, usrCode: String?
+       let custodianA, custodianE, clientID, compID: String?
+       let companyNameA, companyNameE, countryCode, curCode: String?
+       let currDiff: Double?
+       let custodianID: String?
+       let ePrice: Double?
+       let exchange, isderivative, isin, islamic: String?
+       let locBookedPSValue, locNValue: Double?
+       let mainClinetID, marketType: String?
+       let nValue, pCost: Double?
+       let portID, portName: String?
+       let pPerc, pProf, prClosePrice: Double?
+       let prPriceDate, precision: String?
+       let profit: Double?
+       let profitLossInAED: String?
+       let psValue, qtySettled, qtyT0, qtyT1: Double?
+       let qtyT2, qtyUnsettled, qty, qtyToTransfer: Double?
+       let rate: Double?
+       let realizedToday, sectorA, sectorE, symbol: String?
+       let totalEPLossPerc, totalExpectedProfitLoss, totalExpectedSellComm, totalMarketValue: Double?
+       let totalNetProfitLoss, totalRealizedProfitLoss: Double?
+       let tradingProfitLOC, typeA, typeE, usrCode: String?
 
        enum CodingKeys: String, CodingKey {
            case assetNameE = "ASSET_NAME_E"
@@ -188,23 +188,25 @@ struct GetPortfolioResponseModel: Codable {
                    case typeE = "TypeE"
                    case usrCode = "USR_CODE"
        }
+       
+       static func initializer() -> Self {
+           return Portfolio(assetNameE: "", companyShortA: "", companyShortE: "", contractSize: "", custodianA: "", custodianE: "", clientID: "", compID: "", companyNameA: "", companyNameE: "", countryCode: "", curCode: "", currDiff: 0, custodianID: "", ePrice: 0, exchange: "", isderivative: "", isin: "", islamic: "", locBookedPSValue: 0, locNValue: 0, mainClinetID: "", marketType: "", nValue: 0, pCost: 0, portID: "", portName: "", pPerc: 0, pProf: 0, prClosePrice: 0, prPriceDate: "", precision: "", profit: 0, profitLossInAED: "", psValue: 0, qtySettled: 0, qtyT0: 0, qtyT1: 0, qtyT2: 0, qtyUnsettled: 0, qty: 0, qtyToTransfer: 0, rate: 0, realizedToday: "", sectorA: "", sectorE: "", symbol: "", totalEPLossPerc: 0, totalExpectedProfitLoss: 0, totalExpectedSellComm: 0, totalMarketValue: 0, totalNetProfitLoss: 0, totalRealizedProfitLoss: 0, tradingProfitLOC: "", typeA: "", typeE: "", usrCode: "")
+       }
    }
 
-struct GetPortfolioUIModel: Codable {
+struct GetPortfolioUIModel {
     var accountSummaries: AccountSummaries
     var portfolioChart: PortfolioChart
     var portfolioChartAll: PortfolioChartAll
     var portfolioes: [Portfolio]
-}
-
-
-// maintenanceMargin is the LTV
-extension GetPortfolioUIModel {
+    
     static func mapToUIModel(_ model:GetPortfolioResponseModel)->Self {
         return  GetPortfolioUIModel(accountSummaries: model.accountSummaries ?? AccountSummaries(alternateOpportunity: "", balance: "", blockedBalance: "", buyPower: "", currentMarginLimit: "", expectedProfitLoss: "", facilityAmount: "", holdingCost: "", interestRatePerc: "", maintMArgin: "", maintenanceMargin: "", marginAmount: "", marketValue: "", netProfitLoss: "", realisedProfitLoss: "", remainingBalance: "", unUtlizedMarginAmount: "", unpaidInterset: "", unsettledBalance: "", withdrowal: ""), portfolioChart: model.portfolioChart ?? PortfolioChart(chartData: []), portfolioChartAll: model.portfolioChartAll ?? PortfolioChartAll(chartDataa: []), portfolioes: model.portfolioes ?? [])
     }
     
-    static func testUIModel()->Self {
+    static func initializer() -> Self {
         return GetPortfolioUIModel(accountSummaries: AccountSummaries(alternateOpportunity: "", balance: "", blockedBalance: "", buyPower: "", currentMarginLimit: "", expectedProfitLoss: "", facilityAmount: "", holdingCost: "", interestRatePerc: "", maintMArgin: "", maintenanceMargin: "", marginAmount: "", marketValue: "", netProfitLoss: "", realisedProfitLoss: "", remainingBalance: "", unUtlizedMarginAmount: "", unpaidInterset: "", unsettledBalance: "", withdrowal: ""), portfolioChart: PortfolioChart(chartData: []), portfolioChartAll: PortfolioChartAll(chartDataa: []), portfolioes: [])
+
     }
+
 }

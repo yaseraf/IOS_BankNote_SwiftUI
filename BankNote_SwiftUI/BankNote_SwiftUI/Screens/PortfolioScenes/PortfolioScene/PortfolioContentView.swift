@@ -40,19 +40,32 @@ struct PortfolioContentView: View {
 
     }
         
+    @ViewBuilder
     private var portfolioView: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            ForEach(Array((portfolioData.wrappedValue?.portfolioes ?? []).enumerated()), id: \.offset) { idnex, element in
-                Button {
-                    onPortfolioTap()
-                } label: {
-                    PortfolioCell(portfolioData: element)
+        if portfolioData.wrappedValue?.portfolioes.isEmpty == false {
+//            ScrollView(.vertical, showsIndicators: false) {
+//                ForEach(Array((portfolioData.wrappedValue?.portfolioes ?? []).enumerated()), id: \.offset) { idnex, element in
+//                    Button {
+//                        onPortfolioTap()
+//                    } label: {
+//                        PortfolioCell(portfolioData: element)
+//                    }
+//
+//                }
+//            }
+//            .padding(.bottom, 80)
+            
+           ScrollView(.vertical, showsIndicators: false) {
+                ForEach(0...3, id: \.self) { id in
+                    Button {
+                        onPortfolioTap()
+                    } label: {
+                        PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
+                    }
                 }
-
             }
+            .padding(.bottom, 80)
         }
-        .padding(.bottom, 80)
-
     }
     
 
@@ -302,7 +315,8 @@ struct PieChartView: View {
                             .foregroundStyle(.black)
                         
                         ZStack {
-                            Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
+//                            Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
+                            Text("4")
                                 .font(.cairoFont(.semiBold, size: 12))
                         }
                         .padding(.horizontal, 4)
@@ -329,7 +343,7 @@ struct PieChartView: View {
 }
 
 #Preview {
-    PortfolioContentView(portfolioData: .constant(GetPortfolioUIModel.testUIModel()), pieChartData: .constant([]), onPortfolioTap: {
+    PortfolioContentView(portfolioData: .constant(.initializer()), pieChartData: .constant([]), onPortfolioTap: {
         
     })
 }

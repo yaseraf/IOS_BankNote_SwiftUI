@@ -7,11 +7,12 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct WatchlistContentView: View {
     
-    var watchlistData: Binding<[WatchlistUIModel]?>
-    
+    var watchlistData: Binding<[GetMarketWatchByProfileIDUIModel]?>
+
     var onBackTap:()->Void
     
     var body: some View {
@@ -75,20 +76,46 @@ struct WatchlistContentView: View {
 
 struct WatchlistAllCell: View {
     
-    var watchlistData: WatchlistUIModel
+    var watchlistData: GetMarketWatchByProfileIDUIModel
     
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                Image(watchlistData.image ?? "")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 45, height: 45)
-                
+                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(watchlistData.symbol).png")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .failure:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(.gray)
+                    case .empty:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    @unknown default:
+                        Image("ic_selectStock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 45, maxHeight: 45)
+                            .foregroundStyle(.gray)
+                    }
+                }
+
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("\(watchlistData.name ?? "")")
+                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
                         .font(.cairoFont(.semiBold, size: 14))
-                    Text("\(watchlistData.fullName ?? "")")
+                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
             }
@@ -96,17 +123,17 @@ struct WatchlistAllCell: View {
             Spacer()
             
             VStack(alignment: .trailing, spacing: 0) {
-                Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: watchlistData.change ?? 0))")
-                
+                Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.netChange ?? "") ?? 0))")
+
                 HStack(spacing: 4) {
-                    Image(watchlistData.changePerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
+                    Image(Double(watchlistData.netChangePerc ?? "") ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     
-                    Text("\(watchlistData.changePerc ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: watchlistData.changePerc ?? 0))%")
+                    Text("\(Double(watchlistData.netChangePerc ?? "") ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.netChangePerc ?? "") ?? 0))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: watchlistData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                        .foregroundStyle(Color(hex: Double(watchlistData.netChangePerc ?? "") ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
                 }
             }
         }
@@ -119,7 +146,7 @@ struct WatchlistAllCell: View {
 
 
 #Preview {
-    IndexContentView(indexData: .constant([IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 30", changePerc: 0.016, value: 2262.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 70", changePerc: -0.20, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43)]), onBackTap: {
+    IndexContentView(indexData: .constant([]), onBackTap: {
         
     })
 }

@@ -156,7 +156,7 @@ struct HomeContentView: View {
                     .foregroundStyle(.black)
                 
                 ZStack {
-                    Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
+                    Text("4")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
                 .padding(.horizontal, 4)
@@ -175,12 +175,15 @@ struct HomeContentView: View {
             }
             .padding(.horizontal, 18)
             
-            ScrollView(.vertical, showsIndicators: false) {
-                ForEach(Array((portfolioData.wrappedValue?.portfolioes ?? []).enumerated()), id: \.offset) { idnex, element in
-                    PortfolioCell(portfolioData: element)
+            
+            if portfolioData.wrappedValue?.portfolioes.isEmpty == false{
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(0...3, id: \.self) { id in
+                        PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
+                    }
                 }
+                .padding(.bottom, 80)
             }
-            .padding(.bottom, 80)
         }
     }
     
@@ -264,7 +267,7 @@ struct PortfolioCell: View {
 
 
 #Preview {
-    HomeContentView(portfolioData: .constant(GetPortfolioUIModel.testUIModel()), onTopUpTap: {
+    HomeContentView(portfolioData: .constant(.initializer()), onTopUpTap: {
         
     }, onWithdrawalTap: {
         

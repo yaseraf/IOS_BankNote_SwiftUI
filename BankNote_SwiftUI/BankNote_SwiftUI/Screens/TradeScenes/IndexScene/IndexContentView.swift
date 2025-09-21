@@ -7,11 +7,12 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct IndexContentView: View {
     
-    var indexData: Binding<[IndexUIModel]?>
-    
+    var indexData: Binding<[GetExchangeSummaryUIModel]?>
+
     var onBackTap:()->Void
     
     var body: some View {
@@ -75,30 +76,31 @@ struct IndexContentView: View {
 
 struct IndexAllCell: View {
     
-    var indexData: IndexUIModel
+    var indexData: GetExchangeSummaryUIModel
     
     var body: some View {
         VStack(spacing: 12) {
             HStack(spacing: 16) {
-                Image(indexData.image ?? "")
+                Image("ic_indexPlaceholder")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 32, height: 32)
-                
-                Text("\(indexData.name ?? "")")
+
+
+                Text("\(indexData.eMName ?? "")")
                     .font(.cairoFont(.semiBold, size: 14))
                 
                 Spacer()
                 
                 HStack(spacing: 4) {
-                    Image(indexData.changePerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
+                    Image(Double(indexData.netChangePerc ?? "") ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     
-                    Text("\(indexData.changePerc ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: indexData.changePerc ?? 0))%")
+                    Text("\(Double(indexData.netChangePerc ?? "") ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: Double(indexData.netChangePerc ?? "") ?? 0))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: indexData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                        .foregroundStyle(Color(hex: Double(indexData.netChangePerc ?? "") ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
                 }
 
                 VStack(alignment: .leading, spacing: 0) {
@@ -107,7 +109,7 @@ struct IndexAllCell: View {
             }
             
             HStack {
-                Text("\(AppUtility.shared.formatThousandSeparator(number: indexData.value ?? 0)) \("points".localized)")
+                Text("\(AppUtility.shared.formatThousandSeparator(number: Double(indexData.currentValue ?? "") ?? 0)) \("points".localized)")
                     .font(.cairoFont(.semiBold, size: 18))
                 
                 Spacer()
@@ -122,7 +124,7 @@ struct IndexAllCell: View {
 
 
 #Preview {
-    IndexContentView(indexData: .constant([IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 30", changePerc: 0.016, value: 2262.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 70", changePerc: -0.20, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43), IndexUIModel(image: "ic_indexPlaceholder", name: "EGX 100", changePerc: 0.016, value: 9550.43)]), onBackTap: {
+    IndexContentView(indexData: .constant([]), onBackTap: {
         
     })
 }

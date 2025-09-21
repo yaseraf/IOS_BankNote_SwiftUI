@@ -11,8 +11,8 @@ import SDWebImageSwiftUI
 
 struct TradeContentView: View {
     var indexData: Binding<[GetExchangeSummaryUIModel]?>
-    var watchlistData: Binding<[GetAllProfilesLookupsByUserCodeUIModel]?>
-    var newsData: Binding<[NewsUIModel]?>
+    var watchlistData: Binding<[GetMarketWatchByProfileIDUIModel]?>
+    var newsData: Binding<[GetAllMarketNewsUIModel]?>
     
     enum SelectedNewsType {
         case all
@@ -25,6 +25,8 @@ struct TradeContentView: View {
     var onIndexViewAllTap:()->Void
     var onWatchlistViewAllTap:()->Void
     var onNewsViewAllTap:()->Void
+    
+    
     
     var body: some View {
         VStack {
@@ -99,9 +101,11 @@ struct TradeContentView: View {
             }
             .padding(.horizontal, 18)
             
-            ScrollView(.vertical, showsIndicators: false) {
-                ForEach(Array((watchlistData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in
-                    WatchlistCell(watchlistData: element)
+            if watchlistData.wrappedValue?.isEmpty == false {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(0...3, id: \.self) { id in
+                        WatchlistCell(watchlistData: watchlistData.wrappedValue?[id] ?? .initializer())
+                    }
                 }
             }
             
@@ -109,7 +113,7 @@ struct TradeContentView: View {
     }
     
     private var newsView: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
                 Text("news".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -131,43 +135,66 @@ struct TradeContentView: View {
             .padding(.horizontal, 18)
             
             HStack {
-                Text(selectedNewsType == .all ? "\("•" + " " + "all".localized)" : "all".localized)
-                    .font(.cairoFont(.regular, size: 18))
-                    .foregroundStyle(selectedNewsType == .all ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
-                    .onTapGesture {
-                        selectedNewsType = .all
+                HStack(alignment: .center, spacing: 6){
+                    if selectedNewsType == .all {
+                        Circle()
+                            .frame(width: 5, height: 5)
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
                     }
-                Text(selectedNewsType == .stocks ? "\("•" + " "  + "stocks".localized)" : "stocks".localized)
-                    .font(.cairoFont(.regular, size: 18))
-                    .foregroundStyle(selectedNewsType == .stocks ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
-                    .onTapGesture {
-                        selectedNewsType = .stocks
+                    Text("all".localized)
+                        .font(.cairoFont(.regular, size: 18))
+                        .foregroundStyle(selectedNewsType == .all ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
+                        .onTapGesture {
+                            selectedNewsType = .all
+                        }
+                }
+                HStack(alignment: .center, spacing: 6){
+                    if selectedNewsType == .stocks {
+                        Circle()
+                            .frame(width: 5, height: 5)
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
                     }
-                Text(selectedNewsType == .markets ? "\("•" + " "  + "markets".localized)" : "markets".localized)
-                    .font(.cairoFont(.regular, size: 18))
-                    .foregroundStyle(selectedNewsType == .markets ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
-                    .onTapGesture {
-                        selectedNewsType = .markets
+                    Text("stocks".localized)
+                        .font(.cairoFont(.regular, size: 18))
+                        .foregroundStyle(selectedNewsType == .stocks ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
+                        .onTapGesture {
+                            selectedNewsType = .stocks
+                        }
+                }
+                HStack(alignment: .center, spacing: 6){
+                    if selectedNewsType == .markets {
+                        Circle()
+                            .frame(width: 5, height: 5)
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
                     }
+                    Text("markets".localized)
+                        .font(.cairoFont(.regular, size: 18))
+                        .foregroundStyle(selectedNewsType == .markets ? Color(hex: "#9C4EF7") : Color(hex: "#828282"))
+                        .onTapGesture {
+                            selectedNewsType = .markets
+                        }
+                }
                 
                 Spacer()
 
             }
             .padding(.horizontal, 18)
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                ForEach(Array((newsData.wrappedValue ?? []).enumerated()), id: \.offset) { index, element in
-                    newsCell(newsData: element)
-                        .padding(.horizontal, 26)
-                    if index < (newsData.wrappedValue?.count ?? 0) - 1 {
-                        Divider()
+        
+            if newsData.wrappedValue?.isEmpty == false {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(0...3, id: \.self) { id in
+                        newsCell(newsData: newsData.wrappedValue?[id] ?? .initializer())
+                            .padding(.horizontal, 26)
+                        if id < 3 {
+                            Divider()
+                        }
                     }
+                    .padding(.vertical, 17)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(.white))
+                    .padding(.horizontal, 18)
                 }
-                .padding(.vertical, 17)
-                .background(RoundedRectangle(cornerRadius: 8).fill(.white))
-                .padding(.horizontal, 18)
+                .lineSpacing(CGFloat.zero)
             }
-            .lineSpacing(CGFloat.zero)
         }
     }
 }
@@ -216,12 +243,12 @@ struct IndexCell: View {
 
 struct WatchlistCell: View {
     
-    var watchlistData: GetAllProfilesLookupsByUserCodeUIModel
+    var watchlistData: GetMarketWatchByProfileIDUIModel
     
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(portfolioData.symbol ?? "").png")) { phase in
+                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(watchlistData.symbol).png")) { phase in
                     switch phase {
                     case .success(let image):
                         image
@@ -248,14 +275,14 @@ struct WatchlistCell: View {
                             .resizable()
                             .scaledToFit()
                             .frame(maxWidth: 45, maxHeight: 45)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.gray) 
                     }
                 }
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("\(watchlistData.name ?? "")")
+                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
                         .font(.cairoFont(.semiBold, size: 14))
-                    Text("\(watchlistData.fullName ?? "")")
+                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
             }
@@ -263,18 +290,18 @@ struct WatchlistCell: View {
             Spacer()
             
             VStack(alignment: .trailing, spacing: 0) {
-                Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: watchlistData.change ?? 0))")
+                Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.netChange ?? "") ?? 0))")
                     .font(.cairoFont(.semiBold, size: 12))
 
                 HStack(spacing: 4) {
-                    Image(watchlistData.changePerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
+                    Image(Double(watchlistData.netChangePerc ?? "") ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     
-                    Text("\(watchlistData.changePerc ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: watchlistData.changePerc ?? 0))%")
+                    Text("\(Double(watchlistData.netChangePerc ?? "") ?? 0 >= 0 ? "+" : "") \(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.netChangePerc ?? "") ?? 0))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: watchlistData.changePerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                        .foregroundStyle(Color(hex: Double(watchlistData.netChangePerc ?? "") ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
                 }
             }
         }
@@ -287,30 +314,57 @@ struct WatchlistCell: View {
 
 struct newsCell: View {
     
-    var newsData: NewsUIModel
+    var newsData: GetAllMarketNewsUIModel
+    
+    func getHourOfTimeStamp(from dateString: String) -> String {
+        // Define the date format
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ddMMyyyyHHmmss"
+        dateFormatter.timeZone = TimeZone.current
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "dd/MM/yyyy" // Desired output format
+
+        if let date = dateFormatter.date(from: dateString) {
+            return outputFormatter.string(from: date)
+        } else {
+            return "Invalid Date"
+        }
+    }
+    
+    func getNewsContent(description: String, symbol: String) -> String{
+                
+        if let rangeStart = description.range(of: "<a"),
+           let rangeEnd = description.range(of: "</a>", range: rangeStart.upperBound..<description.endIndex) {
+            let content = description[rangeStart.upperBound..<rangeEnd.lowerBound]
+            let filter1 = description.replacingOccurrences(of: "<br />", with: "")
+            let filter2 = filter1.replacingOccurrences(of: content, with: "")
+            let filter3 = filter2.replacingOccurrences(of: "<a</a>", with: "")
+            let filter4 = filter3.replacingOccurrences(of: "<br>", with: "")
+//            let filter4 = filter3.replacingOccurrences(of: "Company:", with: "")
+                return String(filter4)
+            }
+        return "Symbol Name: \(symbol)"
+    }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 0) {
-                Text(newsData.indexName ?? "")
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 4) {
+                Text("egx".localized)
                     .font(.cairoFont(.light, size: 12))
                     .foregroundStyle(.black)
 
                 Text("•")
                 
-                Text(newsData.time ?? "")
+                Text(getHourOfTimeStamp(from: newsData.newsDate ?? ""))
                     .font(.cairoFont(.light, size: 12))
                     .foregroundStyle(.black)
             }
             
-            Text(newsData.title ?? "")
+            Text("\(getNewsContent(description: AppUtility.shared.isRTL ? newsData.newsDescA ?? "" : newsData.newsDescE ?? "", symbol: newsData.symbol ?? ""))")
                 .font(.cairoFont(.semiBold, size: 14))
-
-            Text(newsData.desc ?? "")
-                .font(.cairoFont(.medium, size: 14))
-
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

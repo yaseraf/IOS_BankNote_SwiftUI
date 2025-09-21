@@ -17,6 +17,10 @@ class OrderEntryViewModel: ObservableObject {
 
 // MARK: Routing
 extension OrderEntryViewModel {
+    func popViewController() {
+        coordinator.popViewController()
+    }
+    
     func openPaymentMethodScene() {
         SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getHomeCoordinator().openPaymentMethodScene(transactionType: .topUp)
     }

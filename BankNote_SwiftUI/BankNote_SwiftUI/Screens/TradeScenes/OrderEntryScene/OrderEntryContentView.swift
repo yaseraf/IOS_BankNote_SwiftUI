@@ -25,6 +25,7 @@ struct OrderEntryContentView: View {
     @State private var selectedOrderPriceType: OrderPriceType = .market
 
     var onContinueTap: () -> Void
+    var onBackTap: () -> Void
     
 
     var body: some View {
@@ -83,10 +84,15 @@ struct OrderEntryContentView: View {
     private var headerView: some View {
         VStack(spacing: 0) {
             HStack {
-                Image("ic_leftArrow")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
+                Button {
+                    onBackTap()
+                } label: {
+                    Image("ic_leftArrow")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                }
+
                 
                 Spacer()
             }
@@ -315,6 +321,8 @@ struct OrderEntryContentView: View {
 
 #Preview {
     OrderEntryContentView(onContinueTap: {
+        
+    }, onBackTap: {
         
     })
 }

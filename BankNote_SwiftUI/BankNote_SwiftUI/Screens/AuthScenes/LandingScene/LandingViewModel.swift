@@ -161,7 +161,13 @@ extension LandingViewModel {
                 self?.LoginResponseModelAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
-0
+
+                    
+                    KeyChainController().authToken = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? ""
+                    KeyChainController().loginCookieName = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.name ?? ""
+                    KeyChainController().loginCookieValue = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? ""
+
+                    
                     if success.isFirstLogin?.lowercased() ?? "" == "y" {
                         KeyChainController().resetPasswordCookies = "\(cookies?.filter({$0.name == ".ASPXAUTH"}).first?.name ?? "")=\(cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? "")"
                         KeyChainController().username = success.userName ?? ""

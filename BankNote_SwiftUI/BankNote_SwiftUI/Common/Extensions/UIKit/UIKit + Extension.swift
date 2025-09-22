@@ -50,34 +50,127 @@ extension UIView{
 
 extension UIFont {
     enum ThemeFont {
+        
+        case thin
+        case extraLight
+        case light
         case regular
         case medium
         case semiBold
         case bold
-        case heavy
-        var value: String {
+        case extraBold
+        case black
+        
+        var sfProDisplay: String {
             switch self {
+            case .thin:
+                "\(SFProDisplay)-Thin"
+            case .extraLight:
+                "\(SFProDisplay)-ExtraLight"
+            case .light:
+                "\(SFProDisplay)-Light"
             case .regular:
-                "SFProDisplay-Regular"
+                "\(SFProDisplay)-Regular"
             case .medium:
-                "SFProDisplay-Medium"
-
+                "\(SFProDisplay)-Medium"
             case .semiBold:
-                "SFProDisplay-Semibold"
-
+                "\(SFProDisplay)-SemiBold"
             case .bold:
-                "SFProDisplay-Bold"
+                "\(SFProDisplay)-Bold"
+            case .extraBold:
+                "\(SFProDisplay)-ExtraBold"
+            case .black:
+                "\(SFProDisplay)-Black"
+            }
+        }
 
-            case .heavy:
-                "SFProDisplay-Heavy"
-
+        
+        var notoSansArabicFont: String {
+            switch self {
+            case .thin:
+                "\(notoSansArabic)-Thin"
+            case .extraLight:
+                "\(notoSansArabic)-ExtraLight"
+            case .light:
+                "\(notoSansArabic)-Light"
+            case .regular:
+                "\(notoSansArabic)-Regular"
+            case .medium:
+                "\(notoSansArabic)-Medium"
+            case .semiBold:
+                "\(notoSansArabic)-SemiBold"
+            case .bold:
+                "\(notoSansArabic)-Bold"
+            case .extraBold:
+                "\(notoSansArabic)-ExtraBold"
+            case .black:
+                "\(notoSansArabic)-Black"
+            }
+        }
+        
+        var cairoFont: String {
+            switch self {
+            case .thin:
+                "\(cairo)-Thin"
+            case .extraLight:
+                "\(cairo)-ExtraLight"
+            case .light:
+                "\(cairo)-Light"
+            case .regular:
+                "\(cairo)-Regular"
+            case .medium:
+                "\(cairo)-Medium"
+            case .semiBold:
+                "\(cairo)-SemiBold"
+            case .bold:
+                "\(cairo)-Bold"
+            case .extraBold:
+                "\(cairo)-ExtraBold"
+            case .black:
+                "\(cairo)-Black"
+            }
+        }
+        
+        var interFont: String {
+            switch self {
+            case .thin:
+                "\(inter)_28pt-Thin"
+            case .extraLight:
+                "\(inter)_28pt-ExtraLight"
+            case .light:
+                "\(inter)_28pt-Light"
+            case .regular:
+                "\(inter)_28pt-Regular"
+            case .medium:
+                "\(inter)_28pt-Medium"
+            case .semiBold:
+                "\(inter)_28pt-SemiBold"
+            case .bold:
+                "\(inter)_28pt-Bold"
+            case .extraBold:
+                "\(inter)_28pt-ExtraBold"
+            case .black:
+                "\(inter)_28pt-Black"
             }
         }
     }
 
     static func apply(_ type: UIFont.ThemeFont = .regular, size: CGFloat = 15) -> UIFont? {
-        return  UIFont(name: type.value, size: size)
+        return  UIFont(name: type.sfProDisplay, size: size)
     }
+    
+    static func notoSansArabicFont(_ type: UIFont.ThemeFont = .regular, size: CGFloat ) -> UIFont? {
+        return UIFont(name: type.notoSansArabicFont, size: size)
+    }
+    
+    static func cairoFont(_ type: UIFont.ThemeFont = .regular, size: CGFloat ) -> UIFont? {
+        return UIFont(name: type.cairoFont, size: size)
+    }
+    
+    static func interFont(_ type: UIFont.ThemeFont = .regular, size: CGFloat ) -> UIFont? {
+        return UIFont(name: type.interFont, size: size)
+    }
+
 
 }
 

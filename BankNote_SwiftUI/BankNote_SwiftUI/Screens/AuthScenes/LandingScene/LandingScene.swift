@@ -72,25 +72,25 @@ struct LandingScene: BaseSceneType {
                       isAllGood = false
                       
                       if(status == loginState.invalidLogin) {
-                          msg = "Invalid_Username_password".localized // "Status = -1, invalidLogin"
+                          msg = "invalid_username_password".localized // "Status = -1, invalidLogin"
                       }
                       else if(status == loginState.invalidTokenID) {
-                          msg =  "Invalid_Token_ID".localized  // "Status = -2, invalidTokenID"
+                          msg =  "invalid_token_ID".localized  // "Status = -2, invalidTokenID"
                       }
                       else if(status == loginState.tokenSent) {
-                          msg = "Please_enter_Token".localized // "Status = -3, tokenSent"
+                          msg = "please_enter_token".localized // "Status = -3, tokenSent"
                       }
                       else if(status == loginState.tokenExpire) {
-                          msg = "Token_Expired".localized // "Status = -4, tokenExpire"
+                          msg = "token_expired".localized // "Status = -4, tokenExpire"
                       }
                       else if(status == loginState.noPermetions) {
-                          msg = "No_permissions".localized // "Status = -5, noPermetions"
+                          msg = "no_permissions".localized // "Status = -5, noPermetions"
                       }
                       else if(status == loginState.userLocked) {
-                          msg = "User_Locked".localized // "Status = -6, userLocked"
+                          msg = "user_locked".localized // "Status = -6, userLocked"
                       }
                       else if(status == loginState.anotherUserLogin) {
-                          msg = "userAlreadyLoggedIn".localized // "Status = -7, anotherUserLogin"
+                          msg = "user_already_logged_in".localized // "Status = -7, anotherUserLogin"
                       }
                       else if(status == loginState.userNotAgreeTermCondtion) {
                           msg = "not_agreed_terms_conditions".localized // "Status = -8, userNotAgreeTermCondtion"

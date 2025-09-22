@@ -56,11 +56,11 @@ class CustomMessageView: UIView {
 
     private func setupUI() {
         self.backgroundColor  = .clear
-        lblTitle.font = .apply(.semiBold,size: 15)
+        lblTitle.font = .cairoFont(.semiBold, size: 15)
         lblTitle.textColor = .white
         imgVIcon.tintColor = .white
 
-        lblAlertTitle.font = .apply(.semiBold,size: 15)
+        lblAlertTitle.font = .cairoFont(.semiBold, size: 15)
         lblAlertTitle.textColor = .white
 
 

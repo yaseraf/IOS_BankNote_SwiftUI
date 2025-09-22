@@ -10,7 +10,8 @@ import AVFoundation
 
 struct LivenessScanContentView: View {
     @State private var livenessProgress: Double = 0.0 // Simulating progress
-    
+    @StateObject private var cameraCoordinator = CameraView.CameraCoordinator()
+
     var onNextTap:()->Void
     
     var body: some View {
@@ -26,7 +27,7 @@ struct LivenessScanContentView: View {
                 // The Liveness Check Circle with Camera Placeholder
                 ZStack {
                     // The camera view is the first (bottom) layer
-                    CameraView()
+                    CameraView(coordinator: cameraCoordinator)
                         .frame(maxWidth: 350, maxHeight: 350)
                         .clipShape(Circle()) // This clips the camera feed into a circle
                         .overlay(
@@ -56,6 +57,7 @@ struct LivenessScanContentView: View {
                     }
 
                     Button(action: {
+                        cameraCoordinator.stopSession()
                         onNextTap()
                     }) {
                         Text("Next")
@@ -86,6 +88,11 @@ struct LivenessScanContentView: View {
 
 
 struct CameraView: UIViewRepresentable {
+    @ObservedObject var coordinator: CameraCoordinator
+
+        init(coordinator: CameraCoordinator = CameraCoordinator()) {
+            self._coordinator = ObservedObject(initialValue: coordinator)
+        }
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: .zero)
             view.backgroundColor = .clear
@@ -100,19 +107,18 @@ struct CameraView: UIViewRepresentable {
         }
 
     func makeCoordinator() -> CameraCoordinator {
-        CameraCoordinator(parent: self)
+        CameraCoordinator()
     }
 
-    class CameraCoordinator: NSObject {
-        var parent: CameraView
+    class CameraCoordinator: NSObject, ObservableObject {
         var captureSession: AVCaptureSession?
         var previewLayer: AVCaptureVideoPreviewLayer?
 
-        init(parent: CameraView) {
-            self.parent = parent
+        override init() {
             super.init()
             setupCamera()
         }
+        
         weak var hostView: UIView?
 
         private func setupCamera() {
@@ -157,10 +163,10 @@ struct CameraView: UIViewRepresentable {
                 print("Error setting up camera input: \(error.localizedDescription)")
             }
         }
-
-        deinit {
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.captureSession?.stopRunning()
+        
+        func stopSession() {
+            if let session = captureSession, session.isRunning {
+                session.stopRunning()
             }
         }
     }

@@ -74,10 +74,6 @@ struct BadgesContentView: View {
     
     var body: some View {
         ZStack {
-            // Background gradient.
-            LinearGradient(gradient: Gradient(colors: [Color.purple.opacity(0.2), Color.white.opacity(0.5)]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                .edgesIgnoringSafeArea(.all)
-            
             VStack {
                 // Header with a back button and title.
                 HStack {

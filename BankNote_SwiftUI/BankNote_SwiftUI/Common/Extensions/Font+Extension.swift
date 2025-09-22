@@ -9,14 +9,12 @@
 import Foundation
 import SwiftUI
 
+let SFProDisplay = "SFProDisplay"
 let notoSansArabic = "NotoSansArabic"
 let cairo = "Cairo"
 let inter = "Inter"
 
 extension Font {
-    
-    
-
     enum ThemeFont {
         
         case thin

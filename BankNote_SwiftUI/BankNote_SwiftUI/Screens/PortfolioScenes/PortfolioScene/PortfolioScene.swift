@@ -17,8 +17,8 @@ struct PortfolioScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                PortfolioContentView(portfolioData: $viewModel.portfolioData, pieChartData: $viewModel.pieChartData, onPortfolioTap: { symbol, marketType in
-                    viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType)
+                PortfolioContentView(portfolioData: $viewModel.portfolioData, pieChartData: $viewModel.pieChartData, onPortfolioTap: { symbol, marketType, custodianID, custodianName in
+                    viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType, custodianID: custodianID, custodianName: custodianName)
                 })
             })
             .onAppear {

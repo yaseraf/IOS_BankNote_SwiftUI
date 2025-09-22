@@ -16,6 +16,8 @@ enum HomeRoute:APITargetType{
     case GetExchangeSummary(requestModel: GetExchangeSummaryRequestModel)
     case GetCompaniesLookups(requestModel: GetCompaniesLookupsRequestModel)
     case GetALLMarketWatchBySymbol(requestModel: GetALLMarketWatchBySymbolRequestModel)
+    case GetAllMarketNewsBySymbol(requestModel: GetAllMarketNewsBySymbolRequestModel)
+    case GetExpectedProfitLoss(requestModel: GetExpectedProfitLossRequestModel)
 
     var baseURL: URL{
         get{
@@ -35,6 +37,15 @@ enum HomeRoute:APITargetType{
         }
     }
     
+    func getCurrentDateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ddMMyyyyHHmmss"
+        let currentDate = Date()
+        let dateString = dateFormatter.string(from: currentDate)
+        return dateString
+    }
+
+    
     var path: String{
         switch self {
         case .getUserAccounts:
@@ -51,6 +62,11 @@ enum HomeRoute:APITargetType{
             return "GeneralWServices/GetCompaniesLookups/\(KeyChainController().webCode ?? "")"
         case .GetALLMarketWatchBySymbol:
             return "MarektWServices/GetALLMarketWatchBySymbol/\(KeyChainController().webCode ?? "")/\(UserDefaultController().selectedSymbol ?? "")/\(UserDefaultController().selectedSymbolType ?? "")"
+        case .GetAllMarketNewsBySymbol:
+            return "GeneralWServices/GetAllMarketNewsBySymbol/\(UserDefaultController().selectedSymbol ?? "")/\(KeyChainController().webCode ?? "")"
+        case .GetExpectedProfitLoss:
+            return "FinancialWServices/GetExpectedProfitLoss/\(KeyChainController.shared().mainClientID ?? "")/\(KeyChainController.shared().clientID ?? "")/\(KeyChainController.shared().webCode ?? "")/\(getCurrentDateString())/\(KeyChainController.shared().brokerID ?? "")"
+
 
         }
     }
@@ -58,7 +74,7 @@ enum HomeRoute:APITargetType{
     var method: APIMethodType{
         get{
             switch self {
-            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol:
+            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
                 return .get
             }
         }
@@ -66,7 +82,7 @@ enum HomeRoute:APITargetType{
     
     var requestType: APITypeOfRequest{
         switch self {
-        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol:
+        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
                 .requestPlain
         }
     }

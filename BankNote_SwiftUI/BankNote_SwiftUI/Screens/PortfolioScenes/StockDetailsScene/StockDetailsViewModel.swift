@@ -15,9 +15,15 @@ class StockDetailsViewModel: ObservableObject {
     @Published var marketType = ""
     @Published var stockData:GetALLMarketWatchBySymbolUIModel?
     @Published var chartLoaded:Bool? = false
+    @Published var marketNewsBySymbol:[GetAllMarketNewsBySymbolUIModel]?
+    @Published var getExpectedProfitLossList: [GetExpectedProfitLossUIModel]?
+    @Published var expectedProfitLoss: GetExpectedProfitLossUIModel?
+    @Published var ownedShares = 0
 
     @Published var getAllMarketWatchBySymbolAPIResult:APIResultType<GetALLMarketWatchBySymbolUIModel>?
     @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
+    @Published var getAllMarketNewsBySymbolAPIResult:APIResultType<[GetAllMarketNewsBySymbolUIModel]>?
+    @Published var GetExpectedProfitLossAPIResult:APIResultType<[GetExpectedProfitLossUIModel]>?
 
     init(coordinator: PortfolioCoordinatorProtocol, useCase: HomeUseCaseProtocol, symbol: String, marketType: String) {
         self.coordinator = coordinator
@@ -71,6 +77,57 @@ extension StockDetailsViewModel {
             }
         }
     }
+    
+    func GetAllMarketNewsBySymbol(success:Bool) {
+        let requestModel = GetAllMarketNewsBySymbolRequestModel()
+        getAllMarketNewsBySymbolAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await useCase.GetAllMarketNewsBySymbol(requestModel: requestModel) {[weak self] result in
+                self?.getAllMarketNewsBySymbolAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.getAllMarketNewsBySymbolAPIResult = .onSuccess(response: success)
+                    debugPrint("market news by symbol stocks success")
+                    self?.marketNewsBySymbol = success
+
+                case .failure(let failure):
+                        self?.getAllMarketNewsBySymbolAPIResult = .onFailure(error: failure)
+                    debugPrint("market news by symbol stocks failure")
+                }
+            }
+        }
+    }
+    
+    func GetExpectedProfitLossAPI(success:Bool) {
+        let requestModel = GetExpectedProfitLossRequestModel()
+        
+        GetExpectedProfitLossAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await useCase.GetExpectedProfitLoss(requestModel: requestModel) {[weak self] result in
+
+                self?.GetExpectedProfitLossAPIResult = .onLoading(show: false)
+
+                switch result {
+                case .success(let success):
+                    self?.GetExpectedProfitLossAPIResult = .onSuccess(response: success)
+                    debugPrint("get expected profit loss success")
+                    
+                    self?.getExpectedProfitLossList = success
+                    
+                    self?.filterExpectedProfitLossList()
+                    
+                    
+                case .failure(let failure):
+                        self?.GetExpectedProfitLossAPIResult = .onFailure(error: failure)
+                    debugPrint("get expected profit loss failure: \(failure)")
+
+                }
+            }
+        }
+    }
+
 }
 
 // MARK: SignalR
@@ -132,5 +189,22 @@ extension StockDetailsViewModel: MarketWatchDelegate {
         self.stockData?.netChangePerc = data.netChangePerc
 
     }
+}
+
+// MARK: Functions
+extension StockDetailsViewModel {
+    func filterExpectedProfitLossList() {
+        for i in 0..<(getExpectedProfitLossList?.count ?? 0) {
+            if getExpectedProfitLossList?[i].symbol == UserDefaultController().selectedSymbol ?? "" && getExpectedProfitLossList?[i].custodianID == UserDefaultController().selectedCustodian ?? "" {
+                expectedProfitLoss = getExpectedProfitLossList?[i]
+                ownedShares = Int(expectedProfitLoss?.qtyT0 ?? 0) + Int(expectedProfitLoss?.qtyT1 ?? 0) + Int(expectedProfitLoss?.qtyT2 ?? 0)
+            } else if getExpectedProfitLossList?[i].symbol == UserDefaultController().selectedSymbol ?? "" && (UserDefaultController().selectedCustodian == "" || UserDefaultController().selectedCustodian == nil) {
+                UserDefaultController().selectedCustodian = getExpectedProfitLossList?[i].custodianID
+                expectedProfitLoss = getExpectedProfitLossList?[i]
+                ownedShares = Int(expectedProfitLoss?.qtyT0 ?? 0) + Int(expectedProfitLoss?.qtyT1 ?? 0) + Int(expectedProfitLoss?.qtyT2 ?? 0)
+            }
+        }
+    }
+
 }
 

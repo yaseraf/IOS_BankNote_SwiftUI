@@ -65,6 +65,7 @@ struct LandingContentView: View {
             Text("bank_note".localized)
                 .textCase(.uppercase)
                 .font(.cairoFont(.extraBold, size: 40))
+                .foregroundStyle(.black)
                 .padding(.bottom, 60)
         }
     }
@@ -156,7 +157,8 @@ struct LandingContentView: View {
         return HStack {
             Text("\("you_dont_have_an_account".localized)?")
                 .font(.cairoFont(.semiBold, size:  12))
-            
+                .foregroundStyle(.black)
+
             
             Button {
                 onSignUpTap()

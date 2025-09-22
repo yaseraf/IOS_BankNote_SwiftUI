@@ -14,6 +14,7 @@ struct SettingsContentView: View {
     var onTiersTap:()->Void
     var onBadgesTap:()->Void
     var onHelpTap:()->Void
+    var onLogoutTap:()->Void
     
     var body: some View {
         ZStack {
@@ -325,7 +326,7 @@ struct SettingsContentView: View {
     private var appInfoView: some View {
         VStack(spacing: 8) {
             HStack {
-                Text("app_info_and_hlep".localized)
+                Text("app_info_and_help".localized)
                     .font(.cairoFont(.semiBold, size: 18))
                 
                 Spacer()
@@ -457,6 +458,34 @@ struct SettingsContentView: View {
                         .frame(width: 22, height: 22)
                 }
                 
+                Divider()
+                
+                // Logout
+                Button {
+                    onLogoutTap()
+                } label: {
+                    HStack(spacing: 17) {
+                        Image("ic_logout")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
+                            .frame(width: 24, height: 24)
+                        
+                        Text("logout".localized)
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(.black)
+                        
+                        Spacer()
+                        
+                        Image("ic_rightArrow")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                    }
+
+                }
+
 
             }
             .padding(16)
@@ -475,6 +504,8 @@ struct SettingsContentView: View {
     }, onBadgesTap: {
         
     }, onHelpTap: {
+        
+    }, onLogoutTap: {
         
     })
 }

@@ -24,6 +24,7 @@ struct LandingScene: BaseSceneType {
                 }, onLoginTap: { email, password, isRememberMe in
 //                    viewModel.openPinScene()
                     viewModel.UsrAuthinticationByEmailAndMobileAPI(email: email, phoneNo: "", Password: password, isRememberMe: isRememberMe)
+//                    viewModel.UsrAuthinticationByEmailAndMobileAPI(email: "Mohamed.kamal@cicapital.com", phoneNo: "", Password: "Mahfazty@123", isRememberMe: isRememberMe)
                 }, onSignUpTap: {
                     viewModel.openSignUpScene()
                 })

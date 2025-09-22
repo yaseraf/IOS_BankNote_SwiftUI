@@ -100,6 +100,8 @@
 
 
 // MARK: Tiers Screen
+"buy_now" = "Buy Now";
+
 // Tier names
 "tier_rookie" = "Rookie";
 "tier_casual" = "Casual";
@@ -183,6 +185,8 @@
 "insufficient_funds_top_up" = "Insufficient Funds, Top-Up";
 "to_continue_purchase" = "To continue the purchase";
 "top_up_now" = "Top up now";
+"top_up" = "Top-up";
+"back_to_home" = "Back to Home";
 
 
 

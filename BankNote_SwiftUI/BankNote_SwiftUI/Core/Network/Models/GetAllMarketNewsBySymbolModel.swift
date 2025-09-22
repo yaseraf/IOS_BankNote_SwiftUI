@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct GetAllMarketNewsRequestModel: Codable {
+struct GetAllMarketNewsBySymbolRequestModel: Codable {
     
 }
 
-struct GetAllMarketNewsResponseModel: Codable {
+struct GetAllMarketNewsBySymbolResponseModel: Codable {
         let marketID, newsDate, newsDateT, newsDescA: String?
         let newsDescE, notifyID, symbol: String?
 
@@ -26,15 +26,15 @@ struct GetAllMarketNewsResponseModel: Codable {
         }
 }
 
-struct GetAllMarketNewsUIModel{
+struct GetAllMarketNewsBySymbolUIModel{
     var marketID, newsDate, newsDateT, newsDescA: String?
     var newsDescE, notifyID, symbol: String?
     
-    static func mapToUIModel(_ model:GetAllMarketNewsResponseModel)->Self {
-        return  GetAllMarketNewsUIModel(marketID: model.marketID ?? "", newsDate: model.newsDate ?? "", newsDateT: model.newsDateT ?? "", newsDescA: model.newsDescA ?? "", newsDescE: model.newsDescE ?? "", notifyID: model.notifyID ?? "", symbol: model.symbol ?? "")
+    static func mapToUIModel(_ model:GetAllMarketNewsBySymbolResponseModel)->Self {
+        return  GetAllMarketNewsBySymbolUIModel(marketID: model.marketID ?? "", newsDate: model.newsDate ?? "", newsDateT: model.newsDateT ?? "", newsDescA: model.newsDescA ?? "", newsDescE: model.newsDescE ?? "", notifyID: model.notifyID ?? "", symbol: model.symbol ?? "")
     }
     
     static func initializer() -> Self {
-        return GetAllMarketNewsUIModel()
+        return GetAllMarketNewsBySymbolUIModel()
     }
 }

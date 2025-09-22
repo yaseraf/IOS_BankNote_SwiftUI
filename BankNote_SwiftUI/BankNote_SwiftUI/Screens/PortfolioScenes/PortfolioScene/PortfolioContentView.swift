@@ -14,7 +14,7 @@ struct PortfolioContentView: View {
     var portfolioData:Binding<GetPortfolioUIModel?>
     var pieChartData:Binding<[PieSliceData]?>
         
-    var onPortfolioTap:((String,String)->Void)
+    var onPortfolioTap:((String,String,String,String)->Void)
 
     
     var body: some View {
@@ -58,7 +58,7 @@ struct PortfolioContentView: View {
            ScrollView(.vertical, showsIndicators: false) {
                 ForEach(0...3, id: \.self) { id in
                     Button {
-                        onPortfolioTap(portfolioData.wrappedValue?.portfolioes[id].symbol ?? "", portfolioData.wrappedValue?.portfolioes[id].marketType ?? "")
+                        onPortfolioTap(portfolioData.wrappedValue?.portfolioes[id].symbol ?? "", portfolioData.wrappedValue?.portfolioes[id].marketType ?? "", portfolioData.wrappedValue?.portfolioes[id].custodianID ?? "", AppUtility.shared.isRTL ? portfolioData.wrappedValue?.portfolioes[id].custodianA ?? "" : portfolioData.wrappedValue?.portfolioes[id].custodianE ?? "")
                     } label: {
                         PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
                     }

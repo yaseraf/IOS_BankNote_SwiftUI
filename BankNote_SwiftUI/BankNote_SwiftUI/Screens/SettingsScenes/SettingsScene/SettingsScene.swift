@@ -25,9 +25,30 @@ struct SettingsScene: BaseSceneType {
                     viewModel.openBadgesScene()
                 }, onHelpTap: {
                     viewModel.openHelpScene()
+                }, onLogoutTap: {
+                    viewModel.UsersLogOffAPI(success: true)
                 })
             })
-           
-        })
+        }, showLoading: .constant(viewTypeAction.showLoading))
+        .onViewDidLoad {
+            logoutAPI()
+        }
+
     }
+    
+    private func logoutAPI() {
+        viewModel.$usersLogOffAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
 }

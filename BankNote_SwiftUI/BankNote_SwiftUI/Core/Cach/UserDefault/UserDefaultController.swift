@@ -49,6 +49,8 @@ enum CachingKey: String {
     case marketStatusTitleE
     case marketStatusTitleA
     case selectedMarket
+    case selectedCustodian
+    case selectedCustodianName
     
     // MARK: Other
     
@@ -96,6 +98,8 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.marketStatusTitleE) var marketStatusTitleE
     @CachingCodable<String>(.marketStatusTitleA) var marketStatusTitleA
     @CachingCodable<String>(.selectedMarket) var selectedMarket
+    @CachingCodable<String>(.selectedCustodian) var selectedCustodian
+    @CachingCodable<String>(.selectedCustodianName) var selectedCustodianName
 
     // MARK: Others
 
@@ -116,6 +120,8 @@ class UserDefaultController: ObservableObject {
         selectedSymbolType = nil
         isMarketOpen = nil
         selectedMarket = nil
+        selectedCustodian = nil
+        selectedCustodianName = nil
     }
 }
 

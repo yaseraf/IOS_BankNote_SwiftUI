@@ -56,6 +56,8 @@ struct StockDetailsContentView: View {
 
     var stockData:Binding<GetALLMarketWatchBySymbolUIModel?>
     var chartLoaded:Binding<Bool?>
+    var marketNews:Binding<[GetAllMarketNewsBySymbolUIModel]?>
+    var ownedShares:Binding<Int?>
 
     enum selectedChartPeriod: String {
         case dayChart = "1D"
@@ -105,27 +107,27 @@ struct StockDetailsContentView: View {
                                 image
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .frame(width: 45, height: 45)
                                     .padding(.horizontal, 4)
                                     .foregroundStyle(.gray)
                             case .failure:
                                 Image("ic_selectStock")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .frame(width: 45, height: 45)
                                     .padding(.horizontal, 4)
                                     .foregroundStyle(.gray)
                             case .empty:
                                 Image("ic_selectStock")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .frame(width: 45, height: 45)
                                     .foregroundStyle(.gray)
                             @unknown default:
                                 Image("ic_selectStock")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(maxWidth: 45, maxHeight: 45)
+                                    .frame(width: 45, height: 45)
                                     .foregroundStyle(.gray)
                             }
                         }
@@ -151,7 +153,6 @@ struct StockDetailsContentView: View {
 
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top)
 
                     HStack{
                         Image("ic_topUp")
@@ -165,7 +166,7 @@ struct StockDetailsContentView: View {
                             .font(.cairoFont(.semiBold, size: 12))
                             .foregroundStyle(Color(hex: "#1E961E"))
                         
-                        Text("Today")
+                        Text("today".localized)
                             .font(.cairoFont(.semiBold, size: 12))
 
                     }
@@ -187,8 +188,14 @@ struct StockDetailsContentView: View {
                                 )
                                 .frame(maxHeight: 50)
                                 .mask(
-                                    Text(segment.rawValue)
-                                        .font(.cairoFont(.semiBold, size: 12))
+                                    HStack(alignment: .center, spacing: 4) {
+                                        Circle()
+                                            .scaledToFit()
+                                            .frame(width: 5, height: 5)
+                                            
+                                        Text(segment.rawValue)
+                                            .font(.cairoFont(.semiBold, size: 12))
+                                    }
                                 )
                             } else {
                                 Text(segment.rawValue)
@@ -218,7 +225,7 @@ struct StockDetailsContentView: View {
                     VStack(alignment: .leading) {
                         switch selectedSegment {
                         case .details:
-                            DetailsView()
+                            DetailsView(stockData: stockData, marketNews: marketNews)
                         case .myPosition:
                             MyPositionView()
                         case .orders:
@@ -289,6 +296,10 @@ struct StockDetailsContentView: View {
 
 // MARK: - Details View
 struct DetailsView: View {
+    
+    var stockData:Binding<GetALLMarketWatchBySymbolUIModel?>
+    var marketNews:Binding<[GetAllMarketNewsBySymbolUIModel]?>
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("About Fawry")
@@ -336,12 +347,12 @@ struct DetailsView: View {
             
             VStack(spacing: 0) {
                 InfoGrid(items: [
-                    ("Market cap", "EGP 521.456B"),
-                    ("P/E Ratio", "13.5"),
-                    ("Volume", "2.1M"),
-                    ("Dividend Yield", "4.2%"),
-                    ("52-Week High", "EGP 600"),
-                    ("52-Week Low", "EGP 430")
+                    ("market_cap".localized, "\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.companyMARKETCAP ?? "0") ?? 0))"),
+                    ("\("pe".localized) \("ratio".localized)", "\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.pe ?? "0") ?? 0))"),
+                    ("volume".localized, "\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.totalVolume ?? "0") ?? 0))"),
+                    ("dividend_yield".localized, "\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.companyDIVIDENDYIELDPERC ?? "0") ?? 0))%"),
+                    ("52_week_high".localized, "\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.wk52High ?? "0") ?? 0))"),
+                    ("52_week_low".localized, "\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.wk52Low ?? "0") ?? 0))"),
                 ])
             }
             .background(Color.white.opacity(0.8))
@@ -367,19 +378,36 @@ struct DetailsView: View {
             }
             .padding(.top)
             
-            VStack(spacing: 0) {
-                NewsRow(source: "EGX", time: "2 hours ago", title: "ADNOC Distribution Expands to Saudi Arabia", description: "ADNOCDIST announces new fuel stations in KSA as part of its strategic expansion.")
-                
-                Divider()
-                
-                NewsRow(source: "EGX", time: "Yesterday", title: "Emaar Properties Reports 12% Profit Growth in Q1 2025", description: "Strong performance driven by Dubai's real estate market and international operations.")
-                
-                Divider()
-                
-                NewsRow(source: "EGX", time: "3 days ago", title: "Emirates NBD Completes Acquisition of Sberbank...", description: "Emirates NBD has completed the acquisition of Sberbank's full stake in DenizBank...")
+            if marketNews.wrappedValue?.isEmpty == false{
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(0...3, id: \.self) { id in
+                        newsCellBySymbol(newsData: marketNews.wrappedValue?[id] ?? .initializer())
+                            .padding(.horizontal, 26)
+                        if id < 3 {
+                            Divider()
+                        }
+                    }
+                    .padding(.vertical, 17)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(.white))
+                    .padding(.horizontal, 18)
+                }
+                .lineSpacing(CGFloat.zero)
             }
-            .background(Color.white.opacity(0.8))
-            .cornerRadius(10)
+
+            
+//            VStack(spacing: 0) {
+//                NewsRow(source: "EGX", time: "2 hours ago", title: "ADNOC Distribution Expands to Saudi Arabia", description: "ADNOCDIST announces new fuel stations in KSA as part of its strategic expansion.")
+//                
+//                Divider()
+//                
+//                NewsRow(source: "EGX", time: "Yesterday", title: "Emaar Properties Reports 12% Profit Growth in Q1 2025", description: "Strong performance driven by Dubai's real estate market and international operations.")
+//                
+//                Divider()
+//                
+//                NewsRow(source: "EGX", time: "3 days ago", title: "Emirates NBD Completes Acquisition of Sberbank...", description: "Emirates NBD has completed the acquisition of Sberbank's full stake in DenizBank...")
+//            }
+//            .background(Color.white.opacity(0.8))
+//            .cornerRadius(10)
         }
         .padding()
     }
@@ -387,20 +415,24 @@ struct DetailsView: View {
 
 // MARK: - My Position View
 struct MyPositionView: View {
+    
+    var stockData:Binding<GetALLMarketWatchBySymbolUIModel?>
+    var ownedShares:Binding<Int?>
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             VStack(spacing: 1) {
                 InfoGrid(items: [
-                    ("You Own", "10 Shares"),
-                    ("Average Buy Price", "EGP 13.75"),
-                    ("Total Value", "EGP 2,178"),
-                    ("Dividend Yield", "4.8%")
+                    ("you_own".localized, "\(AppUtility.shared.formatThousandSeparator(number: Double(ownedShares.wrappedValue ?? 0) ?? 0)) \("shares".localized)"),
+                    ("average_buy_price".localized, "\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.avgPrice ?? "") ?? 0))"),
+                    ("total_value".localized, "\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.totalValue ?? "") ?? 0))"),
+                    ("dividend_yield".localized, "\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.companyDIVIDENDYIELDPERC ?? "") ?? 0))%")
                 ])
                 
                 Divider()
                 
                 VStack(alignment: .center, spacing: 0) {
-                    Text("Profit/Loss")
+                    Text("profit_loss")
                         .font(.cairoFont(.semiBold, size: 12))
                     
                     HStack {
@@ -410,7 +442,7 @@ struct MyPositionView: View {
                             .scaledToFit()
                             .frame(width: 20, height: 20)
                             .foregroundColor(Color(hex: "#1E961E"))
-                        Text("EGP +115.5 (+5.6%)")
+                        Text("\("egp".localized) +115.5 (+5.6%)")
                             .font(.cairoFont(.semiBold, size: 18))
                             .foregroundColor(Color(hex: "#1E961E"))
 
@@ -470,6 +502,63 @@ struct ResearchView: View {
 }
 
 // MARK: - Reusable Components
+
+struct newsCellBySymbol: View {
+    
+    var newsData: GetAllMarketNewsBySymbolUIModel
+    
+    func getHourOfTimeStamp(from dateString: String) -> String {
+        // Define the date format
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ddMMyyyyHHmmss"
+        dateFormatter.timeZone = TimeZone.current
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "dd/MM/yyyy" // Desired output format
+
+        if let date = dateFormatter.date(from: dateString) {
+            return outputFormatter.string(from: date)
+        } else {
+            return "Invalid Date"
+        }
+    }
+    
+    func getNewsContent(description: String, symbol: String) -> String{
+                
+        if let rangeStart = description.range(of: "<a"),
+           let rangeEnd = description.range(of: "</a>", range: rangeStart.upperBound..<description.endIndex) {
+            let content = description[rangeStart.upperBound..<rangeEnd.lowerBound]
+            let filter1 = description.replacingOccurrences(of: "<br />", with: "")
+            let filter2 = filter1.replacingOccurrences(of: content, with: "")
+            let filter3 = filter2.replacingOccurrences(of: "<a</a>", with: "")
+            let filter4 = filter3.replacingOccurrences(of: "<br>", with: "")
+//            let filter4 = filter3.replacingOccurrences(of: "Company:", with: "")
+                return String(filter4)
+            }
+        return "Symbol Name: \(symbol)"
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 4) {
+                Text("egx".localized)
+                    .font(.cairoFont(.light, size: 12))
+                    .foregroundStyle(.black)
+
+                Text("•")
+                
+                Text(getHourOfTimeStamp(from: newsData.newsDate ?? ""))
+                    .font(.cairoFont(.light, size: 12))
+                    .foregroundStyle(.black)
+            }
+            
+            Text("\(getNewsContent(description: AppUtility.shared.isRTL ? newsData.newsDescA ?? "" : newsData.newsDescE ?? "", symbol: newsData.symbol ?? ""))")
+                .font(.cairoFont(.semiBold, size: 14))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
 
 // A single row for a label and value.
 struct InfoRow: View {
@@ -615,8 +704,10 @@ struct OrderRow: View {
     }
 }
 
+
+
 #Preview {
-    StockDetailsContentView(stockData: .constant(.initializer()), chartLoaded: .constant(false), onBackTap: {
+    StockDetailsContentView(stockData: .constant(.initializer()), chartLoaded: .constant(false), marketNews: .constant([]), onBackTap: {
         
     }, onBuyTap: {
         

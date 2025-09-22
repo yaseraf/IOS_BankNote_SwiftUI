@@ -45,9 +45,11 @@ extension PortfolioViewModel {
 
 // MARK: Routing
 extension PortfolioViewModel {
-    func openStockDetailsScene(symbol: String, marketType: String) {
+    func openStockDetailsScene(symbol: String, marketType: String, custodianID: String, custodianName: String) {
         UserDefaultController().selectedSymbol = symbol
         UserDefaultController().selectedSymbolType = marketType
+        UserDefaultController().selectedCustodian = custodianID
+        UserDefaultController().selectedCustodianName = custodianName
         coordinator.openStockDetailsScene(symbol: symbol, marketType: marketType)
     }
 }

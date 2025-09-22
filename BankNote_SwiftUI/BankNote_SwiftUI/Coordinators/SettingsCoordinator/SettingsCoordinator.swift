@@ -30,7 +30,8 @@ class SettingsCoordinator:  ObservableObject {
 extension SettingsCoordinator:SettingsCoordinatorProtocol{
 
     func openSettingsScene() {
-        let viewModel = SettingsViewModel(coordinator: self)
+        let useCase = SettingsUseCase()
+        let viewModel = SettingsViewModel(coordinator: self, useCase: useCase)
         let view = SettingsScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

@@ -101,6 +101,8 @@
 
 
 // MARK: Tiers Screen
+"buy_now" = "اشتر الان";
+
 // Tier names
 "tier_rookie" = "مبتدئ";
 "tier_casual" = "عادي";
@@ -184,6 +186,8 @@
 "insufficient_funds_top_up" = "رصيد غير كافٍ، قم بالشحن";
 "to_continue_purchase" = "للاستمرار في الشراء";
 "top_up_now" = "اشحن الآن";
+"top_up" = "اشحن";
+"back_to_home" = "الرجوع";
 
 
 // MARK: Countries

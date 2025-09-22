@@ -14,6 +14,9 @@ protocol HomeRepositoryProtocol {
     func getPortfolio(route: HomeRoute, completion: @escaping(Result<GetPortfolioResponseModel, NetworkError>) -> Void) async
     func GetCompaniesLookups(route: HomeRoute, completion: @escaping(Result<[GetCompaniesLookupsResponseModel], NetworkError>) -> Void) async
     func GetALLMarketWatchBySymbol(route: HomeRoute, completion: @escaping(Result<GetALLMarketWatchBySymbolResponseModel, NetworkError>) -> Void) async
+    func GetAllMarketNewsBySymbol(route: HomeRoute, completion: @escaping(Result<[GetAllMarketNewsBySymbolResponseModel], NetworkError>) -> Void) async
+    func GetExpectedProfitLoss(route: HomeRoute, completion: @escaping(Result<[GetExpectedProfitLossResponseModel], NetworkError>) -> Void) async
+
 }
 
 class HomeRepository: HomeRepositoryProtocol {
@@ -41,4 +44,11 @@ class HomeRepository: HomeRepositoryProtocol {
     func GetALLMarketWatchBySymbol(route: HomeRoute, completion: @escaping (Result<GetALLMarketWatchBySymbolResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: GetALLMarketWatchBySymbolResponseModel.self, completion: completion).requestApi()
     }
+    func GetAllMarketNewsBySymbol(route: HomeRoute, completion: @escaping (Result<[GetAllMarketNewsBySymbolResponseModel], NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: [GetAllMarketNewsBySymbolResponseModel].self, completion: completion).requestApi()
+    }
+    func GetExpectedProfitLoss(route: HomeRoute, completion: @escaping (Result<[GetExpectedProfitLossResponseModel], NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: [GetExpectedProfitLossResponseModel].self, completion: completion).requestApi()
+    }
+
 }

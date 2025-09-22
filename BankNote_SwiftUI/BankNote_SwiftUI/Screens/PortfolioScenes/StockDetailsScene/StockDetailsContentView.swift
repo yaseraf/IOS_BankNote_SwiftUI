@@ -44,10 +44,10 @@ struct StockDetailsContentView: View {
     
     // An enum to represent the different segments in the segmented control.
     enum StockSegment: String, CaseIterable {
-        case details = "Details"
-        case myPosition = "My Position"
-        case orders = "Orders"
-        case research = "Research"
+        case details = "details"
+        case myPosition = "my_positions"
+        case orders = "orders"
+        case research = "research"
     }
     
     // A state variable to keep track of the currently selected segment.
@@ -193,12 +193,12 @@ struct StockDetailsContentView: View {
                                             .scaledToFit()
                                             .frame(width: 5, height: 5)
                                             
-                                        Text(segment.rawValue)
+                                        Text(segment.rawValue.localized)
                                             .font(.cairoFont(.semiBold, size: 12))
                                     }
                                 )
                             } else {
-                                Text(segment.rawValue)
+                                Text(segment.rawValue.localized)
                                     .font(.cairoFont(.semiBold, size: 12))
                                     .foregroundColor(.secondary)
                             }
@@ -227,7 +227,7 @@ struct StockDetailsContentView: View {
                         case .details:
                             DetailsView(stockData: stockData, marketNews: marketNews)
                         case .myPosition:
-                            MyPositionView()
+                            MyPositionView(stockData: stockData, ownedShares: ownedShares)
                         case .orders:
                             OrdersView()
                         case .research:
@@ -245,7 +245,7 @@ struct StockDetailsContentView: View {
                     }) {
                         HStack {
                             Image(systemName: "plus")
-                            Text("Buy")
+                            Text("buy".localized)
                         }
                         .foregroundColor(.white)
                         .padding()
@@ -263,7 +263,7 @@ struct StockDetailsContentView: View {
                     }) {
                         HStack {
                             Image(systemName: "minus")
-                            Text("Sell")
+                            Text("sell".localized)
                         }
                         .foregroundColor(.purple)
                         .padding()
@@ -302,7 +302,7 @@ struct DetailsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("About Fawry")
+            Text("\("about".localized) \(AppUtility.shared.isRTL ? stockData.wrappedValue?.symbolNameA ?? "" : stockData.wrappedValue?.symbolNameE ?? "")")
                 .font(.cairoFont(.semiBold, size: 18))
                 .foregroundStyle(.secondary)
                 .padding(.top)
@@ -340,7 +340,7 @@ struct DetailsView: View {
             .background(Color.white.opacity(0.8))
             .cornerRadius(10)
             
-            Text("Statistics")
+            Text("statistics".localized)
                 .font(.cairoFont(.semiBold, size: 18))
                 .foregroundStyle(.secondary)
                 .padding(.top)
@@ -359,7 +359,7 @@ struct DetailsView: View {
             .cornerRadius(10)
             
             HStack {
-                Text("News")
+                Text("news".localized)
                     .font(.cairoFont(.semiBold, size: 18))
                     .foregroundStyle(.secondary)
                 
@@ -432,7 +432,7 @@ struct MyPositionView: View {
                 Divider()
                 
                 VStack(alignment: .center, spacing: 0) {
-                    Text("profit_loss")
+                    Text("profit_loss".localized)
                         .font(.cairoFont(.semiBold, size: 12))
                     
                     HStack {
@@ -685,14 +685,14 @@ struct OrderRow: View {
                     .opacity(0)
                 
                 HStack(spacing: 0) {
-                    Text("EGP")
+                    Text("egp".localized)
                         .font(.cairoFont(.semiBold, size: 12))
                     Text(price)
                         .font(.cairoFont(.semiBold, size: 18))
                 }
 
                 HStack(spacing: 0) {
-                    Text("EGP")
+                    Text("egp".localized)
                         .font(.cairoFont(.semiBold, size: 12))
                     Text(total)
                         .font(.cairoFont(.semiBold, size: 18))
@@ -707,7 +707,7 @@ struct OrderRow: View {
 
 
 #Preview {
-    StockDetailsContentView(stockData: .constant(.initializer()), chartLoaded: .constant(false), marketNews: .constant([]), onBackTap: {
+    StockDetailsContentView(stockData: .constant(.initializer()), chartLoaded: .constant(false), marketNews: .constant([]), ownedShares: .constant(0), onBackTap: {
         
     }, onBuyTap: {
         

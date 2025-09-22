@@ -18,7 +18,7 @@ class StockDetailsViewModel: ObservableObject {
     @Published var marketNewsBySymbol:[GetAllMarketNewsBySymbolUIModel]?
     @Published var getExpectedProfitLossList: [GetExpectedProfitLossUIModel]?
     @Published var expectedProfitLoss: GetExpectedProfitLossUIModel?
-    @Published var ownedShares = 0
+    @Published var ownedShares: Int?
 
     @Published var getAllMarketWatchBySymbolAPIResult:APIResultType<GetALLMarketWatchBySymbolUIModel>?
     @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?

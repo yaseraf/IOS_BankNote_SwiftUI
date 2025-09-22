@@ -58,6 +58,25 @@
 "total_amount" = "Total Amount";
 "continue" = "Continue";
 
+// MARK: Stock Details Screen
+"details" = "Details";
+"my_positions" = "My Positions";
+"research" = "Research";
+"about" = "About";
+"statistics" = "Statistics";
+"market_cap" = "Market Cap";
+"pe" = "P/E";
+"ratio" = "Ratio";
+"volume" = "Volume";
+"dividend_yield" = "Dividend Yield";
+"52_week_high" = "52 Week High";
+"52_week_low" = "52 Week Low";
+"you_own" = "You Own";
+"average_buy_price" = "Average Buy Price";
+"total_value" = "Total Value";
+"profit_loss" = "Profit/Loss";
+"today" = "Today";
+
 // MARK: Trade Screen
 "index" = "Index";
 "view_all" = "View All";

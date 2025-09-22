@@ -47,7 +47,7 @@ struct LivenessScanContentView: View {
                         // Retake action
                         livenessProgress = 0.0 // Reset progress for retake
                     }) {
-                        Text("Retake")
+                        Text("retake".localized)
                             .font(.cairoFont(.bold, size: 18))
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -60,7 +60,7 @@ struct LivenessScanContentView: View {
                         cameraCoordinator.stopSession()
                         onNextTap()
                     }) {
-                        Text("Next")
+                        Text("next".localized)
                             .font(.cairoFont(.bold, size: 18))
                             .frame(maxWidth: .infinity)
                             .padding()

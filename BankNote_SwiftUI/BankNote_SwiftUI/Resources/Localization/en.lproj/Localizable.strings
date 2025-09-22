@@ -207,7 +207,55 @@
 "top_up" = "Top-up";
 "back_to_home" = "Back to Home";
 
-
+// MARK: KYC Screens
+"continue_with_phone" = "Continue With Phone";
+"well_send_a_6_digit_verification_code_to_this_number_to_verify_it" = "We'll send a 6 digit verification code to this number to verify it";
+"well_send_a_6_digit_verification_code_to_this_email_to_verify_it" = "We'll send a 6 digit verification code to this email to verify it";
+"phone_number" = "Phone Number";
+"enter_code" = "Enter Code";
+"enter_the_6_digit_verification_code_we_sent_to" = "Enter the 6 digit verification code we sent to";
+"confirm" = "Confirm";
+"please_choose_your_nationality" = "Please choose your nationality";
+"well_use_this_information_to_verify_your_identity" = "We'll use this information to verify your identity";
+"nationality" = "Nationality";
+"by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service" = "By clicking continue you agree to\nour privacy policy and terms and service";
+"login_information" = "Login Information";
+"you_will_use_these_details_to_login_to_your_account" = "You will use these details to login to your account";
+"user_name" = "Username";
+"password" = "Password";
+"confirm_password" = "Confirm Password";
+"scan_the_front_of_your_national_id" = "Scan the front of your national id";
+"retake" = "Retake";
+"next" = "Next";
+"confirm_data" = "Confirm Data";
+"full_name" = "Full Name";
+"address" = "Address";
+"id_number" = "Id Number";
+"id_key" = "Id Key";
+"scan_the_back_of_your_national_id" = "Scan the back of your national id";
+"job_title" = "Job Title";
+"religion" = "Religion";
+"marital_status" = "Marital Status";
+"liveness_check" = "Liveness Check";
+"make_sure_there_is_good_lighting" = "Make sure there is good lighting";
+"take_off_your_glasses_if_your_wearing_one" = "Take off your glasses if you're wearing one";
+"look_directly_into_the_camera" = "Look directly into the camera";
+"do_any_of_theese_apply_to_you" = "Do any of these apply to you?";
+"investment_risks" = "Investment Risks:";
+"no_guarantee" = "No Guarantee:";
+"fees_and_charges" = "Fees and Charges";
+"investing_in_nature_funds_and_bonds_involves_risks" = "Investing in nature funds and bonds involves risks";
+"the_value_of_your_investment_can_go_up_or_down._you_might_not_get_back_the_amount_you_originally_invested." = "The value of your investment can go up or down. You might not get back the amount you originally invested.";
+"there_is_no_guarantee_of_returns_past_performance" = "There is no guarantee of returns past performance";
+"is_not_indicative_of_the_future_results" = " is not indicative of the future results.";
+"there_may_be_fees_and_charges_associated_with" = "There may be fees and charges associated with";
+"your_investment_please_review_the_fee_schedule_for_details" = "your investment. please review the fee schedule for details";
+"source_of_fund" = "Source of Fund";
+"investment_objectives" = "Investment Objective";
+"investment_product" = "Investment Product";
+"thanks_for_registering" = "Thanks For Registering";
+"were_reviewing_your_info_now" = "We're reviweing your info now.";
+"well_email_you_with_next_steps" = "We'll email you with next steps.";
 
 // MARK: Countries
 "Afghanistan" = "Afghanistan";

@@ -87,7 +87,7 @@ struct SignUpContentView: View {
                 })
             }
             
-            TextField(verificationType == .phone ? "phone_number" : "example@gmail.com".localized, text: verificationType == .phone ? phone : email)
+            TextField(verificationType == .phone ? "phone_number".localized : "example@gmail.com".localized, text: verificationType == .phone ? phone : email)
                 .font(.cairoFont(.semiBold, size: 12))
                 .foregroundStyle(Color(hex: "#1C1C1C"))
                 .padding(.horizontal, 16)

@@ -35,7 +35,6 @@
 "add_new_card" = "إضافة بطاقة جديدة";
 "pay" = "دفع";
 
-
 // MARK: Bottom Bar
 "home" = "الصفحة الرئيسية";
 "portfolio" = "المحفظة";
@@ -207,6 +206,57 @@
 "top_up_now" = "اشحن الآن";
 "top_up" = "اشحن";
 "back_to_home" = "الرجوع";
+
+// MARK: KYC Screens
+"continue_with_phone" = "تابع عبر الهاتف";
+"well_send_a_6_digit_verification_code_to_this_number_to_verify_it" = "سنرسل رمز تحقق مكون من 6 أرقام إلى هذا الرقم للتحقق منه";
+"well_send_a_6_digit_verification_code_to_this_email_to_verify_it" = "سنرسل رمز تحقق مكون من 6 أرقام إلى هذا البريد الإلكتروني للتحقق منه";
+"phone_number" = "رقم الهاتف";
+"enter_code" = "أدخل الرمز";
+"enter_the_6_digit_verification_code_we_sent_to" = "أدخل رمز التحقق المكون من 6 أرقام الذي أرسلناه إلى";
+"confirm" = "تأكيد";
+"please_choose_your_nationality" = "يرجى اختيار جنسيتك";
+"well_use_this_information_to_verify_your_identity" = "سنستخدم هذه المعلومات للتحقق من هويتك";
+"nationality" = "الجنسية";
+"by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service" = "بالضغط على متابعة، فإنك توافق على سياسة الخصوصية وشروط الخدمة الخاصة بنا";
+"login_information" = "معلومات تسجيل الدخول";
+"you_will_use_these_details_to_login_to_your_account" = "ستستخدم هذه التفاصيل لتسجيل الدخول إلى حسابك";
+"user_name" = "اسم المستخدم";
+"password" = "كلمة المرور";
+"confirm_password" = "تأكيد كلمة المرور";
+"scan_the_front_of_your_national_id" = "امسح الوجه الأمامي لبطاقتك الوطنية";
+"retake" = "إعادة التقاط";
+"next" = "التالي";
+"confirm_data" = "تأكيد البيانات";
+"full_name" = "الاسم الكامل";
+"address" = "العنوان";
+"id_number" = "رقم الهوية";
+"id_key" = "مفتاح الهوية";
+"scan_the_back_of_your_national_id" = "امسح الوجه الخلفي لبطاقتك الوطنية";
+"job_title" = "المسمى الوظيفي";
+"religion" = "الدين";
+"marital_status" = "الحالة الاجتماعية";
+"liveness_check" = "اختبار الحيّوية";
+"make_sure_there_is_good_lighting" = "تأكد من وجود إضاءة جيدة";
+"take_off_your_glasses_if_your_wearing_one" = "قم بإزالة نظارتك إذا كنت ترتدي واحدة";
+"look_directly_into_the_camera" = "انظر مباشرة إلى الكاميرا";
+"do_any_of_theese_apply_to_you" = "هل ينطبق أي من هذه عليك؟";
+"investment_risks" = "مخاطر الاستثمار:";
+"no_guarantee" = "لا توجد ضمانات:";
+"fees_and_charges" = "الرسوم والتكاليف";
+"investing_in_nature_funds_and_bonds_involves_risks" = "الاستثمار في الصناديق والسندات ينطوي على مخاطر";
+"the_value_of_your_investment_can_go_up_or_down._you_might_not_get_back_the_amount_you_originally_invested." = "قيمة استثمارك يمكن أن ترتفع أو تنخفض. قد لا تستعيد المبلغ الذي استثمرته في الأصل.";
+"there_is_no_guarantee_of_returns_past_performance" = "لا توجد ضمانات للعوائد؛ الأداء السابق";
+"is_not_indicative_of_the_future_results" = "لا يدل على النتائج المستقبلية.";
+"there_may_be_fees_and_charges_associated_with" = "قد تكون هناك رسوم وتكاليف مرتبطة بـ";
+"your_investment_please_review_the_fee_schedule_for_details" = "استثمارك. يرجى مراجعة جدول الرسوم للتفاصيل";
+"source_of_fund" = "مصدر الأموال";
+"investment_objectives" = "هدف الاستثمار";
+"investment_product" = "منتج الاستثمار";
+"thanks_for_registering" = "شكرًا لتسجيلك";
+"were_reviewing_your_info_now" = "نقوم بمراجعة معلوماتك الآن.";
+"well_email_you_with_next_steps" = "سنرسل لك بريدًا إلكترونيًا بالخطوات التالية.";
+
 
 
 // MARK: Countries

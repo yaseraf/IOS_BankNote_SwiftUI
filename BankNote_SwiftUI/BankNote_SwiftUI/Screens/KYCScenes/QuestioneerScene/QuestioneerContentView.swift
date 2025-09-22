@@ -59,7 +59,7 @@ struct QuestioneerContentView: View {
                             Text("investing_in_nature_funds_and_bonds_involves_risks".localized)
                                 .font(.cairoFont(.light, size: 12))
                         }
-                        Text("the_value_of_your_investment_can_go_up or_down._you_might_not_get_back_the amount_you_originally_invested.".localized)
+                        Text("the_value_of_your_investment_can_go_up_or_down._you_might_not_get_back_the_amount_you_originally_invested.".localized)
                             .font(.cairoFont(.light, size: 12))
                     }
                     
@@ -70,7 +70,7 @@ struct QuestioneerContentView: View {
                             Text("there_is_no_guarantee_of_returns_past_performance".localized)
                                 .font(.cairoFont(.light, size: 12))
                         }
-                        Text("is_not_indicative_of_the_future".localized)
+                        Text("is_not_indicative_of_the_future_results".localized)
                             .font(.cairoFont(.light, size: 12))
                     }
                     

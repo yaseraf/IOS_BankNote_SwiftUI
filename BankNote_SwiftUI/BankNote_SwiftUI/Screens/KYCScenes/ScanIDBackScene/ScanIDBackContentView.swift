@@ -29,7 +29,7 @@ struct ScanIDBackContentView: View {
     }
     
     private var titleView: some View {
-        Text("scan_the_Back_of_your_national_id".localized)
+        Text("scan_the_back_of_your_national_id".localized)
             .font(.cairoFont(.semiBold, size: 18))
             .foregroundStyle(.white)
     }

@@ -121,6 +121,7 @@ struct VerifyScanIDFrontContentView: View {
                 isValid: doPasswordsMatch
             )
         }
+        .disabled(true)
     }
 
     private var bottomView: some View {

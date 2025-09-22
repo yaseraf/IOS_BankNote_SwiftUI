@@ -114,7 +114,7 @@ struct ChooseNationalityContentView: View {
 
     private var termsAndServiceView: some View {
         VStack {
-            Text("by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service")
+            Text("by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service".localized)
                 .font(.cairoFont(.regular, size: 12))
                 .multilineTextAlignment(.center)
         }

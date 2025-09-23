@@ -8,5 +8,5 @@
 import Foundation
 
 protocol OrderListDelegate {
-    func onOrderReceived(order: [OrderListUIModel])
+    func onOrderReceived(orders: [OrderListUIModel])
 }

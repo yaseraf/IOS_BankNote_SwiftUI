@@ -10,6 +10,7 @@ import Foundation
 class HomeViewModel: ObservableObject {
     private let coordinator: HomeCoordinatorProtocol
     private let useCase: HomeUseCaseProtocol
+    private let lookupsUseCase: LookupsUseCaseProtocol
     
     @Published var portfolioData: GetPortfolioUIModel?
     @Published var transactionType: TransactionTypes?
@@ -19,9 +20,10 @@ class HomeViewModel: ObservableObject {
     @Published var getCompaniesLookupsAPIResult:APIResultType<[GetCompaniesLookupsUIModel]>?
 
     
-    init(coordinator: HomeCoordinatorProtocol, useCase: HomeUseCaseProtocol) {
+    init(coordinator: HomeCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
+        self.lookupsUseCase = lookupsUseCase
         
         connectAndSetupSignalR()
     }
@@ -134,7 +136,7 @@ extension HomeViewModel {
         getCompaniesLookupsAPIResult = .onLoading(show: true)
         
         Task.init {
-            await useCase.GetCompaniesLookups(requestModel: requestModel) {[weak self] result in
+            await lookupsUseCase.GetCompaniesLookups(requestModel: requestModel) {[weak self] result in
                 self?.getCompaniesLookupsAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):

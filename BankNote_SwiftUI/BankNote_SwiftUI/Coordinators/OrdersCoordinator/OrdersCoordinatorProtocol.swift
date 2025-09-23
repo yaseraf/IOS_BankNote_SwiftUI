@@ -11,4 +11,5 @@ import FlagAndCountryCode
 
 protocol OrdersCoordinatorProtocol: AnyObject,Coordinator {
     func openOrdersScene()
+    func openOrderEntryScene(symbol: String)
 }

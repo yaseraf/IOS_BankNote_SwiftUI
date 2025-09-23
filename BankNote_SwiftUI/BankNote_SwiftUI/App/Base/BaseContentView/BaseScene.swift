@@ -15,7 +15,7 @@ struct BaseScene <Content:View> :View{
     @EnvironmentObject var networkMonitor: NetworkMonitor
 
     private var showLoading:Binding<Bool> = .constant(false)
-    init(backgroundType: BackgroundType = .white,@ViewBuilder contentView: () -> Content ,showLoading: Binding<Bool> = .constant(false)) {
+    init(backgroundType: BackgroundType = .clear, @ViewBuilder contentView: () -> Content ,showLoading: Binding<Bool> = .constant(false)) {
         self.backgroundType = backgroundType
         self.showLoading = showLoading
         self.contentView = contentView()

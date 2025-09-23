@@ -107,6 +107,11 @@ class AppUtility {
         
         
     }
+    
+    func loadCompanies() -> [GetCompaniesLookupsUIModel] {
+        return UserData.shared.savedCompaniesEntity.map { GetCompaniesLookupsUIModel(entity: $0) }
+    }
+
 
     func applyDeviceLanguageIfNeeded() {
         if let appLanguage = Locale.preferredLanguages.first {

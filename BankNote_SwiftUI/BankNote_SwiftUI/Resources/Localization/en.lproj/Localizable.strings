@@ -257,6 +257,10 @@
 "were_reviewing_your_info_now" = "We're reviweing your info now.";
 "well_email_you_with_next_steps" = "We'll email you with next steps.";
 
+// MARK: Countries List Screen
+"select_country" = "Select Country";
+"search_for_country" = "Search for country";
+
 // MARK: Countries
 "Afghanistan" = "Afghanistan";
 "Åland Islands" = "Åland Islands";

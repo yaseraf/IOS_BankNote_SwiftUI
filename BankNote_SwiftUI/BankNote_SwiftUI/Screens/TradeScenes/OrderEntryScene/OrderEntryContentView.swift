@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 enum TradingType {
     case cash
@@ -24,6 +25,11 @@ struct OrderEntryContentView: View {
     @State private var availableAmount: Int = 1000
     @State private var selectedOrderPriceType: OrderPriceType = .market
 
+    var symbol: Binding<String>
+    var netChange: Binding<String>
+    var netChangePerc: Binding<String>
+    var lastTradePrice: Binding<String>
+    
     var onContinueTap: () -> Void
     var onBackTap: () -> Void
     
@@ -99,11 +105,39 @@ struct OrderEntryContentView: View {
             
             HStack {
                 HStack(spacing: 16) {
-                    Image("ic_fawry")
-                        .resizable()
-                        .frame(width: 45, height: 45)
+                    WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(symbol.wrappedValue ?? "").png")) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 45, maxHeight: 45)
+                                .padding(.horizontal, 4)
+                                .foregroundStyle(.gray)
+                        case .failure:
+                            Image("ic_selectStock")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 45, maxHeight: 45)
+                                .padding(.horizontal, 4)
+                                .foregroundStyle(.gray)
+                        case .empty:
+                            Image("ic_selectStock")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 45, maxHeight: 45)
+                                .foregroundStyle(.gray)
+                        @unknown default:
+                            Image("ic_selectStock")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 45, maxHeight: 45)
+                                .foregroundStyle(.gray)
+                        }
+                    }
+                    
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("FWRY")
+                        Text("\(symbol.wrappedValue)")
                             .font(.cairoFont(.semiBold, size: 18))
 
                         HStack{
@@ -114,7 +148,7 @@ struct OrderEntryContentView: View {
                                 .frame(width: 20, height: 20)
                                 .foregroundStyle(Color(hex: "#1E961E"))
                             
-                            Text("+3.01% (EGP +0.06)")
+                            Text("\(Double(netChangePerc.wrappedValue) ?? 0 > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: Double(netChangePerc.wrappedValue) ?? 0))% (\("egp".localized) \(Double(netChange.wrappedValue) ?? 0 > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: Double(netChange.wrappedValue) ?? 0)))")
                                 .font(.cairoFont(.semiBold, size: 12))
                                 .foregroundStyle(Color(hex: "#1E961E"))
                             
@@ -129,7 +163,7 @@ struct OrderEntryContentView: View {
                     Text("\("egp".localized)")
                         .font(.cairoFont(.semiBold, size: 12))
 
-                    Text("22.3")
+                    Text(AppUtility.shared.formatThousandSeparator(number: Double(lastTradePrice.wrappedValue) ?? 0))
                         .font(.cairoFont(.semiBold, size: 18))
 
                 }
@@ -320,7 +354,7 @@ struct OrderEntryContentView: View {
 }
 
 #Preview {
-    OrderEntryContentView(onContinueTap: {
+    OrderEntryContentView(symbol: .constant(""), netChange: .constant(""), netChangePerc: .constant(""), lastTradePrice: .constant(""), onContinueTap: {
         
     }, onBackTap: {
         

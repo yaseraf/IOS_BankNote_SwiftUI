@@ -12,10 +12,12 @@ import SwiftUI
 struct VerifySignUpContentView: View {
         
     var verificationType:Binding<VerificationType>
+    var isVLens:Binding<Bool>
     var phone:Binding<String>
     var email:Binding<String>
+    var pin:Binding<String>
     var onBack:()->Void
-    var onContinueTap:()->Void
+    var onContinueTap:(String, Bool, Bool)->Void
     
     var body: some View {
         ZStack {
@@ -25,7 +27,7 @@ struct VerifySignUpContentView: View {
                 
                 titleView
                 
-                PinFieldView()
+                PinFieldView(pin: pin.wrappedValue)
                 
                 bottomView
                 
@@ -83,7 +85,7 @@ struct VerifySignUpContentView: View {
 
         return VStack {
             Button {
-                onContinueTap()
+                onContinueTap(pin.wrappedValue, verificationType.wrappedValue == .email ? true : false, isVLens.wrappedValue)
             } label: {
                 Text("confirm".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -110,7 +112,7 @@ struct VerifySignUpContentView: View {
 
 struct PinFieldView: View {
     let pinCount = 6
-    @State private var pin: String = ""
+    @State var pin: String = ""
     @FocusState private var focusedField: Int?
 
     var body: some View {
@@ -191,9 +193,9 @@ struct PinFieldView: View {
 
 
 #Preview {
-    VerifySignUpContentView(verificationType: .constant(.email), phone: .constant(""), email: .constant(""), onBack: {
+    VerifySignUpContentView(verificationType: .constant(.email), isVLens: .constant(false), phone: .constant(""), email: .constant(""), pin: .constant(""), onBack: {
         
-    }, onContinueTap: {
+    }, onContinueTap: {_,_,_ in 
         
     })
 }

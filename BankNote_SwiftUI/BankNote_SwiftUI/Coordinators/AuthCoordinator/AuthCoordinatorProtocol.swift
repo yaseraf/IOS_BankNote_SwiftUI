@@ -12,13 +12,13 @@ import FlagAndCountryCode
 
 protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openLandingScene()
-    func openCountryPickerScene()
+    func openCountiesScene(delegate: CountriesListDelegate,selectCountry:CountryFlagInfo?)
     func openForgotPasswordScene(forgotType:ForgotDataEnum)
     func openConfirmOtpScene(forgotType:ForgotDataEnum)
     func openChangePasswordScene()
     func openChangePinScene()
     func openSignUpScene(verificationType: VerificationType)
-    func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String)
+    func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String, otpExpirationTimer: Double, otpRequestID: String, transactionID: String, requestIDVlens: String, isVlens: Bool)
     func openChooseNationalityScene()
     func openLoginInformationScene()
     func openScanIDFrontScene()
@@ -28,6 +28,7 @@ protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openLivenessCheckScene()
     func openLivenessScanScene()
     func openQuestioneerScene()
+    func openTermsAndConditionsScene()
     func openThanksForRegisteringScene()
     func openPinScene()
 }

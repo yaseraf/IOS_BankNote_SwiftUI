@@ -26,6 +26,6 @@ class ForgotPasswordViewModel:ObservableObject {
     }
     
     func openCountryPickerScene() {
-        coordinator.openCountryPickerScene()
+//        coordinator.openCountryPickerScene()
     }
 }

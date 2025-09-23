@@ -12,7 +12,6 @@ protocol HomeRepositoryProtocol {
     func GetExchangeSummary(route: HomeRoute, completion: @escaping(Result<[GetExchangeSummaryResponseModel], NetworkError>) -> Void) async
     func getUserAccounts(route: HomeRoute, completion: @escaping(Result<[GetUserAccountsResponseModel], NetworkError>) -> Void) async
     func getPortfolio(route: HomeRoute, completion: @escaping(Result<GetPortfolioResponseModel, NetworkError>) -> Void) async
-    func GetCompaniesLookups(route: HomeRoute, completion: @escaping(Result<[GetCompaniesLookupsResponseModel], NetworkError>) -> Void) async
     func GetALLMarketWatchBySymbol(route: HomeRoute, completion: @escaping(Result<GetALLMarketWatchBySymbolResponseModel, NetworkError>) -> Void) async
     func GetAllMarketNewsBySymbol(route: HomeRoute, completion: @escaping(Result<[GetAllMarketNewsBySymbolResponseModel], NetworkError>) -> Void) async
     func GetExpectedProfitLoss(route: HomeRoute, completion: @escaping(Result<[GetExpectedProfitLossResponseModel], NetworkError>) -> Void) async
@@ -37,9 +36,6 @@ class HomeRepository: HomeRepositoryProtocol {
     }
     func GetMarketWatchByProfileID(route: HomeRoute, completion: @escaping (Result<[GetMarketWatchByProfileIDResponseModel], NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: [GetMarketWatchByProfileIDResponseModel].self, completion: completion).requestApi()
-    }
-    func GetCompaniesLookups(route: HomeRoute, completion: @escaping (Result<[GetCompaniesLookupsResponseModel], NetworkError>) -> Void) async {
-        await RequestApi(route: route, responseType: [GetCompaniesLookupsResponseModel].self, completion: completion).requestApi()
     }
     func GetALLMarketWatchBySymbol(route: HomeRoute, completion: @escaping (Result<GetALLMarketWatchBySymbolResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: GetALLMarketWatchBySymbolResponseModel.self, completion: completion).requestApi()

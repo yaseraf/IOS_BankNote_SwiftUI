@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import FlagAndCountryCode
 
 enum VerificationType {
     case phone
@@ -15,13 +16,19 @@ enum VerificationType {
 
 struct SignUpContentView: View {
         
+    var verifyWithEmail: Bool
+    @Binding var countryCodeUIModel: CountryFlagInfo?
+    var locationPermission:Binding<Bool>
+    @State private var viewType:AuthenticationViewType = .phoneNumber
     @State var verificationType: VerificationType = .phone
     var phone: Binding<String>
     var email: Binding<String>
+    @State var passwordInputValue:String = ""
     var onBack:()->Void
-    var onContinueTap:()->Void
-    var onCountryPickerTap:()->Void
-    
+    var onContinueTap:((_ otpUIModel:VerifyOTPUIModel, _ verifyWithEmail:Bool, _ phoneNumber: String, _ email: String, _ password: String) -> Void)?
+    var onCountryPickerTap:((CountryFlagInfo?) -> Void)
+    var onLocationAlertTap:()->Void
+
     
     var body: some View {
         ZStack {
@@ -36,6 +43,38 @@ struct SignUpContentView: View {
                 bottomView
                 
                 Spacer()
+            }
+            
+            // Location Alert
+            if locationPermission.wrappedValue == true {
+                VStack {
+                    Text("please_enable_location_from_settings".localized)
+                        .padding(.vertical, 8)
+                    
+                    Button(action: {
+                        onLocationAlertTap()
+                    }, label: {
+                        Text("ok".localized)
+                            .padding(.bottom, 8)
+                            .padding(.horizontal, 12)
+                            .foregroundColor(.white)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.colorPrimary,lineWidth: 1)
+                                    .background(RoundedRectangle(cornerRadius: 20)
+                                        .fill(Color.colorPrimary))
+                                        .padding(.bottom, 8)
+                            )
+                    })
+                }
+                .padding(.horizontal, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.colorPrimary,lineWidth: 1)
+                        .background(RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.colorBGPrimary))
+
+                )
             }
         }
     }
@@ -69,11 +108,16 @@ struct SignUpContentView: View {
         HStack(spacing: 8) {
             if verificationType == .phone {
                 Button(action: {
-                    onCountryPickerTap()
+                    onCountryPickerTap(countryCodeUIModel)
                 }, label: {
                     HStack {
-                        Text("🇪🇬 +20")
+                        countryCodeUIModel?.getCountryImage(with: FlagType(rawValue: 0) ?? .roundedRect)
+                            .frame(width: 30)
+                        
+                        Text("\(countryCodeUIModel?.dialCode ?? "")")
                             .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(.black)
+
                         Image("ic_downArrow")
                             .resizable()
                             .scaledToFit()
@@ -100,9 +144,13 @@ struct SignUpContentView: View {
     }
     
     private var bottomView: some View {
+    
+        let value = viewType == .phoneNumber ? phone.wrappedValue : email.wrappedValue
+        let uiModel = VerifyOTPUIModel(viewType: viewType, value: value)
+
         return VStack {
             Button {
-                onContinueTap()
+                onContinueTap?(uiModel, verifyWithEmail, "\(countryCodeUIModel?.dialCode ?? "")\(phone.wrappedValue)", email.wrappedValue, passwordInputValue)
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -118,11 +166,13 @@ struct SignUpContentView: View {
 
 
 #Preview {
-    SignUpContentView(verificationType: .email, phone: .constant(""), email: .constant(""), onBack: {
+    SignUpContentView(verifyWithEmail: false, countryCodeUIModel: .constant(.none), locationPermission: .constant(false), verificationType: .email, phone: .constant(""), email: .constant(""), onBack: {
         
-    }, onContinueTap: {
+    }, onContinueTap: {otpUIModel,verifyWithEmail,phoneNumber,email,password in 
         
-    }, onCountryPickerTap: {
+    }, onCountryPickerTap: {_ in 
+        
+    }, onLocationAlertTap: {
         
     })
 }

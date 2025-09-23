@@ -30,11 +30,23 @@ class OrdersCoordinator:  ObservableObject {
 extension OrdersCoordinator:OrdersCoordinatorProtocol{
     
     func openOrdersScene() {
-        let viewModel = OrdersViewModel(coordinator: self)
+        let lookupsUseCase = LookupsUseCase()
+        let viewModel = OrdersViewModel(coordinator: self, lookupsUseCase:  lookupsUseCase)
         let view = OrdersScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openOrderEntryScene(symbol: String) {
+        let useCase = HomeUseCase()
+        let lookupsUseCase = LookupsUseCase()
+        let viewModel = OrderEntryViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase, symbol: symbol)
+        let view = OrderEntryScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
     
 }

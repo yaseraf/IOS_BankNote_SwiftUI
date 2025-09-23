@@ -257,7 +257,9 @@
 "were_reviewing_your_info_now" = "نقوم بمراجعة معلوماتك الآن.";
 "well_email_you_with_next_steps" = "سنرسل لك بريدًا إلكترونيًا بالخطوات التالية.";
 
-
+// MARK: Countries List Screen
+"select_country" = "اختر الدولة";
+"search_for_country" = "ابحث عن دولة";
 
 // MARK: Countries
 "Afghanistan" = "أفغانستان";

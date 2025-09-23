@@ -59,16 +59,15 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openCountryPickerScene() {
-        let viewModel = CountryPickerViewModel(coordinator: self)
-        let view = CountryPickerScene(viewModel: viewModel)
+    func openCountiesScene(delegate: CountriesListDelegate,selectCountry:CountryFlagInfo?) {
+        let viewModel = CountriesListViewModel(coordinator:self,delegate: delegate, selectCountry: selectCountry)
+        let view =  CountriesListScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         viewController.view.backgroundColor = .clear
         viewController.modalPresentationStyle = .pageSheet
-        self.navigationController.topViewController?.present(viewController, animated: true)
+        SceneDelegate.getAppCoordinator()?.topViewController()?.present(viewController, animated: true)
     }
-    
     func openForgotPasswordScene(forgotType: ForgotDataEnum) {
         let viewModel = ForgotPasswordViewModel(coordinator: self, forgotType: forgotType)
         let view = ForgotPasswordScene(viewModel: viewModel)
@@ -88,6 +87,7 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.topViewController?.present(viewController, animated: true)
     }
     
+        
     func openChangePasswordScene() {
         let viewModel = ChangePasswordViewModel(coordinator: self)
         let view = ChangePasswordScene(viewModel: viewModel)
@@ -105,15 +105,17 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     }
     
     func openSignUpScene(verificationType: VerificationType) {
-        let viewModel = SignUpViewModel(coordinator: self, verificationType: verificationType)
+        let useCase = KYCUseCase()
+        let viewModel = SignUpViewModel(coordinator: self, useCase: useCase, verificationType: verificationType)
         let view = SignUpScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String) {
-        let viewModel = VerifySignUpViewModel(coordinator: self, verificationType: verificationType, phone: phone, email: email)
+    func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String, otpExpirationTimer: Double, otpRequestID: String, transactionID: String, requestIDVlens: String, isVlens: Bool) {
+        let useCase = KYCUseCase()
+        let viewModel = VerifySignUpViewModel(coordinator: self, useCase: useCase, verificationType: verificationType, phone: phone, email: email, otpExpirationTimer: otpExpirationTimer, timerViewModel: .init(), otpRequestID: otpRequestID, transactionID: transactionID, requestIDVlens: requestIDVlens, isVlens: isVlens)
         let view = VerifySignUpScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -190,6 +192,16 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         let view = QuestioneerScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openTermsAndConditionsScene(){
+        let kycUseCase = KYCUseCase()
+        let viewModel = TermsAndConditionsViewModel(coordinator: self, KYCUseCase: kycUseCase)
+        let view =   TermsAndConditionsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.interactivePopGestureRecognizer?.isEnabled = false
         self.navigationController.pushViewController(viewController, animated: true)
     }
 

@@ -65,12 +65,4 @@ extension TradeCoordinator:TradeCoordinatorProtocol{
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
-
-    func openOrderEntryScene() {
-        let viewModel = OrderEntryViewModel(coordinator: self)
-        let view = OrderEntryScene(viewModel: viewModel)
-        let viewWithCoordinator = view.withThemeEnvironment
-        let viewController = UIHostingController(rootView: viewWithCoordinator)
-        self.navigationController.pushViewController(viewController, animated: true)
-    }
 }

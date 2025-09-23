@@ -51,6 +51,9 @@ enum CachingKey: String {
     case selectedMarket
     case selectedCustodian
     case selectedCustodianName
+    case investmentProductKeys
+    case completedInvestmentProductKeys
+    case investmentProductValues
     
     // MARK: Other
     
@@ -100,6 +103,9 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.selectedMarket) var selectedMarket
     @CachingCodable<String>(.selectedCustodian) var selectedCustodian
     @CachingCodable<String>(.selectedCustodianName) var selectedCustodianName
+    @CachingCodable<[String]>(.investmentProductKeys) var investmentProductKeys
+    @CachingCodable<[String:String]>(.completedInvestmentProductKeys) var completedInvestmentProductKeys
+    @CachingCodable<[String]>(.investmentProductValues) var investmentProductValues
 
     // MARK: Others
 
@@ -122,6 +128,9 @@ class UserDefaultController: ObservableObject {
         selectedMarket = nil
         selectedCustodian = nil
         selectedCustodianName = nil
+        investmentProductKeys = nil
+        completedInvestmentProductKeys = nil
+        investmentProductValues = nil
     }
 }
 

@@ -109,10 +109,10 @@ extension Color {
   private static let colorBGDisable_F2F4F7: Color = Color.init(hex: "#F2F4F7")
   private static let colorBorderPrimary_D0D6DD: Color = Color.init(hex: "#D0D6DD")
   private static let colorBorderSecondary_EAEDF0: Color = Color.init(hex: "#EAEDF0")
-  public static let colorSuccess_26A95F: Color = Color.init(hex: "#26A95F")
+  public static let colorSuccess_26A95F: Color = Color.init(hex: "#1E961E")
   private static let colorSuccess50_EEFBF4: Color = Color.init(hex: "#EEFBF4")
   private static let colorLink_39A0F8: Color = Color.init(hex: "#39A0F8")
-  private static let colorError_D92D20: Color = Color.init(hex: "#FF3B30")
+  private static let colorError_D92D20: Color = Color.init(hex: "#AA1A1A")
   private static let colorError50_FEF3F2: Color = Color.init(hex: "#FEF3F2")
   private static let colorWhite_FFFFFF: Color = Color.white
   private static let colorBGPrimary_FFFFFF: Color = Color.init(hex: "#FFFFFF")

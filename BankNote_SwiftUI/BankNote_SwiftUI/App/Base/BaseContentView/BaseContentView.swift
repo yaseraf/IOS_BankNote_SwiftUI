@@ -139,11 +139,11 @@ struct BaseContentView <Content: View>: View  {
         .onAppear {
             TimerManager.shared.startTimer()
             
-            if JailbreakDetector.isJailbroken() {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    isJailbroken = true
-                }
-            }
+//            if JailbreakDetector.isJailbroken() {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                    isJailbroken = true
+//                }
+//            }
             
             NotificationCenter.default.addObserver(
                 forName: UIApplication.didEnterBackgroundNotification,

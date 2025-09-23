@@ -397,7 +397,7 @@ class Connection_Hub {
                 OrderListUIModel.mapToUIModel($0)
             })
             
-            self.orderListDelegate?.onOrderReceived(order: uiModel ?? [])
+            self.orderListDelegate?.onOrderReceived(orders: uiModel ?? [])
             
         }
         

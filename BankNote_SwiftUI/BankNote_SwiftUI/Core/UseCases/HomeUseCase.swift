@@ -9,7 +9,6 @@ import Foundation
 protocol HomeUseCaseProtocol{
     func getUserAccounts(requestModel: GetUserAccountsRequestModel, completion: @escaping(Result<[GetUserAccountsUIModel], NetworkError>) -> Void) async
     func getPortfolio(requestModel: GetPortfolioRequestModel, completion: @escaping(Result<GetPortfolioUIModel, NetworkError>) -> Void) async
-    func GetCompaniesLookups(requestModel: GetCompaniesLookupsRequestModel, completion: @escaping(Result<[GetCompaniesLookupsUIModel], NetworkError>) -> Void) async
     func GetALLMarketWatchBySymbol(requestModel: GetALLMarketWatchBySymbolRequestModel, completion: @escaping(Result<GetALLMarketWatchBySymbolUIModel, NetworkError>) -> Void) async
     func GetAllMarketNewsBySymbol(requestModel: GetAllMarketNewsBySymbolRequestModel, completion: @escaping(Result<[GetAllMarketNewsBySymbolUIModel], NetworkError>) -> Void) async
     func GetExpectedProfitLoss(requestModel: GetExpectedProfitLossRequestModel, completion: @escaping(Result<[GetExpectedProfitLossUIModel], NetworkError>) -> Void) async
@@ -54,21 +53,7 @@ extension HomeUseCase: HomeUseCaseProtocol {
         }
     }
     
-    func GetCompaniesLookups(requestModel: GetCompaniesLookupsRequestModel, completion: @escaping (Result<[GetCompaniesLookupsUIModel], NetworkError>) -> Void) async {
-        let route = HomeRoute.GetCompaniesLookups(requestModel: requestModel)
-        await repository.GetCompaniesLookups(route: route) { result in
-            switch result {
-            case .success(let responseModel):
-                let uiModel =    responseModel.map({
-                   GetCompaniesLookupsUIModel.mapToUIModel($0)
-                })
-                completion(.success(uiModel))
-
-            case .failure(let failure):
-                completion(.failure(failure))
-            }
-        }
-    }
+    
     func GetALLMarketWatchBySymbol(requestModel: GetALLMarketWatchBySymbolRequestModel, completion: @escaping (Result<GetALLMarketWatchBySymbolUIModel, NetworkError>) -> Void) async {
         let route = HomeRoute.GetALLMarketWatchBySymbol(requestModel: requestModel)
         await repository.GetALLMarketWatchBySymbol(route: route) { result in

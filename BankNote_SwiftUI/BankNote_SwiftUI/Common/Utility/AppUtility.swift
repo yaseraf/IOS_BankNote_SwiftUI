@@ -54,7 +54,7 @@ class AppUtility {
     }
 
     var currentAppTheme: ThemeType {
-        return userDefaultController?.appTheme ?? .system
+        return userDefaultController?.appTheme ?? .light
     }
 
     var languageLocal: Locale{

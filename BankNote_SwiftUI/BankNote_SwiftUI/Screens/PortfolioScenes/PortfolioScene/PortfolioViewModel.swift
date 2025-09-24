@@ -83,8 +83,6 @@ extension PortfolioViewModel {
             }
         }
     }
-
-    
 }
 
 // MARK: Functions

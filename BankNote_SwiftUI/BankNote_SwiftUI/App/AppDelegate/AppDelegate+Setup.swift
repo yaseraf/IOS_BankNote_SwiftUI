@@ -17,8 +17,9 @@ extension AppDelegate{
         IQKeyboardManager.shared.isEnabled = false
         
         @Inject var userDefaultController: UserDefaultController?
+        userDefaultController?.appTheme = .light
         if userDefaultController?.appTheme == nil{
-            userDefaultController?.appTheme = .system
+            userDefaultController?.appTheme = .light
         }
 #if DEBUG
         UserDefaults.standard.set(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")

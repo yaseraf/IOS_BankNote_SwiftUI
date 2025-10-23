@@ -104,9 +104,9 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openSignUpScene(verificationType: VerificationType) {
+    func openSignUpScene(verificationType: VerificationType, verifyWithEmail: Bool) {
         let useCase = KYCUseCase()
-        let viewModel = SignUpViewModel(coordinator: self, useCase: useCase, verificationType: verificationType)
+        let viewModel = SignUpViewModel(coordinator: self, useCase: useCase, verificationType: verificationType, verifyWithEmail: verifyWithEmail)
         let view = SignUpScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -123,7 +123,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     }
 
     func openChooseNationalityScene() {
-        let viewModel = ChooseNationalityViewModel(coordinator: self)
+        let useCase = KYCUseCase()
+        let viewModel = ChooseNationalityViewModel(coordinator: self, useCase: useCase)
         let view = ChooseNationalityScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -131,12 +132,47 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     }
 
     func openLoginInformationScene() {
-        let viewModel = LoginInformationViewModel(coordinator: self)
+        let useCase = KYCUseCase()
+        let viewModel = LoginInformationViewModel(coordinator: self, useCase: useCase)
         let view = LoginInformationScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openCameraPreviewFor(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool) {
+        let kycUseCase = KYCUseCase()
+        let viewModel = CameraPreviewViewModel(coordinator: self, kycUseCase: kycUseCase,viewType: type, savedImageOne: savedImageOne, stepIndexBind: stepIndexBind, isFrontBind: isFrontBind)
+        let view =  CameraPreviewScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        
+//        DispatchQueue.main.async{
+//            AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+            let viewController = UIHostingController(rootView: viewWithCoordinator)
+//            self.navigationController.pushViewController(viewController, animated: true)
+        
+            viewController.modalPresentationStyle = .fullScreen
+            SceneDelegate.getAppCoordinator()?.topViewController()?.present(viewController, animated: true)
+//        }
+    }
+    
+    func openVerifyIDConfirmation(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String, gender:String, jobTitle:String, religion:String, maritalStatus:String) {
+        let viewModel = VerifyIDConfirmationViewModel(coordinator: self, delegate: delegate, savedImageOne: savedImageOne, isFrontID: isFrontID, address: address, name: name, dateOfBirth: dateOfBirth, idNumber: idNumber, idKey: idKey, gender: gender, jobTitle: jobTitle, religion: religion, maritalStatus: maritalStatus)
+        let view =  VerifyIDConfirmationScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+        self.navigationController.dismiss(animated: true)
+    }
+
+    func openTakeSelfieScene(livenessCheck:Bool){
+        let viewModel = TakeSelfieViewModel(coordinator: self,isLivenessCheck: livenessCheck)
+        let view = TakeSelfieScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
     
     func openScanIDFrontScene() {
         let viewModel = ScanIDFrontViewModel(coordinator: self)
@@ -146,8 +182,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openVerifyScanIDFrontScene() {
-        let viewModel = VerifyScanIDFrontViewModel(coordinator: self)
+    func openVerifyScanIDFrontScene(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String) {
+        let viewModel = VerifyScanIDFrontViewModel(coordinator: self, delegate: delegate, savedImageOne: savedImageOne, isFrontID: isFrontID, address: address, name: name, dateOfBirth: dateOfBirth, idNumber: idNumber, idKey: idKey)
         let view = VerifyScanIDFrontScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -162,8 +198,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openVerifyScanIDBackScene() {
-        let viewModel = VerifyScanIDBackViewModel(coordinator: self)
+    func openVerifyScanIDBackScene(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, gender:String, jobTitle:String, religion:String, maritalStatus:String) {
+        let viewModel = VerifyScanIDBackViewModel(coordinator: self, delegate: delegate, savedImageOne: savedImageOne, isFrontID: isFrontID, gender: gender, jobTitle: jobTitle, religion: religion, maritalStatus: maritalStatus)
         let view = VerifyScanIDBackScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

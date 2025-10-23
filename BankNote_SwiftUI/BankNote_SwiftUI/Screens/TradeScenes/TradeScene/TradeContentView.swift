@@ -332,7 +332,7 @@ struct newsCell: View {
         }
     }
     
-    func getNewsContent(description: String, symbol: String) -> String{
+    func getNewsContent(description: String, symbol: String) -> String {
                 
         if let rangeStart = description.range(of: "<a"),
            let rangeEnd = description.range(of: "</a>", range: rangeStart.upperBound..<description.endIndex) {

@@ -17,7 +17,7 @@ struct SignUpScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                SignUpContentView(verifyWithEmail: $viewModel.verifyWithEmail.wrappedValue, countryCodeUIModel: $viewModel.selectCountry, locationPermission: $viewModel.locationPermissionDenied, verificationType: viewModel.verificationType, phone: $viewModel.phone, email: $viewModel.email, onBack: {
+                SignUpContentView(showPasswordField: $viewModel.showPasswordField, verifyWithEmail: $viewModel.verifyWithEmail, countryCodeUIModel: $viewModel.selectCountry, locationPermission: $viewModel.locationPermissionDenied, verificationType: $viewModel.verificationType, phone: $viewModel.phone, email: $viewModel.email, onBack: {
                     
                 }, onContinueTap: { uiModel, verifyWithEmail, phoneNumber, email, password in
                     if !verifyWithEmail {

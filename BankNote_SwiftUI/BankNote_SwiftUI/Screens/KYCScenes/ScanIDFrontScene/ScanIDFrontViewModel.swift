@@ -18,6 +18,6 @@ class ScanIDFrontViewModel: ObservableObject {
 
 extension ScanIDFrontViewModel {
     func openVerifyScanIDFrontScene() {
-        coordinator.openVerifyScanIDFrontScene()
+//        coordinator.openVerifyScanIDFrontScene()
     }
 }

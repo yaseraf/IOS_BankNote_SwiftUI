@@ -16,14 +16,15 @@ enum VerificationType {
 
 struct SignUpContentView: View {
         
-    var verifyWithEmail: Bool
+    var showPasswordField: Binding<Bool>
+    @State var password: String = ""
+    var verifyWithEmail: Binding<Bool?>
     @Binding var countryCodeUIModel: CountryFlagInfo?
     var locationPermission:Binding<Bool>
     @State private var viewType:AuthenticationViewType = .phoneNumber
-    @State var verificationType: VerificationType = .phone
+    var verificationType: Binding<VerificationType?>
     var phone: Binding<String>
     var email: Binding<String>
-    @State var passwordInputValue:String = ""
     var onBack:()->Void
     var onContinueTap:((_ otpUIModel:VerifyOTPUIModel, _ verifyWithEmail:Bool, _ phoneNumber: String, _ email: String, _ password: String) -> Void)?
     var onCountryPickerTap:((CountryFlagInfo?) -> Void)
@@ -33,7 +34,9 @@ struct SignUpContentView: View {
     var body: some View {
         ZStack {
             VStack {
-                                            
+                         
+                headerView
+                
                 logoView
                 
                 titleView
@@ -79,6 +82,22 @@ struct SignUpContentView: View {
         }
     }
     
+    private var headerView: some View {
+        HStack {
+           Spacer()
+            
+            Button {
+                onBack()
+            } label: {
+                Image("ic_leftArrow")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 45, maxHeight: 45)
+            }
+
+        }
+    }
+    
     private var logoView: some View {
         VStack(spacing: 0) {
             Image("ic_logo")
@@ -94,9 +113,9 @@ struct SignUpContentView: View {
         
     private var titleView: some View {
         VStack {
-            Text(verificationType == .phone ? "continue_with_phone".localized : "continue_with_email".localized)
+            Text(verificationType.wrappedValue == .phone ? "continue_with_phone".localized : "continue_with_email".localized)
                 .font(.cairoFont(.semiBold, size: 18))
-            Text(verificationType == .phone ? "well_send_a_6_digit_verification_code_to_this_number_to_verify_it".localized : "well_send_a_6_digit_verification_code_to_this_email_to_verify_it".localized)
+            Text(verificationType.wrappedValue == .phone ? "well_send_a_6_digit_verification_code_to_this_number_to_verify_it".localized : "well_send_a_6_digit_verification_code_to_this_email_to_verify_it".localized)
                 .font(.cairoFont(.light, size: 12))
                 .padding(.horizontal, 77)
                 .multilineTextAlignment(.center)
@@ -105,41 +124,58 @@ struct SignUpContentView: View {
     }
     
     private var fieldView: some View {
-        HStack(spacing: 8) {
-            if verificationType == .phone {
-                Button(action: {
-                    onCountryPickerTap(countryCodeUIModel)
-                }, label: {
-                    HStack {
-                        countryCodeUIModel?.getCountryImage(with: FlagType(rawValue: 0) ?? .roundedRect)
-                            .frame(width: 30)
-                        
-                        Text("\(countryCodeUIModel?.dialCode ?? "")")
-                            .font(.cairoFont(.semiBold, size: 12))
-                            .foregroundStyle(.black)
+        VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                if verificationType.wrappedValue == .phone {
+                    Button(action: {
+                        onCountryPickerTap(countryCodeUIModel)
+                    }, label: {
+                        HStack {
+                            countryCodeUIModel?.getCountryImage(with: FlagType(rawValue: 0) ?? .roundedRect)
+                                .frame(width: 30)
+                            
+                            Text("\(countryCodeUIModel?.dialCode ?? "")")
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
 
-                        Image("ic_downArrow")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 12, height: 6)
-                    }
+                            Image("ic_downArrow")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 12, height: 6)
+                        }
+                        .foregroundStyle(Color(hex: "#1C1C1C"))
+                        .padding(.horizontal, 16)
+                        .frame(height: 56)
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                        .padding(.bottom, 24)
+                    })
+                }
+                            
+                TextField(verificationType.wrappedValue == .phone ? "phone_number".localized : "example@gmail.com".localized, text: verificationType.wrappedValue == .phone ? phone : email)
+                    .font(.cairoFont(.semiBold, size: 12))
                     .foregroundStyle(Color(hex: "#1C1C1C"))
                     .padding(.horizontal, 16)
                     .frame(height: 56)
                     .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
                     .padding(.bottom, 24)
-                })
+                    .keyboardType(.numberPad)
+                
+                
+
             }
             
-            TextField(verificationType == .phone ? "phone_number".localized : "example@gmail.com".localized, text: verificationType == .phone ? phone : email)
-                .font(.cairoFont(.semiBold, size: 12))
-                .foregroundStyle(Color(hex: "#1C1C1C"))
-                .padding(.horizontal, 16)
-                .frame(height: 56)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
-                .padding(.bottom, 24)
+            if showPasswordField.wrappedValue == true {
+                SecureField("password".localized, text: $password)
+                    .font(.cairoFont(.semiBold, size: 12))
+                    .foregroundStyle(Color(hex: "#1C1C1C"))
+                    .padding(.horizontal, 16)
+                    .frame(height: 56)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                    .padding(.bottom, 24)
+            }
         }
         .padding(.horizontal, 18)
+
 
     }
     
@@ -150,7 +186,7 @@ struct SignUpContentView: View {
 
         return VStack {
             Button {
-                onContinueTap?(uiModel, verifyWithEmail, "\(countryCodeUIModel?.dialCode ?? "")\(phone.wrappedValue)", email.wrappedValue, passwordInputValue)
+                onContinueTap?(uiModel, verifyWithEmail.wrappedValue ?? false, "\(countryCodeUIModel?.dialCode ?? "")\(phone.wrappedValue)", email.wrappedValue, password)
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -166,7 +202,7 @@ struct SignUpContentView: View {
 
 
 #Preview {
-    SignUpContentView(verifyWithEmail: false, countryCodeUIModel: .constant(.none), locationPermission: .constant(false), verificationType: .email, phone: .constant(""), email: .constant(""), onBack: {
+    SignUpContentView(showPasswordField: .constant(true), verifyWithEmail: .constant(false), countryCodeUIModel: .constant(.none), locationPermission: .constant(false), verificationType: .constant(.phone), phone: .constant(""), email: .constant(""), onBack: {
         
     }, onContinueTap: {otpUIModel,verifyWithEmail,phoneNumber,email,password in 
         

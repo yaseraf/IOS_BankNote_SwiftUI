@@ -229,8 +229,8 @@ struct PieChartView: View {
                         .scaleEffect(isSelected ? 1.02 : 1.0)
                         .animation(.spring(response: 0.4, dampingFraction: 0.7), value: selectedSlice)
                         .onTapGesture {
-                            if selectedSlice == item.data.id { selectedSlice = nil }
-                            else { selectedSlice = item.data.id }
+//                            if selectedSlice == item.data.id { selectedSlice = nil }
+//                            else { selectedSlice = item.data.id }
                         }
                 }
 

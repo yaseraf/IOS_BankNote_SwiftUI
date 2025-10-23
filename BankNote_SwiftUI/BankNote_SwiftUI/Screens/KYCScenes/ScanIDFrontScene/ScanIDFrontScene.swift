@@ -23,6 +23,9 @@ struct ScanIDFrontScene: BaseSceneType {
                     viewModel.openVerifyScanIDFrontScene()
                 })
             })
+            .onAppear {
+                UserDefaultController().cameraType = .back
+            }
         })
     }
 }

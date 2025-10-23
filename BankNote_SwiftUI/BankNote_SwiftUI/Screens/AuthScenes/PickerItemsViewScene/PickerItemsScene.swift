@@ -19,7 +19,7 @@ struct PickerItemsScene: View {
 
     var body: some View {
         BaseScene(contentView: {
-            BaseContentView(withScroll:false,paddingValue:0,paddingVerticalValue: 0, content: {
+            BaseContentView(withScroll:false,paddingValue:0,paddingVerticalValue: 0, backgroundType: .clear, content: {
 
                 PickerItemsContentView(allowSearch: $viewModel.allowSearch, listSearch: $viewModel.listSearchResult, selectType:$viewModel.selectType,title: $viewModel.title,maxCount:$viewModel.maxCount, list: $viewModel.list,selectModel: $viewModel.selectItem,selectModels: $viewModel.selectItems,onTextChange: { text in
                     viewModel.searchName(name: text)

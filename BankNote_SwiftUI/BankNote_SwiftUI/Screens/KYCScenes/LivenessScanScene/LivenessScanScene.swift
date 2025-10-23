@@ -21,6 +21,9 @@ struct LivenessScanScene: BaseSceneType {
                     viewModel.openQuestioneerScene()
                 })
             })
+            .onAppear {
+                UserDefaultController().cameraType = .front
+            }
         })
     }
 }

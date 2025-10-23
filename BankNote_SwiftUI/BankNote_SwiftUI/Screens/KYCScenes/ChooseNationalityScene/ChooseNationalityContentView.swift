@@ -11,8 +11,10 @@ import SwiftUI
 struct ChooseNationalityContentView: View {
     
     @State var stepNumber:Int = 1
+    var selectedNationalityItemPicker:Binding<ItemPickerModelType?>
     
-    var onContinueTap:()->Void
+    var onNationalityTap:()->Void
+    var onContinueTap:(_ nationality:String)->Void
     
     var body: some View {
         VStack {
@@ -70,10 +72,10 @@ struct ChooseNationalityContentView: View {
             
             HStack(spacing: 8) {
                 Button(action: {
-
+                    onNationalityTap()
                 }, label: {
                     HStack {
-                        Text("nationality".localized)
+                        Text((selectedNationalityItemPicker.wrappedValue == nil ? "nationality".localized : selectedNationalityItemPicker.wrappedValue?.name) ?? "")
                             .font(.cairoFont(.semiBold, size: 12))
                         
                         Spacer()
@@ -99,7 +101,7 @@ struct ChooseNationalityContentView: View {
     private var bottomView: some View {
         return VStack {
             Button {
-                onContinueTap()
+                onContinueTap(selectedNationalityItemPicker.wrappedValue?.id ?? "")
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -122,7 +124,9 @@ struct ChooseNationalityContentView: View {
 }
 
 #Preview {
-    ChooseNationalityContentView(onContinueTap: {
+    ChooseNationalityContentView(selectedNationalityItemPicker: .constant(.none), onNationalityTap: {
+        
+    }, onContinueTap: { _ in
         
     })
 }

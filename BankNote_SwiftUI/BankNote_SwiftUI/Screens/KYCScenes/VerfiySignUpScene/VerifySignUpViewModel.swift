@@ -28,6 +28,7 @@ class VerifySignUpViewModel: ObservableObject {
     @Published var isVlens: Bool = false
 
     @Published var verifyPhoneOtpAPIResult:APIResultType<VerifyPhoneOtpUIModel>?
+    @Published var validateOTPBusinessRequestAPIResult:APIResultType<ValidateOtpBusinessRequestUIModel>?
     @Published var verifyEmailWithOtpAPIResult:APIResultType<VerifyEmailWithOtpUIModel>?
     @Published var getKYCCibcAPIResult:APIResultType<GetKYCCibcUIModel>?
 
@@ -45,15 +46,15 @@ class VerifySignUpViewModel: ObservableObject {
         self.isVlens = isVlens
         
         anyCancellable = timerViewModel.objectWillChange.sink { [weak self] (_) in
-               self?.objectWillChange.send()
-           }
+            self?.objectWillChange.send()
+        }
     }
 }
 
 // MARK: Routing
 extension VerifySignUpViewModel {
     func openSignUpScene() {
-        coordinator.openSignUpScene(verificationType: .email)
+        coordinator.openSignUpScene(verificationType: .email, verifyWithEmail: true)
     }
     
     func openChooseNationalityScene() {
@@ -63,7 +64,7 @@ extension VerifySignUpViewModel {
     func nextScene(verifyWithEmail: Bool, phoneNumber: String){
         endTimerIfNeed()
         if !verifyWithEmail {
-            coordinator.openSignUpScene(verificationType: verifyWithEmail ? .email : .phone)
+            coordinator.openSignUpScene(verificationType: !verifyWithEmail ? .email : .phone, verifyWithEmail: true)
         } else {
             coordinator.openChooseNationalityScene()
         }
@@ -95,6 +96,7 @@ extension VerifySignUpViewModel {
                         self?.verifyPhoneOtpAPIResult = .onSuccess(response: success)
                         self?.nextScene(verifyWithEmail: isVerifyingWithEmail, phoneNumber: self?.phone ?? "")
                     } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Failed, \(success.ErrorMessage ?? "")")
                         self?.verifyPhoneOtpAPIResult = .onFailure(error: .custom(error: "Failed, \(success.ErrorMessage ?? "")"))
                     }
                     
@@ -161,11 +163,11 @@ extension VerifySignUpViewModel {
         
         let requestModel = ValidateOtpBusinessRequestRequestModel(accessToken: KeyChainController().stepCreateAccessToken, geoLocation: ValidateOtpGeoLocation(latitude: latitude, longitude: longitude), otpCode: otpCode, otpRequestID: otpRequestID, requestID: KeyChainController().verifyPhoneOtpRequestId, requestIDVlens: requestIDVlens, transactionID: transactionID, userDeviceUTCTime: formatter.string(from: Date()))
         
-        verifyPhoneOtpAPIResult = .onLoading(show: true)
+        validateOTPBusinessRequestAPIResult = .onLoading(show: true)
 
         Task.init {
             await useCase.ValidateOtpBusinessRequest(requestModel: requestModel) {[weak self] result in
-                self?.verifyPhoneOtpAPIResult = .onLoading(show: false)
+                self?.validateOTPBusinessRequestAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
 //                    debugPrint("validate success: \(success)")
@@ -186,7 +188,7 @@ extension VerifySignUpViewModel {
                     
                 case .failure(let failure):
                     debugPrint("validate failed")
-                        self?.verifyPhoneOtpAPIResult = .onFailure(error: failure)
+                        self?.validateOTPBusinessRequestAPIResult = .onFailure(error: failure)
                
                 }
             }
@@ -223,6 +225,10 @@ extension VerifySignUpViewModel {
 extension VerifySignUpViewModel {
     func endTimerIfNeed() {
         timerViewModel.endTimerIfNeed()
+    }
+    
+    func startTimer() {
+        timerViewModel.startTimer(resentOtpTimer: otpExpirationTimer ?? 0)
     }
 
 }

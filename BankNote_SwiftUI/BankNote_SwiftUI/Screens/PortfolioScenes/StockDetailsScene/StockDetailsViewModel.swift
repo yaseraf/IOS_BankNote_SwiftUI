@@ -46,8 +46,9 @@ extension StockDetailsViewModel {
     }
     
     func openOrderEntryScene() {
-        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getOrdersCoordinator().openOrderEntryScene(symbol: symbol)
+        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getOrdersCoordinator().openOrderEntryScene(orderDetails: .initializer(), isEditOrder: false)
     }
+
 }
 
 // MARK: API Calls

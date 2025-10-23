@@ -92,6 +92,27 @@
 "buy" = "شراء";
 "sell" = "بيع";
 
+// MARK: Order Entry Screen
+"market_price" = "السعر السوق";
+"limit_price" = "سعر محدد";
+"available_amount" = "الكمية المتاحة";
+"cash" = "نقدي";
+
+// MARK: Order Details Screen
+"order_details" = "تفاصيل الطلب";
+"type" = "النوع";
+"account" = "الحساب";
+"custodian" = "الوصي";
+"quantity" = "الكمية";
+"execution_type" = "نوع التنفيذ";
+"price" = "السعر";
+"execution_rule" = "قاعدة التنفيذ";
+"validity_date" = "تاريخ الصلاحية";
+"order_value" = "قيمة الطلب";
+"place_order" = "تنفيذ الطلب";
+"cancel" = "إلغاء";
+
+
 // MARK: Settings Screen
 "bank_notes" = "الأوراق المالية";
 "view_details" = "عرض التفاصيل";
@@ -218,6 +239,7 @@
 "please_choose_your_nationality" = "يرجى اختيار جنسيتك";
 "well_use_this_information_to_verify_your_identity" = "سنستخدم هذه المعلومات للتحقق من هويتك";
 "nationality" = "الجنسية";
+"search_for_name" = "ابحث";
 "by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service" = "بالضغط على متابعة، فإنك توافق على سياسة الخصوصية وشروط الخدمة الخاصة بنا";
 "login_information" = "معلومات تسجيل الدخول";
 "you_will_use_these_details_to_login_to_your_account" = "ستستخدم هذه التفاصيل لتسجيل الدخول إلى حسابك";

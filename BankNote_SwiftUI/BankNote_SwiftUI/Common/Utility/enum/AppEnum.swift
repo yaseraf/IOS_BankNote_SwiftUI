@@ -29,6 +29,12 @@ enum ThemeType: String,Codable {
         self.rawValue.localized
     }
 }
+
+enum CameraType: Codable {
+    case front
+    case back
+}
+
 enum loginState {
     static let success = 0
     static let invalidLogin = -1

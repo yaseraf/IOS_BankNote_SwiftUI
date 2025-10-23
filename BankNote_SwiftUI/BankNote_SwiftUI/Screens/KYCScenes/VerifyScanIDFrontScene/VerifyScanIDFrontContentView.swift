@@ -10,26 +10,13 @@ import SwiftUI
 
 struct VerifyScanIDFrontContentView: View {
     
+    var address:Binding<String>
+    var name:Binding<String>
+    var dateOfBirth:Binding<String>
+    var idNumber:Binding<String>
+    var idKey:Binding<String>
+        
     @State var stepNumber:Int = 3
-    
-    @State private var username = "John Dohh"
-    @State private var password = "password123"
-    @State private var confirmPassword = "password123"
-
-    var isUsernameValid: Bool {
-        // A simple validation rule
-        return username.count > 3
-    }
-
-    var isPasswordValid: Bool {
-        // A simple validation rule
-        return password.count > 7
-    }
-
-    var doPasswordsMatch: Bool {
-        return password == confirmPassword && password.count > 0
-    }
-
     
     var onNextTap:()->Void
     var onRetakeTap:()->Void
@@ -91,35 +78,72 @@ struct VerifyScanIDFrontContentView: View {
     
     private var fieldsView: some View {
         VStack(spacing: 8) {
-            InputField(
-                title: "full_name",
-                text: $username,
-                isValid: isUsernameValid
-            )
-
-            InputField(
-                title: "address",
-                text: $password,
-                isValid: isPasswordValid
-            )
-
-            InputField(
-                title: "date_of_birth",
-                text: $confirmPassword,
-                isValid: doPasswordsMatch
-            )
             
-            InputField(
-                title: "id_number",
-                text: $confirmPassword,
-                isValid: doPasswordsMatch
-            )
+            // Full Name
+            VStack(alignment: .leading, spacing: 0) {
+                Text("full_name".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(name.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
             
-            InputField(
-                title: "id_key",
-                text: $confirmPassword,
-                isValid: doPasswordsMatch
-            )
+            // Address
+            VStack(alignment: .leading, spacing: 0) {
+                Text("address".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(address.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
+
+            
+            // Date of birth
+            VStack(alignment: .leading, spacing: 0) {
+                Text("date_of_birth".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(dateOfBirth.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
+
+            // ID Number
+            VStack(alignment: .leading, spacing: 0) {
+                Text("id_number".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(idNumber.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
+           
+            // ID Key
+            VStack(alignment: .leading, spacing: 0) {
+                Text("id_key".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(idKey.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
         }
         .disabled(true)
     }
@@ -147,8 +171,6 @@ struct VerifyScanIDFrontContentView: View {
                     .padding(.vertical, 14)
                     .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#9C4EF7")))
             }
-
-
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 18)
@@ -157,7 +179,7 @@ struct VerifyScanIDFrontContentView: View {
 }
 
 #Preview {
-    VerifyScanIDFrontContentView(onNextTap: {
+    VerifyScanIDFrontContentView(address: .constant(""), name: .constant(""), dateOfBirth: .constant(""), idNumber: .constant(""), idKey: .constant(""), stepNumber: 0, onNextTap: {
         
     }, onRetakeTap: {
         

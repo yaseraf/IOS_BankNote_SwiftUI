@@ -22,7 +22,7 @@ struct GetLookupsResponseModel: Codable {
         }
 }
 
-struct GetLookupsUIModel {
+struct GetLookupsUIModel: Codable {
     var descA, descE, id, type:String?
     
     static func mapToUIModel(_ model:GetLookupsResponseModel) -> Self {

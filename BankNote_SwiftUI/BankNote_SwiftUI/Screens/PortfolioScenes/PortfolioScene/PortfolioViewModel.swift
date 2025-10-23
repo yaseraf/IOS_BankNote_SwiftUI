@@ -46,7 +46,11 @@ extension PortfolioViewModel {
 // MARK: Routing
 extension PortfolioViewModel {
     func openStockDetailsScene(symbol: String, marketType: String, custodianID: String, custodianName: String) {
+        
+        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == UserDefaultController().selectedSymbol ?? ""}).first ?? .testUIModel()
+
         UserDefaultController().selectedSymbol = symbol
+        UserDefaultController().selectedSymbolID = selectedStock.symbolID
         UserDefaultController().selectedSymbolType = marketType
         UserDefaultController().selectedCustodian = custodianID
         UserDefaultController().selectedCustodianName = custodianName

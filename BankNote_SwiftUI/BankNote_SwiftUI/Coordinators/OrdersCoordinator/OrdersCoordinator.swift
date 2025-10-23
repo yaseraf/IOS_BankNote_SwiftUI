@@ -27,7 +27,7 @@ class OrdersCoordinator:  ObservableObject {
         start()
     }
 }
-extension OrdersCoordinator:OrdersCoordinatorProtocol{
+extension OrdersCoordinator:OrdersCoordinatorProtocol {
     
     func openOrdersScene() {
         let lookupsUseCase = LookupsUseCase()
@@ -38,15 +38,23 @@ extension OrdersCoordinator:OrdersCoordinatorProtocol{
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openOrderEntryScene(symbol: String) {
+    func openOrderEntryScene(orderDetails: OrderListUIModel, isEditOrder: Bool) {
         let useCase = HomeUseCase()
         let lookupsUseCase = LookupsUseCase()
-        let viewModel = OrderEntryViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase, symbol: symbol)
+        let viewModel = OrderEntryViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase, orderDetails: orderDetails, isEditOrder: isEditOrder)
         let view = OrderEntryScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
 
-    
+    func openOrderDetailsScene(orderPreview: OrderListUIModel, riskManagementData: GetRiskManagementUIModel, isEditOrder: Bool) {
+        let useCase = HomeUseCase()
+        let viewModel = OrderDetailsViewModel(coordinator: self, useCase: useCase, orderPreview: orderPreview, riskManagementData: riskManagementData, isEditOrder: isEditOrder)
+        let view = OrderDetailsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
 }

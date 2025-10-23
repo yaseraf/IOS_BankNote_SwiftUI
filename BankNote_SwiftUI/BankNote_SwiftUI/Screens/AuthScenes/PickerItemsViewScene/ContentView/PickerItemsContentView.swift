@@ -117,7 +117,7 @@ struct PickerItemsContentView: View {
                 Spacer()
 
                 if selectType.wrappedValue == .one{
-                    Image((selectModel.wrappedValue?.key ) == model.key ?  "ic_radioSelect" : "ic_radio")
+                    Image((selectModel.wrappedValue?.key ) == model.key ?  "ic_radioFill" : "ic_radioEmpty")
                         .resizable()
                         .frame(width: 20)
                         .frame(height:  20)

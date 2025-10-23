@@ -56,7 +56,9 @@ class LandingViewModel:ObservableObject {
 // MARK: Routing
 extension LandingViewModel {
     func openSignUpScene() {
-        coordinator.openSignUpScene(verificationType: .phone)
+//        coordinator.openScanIDFrontScene()
+//        coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
+        coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
     }
     
     func openLoginScene() {
@@ -150,7 +152,7 @@ extension LandingViewModel {
             tradingNo: "",
             userIPAddress: "192.168.68.118",
             userName: "",
-            versionNumber: "1",
+            versionNumber: "100",
             webCode: "",
             isAuthorizeOnly: "N"
         )

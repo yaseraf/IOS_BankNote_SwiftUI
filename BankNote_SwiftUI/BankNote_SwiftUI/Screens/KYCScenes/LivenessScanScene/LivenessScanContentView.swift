@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import AVFoundation
 
 struct LivenessScanContentView: View {
     @State private var livenessProgress: Double = 0.0 // Simulating progress
-    @StateObject private var cameraCoordinator = CameraView.CameraCoordinator()
+    @StateObject private var cameraCoordinator = CameraCoordinator()
 
     var onNextTap:()->Void
     
@@ -27,16 +26,16 @@ struct LivenessScanContentView: View {
                 // The Liveness Check Circle with Camera Placeholder
                 ZStack {
                     // The camera view is the first (bottom) layer
-                    CameraView(coordinator: cameraCoordinator)
-                        .frame(maxWidth: 350, maxHeight: 350)
-                        .clipShape(Circle()) // This clips the camera feed into a circle
-                        .overlay(
-                            Circle() // This adds the outer white circle border
-                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                        )
-                    
-//                     The progress view is the second (top) layer
-                    LivenessProgressView(progress: livenessProgress)
+//                    CameraView(coordinator: cameraCoordinator)
+//                        .frame(maxWidth: 350, maxHeight: 350)
+//                        .clipShape(Circle()) // This clips the camera feed into a circle
+//                        .overlay(
+//                            Circle() // This adds the outer white circle border
+//                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+//                        )
+//                    
+////                     The progress view is the second (top) layer
+//                    LivenessProgressView(progress: livenessProgress)
                 }
 
                 Spacer()
@@ -87,90 +86,7 @@ struct LivenessScanContentView: View {
 }
 
 
-struct CameraView: UIViewRepresentable {
-    @ObservedObject var coordinator: CameraCoordinator
 
-        init(coordinator: CameraCoordinator = CameraCoordinator()) {
-            self._coordinator = ObservedObject(initialValue: coordinator)
-        }
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView(frame: .zero)
-            view.backgroundColor = .clear
-            context.coordinator.hostView = view   // ✅ keep a reference to attach preview later
-            return view
-        }
-
-    func updateUIView(_ uiView: UIView, context: Context) {
-            if let previewLayer = context.coordinator.previewLayer {
-                previewLayer.frame = uiView.bounds   // ✅ Keep resizing with SwiftUI layout
-            }
-        }
-
-    func makeCoordinator() -> CameraCoordinator {
-        CameraCoordinator()
-    }
-
-    class CameraCoordinator: NSObject, ObservableObject {
-        var captureSession: AVCaptureSession?
-        var previewLayer: AVCaptureVideoPreviewLayer?
-
-        override init() {
-            super.init()
-            setupCamera()
-        }
-        
-        weak var hostView: UIView?
-
-        private func setupCamera() {
-            captureSession = AVCaptureSession()
-            guard let captureSession = captureSession else { return }
-
-            // Configure for front camera
-            guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
-                print("Front camera not available")
-                return
-            }
-
-            do {
-                let input = try AVCaptureDeviceInput(device: frontCamera)
-                if captureSession.canAddInput(input) {
-                    captureSession.addInput(input)
-                }
-
-                let layer = AVCaptureVideoPreviewLayer(session: captureSession)
-                        layer.videoGravity = .resizeAspectFill
-                        layer.connection?.videoOrientation = .portrait
-                        self.previewLayer = layer
-
-                DispatchQueue.main.async {   // ✅ must add layer on main thread
-                            if let host = self.hostView {
-                                layer.frame = host.bounds
-                                host.layer.addSublayer(layer)
-                            }
-                        }
-
-                // Start the session on a background thread
-                AVCaptureDevice.requestAccess(for: .video) { granted in
-                    if granted {
-                        DispatchQueue.global(qos: .userInitiated).async {
-                            self.captureSession?.startRunning()
-                        }
-                    } else {
-                        print("Camera permission not granted")
-                    }
-                }
-            } catch {
-                print("Error setting up camera input: \(error.localizedDescription)")
-            }
-        }
-        
-        func stopSession() {
-            if let session = captureSession, session.isRunning {
-                session.stopRunning()
-            }
-        }
-    }
-}
 
 
 struct LivenessProgressView: View {

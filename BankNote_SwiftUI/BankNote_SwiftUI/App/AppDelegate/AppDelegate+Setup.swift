@@ -18,7 +18,7 @@ extension AppDelegate{
         
         @Inject var userDefaultController: UserDefaultController?
         userDefaultController?.appTheme = .light
-        if userDefaultController?.appTheme == nil{
+        if userDefaultController?.appTheme == nil {
             userDefaultController?.appTheme = .light
         }
 #if DEBUG

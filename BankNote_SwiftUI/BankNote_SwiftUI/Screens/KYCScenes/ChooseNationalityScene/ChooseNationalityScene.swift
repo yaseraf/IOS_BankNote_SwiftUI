@@ -17,10 +17,55 @@ struct ChooseNationalityScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                ChooseNationalityContentView(onContinueTap: {
-                    viewModel.openLoginInformationScene()
+                ChooseNationalityContentView(selectedNationalityItemPicker: $viewModel.selectNationalityItemPicker, onNationalityTap: {
+                    viewModel.openPickerNationality()
+                }, onContinueTap: { nationalityInput in
+                    viewModel.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "18", Value: "0"), GetKYCCibcRequestItems(ID: "7", Value: nationalityInput)])
                 })
             })
-        })
+            .onAppear {
+                viewModel.getNationalityAPI(success: true)
+            }
+        }, showLoading: .constant(viewTypeAction.showLoading))
+        .onViewDidLoad {
+            NationalityAPI()
+            getKYCCibcAPI()
+        }
+    }
+    
+    private func NationalityAPI() {
+        viewModel.$getNationalityAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func getKYCCibcAPI() {
+        viewModel.$getKYCCibcAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
     }
 }

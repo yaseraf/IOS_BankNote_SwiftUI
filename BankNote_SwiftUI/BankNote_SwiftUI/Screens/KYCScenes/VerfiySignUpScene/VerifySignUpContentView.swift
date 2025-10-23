@@ -12,12 +12,14 @@ import SwiftUI
 struct VerifySignUpContentView: View {
         
     var verificationType:Binding<VerificationType>
+    var timerObserve:Binding<(Int, String)?>
     var isVLens:Binding<Bool>
     var phone:Binding<String>
     var email:Binding<String>
     var pin:Binding<String>
     var onBack:()->Void
     var onContinueTap:(String, Bool, Bool)->Void
+    var onResendOtpTap:(Bool)->Void
     
     var body: some View {
         ZStack {
@@ -27,7 +29,7 @@ struct VerifySignUpContentView: View {
                 
                 titleView
                 
-                PinFieldView(pin: pin.wrappedValue)
+                PinFieldView(pin: pin)
                 
                 bottomView
                 
@@ -78,10 +80,12 @@ struct VerifySignUpContentView: View {
     private var bottomView: some View {
         
         var resentAttribute: AttributedString {
-            var str = AttributedString("\("resend_link".localized) in 02:41")
+            var str = AttributedString("\("resend_link".localized) in \(timerObserve.wrappedValue?.1 ?? "")")
             str.underlineStyle = .single
             return str
         }
+        
+        let timeInt = timerObserve.wrappedValue?.0 ?? 0
 
         return VStack {
             Button {
@@ -97,7 +101,7 @@ struct VerifySignUpContentView: View {
             Spacer().frame(height: 24)
             
             Button {
-
+                onResendOtpTap(verificationType.wrappedValue == .email ? true : false)
             } label: {
                 Text(resentAttribute)
                     .font(.cairoFont(.semiBold, size: 14))
@@ -112,7 +116,7 @@ struct VerifySignUpContentView: View {
 
 struct PinFieldView: View {
     let pinCount = 6
-    @State var pin: String = ""
+    var pin:Binding<String>
     @FocusState private var focusedField: Int?
 
     var body: some View {
@@ -127,12 +131,13 @@ struct PinFieldView: View {
                         .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
                         .focused($focusedField, equals: index)
                         .tag(index) // Add a tag to ensure the view is uniquely identifiable
+                        .textContentType(.oneTimeCode)
 
                     // This is to hide the actual text field and show a dash if needed
                     .overlay(
                         Text(characterForIndex(index))
                             .font(.cairoFont(.semiBold, size: 20))
-                            .opacity(pin.count > index ? 0 : 1)
+                            .opacity(pin.wrappedValue.count > index ? 0 : 1)
                             .padding(.top, 12)
                     )
                 }
@@ -142,47 +147,54 @@ struct PinFieldView: View {
         .onAppear {
             focusedField = 0 // Focus on the first field when the view appears
         }
-        .onChange(of: pin) { newValue in
-            let newPinCount = newValue.count
-            if newPinCount < pinCount {
-                // Move focus to the next field if a digit was added
-                focusedField = newPinCount
-            } else if newPinCount == pinCount {
-                // Dismiss the keyboard if all digits are entered
-                focusedField = nil
+        .onChange(of: pin.wrappedValue) { newValue in
+            // Only allow up to pinCount digits
+            if newValue.count > pinCount {
+                pin.wrappedValue = String(newValue.prefix(pinCount))
+            }
+            
+            let newCount = pin.wrappedValue.count
+            
+            if newCount < pinCount {
+                focusedField = newCount
+            } else {
+                focusedField = nil // dismiss keyboard
             }
         }
     }
 
+
     // A helper function to get the character for a specific index
     func characterForIndex(_ index: Int) -> String {
-        guard index < pin.count else { return "-" }
-        return String(pin[pin.index(pin.startIndex, offsetBy: index)])
+        guard index < pin.wrappedValue.count else { return "-" }
+        return String(pin.wrappedValue[pin.wrappedValue.index(pin.wrappedValue.startIndex, offsetBy: index)])
     }
 
     // A binding to update a single character in the pin string
     func bindingForIndex(_ index: Int) -> Binding<String> {
         Binding(
             get: {
-                if index < pin.count {
-                    return String(pin[pin.index(pin.startIndex, offsetBy: index)])
+                if index < pin.wrappedValue.count {
+                    return String(pin.wrappedValue[pin.wrappedValue.index(pin.wrappedValue.startIndex, offsetBy: index)])
                 } else {
                     return ""
                 }
             },
             set: { newChar in
-                if newChar.count == 1 {
-                    if pin.count <= index {
-                        pin += newChar
-                    } else {
-                        let startIndex = pin.index(pin.startIndex, offsetBy: index)
-                        let endIndex = pin.index(startIndex, offsetBy: 1)
-                        pin.replaceSubrange(startIndex..<endIndex, with: newChar)
+                if newChar.isEmpty {
+                    // Backspace handling
+                    if index < pin.wrappedValue.count {
+                        let removeIndex = pin.wrappedValue.index(pin.wrappedValue.startIndex, offsetBy: index)
+                        pin.wrappedValue.remove(at: removeIndex)
                     }
-                } else if newChar.isEmpty {
-                    if pin.count > index {
-                        let startIndex = pin.index(pin.startIndex, offsetBy: index)
-                        pin.remove(at: startIndex)
+                } else if let char = newChar.last, char.isNumber {
+                    // Replace or append digit
+                    if index < pin.wrappedValue.count {
+                        let startIndex = pin.wrappedValue.index(pin.wrappedValue.startIndex, offsetBy: index)
+                        let endIndex = pin.wrappedValue.index(after: startIndex)
+                        pin.wrappedValue.replaceSubrange(startIndex..<endIndex, with: String(char))
+                    } else {
+                        pin.wrappedValue.append(char)
                     }
                 }
             }
@@ -193,9 +205,11 @@ struct PinFieldView: View {
 
 
 #Preview {
-    VerifySignUpContentView(verificationType: .constant(.email), isVLens: .constant(false), phone: .constant(""), email: .constant(""), pin: .constant(""), onBack: {
+    VerifySignUpContentView(verificationType: .constant(.email), timerObserve: .constant((1,"1")), isVLens: .constant(false), phone: .constant(""), email: .constant(""), pin: .constant(""), onBack: {
         
     }, onContinueTap: {_,_,_ in 
+        
+    }, onResendOtpTap: { _ in
         
     })
 }

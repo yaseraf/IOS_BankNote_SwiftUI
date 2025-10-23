@@ -17,7 +17,7 @@ struct VerifyScanIDBackScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                VerifyScanIDBackContentView(onNextTap: {
+                VerifyScanIDBackContentView(gender: $viewModel.gender, jobTitle: $viewModel.jobTitle, religion: $viewModel.religion, maritalStatus: $viewModel.maritalStatus, onNextTap: {
                     viewModel.openLivenessCheckScene()
                 }, onRetakeTap: {
                     viewModel.popViewController()

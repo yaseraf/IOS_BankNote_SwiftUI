@@ -17,7 +17,7 @@ struct VerifyScanIDFrontScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                VerifyScanIDFrontContentView(onNextTap: {
+                VerifyScanIDFrontContentView(address: $viewModel.address, name: $viewModel.name, dateOfBirth: $viewModel.dateOfBirth, idNumber: $viewModel.idNumber, idKey: $viewModel.idKey, onNextTap: {
                     viewModel.openScanIDBackScene()
                 }, onRetakeTap: {
                     viewModel.popViewController()

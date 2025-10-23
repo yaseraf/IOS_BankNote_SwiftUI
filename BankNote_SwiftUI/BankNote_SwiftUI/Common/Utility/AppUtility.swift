@@ -147,6 +147,21 @@ class AppUtility {
         }
     }
     
+    func formatThousandSeparatorNoDecimal(number: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0  // show decimals only if present
+        formatter.maximumFractionDigits = 16 // optional: large enough to show all
+        formatter.locale = Locale(identifier: "en_US") // or "en_US_POSIX" for strict formatting
+
+        // Format the double and add a thousand separator
+        if let formattedString = formatter.string(from: NSNumber(value: number)) {
+            return formattedString // Output: "1,234,568"
+        } else {
+            return "-"
+        }
+    }
+    
     func convertDateString(_ dateString: String, inputFormat: String, outputFormat: String) -> String {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = inputFormat

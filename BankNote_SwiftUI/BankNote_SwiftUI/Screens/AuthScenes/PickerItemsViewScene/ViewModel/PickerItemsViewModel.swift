@@ -19,8 +19,10 @@ class PickerItemsViewModel:ObservableObject{
     @Published var listSearchResult:[ItemPickerModelType]? = []
     var originalList:[ItemPickerModelType]
     @Published var selectType:PickerItemsSelectType = .one
+    
+    @Published var mandatoryFields:[ItemPickerModelType]? = []
 
-    init(allowSearch:Bool, selectType:PickerItemsSelectType,tag:Int,title:String,delegate: PickerItemsDelegate,selectItem:ItemPickerModelType?,selectItems:[ItemPickerModelType] = [],list:[ItemPickerModelType]) {
+    init(allowSearch:Bool, selectType:PickerItemsSelectType,tag:Int,title:String,delegate: PickerItemsDelegate,selectItem:ItemPickerModelType?,selectItems:[ItemPickerModelType] = [],list:[ItemPickerModelType], mandatoryFields:[ItemPickerModelType]? = []) {
         self.allowSearch = allowSearch
         self.selectType = selectType
         self.selectItems = selectItems
@@ -31,10 +33,17 @@ class PickerItemsViewModel:ObservableObject{
         self.list = list
         self.originalList = list
         self.maxCount = originalList.count
+        self.mandatoryFields = mandatoryFields
     }
         
 
     func selectItem(_ item:ItemPickerModelType) {
+        
+        // Prevent user from interacting with mandatory fields
+        if mandatoryFields?.contains(where: { $0.id == item.id }) ?? false {
+            return
+        }
+        
         if selectType == .multi{
             if let index  = selectItems.firstIndex(where: { $0.id == item.id }){
                 selectItems.remove(at: index)

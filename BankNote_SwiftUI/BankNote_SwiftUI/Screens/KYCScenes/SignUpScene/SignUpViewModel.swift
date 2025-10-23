@@ -15,13 +15,13 @@ class SignUpViewModel: ObservableObject {
     private let coordinator: AuthCoordinatorProtocol
     private let useCase: KYCUseCaseProtocol
     
-    @Published var verificationType: VerificationType
+    @Published var verificationType: VerificationType?
     @Published var phone: String = ""
     @Published var email: String = ""
     @Published var getAccessTokenResponse: GetAccessTokenUIModel?
     @Published var stepVerifyPhoneResponse: StepVerifyPhoneUIModel?
     @Published var stepVerifyEmailResponse: StepVerifyEmailUIModel?
-    @Published var verifyWithEmail: Bool = false
+    @Published var verifyWithEmail: Bool?
     @Published var showPasswordField: Bool = false
     @Published var locationPermissionDenied: Bool = false
     @Published var selectCountry: CountryFlagInfo?
@@ -32,10 +32,11 @@ class SignUpViewModel: ObservableObject {
     @Published var stepVerifyEmailAPIResult:APIResultType<StepVerifyEmailUIModel>?
     @Published var loginVlensAPIResult:APIResultType<LoginVlensUIModel>?
 
-    init(coordinator: AuthCoordinatorProtocol, useCase: KYCUseCaseProtocol, verificationType: VerificationType) {
+    init(coordinator: AuthCoordinatorProtocol, useCase: KYCUseCaseProtocol, verificationType: VerificationType, verifyWithEmail: Bool) {
         self.coordinator = coordinator
         self.useCase = useCase
         self.verificationType = verificationType
+        self.verifyWithEmail = verifyWithEmail
         self.selectCountry = AppConstants.defaultEgyptCountry
         checkLocationAuthorization()
     }
@@ -157,7 +158,7 @@ extension SignUpViewModel {
                             KeyChainController().stepCreateAccessToken = success.Data.accessToken
                             KeyChainController().loginVlensAccessToken = success.HeaderAccessToken
                             debugPrint("Header acces token: \(success.HeaderAccessToken)")
-                            self?.coordinator.openScanIDFrontScene()
+                            self?.coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
                         }
                         
                     }

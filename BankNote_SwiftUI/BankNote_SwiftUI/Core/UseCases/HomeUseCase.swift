@@ -12,7 +12,7 @@ protocol HomeUseCaseProtocol{
     func GetALLMarketWatchBySymbol(requestModel: GetALLMarketWatchBySymbolRequestModel, completion: @escaping(Result<GetALLMarketWatchBySymbolUIModel, NetworkError>) -> Void) async
     func GetAllMarketNewsBySymbol(requestModel: GetAllMarketNewsBySymbolRequestModel, completion: @escaping(Result<[GetAllMarketNewsBySymbolUIModel], NetworkError>) -> Void) async
     func GetExpectedProfitLoss(requestModel: GetExpectedProfitLossRequestModel, completion: @escaping(Result<[GetExpectedProfitLossUIModel], NetworkError>) -> Void) async
-
+    func GetRiskManagement(requestModel: GetRiskManagementRequestModel, completion: @escaping(Result<GetRiskManagementUIModel, NetworkError>) -> Void) async
 }
 
 class HomeUseCase {
@@ -100,5 +100,18 @@ extension HomeUseCase: HomeUseCaseProtocol {
         }
     }
 
+    func GetRiskManagement(requestModel: GetRiskManagementRequestModel, completion: @escaping (Result<GetRiskManagementUIModel, NetworkError>) -> Void) async {
+        let route = HomeRoute.GetRiskManagement(requestModel: requestModel)
+        await repository.GetRiskManagement(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetRiskManagementUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
 
 }

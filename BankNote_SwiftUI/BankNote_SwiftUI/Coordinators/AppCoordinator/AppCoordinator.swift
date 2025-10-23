@@ -155,6 +155,27 @@ extension AppCoordinator: AppCoordinatorProtocol {
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openPickerItemsScene(allowSearch:Bool, tag:Int,title:String,delegate: PickerItemsDelegate,selectItem:ItemPickerModelType?,list:[ItemPickerModelType]) {
+        let viewModel = PickerItemsViewModel(allowSearch: allowSearch, selectType: .one,tag:tag,title:title,delegate: delegate, selectItem: selectItem, list: list)
+        let view =  PickerItemsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        viewController.view.backgroundColor = .clear
+        viewController.modalPresentationStyle = .overFullScreen
+        SceneDelegate.getAppCoordinator()?.topViewController()?.present(viewController, animated: true)
+    }
+
+    func openPickerMultiItemsScene(tag:Int,title:String,delegate: PickerItemsDelegate,selectItems:[ItemPickerModelType],list:[ItemPickerModelType], mandatoryFields: [ItemPickerModelType] = []) {
+        let viewModel = PickerItemsViewModel(allowSearch: true, selectType: .multi,tag:tag,title:title,delegate: delegate, selectItem: nil,selectItems:selectItems, list: list, mandatoryFields: mandatoryFields)
+        let view =  PickerItemsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        viewController.view.backgroundColor = .clear
+        viewController.modalPresentationStyle = .overFullScreen
+        SceneDelegate.getAppCoordinator()?.topViewController()?.present(viewController, animated: true)
+    }
+
 }
 
 

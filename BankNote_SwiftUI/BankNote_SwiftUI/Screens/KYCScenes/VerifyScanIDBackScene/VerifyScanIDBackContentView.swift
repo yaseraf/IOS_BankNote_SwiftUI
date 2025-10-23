@@ -10,26 +10,13 @@ import SwiftUI
 
 struct VerifyScanIDBackContentView: View {
     
-    @State var stepNumber:Int = 4
     
-    @State private var username = "John Dohh"
-    @State private var password = "password123"
-    @State private var confirmPassword = "password123"
-
-    var isUsernameValid: Bool {
-        // A simple validation rule
-        return username.count > 3
-    }
-
-    var isPasswordValid: Bool {
-        // A simple validation rule
-        return password.count > 7
-    }
-
-    var doPasswordsMatch: Bool {
-        return password == confirmPassword && password.count > 0
-    }
-
+    var gender:Binding<String>
+    var jobTitle:Binding<String>
+    var religion:Binding<String>
+    var maritalStatus:Binding<String>
+                                
+    @State var stepNumber:Int = 4
     
     var onNextTap:()->Void
     var onRetakeTap:()->Void
@@ -91,29 +78,56 @@ struct VerifyScanIDBackContentView: View {
     
     private var fieldsView: some View {
         VStack(spacing: 8) {
-            InputField(
-                title: "gender",
-                text: $username,
-                isValid: isUsernameValid
-            )
-
-            InputField(
-                title: "job_title",
-                text: $password,
-                isValid: isPasswordValid
-            )
-
-            InputField(
-                title: "religion",
-                text: $confirmPassword,
-                isValid: doPasswordsMatch
-            )
             
-            InputField(
-                title: "marital_status",
-                text: $confirmPassword,
-                isValid: doPasswordsMatch
-            )            
+            // Gender
+            VStack(alignment: .leading, spacing: 0) {
+                Text("gender".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(gender.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
+
+            // Job Title
+            VStack(alignment: .leading, spacing: 0) {
+                Text("job_title".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(jobTitle.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
+
+            // Religion
+            VStack(alignment: .leading, spacing: 0) {
+                Text("religion".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(religion.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
+
+
+            // Marital Status
+            VStack(alignment: .leading, spacing: 0) {
+                Text("marital_status".localized)
+                    .font(.cairoFont(.light, size: 12))
+                Text(maritalStatus.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 12))
+            }
+            .padding(.vertical, 5.5)
+            .padding(.horizontal, 12)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+            .padding(.horizontal, 18)
+
         }
         .disabled(true)
     }
@@ -151,7 +165,7 @@ struct VerifyScanIDBackContentView: View {
 }
 
 #Preview {
-    VerifyScanIDFrontContentView(onNextTap: {
+    VerifyScanIDFrontContentView(address: .constant(""), name: .constant(""), dateOfBirth: .constant(""), idNumber: .constant(""), idKey: .constant(""), onNextTap: {
         
     }, onRetakeTap: {
         

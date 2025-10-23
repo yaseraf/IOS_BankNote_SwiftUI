@@ -18,6 +18,7 @@ enum HomeRoute:APITargetType{
     case GetALLMarketWatchBySymbol(requestModel: GetALLMarketWatchBySymbolRequestModel)
     case GetAllMarketNewsBySymbol(requestModel: GetAllMarketNewsBySymbolRequestModel)
     case GetExpectedProfitLoss(requestModel: GetExpectedProfitLossRequestModel)
+    case GetRiskManagement(requestModel: GetRiskManagementRequestModel)
 
     var baseURL: URL{
         get{
@@ -66,7 +67,8 @@ enum HomeRoute:APITargetType{
             return "GeneralWServices/GetAllMarketNewsBySymbol/\(UserDefaultController().selectedSymbol ?? "")/\(KeyChainController().webCode ?? "")"
         case .GetExpectedProfitLoss:
             return "FinancialWServices/GetExpectedProfitLoss/\(KeyChainController.shared().mainClientID ?? "")/\(KeyChainController.shared().clientID ?? "")/\(KeyChainController.shared().webCode ?? "")/\(getCurrentDateString())/\(KeyChainController.shared().brokerID ?? "")"
-
+        case .GetRiskManagement:
+            return "TradingWServices/GetRiskManagment"
 
         }
     }
@@ -76,6 +78,8 @@ enum HomeRoute:APITargetType{
             switch self {
             case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
                 return .get
+            case .GetRiskManagement:
+                return .post
             }
         }
     }
@@ -84,6 +88,10 @@ enum HomeRoute:APITargetType{
         switch self {
         case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
                 .requestPlain
+            
+        case .GetRiskManagement(let requestModel):
+                .requestJsonEncodable(requestModel)
+
         }
     }
 }

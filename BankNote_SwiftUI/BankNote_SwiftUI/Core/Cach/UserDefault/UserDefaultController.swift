@@ -41,6 +41,7 @@ enum CachingKey: String {
     case profileID
     case marketStatusTitle
     case selectedSymbol
+    case selectedSymbolID
     case selectedSymbolType
     case iconPath
     case BackgroundWatchList
@@ -54,11 +55,14 @@ enum CachingKey: String {
     case investmentProductKeys
     case completedInvestmentProductKeys
     case investmentProductValues
+    case CUSTODYID
     
     // MARK: Other
     
     case appTheme
     case selectedUserAccount
+    case cameraType
+    case tifList
 
 }
 
@@ -92,6 +96,7 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.profileID) var profileID
     @CachingCodable<String>(.marketStatusTitle) var marketStatusTitle
     @CachingCodable<String>(.selectedSymbol) var selectedSymbol
+    @CachingCodable<String>(.selectedSymbolID) var selectedSymbolID
     @CachingCodable<String>(.selectedSymbolType) var selectedSymbolType
     @CachingCodable<String>(.iconPath) var iconPath
     @CachingCodable<String>(.BackgroundWatchList) var BackgroundWatchList
@@ -106,12 +111,15 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<[String]>(.investmentProductKeys) var investmentProductKeys
     @CachingCodable<[String:String]>(.completedInvestmentProductKeys) var completedInvestmentProductKeys
     @CachingCodable<[String]>(.investmentProductValues) var investmentProductValues
+    @CachingCodable<String>(.CUSTODYID) var CUSTODYID
 
     // MARK: Others
 
     @CachingCodable<GetUserAccountsUIModel>(.selectedUserAccount) var selectedUserAccount
     @CachingCodable<ThemeType>(.appTheme) var appTheme
-        
+    @CachingCodable<CameraType>(.cameraType) var cameraType
+    @CachingCodable<[GetLookupsUIModel]>(.tifList) var tifList
+
     var isArabicLanguage: Bool {
         get {
             return appLanguage == LanguageType.arabic.rawValue
@@ -123,6 +131,7 @@ class UserDefaultController: ObservableObject {
         signalRConnected = nil
         marketStatusTitle = nil
         selectedSymbol = nil
+        selectedSymbolID = nil
         selectedSymbolType = nil
         isMarketOpen = nil
         selectedMarket = nil
@@ -131,6 +140,9 @@ class UserDefaultController: ObservableObject {
         investmentProductKeys = nil
         completedInvestmentProductKeys = nil
         investmentProductValues = nil
+        cameraType = nil
+        tifList = nil
+        CUSTODYID = nil
     }
 }
 

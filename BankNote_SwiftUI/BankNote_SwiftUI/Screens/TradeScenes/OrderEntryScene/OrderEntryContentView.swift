@@ -21,16 +21,19 @@ enum OrderPriceType {
 
 struct OrderEntryContentView: View {
     @State private var selectedTab: TradingType = .cash
-    @State private var inputValue: String = "0"
+    var cashInputValue:Binding<String>
+    var stocksInputValue:Binding<String>
     @State private var availableAmount: Int = 1000
-    @State private var selectedOrderPriceType: OrderPriceType = .market
-
-    var symbol: Binding<String>
-    var netChange: Binding<String>
-    var netChangePerc: Binding<String>
-    var lastTradePrice: Binding<String>
+    var selectedOrderPriceType:Binding<OrderPriceType>
+    var newMarketSymbol:Binding<GetALLMarketWatchBySymbolUIModel?>
+    var orderDetails:Binding<OrderListUIModel?>
+    var netChange:Binding<String>
+    var netChangePerc:Binding<String>
+    var lastTradePrice:Binding<String>
+    var flagMessage:Binding<String>
     
     var onContinueTap: () -> Void
+    var onValuesChange:() -> Void
     var onBackTap: () -> Void
     
 
@@ -64,6 +67,7 @@ struct OrderEntryContentView: View {
                     }
                     HStack(spacing: 10) {
                         keypadButton(character: ".")
+                            .disabled(selectedTab == .stocks)
                         keypadButton(character: "0")
                         backspaceButton()
                     }
@@ -71,18 +75,9 @@ struct OrderEntryContentView: View {
                 .padding(.horizontal, 18)
                 .padding(.bottom, 10)
 
-                // MARK: - Continue Button
-                Button(action: {
-                    onContinueTap()
-                }) {
-                    Text("Continue")
-                        .font(.cairoFont(.semiBold, size: 18))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: 54)
-                        .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#9C4EF7")))
-                }
-                .padding(.horizontal, 18)
+
+                bottomButtonView
+                
             }
         }
     }
@@ -105,7 +100,7 @@ struct OrderEntryContentView: View {
             
             HStack {
                 HStack(spacing: 16) {
-                    WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(symbol.wrappedValue ?? "").png")) { phase in
+                    WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(UserDefaultController().selectedSymbol ?? "").png")) { phase in
                         switch phase {
                         case .success(let image):
                             image
@@ -137,7 +132,7 @@ struct OrderEntryContentView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("\(symbol.wrappedValue)")
+                        Text("\(UserDefaultController().selectedSymbol ?? "")")
                             .font(.cairoFont(.semiBold, size: 18))
 
                         HStack{
@@ -159,7 +154,7 @@ struct OrderEntryContentView: View {
                 
                 Spacer()
                 
-                HStack(spacing:0) {
+                HStack(alignment: .firstTextBaseline, spacing:0) {
                     Text("\("egp".localized)")
                         .font(.cairoFont(.semiBold, size: 12))
 
@@ -175,61 +170,118 @@ struct OrderEntryContentView: View {
     }
     
     private var orderPriceTypeView: some View {
-        HStack {
-            if selectedOrderPriceType == .market {
-                LinearGradient(
-                    gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-                .mask {
-                    HStack(spacing: 6){
-                        Circle()
-                            .frame(width: 5, height: 5)
-                        
+        VStack {
+            HStack {
+                if selectedOrderPriceType.wrappedValue == .market {
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .mask {
+                        HStack(spacing: 6){
+                            Circle()
+                                .frame(width: 5, height: 5)
+                            
+                            Text("market_price".localized)
+                                .font(.cairoFont(.semiBold, size: 12))
+                        }
+                    }
+                    .frame(maxWidth: 100)
+                } else {
+                    Button {
+                        selectedOrderPriceType.wrappedValue = .market
+                        cashInputValue.wrappedValue = "0"
+                        onValuesChange()
+                    } label: {
                         Text("market_price".localized)
                             .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(Color(hex: "#828282"))
                     }
                 }
-                .frame(maxWidth: 100)
-            } else {
-                Button {
-                    selectedOrderPriceType = .limit
-                } label: {
-                    Text("market_price".localized)
-                        .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: "#828282"))
-                }
-            }
 
-            if selectedOrderPriceType == .limit {
-                LinearGradient(
-                    gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-                .mask {
-                    HStack(spacing: 6){
-                        Circle()
-                            .frame(width: 5, height: 5)
-                        
+                if selectedOrderPriceType.wrappedValue == .limit {
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .mask {
+                        HStack(spacing: 6){
+                            Circle()
+                                .frame(width: 5, height: 5)
+                            
+                            Text("limit_price".localized)
+                                .font(.cairoFont(.semiBold, size: 12))
+                        }
+                    }
+                    .frame(maxWidth: 100)
+                } else {
+                    Button {
+                        selectedOrderPriceType.wrappedValue = .limit
+                    } label: {
                         Text("limit_price".localized)
                             .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(Color(hex: "#828282"))
                     }
                 }
-                .frame(maxWidth: 100)
-            } else {
-                Button {
-                    selectedOrderPriceType = .market
-                } label: {
-                    Text("limit_price".localized)
-                        .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: "#828282"))
+
+                
+                Spacer()
+            }
+            
+            VStack(spacing: 0) {
+                HStack {
+                    Text(AppUtility.shared.formatThousandSeparator(number: Double(newMarketSymbol.wrappedValue?.minPrice ?? "") ?? 0))
+                        .font(.cairoFont(.bold, size: 10))
+                    
+                    Spacer()
+
+                    
+                    Text(AppUtility.shared.formatThousandSeparator(number: Double(newMarketSymbol.wrappedValue?.maxPrice ?? "") ?? 0))
+                        .font(.cairoFont(.bold, size: 10))
+
                 }
+                .padding(.horizontal, 75)
+                .frame(maxWidth: .infinity)
+
+                ZStack {
+                    RoundedRectangle(cornerRadius: 99)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 3)
+                        .foregroundStyle(Color(hex: "#D9D9D9"))
+                    
+                    HStack(spacing: -2) {
+                        Circle()
+                            .frame(width: 7, height: 7)
+                            .foregroundStyle(Color(hex: "#629AF9"))
+                            .zIndex(1)
+
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .mask {
+                            RoundedRectangle(cornerRadius: 99)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 3)
+                                .foregroundStyle(Color(hex: "#000000"))
+
+                        }
+                        .zIndex(0)
+                        
+                        Circle()
+                            .frame(width: 7, height: 7)
+                            .foregroundStyle(Color(hex: "#FC814B"))
+                            .zIndex(1)
+
+                    }
+                    .padding(.horizontal, 85)
+                }
+
             }
 
-            
-            Spacer()
         }
         .padding(.horizontal, 18)
     }
@@ -262,13 +314,18 @@ struct OrderEntryContentView: View {
 
 
             VStack(spacing: 0) {
-                HStack(spacing: 0) {
+                HStack(alignment: .firstTextBaseline, spacing:6) {
                     Text(selectedTab == .cash ? "egp".localized : "stocks".localized)
                         .font(.cairoFont(.bold, size: 32))
-                    Text(inputValue)
+                    Text(selectedTab == .cash && selectedOrderPriceType.wrappedValue == .market ? "MKT" : selectedTab == .cash ? AppUtility.shared.formatThousandSeparatorNoDecimal(number: Double(cashInputValue.wrappedValue) ?? 0) : AppUtility.shared.formatThousandSeparatorNoDecimal(number: Double(stocksInputValue.wrappedValue) ?? 0))
                         .font(.cairoFont(.bold, size: 48))
                 }
                 .foregroundStyle(Color(hex: "#828282"))
+                
+                Text(flagMessage.wrappedValue)
+                    .font(.cairoFont(.semiBold, size: 16))
+                    .foregroundStyle(Color(hex: "#AA1A1A"))
+
                 
                 Button(action: { handleButtonTap("MAX") }) {
                     Text("MAX")
@@ -300,32 +357,60 @@ struct OrderEntryContentView: View {
     }
     
     private func handleButtonTap(_ character: String) {
-        if character == "⌫" {
-            // Remove the last character, unless it's the last one and it's not "0"
-            if inputValue.count > 1 {
-                inputValue.removeLast()
-            } else if inputValue != "0" {
-                inputValue = "0"
+        if selectedTab == .cash {
+            if character == "⌫" {
+                // Remove the last character, unless it's the last one and it's not "0"
+                if cashInputValue.wrappedValue.count > 1 {
+                    cashInputValue.wrappedValue.removeLast()
+                } else if cashInputValue.wrappedValue != "0" {
+                    cashInputValue.wrappedValue = "0"
+                }
+            } else if character == "." {
+                // Only allow one decimal point
+                if !cashInputValue.wrappedValue.contains(".") {
+                    cashInputValue.wrappedValue += character
+                }
+            } else if character == "MAX" {
+                // Set the input to the maximum available amount
+                cashInputValue.wrappedValue = String(availableAmount)
+            } else if cashInputValue.wrappedValue == "0" && character != "." {
+                // Replace the leading "0" with the new digit, unless it's a decimal point
+                cashInputValue.wrappedValue = character
+            } else {
+                cashInputValue.wrappedValue += character
             }
-        } else if character == "." {
-            // Only allow one decimal point
-            if !inputValue.contains(".") {
-                inputValue += character
-            }
-        } else if character == "MAX" {
-            // Set the input to the maximum available amount
-            inputValue = String(availableAmount)
-        } else if inputValue == "0" && character != "." {
-            // Replace the leading "0" with the new digit, unless it's a decimal point
-            inputValue = character
         } else {
-            inputValue += character
+            if character == "⌫" {
+                // Remove the last character, unless it's the last one and it's not "0"
+                if stocksInputValue.wrappedValue.count > 1 {
+                    stocksInputValue.wrappedValue.removeLast()
+                } else if stocksInputValue.wrappedValue != "0" {
+                    stocksInputValue.wrappedValue = "0"
+                }
+            } else if character == "." {
+                // Only allow one decimal point
+                if !stocksInputValue.wrappedValue.contains(".") {
+                    stocksInputValue.wrappedValue += character
+                }
+            } else if character == "MAX" {
+                // Set the input to the maximum available amount
+                stocksInputValue.wrappedValue = String(availableAmount)
+            } else if stocksInputValue.wrappedValue == "0" && character != "." {
+                // Replace the leading "0" with the new digit, unless it's a decimal point
+                stocksInputValue.wrappedValue = character
+            } else {
+                stocksInputValue.wrappedValue += character
+            }
         }
     }
 
     private func keypadButton(character: String) -> some View {
         Button(action: {
+            if (selectedTab == .cash && cashInputValue.wrappedValue.count > 8) {return}
+            if (selectedTab == .stocks && stocksInputValue.wrappedValue.count > 8) {return}
+            
             handleButtonTap(character)
+            onValuesChange()
         }) {
             Text(character)
                 .font(.cairoFont(.semiBold, size: 18))
@@ -334,11 +419,13 @@ struct OrderEntryContentView: View {
                 .padding(.horizontal, 50)
                 .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#DDDDDD")))
         }
+        .disabled(selectedTab == .cash && selectedOrderPriceType.wrappedValue == .market)
     }
     
     private func backspaceButton() -> some View {
         Button(action: {
             handleButtonTap("⌫")
+            onValuesChange()
         }) {
             ZStack {
                 Image("ic_erase")
@@ -351,10 +438,36 @@ struct OrderEntryContentView: View {
             .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#DDDDDD")))
         }
     }
+    
+    private var bottomButtonView: some View {
+        Button(action: {
+            onContinueTap()
+        }) {
+            Text("Continue")
+                .font(.cairoFont(.semiBold, size: 18))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 54)
+                .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#9C4EF7")))
+        }
+        .padding(.horizontal, 18)
+        .disabled(!checkEnabledBtn())
+        .opacity(checkEnabledBtn() ? 1 : 0.3)
+    }
+    
+    private func checkEnabledBtn() -> Bool {
+        if Double(stocksInputValue.wrappedValue) ?? 0 > 0 && ((Double(cashInputValue.wrappedValue) ?? 0 > 0 && selectedOrderPriceType.wrappedValue == .limit) || (selectedOrderPriceType.wrappedValue == .market)) && flagMessage.wrappedValue.isEmpty {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 #Preview {
-    OrderEntryContentView(symbol: .constant(""), netChange: .constant(""), netChangePerc: .constant(""), lastTradePrice: .constant(""), onContinueTap: {
+    OrderEntryContentView(cashInputValue: .constant(""), stocksInputValue: .constant(""), selectedOrderPriceType: .constant(.limit), newMarketSymbol: .constant(.initializer()), orderDetails: .constant(.initializer()), netChange: .constant(""), netChangePerc: .constant(""), lastTradePrice: .constant(""), flagMessage: .constant(""), onContinueTap: {
+        
+    }, onValuesChange: {
         
     }, onBackTap: {
         

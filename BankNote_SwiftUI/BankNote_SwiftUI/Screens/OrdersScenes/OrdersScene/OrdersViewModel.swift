@@ -35,7 +35,13 @@ class OrdersViewModel: ObservableObject {
 // MARK: Routing
 extension OrdersViewModel {
     func openOrderEntryScreen(symbol:String) {
-        coordinator.openOrderEntryScene(symbol: symbol)
+        
+        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == symbol}).first ?? .testUIModel()
+        UserDefaultController().selectedSymbol = symbol
+        UserDefaultController().selectedSymbolID = selectedStock.symbolID
+        UserDefaultController().selectedSymbolType = selectedStock.marketType
+
+        coordinator.openOrderEntryScene(orderDetails: .initializer(), isEditOrder: false)
     }
 }
 
@@ -66,8 +72,11 @@ extension OrdersViewModel {
                 case .success(let success):
                     self?.getLookupsAPIResult = .onSuccess(response: success)
 //                    debugPrint("get lookups success: \(success)")
+                    UserDefaultController().tifList = success.filter({$0.type == "TIF"})
+                    UserDefaultController().CUSTODYID = success.filter({$0.type == "CUST"}).first?.id ?? ""
                     self?.getLookupsList = success.filter({$0.type == "OSS"})
                     self?.filterOSSList = self?.getLookupsList
+
 
 //                    self?.filterLookUps("OSS")
 //                    let egxMarketData = marketData.filter { $0.exchangeID?.lowercased() == "egx" }

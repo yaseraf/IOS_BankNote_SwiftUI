@@ -17,14 +17,16 @@ struct OrderEntryScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                OrderEntryContentView(symbol: $viewModel.symbol, netChange: $viewModel.netChange, netChangePerc: $viewModel.netChangePerc, lastTradePrice: $viewModel.lastTradePrice, onContinueTap: {
-                    viewModel.openPaymentMethodScene()
+                OrderEntryContentView(cashInputValue: $viewModel.price, stocksInputValue: $viewModel.shares, selectedOrderPriceType: $viewModel.orderPriceType, newMarketSymbol: $viewModel.newMarketSymbol, orderDetails: $viewModel.orderDetails, netChange: $viewModel.netChange, netChangePerc: $viewModel.netChangePerc, lastTradePrice: $viewModel.lastTradePrice, flagMessage: $viewModel.flagMessage, onContinueTap: {
+                    viewModel.openOrderDetailsScene()
+                }, onValuesChange: {
+                    viewModel.CheckPriceWithinRange()
                 }, onBackTap: {
                     viewModel.popViewController()
                 })
             })
             .onAppear {
-                viewModel.GetCompaniesLookupsAPI(success: true)
+                viewModel.GetAllMarketWatchBySymbolAPI(success: true)
             }
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad {

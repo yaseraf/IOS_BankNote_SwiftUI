@@ -50,7 +50,7 @@ struct OrdersContentView:View {
             segmentSelection
             
             ScrollView(.vertical, showsIndicators: false) {
-                ForEach(Array((ordersData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in
+                ForEach(Array((ordersData.wrappedValue ?? []).enumerated()).reversed(), id: \.offset) { idnex, element in
                     Button {
                         onOrderTap(element.Symbol ?? "")
                     } label: {

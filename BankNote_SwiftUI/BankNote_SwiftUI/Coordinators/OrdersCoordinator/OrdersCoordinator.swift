@@ -38,10 +38,10 @@ extension OrdersCoordinator:OrdersCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openOrderEntryScene(orderDetails: OrderListUIModel, isEditOrder: Bool) {
+    func openOrderEntryScene(orderDetails: OrderListUIModel, placeOrderType: PlaceOrderType, isEditOrder: Bool) {
         let useCase = HomeUseCase()
         let lookupsUseCase = LookupsUseCase()
-        let viewModel = OrderEntryViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase, orderDetails: orderDetails, isEditOrder: isEditOrder)
+        let viewModel = OrderEntryViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase, orderDetails: orderDetails, placeOrderType: placeOrderType, isEditOrder: isEditOrder)
         let view = OrderEntryScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

@@ -36,12 +36,12 @@ class OrdersViewModel: ObservableObject {
 extension OrdersViewModel {
     func openOrderEntryScreen(symbol:String) {
         
-        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == symbol}).first ?? .testUIModel()
-        UserDefaultController().selectedSymbol = symbol
-        UserDefaultController().selectedSymbolID = selectedStock.symbolID
-        UserDefaultController().selectedSymbolType = selectedStock.marketType
-
-        coordinator.openOrderEntryScene(orderDetails: .initializer(), isEditOrder: false)
+//        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == symbol}).first ?? .testUIModel()
+//        UserDefaultController().selectedSymbol = symbol
+//        UserDefaultController().selectedSymbolID = selectedStock.symbolID
+//        UserDefaultController().selectedSymbolType = selectedStock.marketType
+//
+//        coordinator.openOrderEntryScene(orderDetails: .initializer(), placeOrderType: <#PlaceOrderType#>, isEditOrder: false)
     }
     
     func openOrderEditScene(orderDetails: OrderListUIModel) {
@@ -166,7 +166,6 @@ extension OrdersViewModel {
             }
         }
     }
-
 }
 
 
@@ -183,7 +182,7 @@ extension OrdersViewModel: OrderEditDelegate {
         UserDefaultController().selectedSymbolID = selectedStock.symbolID
         UserDefaultController().selectedSymbolType = selectedStock.marketType
 
-        coordinator.openOrderEntryScene(orderDetails: order, isEditOrder: true)
+        coordinator.openOrderEntryScene(orderDetails: order, placeOrderType: order.SellBuyFlag?.lowercased() == "b" ? .buy : .sell, isEditOrder: true)
     }
 }
 

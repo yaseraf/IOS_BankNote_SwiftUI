@@ -84,8 +84,6 @@ struct SignUpContentView: View {
     
     private var headerView: some View {
         HStack {
-           Spacer()
-            
             Button {
                 onBack()
             } label: {
@@ -94,7 +92,8 @@ struct SignUpContentView: View {
                     .scaledToFit()
                     .frame(maxWidth: 45, maxHeight: 45)
             }
-
+            
+            Spacer()
         }
     }
     

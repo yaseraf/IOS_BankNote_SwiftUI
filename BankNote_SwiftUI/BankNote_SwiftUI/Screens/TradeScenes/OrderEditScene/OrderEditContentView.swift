@@ -98,7 +98,7 @@ struct OrderEditContentView: View {
 
             
 
-            if orderDetails.wrappedValue?.StatusCode?.lowercased() != "r" && orderDetails.wrappedValue?.StatusCode?.lowercased() != "c" && orderDetails.wrappedValue?.StatusCode?.lowercased() != "e" {
+            if orderDetails.wrappedValue?.StatusCode?.lowercased() != "r" && orderDetails.wrappedValue?.StatusCode?.lowercased() != "c" && orderDetails.wrappedValue?.StatusCode?.lowercased() != "e" && orderDetails.wrappedValue?.StatusCode?.lowercased() != "s" {
                 Divider()
                 HStack(spacing: 8) {
                     

@@ -20,9 +20,9 @@ struct StockDetailsScene: BaseSceneType {
                 StockDetailsContentView(stockData: $viewModel.stockData, chartLoaded: $viewModel.chartLoaded, marketNews: $viewModel.marketNewsBySymbol, ownedShares: $viewModel.ownedShares, onBackTap: {
                     viewModel.popViewController()
                 }, onBuyTap: {
-                    viewModel.openOrderEntryScene()
+                    viewModel.openOrderEntryScene(placeOrderType: .buy)
                 }, onSellTap: {
-                    viewModel.openOrderEntryScene()
+                    viewModel.openOrderEntryScene(placeOrderType: .sell)
                 })
             })
             .onAppear {

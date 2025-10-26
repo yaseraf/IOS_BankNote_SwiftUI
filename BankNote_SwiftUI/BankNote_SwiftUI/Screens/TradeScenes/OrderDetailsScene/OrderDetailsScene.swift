@@ -31,22 +31,22 @@ struct OrderDetailsScene: BaseSceneType {
             }
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad {
-//            ExchangeDataAPI()
+            SendOrderAPI()
         }
     }
     
-//    private func ExchangeDataAPI() {
-//        viewModel.$getExchangeSummaryAPIResult.receive(on: DispatchQueue.main).sink { result  in
-//            switch result {
-//            case .onFailure(let error):
-//                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
-//            case.onLoading(let show):
-//                viewTypeAction.showLoading = show
-//            case.onSuccess(let listResponse):
-//                debugPrint("Loading..")
-//            case .none:
-//                break
-//            }
-//        }.store(in: &anyCancellable)
-//    }
+    private func SendOrderAPI() {
+        viewModel.$sendOrdersAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result {
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("Loading..")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
 }

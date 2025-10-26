@@ -33,11 +33,12 @@ class OrderEntryViewModel: ObservableObject {
     @Published var getCompaniesLookupsAPIResult:APIResultType<[GetCompaniesLookupsUIModel]>?
     @Published var getRiskManagementAPIResult:APIResultType<GetRiskManagementUIModel>?
 
-    init(coordinator: OrdersCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol, orderDetails: OrderListUIModel, isEditOrder: Bool) {
+    init(coordinator: OrdersCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol, orderDetails: OrderListUIModel, placeOrderType: PlaceOrderType, isEditOrder: Bool) {
         self.coordinator = coordinator
         self.useCase = useCase
         self.lookupsUseCase = lookupsUseCase
         self.orderDetails = orderDetails
+        self.placeOrderType = placeOrderType
         self.isEditOrder = isEditOrder
         
         if isEditOrder {
@@ -45,7 +46,7 @@ class OrderEntryViewModel: ObservableObject {
             price = orderDetails.Price ?? ""
             
             orderPriceType = orderDetails.OrderTypeCode == "1" ? .market : .limit
-            placeOrderType = orderDetails.SellBuyFlag?.lowercased() == "b" ? .buy : .sell
+            self.placeOrderType = orderDetails.SellBuyFlag?.lowercased() == "b" ? .buy : .sell
         }
     }
 }
@@ -85,7 +86,8 @@ extension OrderEntryViewModel {
             NIN: UserDefaultController().selectedUserAccount?.NIN ?? "",
             OrdComm: "",
             OrderID: isEditOrder ? orderDetails?.OrderID ?? "" : "",
-            OrderValue: isEditOrder ? orderDetails?.LocalValue ?? "" : orderValue,
+//            OrderValue: isEditOrder ? orderDetails?.LocalValue ?? "" : orderValue,
+            OrderValue: orderValue,
             OrderTypeCode: orderPriceType == .limit ? "2" : "1",
             OriginCode: "",
             Precision: "",
@@ -148,7 +150,7 @@ extension OrderEntryViewModel {
             SymbolNameA: ""
             )
         
-        coordinator.openOrderDetailsScene(orderPreview: orderPreview, riskManagementData: riskManagementData ?? .initializer(), isEditOrder: false)
+        coordinator.openOrderDetailsScene(orderPreview: orderPreview, riskManagementData: riskManagementData ?? .initializer(), isEditOrder: isEditOrder)
     }
 }
 
@@ -232,8 +234,10 @@ extension OrderEntryViewModel {
             orderID: (isEditOrder ? orderDetails?.OrderID : "-1"),
             orderType: placeOrderType == .buy ? "B" : "S",
             portMang: KeyChainController.shared().brokerID,
-            price: isEditOrder ? orderDetails?.Price : price,
-            qty: isEditOrder ? orderDetails?.ExecQty : shares,
+//            price: isEditOrder ? orderDetails?.Price : price,
+            price: price,
+//            qty: isEditOrder ? orderDetails?.ExecQty : shares,
+            qty: shares,
 //            symbol: (isEditOrder ? newMarketSymbol?.symbol : placeOrderUIModel?.symbol),
             symbol: (newMarketSymbol?.symbol),
 //            typeCode: (isEditOrder ? newMarketSymbol?.marketType : placeOrderUIModel?.marketType),

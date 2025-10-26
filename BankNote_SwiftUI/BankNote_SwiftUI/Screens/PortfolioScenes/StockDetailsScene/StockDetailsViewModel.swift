@@ -45,8 +45,8 @@ extension StockDetailsViewModel {
         coordinator.popViewController()
     }
     
-    func openOrderEntryScene() {
-        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getOrdersCoordinator().openOrderEntryScene(orderDetails: .initializer(), isEditOrder: false)
+    func openOrderEntryScene(placeOrderType: PlaceOrderType) {
+        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getOrdersCoordinator().openOrderEntryScene(orderDetails: .initializer(), placeOrderType: placeOrderType, isEditOrder: false)
     }
 
 }

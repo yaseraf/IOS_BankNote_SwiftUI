@@ -18,7 +18,7 @@ struct SignUpScene: BaseSceneType {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 SignUpContentView(showPasswordField: $viewModel.showPasswordField, verifyWithEmail: $viewModel.verifyWithEmail, countryCodeUIModel: $viewModel.selectCountry, locationPermission: $viewModel.locationPermissionDenied, verificationType: $viewModel.verificationType, phone: $viewModel.phone, email: $viewModel.email, onBack: {
-                    
+                    viewModel.popViewController()
                 }, onContinueTap: { uiModel, verifyWithEmail, phoneNumber, email, password in
                     if !verifyWithEmail {
                         KeyChainController.shared().phoneNumberEntered = phoneNumber

@@ -22,7 +22,7 @@ struct OrdersContentView:View {
     var ordersData: Binding<[OrderListUIModel]?>
     var filterOSSList: Binding<[GetLookupsUIModel]?>
     
-    var onOrderTap:(String)->Void
+    var onOrderTap:(OrderListUIModel)->Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -51,12 +51,31 @@ struct OrdersContentView:View {
             
             ScrollView(.vertical, showsIndicators: false) {
                 ForEach(Array((ordersData.wrappedValue ?? []).enumerated()).reversed(), id: \.offset) { idnex, element in
-                    Button {
-                        onOrderTap(element.Symbol ?? "")
-                    } label: {
-                        OrdersCell(ordersData: element, filterOSSList: filterOSSList)
+                    if selectedOrderType == .all {
+                        
+                        Button {
+                            onOrderTap(element)
+                        } label: {
+                            OrdersCell(ordersData: element, filterOSSList: filterOSSList)
+                        }
+                        
+                    } else if selectedOrderType == .pending && (element.StatusCode?.lowercased() == "p" || element.StatusCode?.lowercased() == "w" || element.StatusCode?.lowercased() == "a" || element.StatusCode?.lowercased() == "t") {
+                        
+                        Button {
+                            onOrderTap(element)
+                        } label: {
+                            OrdersCell(ordersData: element, filterOSSList: filterOSSList)
+                        }
+                        
+                    } else if selectedOrderType == .completed && (element.StatusCode?.lowercased() == "s" || element.StatusCode?.lowercased() == "r" || element.StatusCode?.lowercased() == "c" || element.StatusCode?.lowercased() == "e") {
+                        
+                        Button {
+                            onOrderTap(element)
+                        } label: {
+                            OrdersCell(ordersData: element, filterOSSList: filterOSSList)
+                        }
+                        
                     }
-
                 }
             }
         }
@@ -351,7 +370,6 @@ func convertDateString(_ dateString: String, format: String) -> String? {
     
     return outputFormatter.string(from: date)
 }
-
 
 #Preview {
     OrdersContentView(ordersData: .constant([]), filterOSSList: .constant([]), onOrderTap: {_ in 

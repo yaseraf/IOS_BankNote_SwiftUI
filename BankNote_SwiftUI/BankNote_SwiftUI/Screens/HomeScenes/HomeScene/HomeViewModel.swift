@@ -56,6 +56,19 @@ extension HomeViewModel {
     func openTopUpScene(transactionType: TransactionTypes) {
         coordinator.openTopUpScene(transactionType: transactionType)
     }
+    
+    func openStockDetailsScene(symbol: String, marketType: String, custodianID: String, custodianName: String) {
+        
+        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == UserDefaultController().selectedSymbol ?? ""}).first ?? .testUIModel()
+
+        UserDefaultController().selectedSymbol = symbol
+        UserDefaultController().selectedSymbolID = selectedStock.symbolID
+        UserDefaultController().selectedSymbolType = marketType
+        UserDefaultController().selectedCustodian = custodianID
+        UserDefaultController().selectedCustodianName = custodianName
+        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().openStockDetailsScene(symbol: symbol, marketType: marketType)
+    }
+
 }
 
 // MARK: API Calls

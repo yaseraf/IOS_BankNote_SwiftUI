@@ -111,6 +111,12 @@
 "order_value" = "قيمة الطلب";
 "place_order" = "تنفيذ الطلب";
 "cancel" = "إلغاء";
+"order_no" = "رقم الطلب";
+"order_type" = "نوع الطلب";
+"limit_order" = "أمر محدد";
+"market_order" = "أمر سوق";
+"good_till" = "صالح حتى";
+"rejection_reason" = "سبب الرفض";
 
 
 // MARK: Settings Screen

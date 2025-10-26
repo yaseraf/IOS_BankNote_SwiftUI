@@ -111,6 +111,12 @@
 "order_value" = "Order Value";
 "place_order" = "Place Order";
 "cancel" = "Cancel";
+"order_no" = "Order No.";
+"order_type" = "Order Type";
+"limit_order" = "Limit Order";
+"market_order" = "Market Order";
+"good_till" = "Good Till";
+"rejection_reason" = "Rejection Reason";
 
 // MARK: Settings Screen
 "bank_notes" = "BankNotes";

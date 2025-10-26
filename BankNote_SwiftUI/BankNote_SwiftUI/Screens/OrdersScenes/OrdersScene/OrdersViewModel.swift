@@ -43,6 +43,10 @@ extension OrdersViewModel {
 
         coordinator.openOrderEntryScene(orderDetails: .initializer(), isEditOrder: false)
     }
+    
+    func openOrderEditScene(orderDetails: OrderListUIModel) {
+        coordinator.openOrderEditScene(orderDetails: orderDetails, delegate: self)
+    }
 }
 
 // MARK: Mock Data
@@ -164,3 +168,22 @@ extension OrdersViewModel {
     }
 
 }
+
+
+// MARK: Delegates
+extension OrdersViewModel: OrderEditDelegate {
+    func onCancelOrder() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.sendOrdersSignalR()
+        }
+    }
+    func onEditOrder(order: OrderListUIModel) {
+        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == order.Symbol}).first ?? .testUIModel()
+        UserDefaultController().selectedSymbol = order.Symbol
+        UserDefaultController().selectedSymbolID = selectedStock.symbolID
+        UserDefaultController().selectedSymbolType = selectedStock.marketType
+
+        coordinator.openOrderEntryScene(orderDetails: order, isEditOrder: true)
+    }
+}
+

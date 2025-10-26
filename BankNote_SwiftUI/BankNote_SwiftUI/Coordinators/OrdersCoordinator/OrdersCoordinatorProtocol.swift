@@ -13,4 +13,5 @@ protocol OrdersCoordinatorProtocol: AnyObject,Coordinator {
     func openOrdersScene()
     func openOrderEntryScene(orderDetails: OrderListUIModel, isEditOrder: Bool)
     func openOrderDetailsScene(orderPreview: OrderListUIModel, riskManagementData: GetRiskManagementUIModel, isEditOrder: Bool)
+    func openOrderEditScene(orderDetails: OrderListUIModel, delegate: OrderEditDelegate)
 }

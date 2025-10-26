@@ -39,6 +39,14 @@ class OrderEntryViewModel: ObservableObject {
         self.lookupsUseCase = lookupsUseCase
         self.orderDetails = orderDetails
         self.isEditOrder = isEditOrder
+        
+        if isEditOrder {
+            shares = orderDetails.TotalVolume ?? ""
+            price = orderDetails.Price ?? ""
+            
+            orderPriceType = orderDetails.OrderTypeCode == "1" ? .market : .limit
+            placeOrderType = orderDetails.SellBuyFlag?.lowercased() == "b" ? .buy : .sell
+        }
     }
 }
 

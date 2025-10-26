@@ -56,5 +56,16 @@ extension OrdersCoordinator:OrdersCoordinatorProtocol {
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openOrderEditScene(orderDetails: OrderListUIModel, delegate: OrderEditDelegate) {
+        let viewModel = OrderEditViewModel(coordinator: self, orderDetails: orderDetails, delegate: delegate)
+        let view = OrderEditScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        viewController.view.backgroundColor = .clear
+        viewController.modalPresentationStyle = .pageSheet
+        viewController.sheetPresentationController?.detents = [.medium()]
+        self.navigationController.topViewController?.present(viewController, animated: true)
+    }
 
 }

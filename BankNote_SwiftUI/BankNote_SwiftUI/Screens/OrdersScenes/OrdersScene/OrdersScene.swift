@@ -17,8 +17,9 @@ struct OrdersScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                OrdersContentView(ordersData: $viewModel.ordersData, filterOSSList: $viewModel.filterOSSList, onOrderTap: { symbol in
-                    viewModel.openOrderEntryScreen(symbol: symbol)
+                OrdersContentView(ordersData: $viewModel.ordersData, filterOSSList: $viewModel.filterOSSList, onOrderTap: { order in
+//                    viewModel.openOrderEntryScreen(symbol: symbol)
+                    viewModel.openOrderEditScene(orderDetails: order)
                 })
             })
             .onAppear {

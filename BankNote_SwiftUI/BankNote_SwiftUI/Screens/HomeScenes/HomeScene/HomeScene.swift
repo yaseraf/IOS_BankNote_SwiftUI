@@ -19,6 +19,8 @@ struct HomeScene: BaseSceneType {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 HomeContentView(portfolioData: $viewModel.portfolioData, onTopUpTap: {
                     viewModel.openTopUpScene(transactionType: .topUp)
+                }, onStockTap: { symbol, marketType, custodianID, custodianName in
+                    viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType, custodianID: custodianID, custodianName: custodianName)
                 }, onWithdrawalTap: {
                     viewModel.openTopUpScene(transactionType: .withdrawal)
                 })

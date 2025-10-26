@@ -15,6 +15,7 @@ struct HomeContentView: View {
     @State var isBalanceHidden:Bool = false
     
     var onTopUpTap:()->Void
+    var onStockTap:(String, String, String, String) -> Void
     var onWithdrawalTap:()->Void
     
     var body: some View {
@@ -179,7 +180,12 @@ struct HomeContentView: View {
             if portfolioData.wrappedValue?.portfolioes.isEmpty == false{
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(0...3, id: \.self) { id in
-                        PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
+                        Button {
+                            onStockTap(portfolioData.wrappedValue?.portfolioes[id].symbol ?? "", portfolioData.wrappedValue?.portfolioes[id].marketType ?? "", portfolioData.wrappedValue?.portfolioes[id].custodianID ?? "", AppUtility.shared.isRTL ? portfolioData.wrappedValue?.portfolioes[id].custodianA ?? "" : portfolioData.wrappedValue?.portfolioes[id].custodianE ?? "")
+                        } label: {
+                            PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
+                        }
+
                     }
                 }
                 .padding(.bottom, 80)
@@ -233,6 +239,7 @@ struct PortfolioCell: View {
                     Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: portfolioData.prClosePrice ?? 0))")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
+                .foregroundStyle(.black)
             }
             
             Spacer()
@@ -268,6 +275,8 @@ struct PortfolioCell: View {
 
 #Preview {
     HomeContentView(portfolioData: .constant(.initializer()), onTopUpTap: {
+        
+    }, onStockTap: { _,_,_,_ in
         
     }, onWithdrawalTap: {
         

@@ -31,6 +31,7 @@ struct OrderEntryContentView: View {
     var netChangePerc:Binding<String>
     var lastTradePrice:Binding<String>
     var flagMessage:Binding<String>
+    var isEditOrder:Binding<Bool>
     
     var onContinueTap: () -> Void
     var onValuesChange:() -> Void
@@ -191,7 +192,7 @@ struct OrderEntryContentView: View {
                 } else {
                     Button {
                         selectedOrderPriceType.wrappedValue = .market
-                        cashInputValue.wrappedValue = "0"
+//                        cashInputValue.wrappedValue = "0"
                         onValuesChange()
                     } label: {
                         Text("market_price".localized)
@@ -219,6 +220,9 @@ struct OrderEntryContentView: View {
                 } else {
                     Button {
                         selectedOrderPriceType.wrappedValue = .limit
+                        if isEditOrder.wrappedValue == true {
+                            cashInputValue.wrappedValue = orderDetails.wrappedValue?.Price ?? ""
+                        }
                     } label: {
                         Text("limit_price".localized)
                             .font(.cairoFont(.semiBold, size: 12))
@@ -465,7 +469,7 @@ struct OrderEntryContentView: View {
 }
 
 #Preview {
-    OrderEntryContentView(cashInputValue: .constant(""), stocksInputValue: .constant(""), selectedOrderPriceType: .constant(.limit), newMarketSymbol: .constant(.initializer()), orderDetails: .constant(.initializer()), netChange: .constant(""), netChangePerc: .constant(""), lastTradePrice: .constant(""), flagMessage: .constant(""), onContinueTap: {
+    OrderEntryContentView(cashInputValue: .constant(""), stocksInputValue: .constant(""), selectedOrderPriceType: .constant(.limit), newMarketSymbol: .constant(.initializer()), orderDetails: .constant(.initializer()), netChange: .constant(""), netChangePerc: .constant(""), lastTradePrice: .constant(""), flagMessage: .constant(""), isEditOrder: .constant(false), onContinueTap: {
         
     }, onValuesChange: {
         

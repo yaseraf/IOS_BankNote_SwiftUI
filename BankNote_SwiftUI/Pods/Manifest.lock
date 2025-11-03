@@ -1,0 +1,16 @@
+PODS:
+  - VIDVLiveness (2.3.2)
+
+DEPENDENCIES:
+  - VIDVLiveness (= 2.3.2)
+
+SPEC REPOS:
+  trunk:
+    - VIDVLiveness
+
+SPEC CHECKSUMS:
+  VIDVLiveness: 3b081887b458418e3cfedd8af19491159f97b885
+
+PODFILE CHECKSUM: 92abe20f5048c841cce8af55c474b8127b07ed73
+
+COCOAPODS: 1.16.2

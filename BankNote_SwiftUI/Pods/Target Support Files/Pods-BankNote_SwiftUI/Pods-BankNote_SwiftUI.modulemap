@@ -1,0 +1,6 @@
+framework module Pods_BankNote_SwiftUI {
+  umbrella header "Pods-BankNote_SwiftUI-umbrella.h"
+
+  export *
+  module * { export * }
+}

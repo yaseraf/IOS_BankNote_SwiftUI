@@ -12,6 +12,7 @@ import MapKit
 class VerifySignUpViewModel: ObservableObject {
     private let coordinator: AuthCoordinatorProtocol
     private let useCase: KYCUseCaseProtocol
+    private let valifyUseCase: ValifyUseCase
     var anyCancellable: AnyCancellable? = nil
 
     @Published var verificationType: VerificationType
@@ -31,10 +32,18 @@ class VerifySignUpViewModel: ObservableObject {
     @Published var validateOTPBusinessRequestAPIResult:APIResultType<ValidateOtpBusinessRequestUIModel>?
     @Published var verifyEmailWithOtpAPIResult:APIResultType<VerifyEmailWithOtpUIModel>?
     @Published var getKYCCibcAPIResult:APIResultType<GetKYCCibcUIModel>?
+    
+    // MARK: VALIFY
+    @Published var verifyPhoneOtpValifyAPIResult:APIResultType<VerifyPhoneOtpValifyUIModel>?
+    @Published var verifyEmailOtpValifyAPIResult:APIResultType<VerifyEmailOtpValifyUIModel>?
+    @Published var sendPhoneOtpValifyAPIResult:APIResultType<SendPhoneOtpValifyUIModel>?
+    @Published var sendEmailOtpValifyAPIResult:APIResultType<SendEmailOtpValifyUIModel>?
 
-    init(coordinator: AuthCoordinatorProtocol, useCase: KYCUseCaseProtocol, verificationType: VerificationType, phone: String, email: String, otpExpirationTimer: Double?, timerViewModel:OTPTimerViewModel, otpRequestID: String, transactionID: String, requestIDVlens:String, isVlens:Bool) {
+    init(coordinator: AuthCoordinatorProtocol, useCase: KYCUseCaseProtocol, valifyUseCase: ValifyUseCase, verificationType: VerificationType, phone: String, email: String, otpExpirationTimer: Double?, timerViewModel:OTPTimerViewModel, otpRequestID: String, transactionID: String, requestIDVlens:String, isVlens:Bool) {
         self.coordinator = coordinator
         self.useCase = useCase
+        self.valifyUseCase = valifyUseCase
+
         self.verificationType = verificationType
         self.phone = phone
         self.email = email
@@ -57,16 +66,23 @@ extension VerifySignUpViewModel {
         coordinator.openSignUpScene(verificationType: .email, verifyWithEmail: true)
     }
     
+    func popViewController() {
+        coordinator.popViewController()
+    }
+    
     func openChooseNationalityScene() {
         coordinator.openChooseNationalityScene()
     }
     
-    func nextScene(verifyWithEmail: Bool, phoneNumber: String){
+    func nextScene(verifyWithEmail: Bool, phoneNumber: String) {
         endTimerIfNeed()
         if !verifyWithEmail {
             coordinator.openSignUpScene(verificationType: !verifyWithEmail ? .email : .phone, verifyWithEmail: true)
         } else {
-            coordinator.openChooseNationalityScene()
+            
+            // Go to front and back id scanning
+            coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
+//            coordinator.openChooseNationalityScene()
         }
     }
 
@@ -74,6 +90,126 @@ extension VerifySignUpViewModel {
 
 // MARK: API Calls
 extension VerifySignUpViewModel {
+    
+    // MARK: VALIFY
+    
+    func verifyPhoneOtpValifyAPI(otp: String, isVerifyingWithEmail: Bool) {
+        let requestModel = VerifyPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", OTP: otp, TransactionId: transactionID, reqID: "14691")
+        
+        verifyPhoneOtpValifyAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await valifyUseCase.VerifyPhoneOtpValify(requestModel: requestModel) {[weak self] result in
+                self?.verifyPhoneOtpValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    if success.IsSuccessful ?? false {
+                        self?.nextScene(verifyWithEmail: isVerifyingWithEmail, phoneNumber: self?.phone ?? "")
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
+                    }
+
+
+                    debugPrint("Send phone otp valify success")
+                    
+                case .failure(let failure):
+                    self?.verifyPhoneOtpValifyAPIResult = .onFailure(error: failure)
+                    debugPrint("Send phone otp valify failed: \(failure)")
+                }
+            }
+        }
+    }
+    
+    func verifyEmailOtpValifyAPI(otp: String, isVerifyingWithEmail: Bool) {
+        let requestModel = VerifyEmailOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", OTP: otp, TransactionId: transactionID, reqID: "14691")
+        
+        verifyEmailOtpValifyAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await valifyUseCase.VerifyEmailOtpValify(requestModel: requestModel) {[weak self] result in
+                self?.verifyEmailOtpValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    if success.IsSuccessful ?? false {
+                        self?.nextScene(verifyWithEmail: isVerifyingWithEmail, phoneNumber: self?.phone ?? "")
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
+                    }
+
+
+                    debugPrint("Send phone otp valify success")
+                    
+                case .failure(let failure):
+                    self?.verifyEmailOtpValifyAPIResult = .onFailure(error: failure)
+                    debugPrint("Send phone otp valify failed: \(failure)")
+                }
+            }
+        }
+    }
+    
+    func sendPhoneOtpValifyAPI(phoneNumber: String) {
+        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber, reqID: "14691")
+        
+        sendPhoneOtpValifyAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await valifyUseCase.SendPhoneOtpValify(requestModel: requestModel) {[weak self] result in
+                self?.sendPhoneOtpValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    if success.IsSuccessful ?? false {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "resend_code_status".localized)
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
+                    }
+
+
+                    debugPrint("Send phone otp valify success")
+                    
+                case .failure(let failure):
+                    self?.sendPhoneOtpValifyAPIResult = .onFailure(error: failure)
+                    debugPrint("Send phone otp valify failed: \(failure)")
+                }
+            }
+        }
+    }
+    
+    func sendEmailOtpValifyAPI(email:String) {
+        let requestModel = SendEmailOtpValifyRequestModel(Email: email, Lang: AppUtility.shared.isRTL ? "ar" : "en", reqID: "14691")
+        
+        sendEmailOtpValifyAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await valifyUseCase.SendEmailOtpValify(requestModel: requestModel) {[weak self] result in
+                self?.sendEmailOtpValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    if success.IsSuccessful ?? false {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "resend_code_status".localized)
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
+                    }
+
+
+                    debugPrint("Send email otp valify success")
+                    
+                case .failure(let failure):
+                    self?.sendEmailOtpValifyAPIResult = .onFailure(error: failure)
+                    debugPrint("Send email otp valify failed: \(failure)")
+                }
+            }
+        }
+    }
+
+
+    
+    // MARK: VLENS
+    
+    
     func verifyPhoneOtpAPI(success: Bool, phoneNumber: String, phoneNumberOtp: String, phoneNumberOtpRequestId: String, isVerifyingWithEmail: Bool) {
                 
         let requestModel = VerifyPhoneOtpRequestModel(PhoneNumber: phoneNumber, PhoneNumberOtp: phoneNumberOtp, PhoneNumberOtpRequestId: phoneNumberOtpRequestId)

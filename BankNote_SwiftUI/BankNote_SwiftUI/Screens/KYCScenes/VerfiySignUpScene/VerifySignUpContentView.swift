@@ -10,6 +10,24 @@ import SwiftUI
 
 
 struct VerifySignUpContentView: View {
+    
+    enum FocusPin {
+        case pinOne
+        case pinTwo
+        case pinThree
+        case pinFour
+        case pinFive
+        case pinSix
+    }
+    
+    @FocusState var selectedPin:FocusPin?
+    @State var pinOne:String = ""
+    @State var pinTwo:String = ""
+    @State var pinThree:String = ""
+    @State var pinFour:String = ""
+    @State var pinFive:String = ""
+    @State var pinSix:String = ""
+
         
     var verificationType:Binding<VerificationType>
     var timerObserve:Binding<(Int, String)?>
@@ -29,7 +47,8 @@ struct VerifySignUpContentView: View {
                 
                 titleView
                 
-                PinFieldView(pin: pin)
+                pinsView
+//                PinFieldView(pin: pin)
                 
                 bottomView
                 
@@ -71,25 +90,128 @@ struct VerifySignUpContentView: View {
                 .font(.cairoFont(.semiBold, size: 18))
             Text("\("enter_the_6_digit_verification_code_we_sent_to".localized) \(verificationType.wrappedValue == .phone ? phone.wrappedValue : email.wrappedValue)")
                 .font(.cairoFont(.light, size: 12))
-                .padding(.horizontal, 77)
+                .padding(.horizontal, 38)
                 .multilineTextAlignment(.center)
             
         }
+        .frame(maxWidth: .infinity)
     }
     
+    private var pinsView: some View {
+        HStack(spacing: 8) {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1)
+                .frame(width: 41, height: 50)
+                .overlay {
+                    TextField("-", text: $pinOne)
+                        .modifier(OtpModifer(pin: $pinOne))
+                        .onChange(of: pinOne) { newValue in
+                            if newValue.count == 1 {
+                                selectedPin = .pinTwo
+                            }
+                        }
+                        .focused($selectedPin, equals: .pinOne)
+                        .textContentType(.oneTimeCode)
+                }
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1)
+                .frame(width: 41, height: 50)
+                .overlay {
+                    TextField("-", text: $pinTwo)
+                        .modifier(OtpModifer(pin: $pinTwo))
+                        .onChange(of: pinTwo) { newValue in
+                            if newValue.isEmpty {
+                                selectedPin = .pinOne
+                            } else if newValue.count == 1 {
+                                selectedPin = .pinThree
+                            }
+                        }
+                        .focused($selectedPin, equals: .pinTwo)
+                        .textContentType(.oneTimeCode)
+                }
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1)
+                .frame(width: 41, height: 50)
+                .overlay {
+                    TextField("-", text: $pinThree)
+                        .modifier(OtpModifer(pin: $pinThree))
+                        .onChange(of: pinThree) { newValue in
+                            if newValue.isEmpty {
+                                selectedPin = .pinTwo
+                            } else if newValue.count == 1 {
+                                selectedPin = .pinFour
+                            }
+                        }
+                        .focused($selectedPin, equals: .pinThree)
+                        .textContentType(.oneTimeCode)
+                }
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1)
+                .frame(width: 41, height: 50)
+                .overlay {
+                    TextField("-", text: $pinFour)
+                        .modifier(OtpModifer(pin: $pinFour))
+                        .onChange(of: pinFour) { newValue in
+                            if newValue.isEmpty {
+                                selectedPin = .pinThree
+                            } else if newValue.count == 1 {
+                                selectedPin = .pinFive
+                            }
+                        }
+                        .focused($selectedPin, equals: .pinFour)
+                        .textContentType(.oneTimeCode)
+                }
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1)
+                .frame(width: 41, height: 50)
+                .overlay {
+                    TextField("-", text: $pinFive)
+                        .modifier(OtpModifer(pin: $pinFive))
+                        .onChange(of: pinFive) { newValue in
+                            if newValue.isEmpty {
+                                selectedPin = .pinFour
+                            } else if newValue.count == 1 {
+                                selectedPin = .pinSix
+                            }
+                        }
+                        .focused($selectedPin, equals: .pinFive)
+                        .textContentType(.oneTimeCode)
+                }
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1)
+                .frame(width: 41, height: 50)
+                .overlay {
+                    TextField("-", text: $pinSix)
+                        .modifier(OtpModifer(pin: $pinSix))
+                        .onChange(of: pinSix) { newValue in
+                            if newValue.isEmpty {
+                                selectedPin = .pinFive
+                            } else {
+                                selectedPin = nil // dismiss focus at last digit
+                            }
+                        }
+                        .focused($selectedPin, equals: .pinSix)
+                        .textContentType(.oneTimeCode)
+                }
+        }
+        .padding(.horizontal, 53)
+        .padding(.bottom, 52)
+    }
+
+    
     private var bottomView: some View {
-        
+        let timeInt = timerObserve.wrappedValue?.0 ?? 0
+
         var resentAttribute: AttributedString {
-            var str = AttributedString("\("resend_link".localized) in \(timerObserve.wrappedValue?.1 ?? "")")
+            var str = AttributedString(timeInt > 0 ? "\("resend_link".localized) in \(timeInt)" : "click_to_resend_otp".localized)
             str.underlineStyle = .single
             return str
         }
         
-        let timeInt = timerObserve.wrappedValue?.0 ?? 0
 
         return VStack {
             Button {
-                onContinueTap(pin.wrappedValue, verificationType.wrappedValue == .email ? true : false, isVLens.wrappedValue)
+                onContinueTap(pinOne+pinTwo+pinThree+pinFour+pinFive+pinSix, verificationType.wrappedValue == .email ? true : false, isVLens.wrappedValue)
             } label: {
                 Text("confirm".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -97,7 +219,7 @@ struct VerifySignUpContentView: View {
                     .frame(minWidth: 357, minHeight: 51)
                     .background(RoundedRectangle(cornerRadius: 99).fill(Color.colorPrimary))
             }
-            
+        
             Spacer().frame(height: 24)
             
             Button {
@@ -107,6 +229,7 @@ struct VerifySignUpContentView: View {
                     .font(.cairoFont(.semiBold, size: 14))
                     .foregroundStyle(Color(hex: "#828282"))
             }
+            .disabled(timeInt > 0)
             
             Spacer().frame(height: 34)
             
@@ -207,7 +330,7 @@ struct PinFieldView: View {
 #Preview {
     VerifySignUpContentView(verificationType: .constant(.email), timerObserve: .constant((1,"1")), isVLens: .constant(false), phone: .constant(""), email: .constant(""), pin: .constant(""), onBack: {
         
-    }, onContinueTap: {_,_,_ in 
+    }, onContinueTap: {_,_,_ in
         
     }, onResendOtpTap: { _ in
         

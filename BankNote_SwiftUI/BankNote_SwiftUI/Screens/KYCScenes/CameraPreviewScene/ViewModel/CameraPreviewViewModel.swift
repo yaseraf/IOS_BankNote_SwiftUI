@@ -2,8 +2,8 @@
 //  CameraPreviewViewModel.swift
 //  mahfazati
 //
-//  Created by Mohammmed on 09/08/2024.
-//  Copyright © 2024 Mohammed Mathkour. All rights reserved.
+//  Created by FIT on 09/08/2024.
+//  Copyright © 2024 FIT. All rights reserved.
 //
 
 import AVFoundation
@@ -14,13 +14,16 @@ import SwiftUI
 class CameraPreviewViewModel:ObservableObject{
     private let coordinator: AuthCoordinatorProtocol
     private let kycUseCase: KYCUseCaseProtocol
-    @Published var viewType: CameraPreviewType
+    private let valifyUseCase: ValifyUseCaseProtocol
     
+    @Published var viewType: CameraPreviewType
     @Published var verifyIDFrontVlensAPIResult:APIResultType<VerifyIDFrontVlensUIModel>?
     @Published var VerifyIDBackAPIResult:APIResultType<VerifyIDBackUIModel>?
+    @Published var getFrontBackValifyAPIResult:APIResultType<GetFrontBackValifiyUIModel>?
     @Published var verifyLivenessAPIResult:APIResultType<VerifyLivenessUIModel>?
     @Published var verifyIDFrontVlensResponse: VerifyIDFrontVlensUIModel?
     @Published var VerifyIDBackResponse: VerifyIDBackUIModel?
+    @Published var getFrontBackValifyResponse: GetFrontBackValifiyUIModel?
     @Published var verifyLivenessResponse: VerifyLivenessUIModel?
     
     @Published var savedImageOne: Image?
@@ -32,9 +35,14 @@ class CameraPreviewViewModel:ObservableObject{
     @Published var captureLiveImage: Bool = false
     @Published var liveCaptureCount: Int = 0
     
-    init(coordinator: AuthCoordinatorProtocol, kycUseCase: KYCUseCaseProtocol, viewType: CameraPreviewType, savedImageOne: Image?, stepIndexBind: Int, isFrontBind: Bool) {
+    @Published var imageFront: String?
+    @Published var imageBack: String?
+    
+    init(coordinator: AuthCoordinatorProtocol, kycUseCase: KYCUseCaseProtocol, valifyUseCase: ValifyUseCaseProtocol, viewType: CameraPreviewType, savedImageOne: Image?, stepIndexBind: Int, isFrontBind: Bool) {
         self.coordinator = coordinator
         self.kycUseCase = kycUseCase
+        self.valifyUseCase = valifyUseCase
+        
         self.viewType = viewType
         self.savedImageOne = savedImageOne
         self.stepIndexBind = stepIndexBind
@@ -42,54 +50,120 @@ class CameraPreviewViewModel:ObservableObject{
     }
     
     func VerifyIDFrontVlensAPI(success: Bool, image: Data) async {
-
-        verifyIDFrontVlensAPIResult = .onLoading(show: true)
-                
+//        KeyChainController().transactionId = success.transactionID
+        
         let compressedString = await resizeImageData(imageData: image, targetSize: CGSize(width: 480, height: 360))
 
-//        let requestModel = VerifyIDFrontVlensRequestModel(Image: compressedString, transaction_id: "", accessToken: KeyChainController().stepCreateAccessToken, Request_Id: KeyChainController().verifyPhoneOtpRequestId)
+        imageFront = compressedString
         
-        //MARK: Template
-        let requestModel = VerifyIDFrontVlensRequestModel(Image: ImagesTemplates.init().frontImageTemplate, transaction_id: "", accessToken: KeyChainController().stepCreateAccessToken, Request_Id: KeyChainController().verifyPhoneOtpRequestId)
+        stepIndexBind += 1
+        isFrontBind = false
+
         
 
+//        verifyIDFrontVlensAPIResult = .onLoading(show: true)
+//
+//        let compressedString = await resizeImageData(imageData: image, targetSize: CGSize(width: 480, height: 360))
+//
+//        let requestModel = VerifyIDFrontVlensRequestModel(Image: compressedString, transaction_id: "", accessToken: KeyChainController().stepCreateAccessToken, Request_Id: KeyChainController().verifyPhoneOtpRequestId)
+//
+//        //MARK: Template
+////        let requestModel = VerifyIDFrontVlensRequestModel(Image: ImagesTemplates.init().frontImageTemplate, transaction_id: "", accessToken: KeyChainController().stepCreateAccessToken, Request_Id: KeyChainController().verifyPhoneOtpRequestId)
+//
+//
+//        Task.init {
+//            await kycUseCase.VerifyIDFrontVlens(requestModel: requestModel) {[weak self] result in
+//                self?.verifyIDFrontVlensAPIResult = .onLoading(show: false)
+//                switch result {
+//                case .success(let success):
+//                    debugPrint("verify id front vlens success")
+//
+//                    if success.services?.validations?.validationErrors?.first?.errors?.first?.message == nil || success.services?.validations?.validationErrors?.first?.errors?.first?.message == "" {
+//                        if success.errorMessage?.isEmpty == true || success.errorMessage == "null" || success.errorMessage == nil {
+//
+//                        } else {
+////                            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "\(success.errorMessage ?? "")")
+////                            self?.stepIndexBind -= 1
+////                            self?.isFrontBind = true
+////                            self?.failedProcess.toggle()
+//                        }
+//
+//                        self?.verifyIDFrontVlensAPIResult = .onSuccess(response: success)
+//                        self?.verifyIDFrontVlensResponse = success
+//                        KeyChainController().transactionId = success.transactionID
+//                        self?.stepIndexBind += 1
+//                        self?.isFrontBind = false
+//                        self?.openVerifyIDConfirmationScene(savedImageOne: self?.savedImageOne, isFrontID: true, address: success.data?.idFrontData?.address ?? "", name: success.data?.idFrontData?.name ?? "", dateOfBirth: success.data?.idFrontData?.dateOfBirth ?? "", idNumber: success.data?.idFrontData?.idNumber ?? "", idKey: success.data?.idFrontData?.idKey ?? "", gender: "", jobTitle: "", religion: "", maritalStatus: "")
+//                    } else {
+//                        self?.verifyIDFrontVlensAPIResult = .onFailure(error: .custom(error: success.services?.validations?.validationErrors?.first?.errors?.first?.message ?? ""))
+////                        SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "\(success.ErrorMessage)")
+//                        self?.stepIndexBind -= 1
+//                        self?.isFrontBind = true
+//                        self?.failedProcess.toggle()
+//
+//                    }
+//
+//
+//                case .failure(let failure):
+//                        debugPrint("verify id front vlens failed")
+//                        self?.verifyIDFrontVlensAPIResult = .onFailure(error: failure)
+//                    self?.stepIndexBind -= 1
+//                    self?.isFrontBind = true
+//                    self?.failedProcess.toggle()
+//
+//                }
+//            }
+//        }
+    }
+    
+    func getFrontBackValifyAPI(success: Bool, image: Data) async {
+
+        getFrontBackValifyAPIResult = .onLoading(show: true)
+                
+        let compressedString = await resizeImageData(imageData: image, targetSize: CGSize(width: 480, height: 360))
+        
+        imageBack = compressedString
+
+//        let requestModel = VerifyIDBackRequestModel(Image: compressedString, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
+        
+        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: imageBack, IdFrontBase64: imageFront, reqID: "14691")
+//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: "", IdFrontBase64: "", reqID: "14691")
+        
+        //MARK: Template
+//        let requestModel = VerifyIDBackRequestModel(Image: ImagesTemplates.init().backImageTemplate, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
+        
+
+        
         Task.init {
-            await kycUseCase.VerifyIDFrontVlens(requestModel: requestModel) {[weak self] result in
-                self?.verifyIDFrontVlensAPIResult = .onLoading(show: false)
+            await valifyUseCase.GetFrontBackValify(requestModel: requestModel) {[weak self] result in
+                self?.getFrontBackValifyAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
-                    debugPrint("verify id front vlens success")
+                    debugPrint("GetFrontBackValify success")
                     
-                    if success.services?.validations?.validationErrors?.first?.errors?.first?.message == nil || success.services?.validations?.validationErrors?.first?.errors?.first?.message == "" {
-                        if success.errorMessage?.isEmpty == true || success.errorMessage == "null" || success.errorMessage == nil {
-                            
-                        } else {
-//                            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "\(success.errorMessage ?? "")")
-//                            self?.stepIndexBind -= 1
-//                            self?.isFrontBind = true
-//                            self?.failedProcess.toggle()
-                        }
+                    if success.IsSuccessful == true {
                         
-                        self?.verifyIDFrontVlensAPIResult = .onSuccess(response: success)
-                        self?.verifyIDFrontVlensResponse = success
-                        KeyChainController().transactionId = success.transactionID
+                        self?.getFrontBackValifyAPIResult = .onSuccess(response: success)
+                        self?.getFrontBackValifyResponse = success
+//                        self?.coordinator.openTakeSelfieScene(livenessCheck: true)
+                        self?.coordinator.openLivenessCheckScene()
+//                        self?.openVerifyIDConfirmationScene(savedImageOne: self?.savedImageOne, isFrontID: false, address: "", name: "", dateOfBirth: "", idNumber: "", idKey: "", gender: success.data?.idBackData?.gender ?? "", jobTitle: success.data?.idBackData?.jobTitle ?? "", religion: success.data?.idBackData?.religion ?? "", maritalStatus: success.data?.idBackData?.maritalStatus ?? "")
+//                        self?.nextScene()
                         self?.stepIndexBind += 1
-                        self?.isFrontBind = false
-                        self?.openVerifyIDConfirmationScene(savedImageOne: self?.savedImageOne, isFrontID: true, address: success.data?.idFrontData?.address ?? "", name: success.data?.idFrontData?.name ?? "", dateOfBirth: success.data?.idFrontData?.dateOfBirth ?? "", idNumber: success.data?.idFrontData?.idNumber ?? "", idKey: success.data?.idFrontData?.idKey ?? "", gender: "", jobTitle: "", religion: "", maritalStatus: "")
+                        
+
                     } else {
-                        self?.verifyIDFrontVlensAPIResult = .onFailure(error: .custom(error: success.services?.validations?.validationErrors?.first?.errors?.first?.message ?? ""))
-//                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "\(success.errorMessage)")
+                        self?.getFrontBackValifyAPIResult = .onFailure(error: .custom(error: success.ErrorMsg ?? ""))
+//                        SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "\(success.ErrorMessage)")
                         self?.stepIndexBind -= 1
-                        self?.isFrontBind = true
                         self?.failedProcess.toggle()
+
                     }
                     
-                    
                 case .failure(let failure):
-                    debugPrint("verify id front vlens failed")
-                    self?.verifyIDFrontVlensAPIResult = .onFailure(error: failure)
+                        debugPrint("GetFrontBackValify failed")
+                        self?.getFrontBackValifyAPIResult = .onFailure(error: failure)
                     self?.stepIndexBind -= 1
-                    self?.isFrontBind = true
                     self?.failedProcess.toggle()
 
                 }
@@ -103,10 +177,10 @@ class CameraPreviewViewModel:ObservableObject{
                 
         let compressedString = await resizeImageData(imageData: image, targetSize: CGSize(width: 480, height: 360))
 
-//        let requestModel = VerifyIDBackRequestModel(Image: compressedString, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
+        let requestModel = VerifyIDBackRequestModel(Image: compressedString, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
         
         //MARK: Template
-        let requestModel = VerifyIDBackRequestModel(Image: ImagesTemplates.init().backImageTemplate, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
+//        let requestModel = VerifyIDBackRequestModel(Image: ImagesTemplates.init().backImageTemplate, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
         
 
         
@@ -135,7 +209,7 @@ class CameraPreviewViewModel:ObservableObject{
 
                     } else {
                         self?.VerifyIDBackAPIResult = .onFailure(error: .custom(error: success.services?.validations?.validationErrors?.first?.errors?.first?.message ?? ""))
-//                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "\(success.errorMessage)")
+//                        SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "\(success.ErrorMessage)")
                         self?.stepIndexBind -= 1
                         self?.failedProcess.toggle()
 
@@ -161,22 +235,22 @@ class CameraPreviewViewModel:ObservableObject{
         let compressedString3 = await resizeImageDataForLiveness(imageData: image3, targetSize: CGSize(width: 500, height: 500))
 
         
-//        let requestModel = VerifyLivenessRequestModel(
-//            Face1: compressedString1,
-//            Face2: compressedString2,
-//            Face3: compressedString3,
-//            Request_Id: KeyChainController().verifyPhoneOtpRequestId,
-//            accessToken: KeyChainController().stepCreateAccessToken,
-//            transaction_id: KeyChainController().transactionId)
-        
-        //MARK: Template
         let requestModel = VerifyLivenessRequestModel(
-            Face1: ImagesTemplates.init().livenessFace1Template,
-            Face2: ImagesTemplates.init().livenessFace2Template,
-            Face3: ImagesTemplates.init().livenessFace3Template,
+            Face1: compressedString1,
+            Face2: compressedString2,
+            Face3: compressedString3,
             Request_Id: KeyChainController().verifyPhoneOtpRequestId,
             accessToken: KeyChainController().stepCreateAccessToken,
             transaction_id: KeyChainController().transactionId)
+        
+        //MARK: Template
+//        let requestModel = VerifyLivenessRequestModel(
+//            Face1: ImagesTemplates.init().livenessFace1Template,
+//            Face2: ImagesTemplates.init().livenessFace2Template,
+//            Face3: ImagesTemplates.init().livenessFace3Template,
+//            Request_Id: KeyChainController().verifyPhoneOtpRequestId,
+//            accessToken: KeyChainController().stepCreateAccessToken,
+//            transaction_id: KeyChainController().transactionId)
         
 
 
@@ -239,20 +313,20 @@ class CameraPreviewViewModel:ObservableObject{
       }
     }
     
-    func detectFace(sampleBuffer: CMSampleBuffer, cameraPosition: AVCaptureDevice.Position) {
-        if self.viewType != .selfieMode(liveness: true) {return} // Terminate if screen is not in liveness step
-        
+//    func detectFace(sampleBuffer: CMSampleBuffer, cameraPosition: AVCaptureDevice.Position) {
+//        if self.viewType != .selfieMode(liveness: true) {return} // Terminate if screen is not in liveness step
+//
 //        let visionImage = VisionImage(buffer: sampleBuffer)
 //        visionImage.orientation = imageOrientation(deviceOrientation: UIDevice.current.orientation, cameraPosition: cameraPosition)
-//        
+//
 //        let options = FaceDetectorOptions()
 //        options.performanceMode = .accurate
 //        options.landmarkMode = .all
 //        options.classificationMode = .all
-//        
+//
 //        let faceDetector = FaceDetector.faceDetector(options: options)
-        
-        weak var weakSelf = self
+//
+//        weak var weakSelf = self
 //        faceDetector.process(visionImage) { faces, error in
 //          guard let strongSelf = weakSelf else {
 //              debugPrint("Self is nil!")
@@ -264,15 +338,15 @@ class CameraPreviewViewModel:ObservableObject{
 //            return
 //          }
 ////            debugPrint("Detected face: \(faces.count)")
-//            
-//            
-//            
+//
+//
+//
 //            for face in faces {
 //                let frame = face.frame
 //                if face.hasHeadEulerAngleX {
 //                    let rotX = face.headEulerAngleX  // Head is rotated to the uptoward rotX degrees
 //                    debugPrint("Face X rotation: \(rotX)")
-//                    
+//
 //                    if rotX >= -10 && rotX <= 10 {
 //                        // Head straight
 //                        if self.liveCaptureCount == 0 {
@@ -287,10 +361,10 @@ class CameraPreviewViewModel:ObservableObject{
 //
 //                        }
 //                    }
-// 
+//
 //                    if UserDefaultController().isHeadHorizontalMovement == false {
-//                        
-//                        
+//
+//
 //                        if rotX <= -15 {
 //                            // Head up
 //                            if self.liveCaptureCount == 1 {
@@ -298,7 +372,7 @@ class CameraPreviewViewModel:ObservableObject{
 //                                self.liveCaptureCount += 1
 //                                debugPrint("Captured X rotation: \(rotX)")
 //                            }
-//                            
+//
 //                        } else if rotX >= 15 {
 //                            // Head down
 //                            if self.liveCaptureCount == 2 {
@@ -312,7 +386,7 @@ class CameraPreviewViewModel:ObservableObject{
 //                if face.hasHeadEulerAngleY {
 //                    let rotY = face.headEulerAngleY  // Head is rotated to the right rotY degrees
 //                    debugPrint("Face Y rotation: \(rotY)")
-//                    
+//
 //                    if UserDefaultController().isHeadHorizontalMovement == true{
 //                        if rotY <= -15 {
 //                            // Head right
@@ -321,7 +395,7 @@ class CameraPreviewViewModel:ObservableObject{
 //                                self.liveCaptureCount += 1
 //                                debugPrint("Captured Y rotation: \(rotY)")
 //                            }
-//                            
+//
 //                        } else if rotY >= 15 {
 //                            // Head left
 //                            if self.liveCaptureCount == 2 {
@@ -338,8 +412,8 @@ class CameraPreviewViewModel:ObservableObject{
 //                }
 //            }
 //        }
-        
-    }
+//
+//    }
     
     func resizeImageDataForFaceDetector(imageData: Data?, targetSize: CGSize) async -> UIImage? {
         
@@ -367,19 +441,19 @@ class CameraPreviewViewModel:ObservableObject{
     func resizeImageDataForLiveness(imageData: Data, targetSize: CGSize) async -> String? {
 //            // Convert Data to UIImage
 //            guard let image = UIImage(data: imageData) else { return nil }
-//            
+//
 //            // Calculate the scaling factor to get the target width
 //            let scale = targetWidth / image.size.width
 //            let targetHeight = image.size.height * scale
-//            
+//
 //            // Resize the image using UIGraphicsImageRenderer
 //            let resizedImage = UIGraphicsImageRenderer(size: CGSize(width: targetWidth, height: targetHeight)).image { _ in
 //                image.draw(in: CGRect(origin: .zero, size: CGSize(width: targetWidth, height: targetHeight)))
 //            }
-//            
+//
 //            // Compress the resized image (change 0.8 to adjust compression quality)
 //            guard let compressedData = resizedImage.jpegData(compressionQuality: 0.8) else { return nil }
-//            
+//
 //            // Convert to Base64 string
 //            return compressedData.base64EncodedString()
         
@@ -458,9 +532,10 @@ class CameraPreviewViewModel:ObservableObject{
         }
     }
     
-     func handleImageData(imageDataOne:Data?,ImageDataTwo:Data?) {
+     func handleImageData(imageDataOne:Data?,ImageDataTwo:Data?)
+    {
         nextScene()
-     }
+    }
 
     private func nextScene() {
         switch viewType {
@@ -483,14 +558,11 @@ extension CameraPreviewViewModel{
 
     private func openQuestionnaireRegisterScene(){
 //        coordinator.openQuestionnaireRegisterScene()
-        coordinator.openQuestioneerScene()
 
     }
     
     private func openVerifyIDConfirmationScene(savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String, gender:String, jobTitle:String, religion:String, maritalStatus:String) {
-//        coordinator.openVerifyIDConfirmation(delegate: self, savedImageOne: savedImageOne, isFrontID: isFrontID, address: address, name: name, dateOfBirth: dateOfBirth, idNumber: idNumber, idKey: idKey, gender: gender, jobTitle: jobTitle, religion: religion, maritalStatus: maritalStatus)
-        
-        coordinator.openVerifyScanIDFrontScene(delegate: self, savedImageOne: savedImageOne, isFrontID: isFrontID, address: address, name: name, dateOfBirth: dateOfBirth, idNumber: idNumber, idKey: idKey)
+        coordinator.openVerifyIDConfirmation(delegate: self, savedImageOne: savedImageOne, isFrontID: isFrontID, address: address, name: name, dateOfBirth: dateOfBirth, idNumber: idNumber, idKey: idKey, gender: gender, jobTitle: jobTitle, religion: religion, maritalStatus: maritalStatus)
     }
 
 }
@@ -512,6 +584,8 @@ extension CameraPreviewViewModel: CameraPreviewDelegate {
     func onProceed() {
         self.stepIndexBind += 1
     }
+    
+    
 }
 
 extension UIImage {

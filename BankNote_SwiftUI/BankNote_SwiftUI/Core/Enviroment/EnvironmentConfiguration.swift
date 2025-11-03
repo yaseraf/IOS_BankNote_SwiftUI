@@ -40,12 +40,19 @@ class NetworkConfiguration{
     }
 
     static let development:NetworkConfiguration = .init(
+        
+        // FIT OMAN
 //      basePath: "http://develop.fitoman.com:8090/MobileServices/", signalRDomain: "http://develop.fitoman.com:8090/"
+        
+        // CIBC UAT
 //        basePath: "http://10.120.52.55/MobileServices/", signalRDomain: "http://10.120.52.55/" // uat (development)
 
-      basePath: "https://mahfaztyplus.cicapital.com/MobileServices/", signalRDomain:  "https://mahfaztyplus.cicapital.com/" // NEW
+        // CIBC LIVE
+//      basePath: "https://mahfaztyplus.cicapital.com/MobileServices/", signalRDomain:  "https://mahfaztyplus.cicapital.com/"
+      
+        // VALIFY TESTING
+      basePath: "https://tfit.pioneers-securities.com/MobileServices/", signalRDomain:  "https://tfit.pioneers-securities.com/"
 
-//        basePath: "https://mobile.qatar-securities.com/MobileServiceNew/", signalRDomain: "https://mobile.qatar-securities.com/MobileServiceNew/"
     )
 
     static let preProduction:NetworkConfiguration = .init(

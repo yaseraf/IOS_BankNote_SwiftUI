@@ -2,8 +2,8 @@
 //  AuthCoordinator.swift
 //  mahfazati
 //
-//  Created by Mohammmed on 22/07/2024.
-//  Copyright © 2024 Mohammed Mathkour. All rights reserved.
+//  Created by FIT on 22/07/2024.
+//  Copyright © 2024 FIT. All rights reserved.
 //
 
 import Foundation
@@ -106,7 +106,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     
     func openSignUpScene(verificationType: VerificationType, verifyWithEmail: Bool) {
         let useCase = KYCUseCase()
-        let viewModel = SignUpViewModel(coordinator: self, useCase: useCase, verificationType: verificationType, verifyWithEmail: verifyWithEmail)
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = SignUpViewModel(coordinator: self, useCase: useCase, valifyUseCase: valifyUseCase, verificationType: verificationType, verifyWithEmail: verifyWithEmail)
         let view = SignUpScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -114,8 +115,10 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     }
     
     func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String, otpExpirationTimer: Double, otpRequestID: String, transactionID: String, requestIDVlens: String, isVlens: Bool) {
+        
         let useCase = KYCUseCase()
-        let viewModel = VerifySignUpViewModel(coordinator: self, useCase: useCase, verificationType: verificationType, phone: phone, email: email, otpExpirationTimer: otpExpirationTimer, timerViewModel: .init(), otpRequestID: otpRequestID, transactionID: transactionID, requestIDVlens: requestIDVlens, isVlens: isVlens)
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = VerifySignUpViewModel(coordinator: self, useCase: useCase, valifyUseCase: valifyUseCase, verificationType: verificationType, phone: phone, email: email, otpExpirationTimer: otpExpirationTimer, timerViewModel: .init(), otpRequestID: otpRequestID, transactionID: transactionID, requestIDVlens: requestIDVlens, isVlens: isVlens)
         let view = VerifySignUpScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -142,7 +145,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     
     func openCameraPreviewFor(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool) {
         let kycUseCase = KYCUseCase()
-        let viewModel = CameraPreviewViewModel(coordinator: self, kycUseCase: kycUseCase,viewType: type, savedImageOne: savedImageOne, stepIndexBind: stepIndexBind, isFrontBind: isFrontBind)
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = CameraPreviewViewModel(coordinator: self, kycUseCase: kycUseCase, valifyUseCase: valifyUseCase, viewType: type, savedImageOne: savedImageOne, stepIndexBind: stepIndexBind, isFrontBind: isFrontBind)
         let view =  CameraPreviewScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         
@@ -172,10 +176,12 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
-
-    
-    func openScanIDFrontScene() {
-        let viewModel = ScanIDFrontViewModel(coordinator: self)
+        
+    func openScanIDFrontScene(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool) {
+        let kycUseCase = KYCUseCase()
+        let valifyUseCase = ValifyUseCase()
+        //        let viewModel = ScanIDFrontViewModel(coordinator: self, kycUseCase: kycUseCase, valifyUseCase: valifyUseCase, viewType: type, savedImageOne: savedImageOne, stepIndexBind: stepIndexBind, isFrontBind: isFrontBind)
+        let viewModel = CameraPreviewViewModel(coordinator: self, kycUseCase: kycUseCase, valifyUseCase: valifyUseCase, viewType: type, savedImageOne: savedImageOne, stepIndexBind: stepIndexBind, isFrontBind: isFrontBind)
         let view = ScanIDFrontScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -214,8 +220,11 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openLivenessScanScene() {
-        let viewModel = LivenessScanViewModel(coordinator: self)
+    func openLivenessScanScene(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool) {
+//        let viewModel = LivenessScanViewModel(coordinator: self)
+        let kycUseCase = KYCUseCase()
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = CameraPreviewViewModel(coordinator: self, kycUseCase: kycUseCase, valifyUseCase: valifyUseCase, viewType: type, savedImageOne: savedImageOne, stepIndexBind: stepIndexBind, isFrontBind: isFrontBind)
         let view = LivenessScanScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

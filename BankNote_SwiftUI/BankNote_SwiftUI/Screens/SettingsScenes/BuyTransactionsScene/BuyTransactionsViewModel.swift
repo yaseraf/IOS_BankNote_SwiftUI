@@ -8,15 +8,6 @@
 import Foundation
 import SwiftUI
 
-// The main data model for a row item.
-struct RowItem: Identifiable {
-    let id = UUID()
-    let title: String
-    let value: String
-    let color: Color
-    let icon: String?
-}
-
 class BuyTransactionsViewModel:ObservableObject {
     private let coordinator: SettingsCoordinatorProtocol
     
@@ -39,7 +30,7 @@ class BuyTransactionsViewModel:ObservableObject {
 }
 
 // MARK: Routing
-extension BankNotesViewModel {
+extension BuyTransactionsViewModel {
     func popViewController() {
         coordinator.popViewController()
     }

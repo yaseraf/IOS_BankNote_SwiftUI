@@ -157,7 +157,7 @@ struct SignUpContentView: View {
                     .frame(height: 56)
                     .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
                     .padding(.bottom, 24)
-                    .keyboardType(.numberPad)
+                    .keyboardType(verificationType.wrappedValue == .phone ? .numberPad : .emailAddress)
                 
                 
 
@@ -185,7 +185,8 @@ struct SignUpContentView: View {
 
         return VStack {
             Button {
-                onContinueTap?(uiModel, verifyWithEmail.wrappedValue ?? false, "\(countryCodeUIModel?.dialCode ?? "")\(phone.wrappedValue)", email.wrappedValue, password)
+//                onContinueTap?(uiModel, verifyWithEmail.wrappedValue ?? false, "\(countryCodeUIModel?.dialCode ?? "")\(phone.wrappedValue)", email.wrappedValue, password)
+                onContinueTap?(uiModel, verifyWithEmail.wrappedValue ?? false, "\(phone.wrappedValue)", email.wrappedValue, password)
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -203,9 +204,9 @@ struct SignUpContentView: View {
 #Preview {
     SignUpContentView(showPasswordField: .constant(true), verifyWithEmail: .constant(false), countryCodeUIModel: .constant(.none), locationPermission: .constant(false), verificationType: .constant(.phone), phone: .constant(""), email: .constant(""), onBack: {
         
-    }, onContinueTap: {otpUIModel,verifyWithEmail,phoneNumber,email,password in 
+    }, onContinueTap: {otpUIModel,verifyWithEmail,phoneNumber,email,password in
         
-    }, onCountryPickerTap: {_ in 
+    }, onCountryPickerTap: {_ in
         
     }, onLocationAlertTap: {
         

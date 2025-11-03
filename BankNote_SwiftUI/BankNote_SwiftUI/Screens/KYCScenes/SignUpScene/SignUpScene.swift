@@ -21,16 +21,19 @@ struct SignUpScene: BaseSceneType {
                     viewModel.popViewController()
                 }, onContinueTap: { uiModel, verifyWithEmail, phoneNumber, email, password in
                     if !verifyWithEmail {
-                        KeyChainController.shared().phoneNumberEntered = phoneNumber
-                        if $viewModel.showPasswordField.wrappedValue == false {
-                            viewModel.checkEmailOrPhoneExistence(email: email, phoneNumber: phoneNumber, password: password, uiModel: uiModel, verifyWithEmail: verifyWithEmail)
-                        } else {
-                            viewModel.loginVlensAPI(success: true, phoneNumber: phoneNumber, password: password, uiModel: uiModel, verifyWithEmail: verifyWithEmail)
-                        }
+//                        KeyChainController.shared().phoneNumberEntered = phoneNumber
+                        
+                        viewModel.sendPhoneOtpValifyAPI(phoneNumber: phoneNumber)
+//                        if $viewModel.showPasswordField.wrappedValue == false {
+//                            viewModel.checkEmailOrPhoneExistence(email: email, phoneNumber: phoneNumber, password: password, uiModel: uiModel, verifyWithEmail: verifyWithEmail)
+//                        } else {
+//                            viewModel.loginVlensAPI(success: true, phoneNumber: phoneNumber, password: password, uiModel: uiModel, verifyWithEmail: verifyWithEmail)
+//                        }
                     } else {
-                        if $viewModel.showPasswordField.wrappedValue == false {
-                            viewModel.stepVerifyEmailAPI(success: true, email: email, emailOtp: "", emailOtpRequestId: "", requestId: KeyChainController().verifyPhoneOtpRequestId ?? "", uiModel: uiModel, verifyWithEmail: verifyWithEmail)
-                        }
+                        viewModel.sendEmailOtpValifyAPI(email: email)
+//                        if $viewModel.showPasswordField.wrappedValue == false {
+//                            viewModel.stepVerifyEmailAPI(success: true, email: email, emailOtp: "", emailOtpRequestId: "", requestId: KeyChainController().verifyPhoneOtpRequestId ?? "", uiModel: uiModel, verifyWithEmail: verifyWithEmail)
+//                        }
                     }
                 }, onCountryPickerTap: { countryData in
                     viewModel.openCountryPickerScene(countryModel: countryData)
@@ -42,20 +45,65 @@ struct SignUpScene: BaseSceneType {
         .onAppear {
 
             // Dont call getAccessToken when going to Email
-            if viewModel.verifyWithEmail == false {
-                viewModel.getAccessTokenAPI(success: true)
-            }
+//            if viewModel.verifyWithEmail == false {
+//                viewModel.getAccessTokenAPI(success: true)
+//            }
         }
         .onViewDidLoad {
             UserData.shared.locManager.requestWhenInUseAuthorization()
             UserData.shared.locManager.startUpdatingLocation()
 //            getAccessTokenAPI()
-            stepVerifyPhoneAPI()
-            stepVerifyEmailAPI()
-            loginVlensAPI()
+//            stepVerifyPhoneAPI()
+//            stepVerifyEmailAPI()
+//            loginVlensAPI()
+            
+            sendPhoneOtpValifyAPI()
+            sendEmailOtpValifyAPI()
         }
         
     }
+    
+    // MARK: VALIFY
+    
+    private func sendPhoneOtpValifyAPI() {
+        viewModel.$sendPhoneOtpValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func sendEmailOtpValifyAPI() {
+        viewModel.$sendEmailOtpValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+
+
+    
+    // MARK: VLENS
     
     private func loginVlensAPI() {
         viewModel.$loginVlensAPIResult.receive(on: DispatchQueue.main).sink { result  in

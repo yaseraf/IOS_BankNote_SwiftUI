@@ -83,7 +83,7 @@ struct BuyTransactionsContentView: View {
                                 .font(.cairoFont(.bold, size: 32))
                         }
 
-                        Text("coins".localized)
+                        Text("transactions".localized)
                             .font(.cairoFont(.bold, size: 32))
 
                     }

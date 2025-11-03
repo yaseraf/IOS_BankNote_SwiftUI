@@ -435,14 +435,17 @@ struct CameraView: View {
                         if UIDevice.current.userInterfaceIdiom == .phone {
                             getImage()?.resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .offset(x: 80, y: 15)
+//                                .offset(x: 80, y: 15)
                                 .mask(
                                     RoundedRectangle(cornerRadius:  24)
                                         .frame(width: geometry.size.width - 10, height: geometry.size.height / 3.5)
+                                        .padding(.bottom, 5)
+                                        .offset(x: 2.5, y: 0)
                                 )
                             
                             RoundedCorner(radius: 24)
-                                .stroke(Color.colorWhite,lineWidth: 4)
+//                                .stroke(Color.colorWhite,lineWidth: 4)
+                                .stroke(Color.colorWhite,lineWidth: 0)
                                 .frame(width: geometry.size.width - 10 )
                                 .frame(height: geometry.size.height / 3.5)
     //                            .padding(.horizontal,16)
@@ -459,7 +462,8 @@ struct CameraView: View {
                                 )
                             
                             RoundedCorner(radius: 24)
-                                .stroke(Color.colorWhite,lineWidth: 4)
+//                                .stroke(Color.colorWhite,lineWidth: 4)
+                                .stroke(Color.colorWhite,lineWidth: 0)
                                 .frame(width: 642 ,height: 365)
     //                            .padding(.horizontal,16)
                                 .background(
@@ -477,6 +481,7 @@ struct CameraView: View {
 
 
             Text(getContent())
+                .opacity(0)
                 .font(Font.apply(size: 16))
                 .foregroundColor(.colorTextSecondaryTwo)
         }

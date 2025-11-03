@@ -3,7 +3,7 @@
 //  mahfazati
 //
 //  Created by FIT on 18/03/2025.
-//  Copyright © 2025 Mohammed Mathkour. All rights reserved.
+//  Copyright © 2025 FIT. All rights reserved.
 //
 
 import Foundation

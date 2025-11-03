@@ -2,8 +2,8 @@
 //  OTPTimerViewModel.swift
 //  mahfazati
 //
-//  Created by Mohammmed on 12/08/2024.
-//  Copyright © 2024 Mohammed Mathkour. All rights reserved.
+//  Created by FIT on 12/08/2024.
+//  Copyright © 2024 FIT. All rights reserved.
 //
 
 import Foundation

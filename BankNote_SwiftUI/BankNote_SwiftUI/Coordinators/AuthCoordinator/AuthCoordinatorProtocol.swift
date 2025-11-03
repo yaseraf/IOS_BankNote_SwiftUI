@@ -2,8 +2,8 @@
 //  AuthCoordinatorProtocol.swift
 //  mahfazati
 //
-//  Created by Mohammmed on 22/07/2024.
-//  Copyright © 2024 Mohammed Mathkour. All rights reserved.
+//  Created by FIT on 22/07/2024.
+//  Copyright © 2024 FIT. All rights reserved.
 //
 
 import Foundation
@@ -24,12 +24,12 @@ protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openCameraPreviewFor(type:CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool)
     func openVerifyIDConfirmation(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String, gender:String, jobTitle:String, religion:String, maritalStatus:String)
     func openTakeSelfieScene(livenessCheck:Bool)
-    func openScanIDFrontScene()
+    func openScanIDFrontScene(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool)
     func openVerifyScanIDFrontScene(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String)
     func openScanIDBackScene()
     func openVerifyScanIDBackScene(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, gender:String, jobTitle:String, religion:String, maritalStatus:String)
     func openLivenessCheckScene()
-    func openLivenessScanScene()
+    func openLivenessScanScene(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool)
     func openQuestioneerScene()
     func openTermsAndConditionsScene()
     func openThanksForRegisteringScene()

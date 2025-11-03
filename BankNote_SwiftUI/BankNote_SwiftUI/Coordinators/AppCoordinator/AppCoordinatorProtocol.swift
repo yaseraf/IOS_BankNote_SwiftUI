@@ -2,8 +2,8 @@
 //  AppCoordinatorProtocol.swift
 //  mahfazati
 //
-//  Created by Mohammmed on 22/07/2024.
-//  Copyright © 2024 Mohammed Mathkour. All rights reserved.
+//  Created by FIT on 22/07/2024.
+//  Copyright © 2024 FIT. All rights reserved.
 //
 
 import Foundation

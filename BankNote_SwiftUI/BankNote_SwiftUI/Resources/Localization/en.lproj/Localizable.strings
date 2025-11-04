@@ -7,7 +7,7 @@
 */
 
 // MARK: Login Screen
-"bank_note" = "Bank Note";
+"XNTRQ" = "XNTRQ";
 "enter_your_user_name" = "Enter Your User Name";
 "enter_your_password" = "Enter Your Password";
 "forgot_password" = "Forgot Password";
@@ -119,7 +119,7 @@
 "rejection_reason" = "Rejection Reason";
 
 // MARK: Settings Screen
-"bank_notes" = "BankNotes";
+"XNTRQ" = "XNTRQ";
 "view_details" = "View Details";
 "account_info" = "Account Info";
 "tiers" = "Tiers";

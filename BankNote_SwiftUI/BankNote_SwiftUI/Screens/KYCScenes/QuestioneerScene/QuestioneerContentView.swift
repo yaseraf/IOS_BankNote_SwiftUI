@@ -39,7 +39,7 @@ struct QuestioneerContentView: View {
                 .scaledToFit()
                 .frame(maxWidth: 90, maxHeight: 90)
             
-            Text("bank_note".localized)
+            Text("XNTRQ".localized)
                 .textCase(.uppercase)
                 .font(.cairoFont(.extraBold, size: 16))
         }

@@ -64,7 +64,7 @@ struct LoginInformationContentView: View {
                 .scaledToFit()
                 .frame(maxWidth: 225, maxHeight: 225)
             
-            Text("bank_note".localized)
+            Text("XNTRQ".localized)
                 .textCase(.uppercase)
                 .font(.cairoFont(.extraBold, size: 40))
         }

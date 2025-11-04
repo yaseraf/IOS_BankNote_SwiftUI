@@ -81,7 +81,7 @@ struct SettingsContentView: View {
                         .frame(width: 45, height: 45)
                     
                     VStack(spacing: 0) {
-                        Text("bank_notes".localized)
+                        Text("XNTRQ".localized)
                             .font(.cairoFont(.semiBold, size: 18))
                         
                         Text("1,500.00 BN")

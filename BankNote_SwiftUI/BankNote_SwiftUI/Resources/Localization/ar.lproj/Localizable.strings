@@ -7,7 +7,7 @@
 */
 
 // MARK: Login Screen
-"bank_note" = "Bank Note";
+"XNTRQ" = "XNTRQ";
 "enter_your_user_name" = "أدخل اسم المستخدم الخاص بك";
 "enter_your_password" = "أدخل كلمة المرور الخاصة بك";
 "forgot_password" = "هل نسيت كلمة السر";
@@ -120,7 +120,7 @@
 
 
 // MARK: Settings Screen
-"bank_notes" = "الأوراق المالية";
+"XNTRQ" = "XNTRQ";
 "view_details" = "عرض التفاصيل";
 "account_info" = "معلومات الحساب";
 "tiers" = "المستويات";

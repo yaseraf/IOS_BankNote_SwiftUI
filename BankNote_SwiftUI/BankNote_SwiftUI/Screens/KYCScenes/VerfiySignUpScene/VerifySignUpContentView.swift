@@ -42,7 +42,9 @@ struct VerifySignUpContentView: View {
     var body: some View {
         ZStack {
             VStack {
-                                            
+                       
+                headerView
+                
                 logoView
                 
                 titleView
@@ -72,16 +74,17 @@ struct VerifySignUpContentView: View {
     
     private var headerView: some View {
         HStack {
-            Image("ic_close")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 38, height: 38)
-                .onTapGesture {
-                    onBack()
-                }
+            Button {
+                onBack()
+            } label: {
+                Image("ic_leftArrow")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 45, maxHeight: 45)
+            }
+            
             Spacer()
         }
-        .padding(.horizontal, 18)
     }
     
     private var titleView: some View {

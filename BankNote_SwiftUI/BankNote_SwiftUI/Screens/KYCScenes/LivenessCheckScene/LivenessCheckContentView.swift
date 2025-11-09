@@ -11,7 +11,8 @@ import SwiftUI
 struct LivenessCheckContentView: View {
     
     @State var stepNumber:Int = 5
-    
+    @StateObject private var SdkIntegration = sdkIntegration()
+
     var onContinueTap:()->Void
     
     var body: some View {
@@ -101,7 +102,7 @@ struct LivenessCheckContentView: View {
     private var bottomView: some View {
         return VStack {
             Button {
-                onContinueTap()
+                SdkIntegration.startLiveness(transactionFrontId: "123456")
             } label: {
                 Text("liveness_check".localized)
                     .font(.cairoFont(.semiBold, size: 18))

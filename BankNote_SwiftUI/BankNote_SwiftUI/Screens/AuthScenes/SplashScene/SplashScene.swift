@@ -16,10 +16,10 @@ struct SplashScene: View {
 
     var body: some View {
         BaseScene(contentView: {
-            BaseContentView(withScroll:false, paddingValue: 00, content: {
+            BaseContentView(withScroll:false, paddingValue: 0, content: {
                 SplashContentView()
                     .onAppear(perform: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         viewModel.openLoginScene()
                     }
                 })

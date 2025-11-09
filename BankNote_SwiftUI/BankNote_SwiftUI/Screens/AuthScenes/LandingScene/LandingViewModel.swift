@@ -58,7 +58,8 @@ extension LandingViewModel {
     func openSignUpScene() {
 //        coordinator.openScanIDFrontScene()
 //        coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
-        coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+//        coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+        coordinator.openLivenessCheckScene()
     }
     
     func openLoginScene() {

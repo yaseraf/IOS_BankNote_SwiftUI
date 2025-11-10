@@ -13,6 +13,7 @@ struct SettingsContentView: View {
     var onBankNotesTap:()->Void
     var onTiersTap:()->Void
     var onBadgesTap:()->Void
+    var onTransactionsTap:()->Void
     var onHelpTap:()->Void
     var onLogoutTap:()->Void
     
@@ -313,6 +314,31 @@ struct SettingsContentView: View {
                             .frame(width: 22, height: 22)
                     }
                 }
+                
+                Divider()
+                
+                // Transactions
+                Button {
+                    onTransactionsTap()
+                } label: {
+                    HStack(spacing: 17) {
+                        Image("ic_badges")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                        
+                        Text("buy_transactions".localized)
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(.black)
+                        
+                        Spacer()
+                        
+                        Image("ic_rightArrow")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                    }
+                }
 
                 
             }
@@ -502,6 +528,8 @@ struct SettingsContentView: View {
     }, onTiersTap: {
         
     }, onBadgesTap: {
+        
+    }, onTransactionsTap: {
         
     }, onHelpTap: {
         

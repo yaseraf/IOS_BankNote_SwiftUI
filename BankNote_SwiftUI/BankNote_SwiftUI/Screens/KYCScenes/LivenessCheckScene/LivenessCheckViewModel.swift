@@ -10,8 +10,6 @@ import VIDVLiveness
 import UIKit
 import SwiftUI
 
-
-
 class LivenessCheckViewModel: ObservableObject, VIDVLivenessDelegate {
         
     private let coordinator: AuthCoordinatorProtocol

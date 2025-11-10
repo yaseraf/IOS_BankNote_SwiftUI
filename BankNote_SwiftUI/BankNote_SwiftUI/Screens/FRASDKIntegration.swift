@@ -1,10 +1,15 @@
+//
+//  LivenessCheckViewModel.swift
+//  BankNote_SwiftUI
+//
+//  Created by FIT on 16/09/2025.
+//
+
 import Foundation
 import VIDVLiveness
+import VIDVAuth
 import UIKit
 import Combine
-import SwiftUI
-
-import UIKit
 import SwiftUI
 
 extension UIViewController {
@@ -37,7 +42,8 @@ extension UIViewController {
 
 
 
-class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate{
+class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, VIDVAuthDelegate{
+    
     // Ensure it conforms to ObservableObject
     @Published var ocrResultMessage: String = "" // Publish OCR result message
     @Published var livenessResultMessage: String = "" // Publish Liveness result message
@@ -45,7 +51,8 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate{
     
     // SDK Builder instance
     private var vidvLivenessBuilder =  VIDVLivenessBuilder()
-    
+    private var vidvAuthBuilder = VIDVAuthBuilder()
+
     // Store credentials( The credentials are out in app interface for testing purposes it's recommended to put in your app backend for better security)
     private let username = "fitmena__49191_integration_bundle"
     private let password = "51US2Myzx1LTJa9a"
@@ -144,6 +151,30 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate{
             }
         }
     }
+    
+    func startAuth() {
+        // Registration Flow
+        self.vidvAuthBuilder = self.vidvAuthBuilder
+            .setBaseURL(self.baseURL)
+            .setBundleKey(self.bundleKey)
+//            .setSessionID(<#T##sessionID: String##String#>)
+//            .setOtpSessionId("OTP session ID")
+            .setFlow(.registration)
+
+        
+        self.vidvAuthBuilder.start(with: self, and: self)
+
+    }
+    
+    func startLogin() {
+        // Login Flow
+        self.vidvAuthBuilder = self.vidvAuthBuilder
+            .setBaseURL(self.baseURL)
+            .setBundleKey(self.bundleKey)
+        //            .setSessionID(<#T##sessionID: String##String#>)
+//            .setOtpSessionId("OTP session ID")
+            .setFlow(.login(phoneNumber: "+1234567890"))
+    }
         
     //Handling Liveness results
     func onLivenessResult(_ result: VIDVLiveness.VIDVLivenessResponse) {
@@ -153,6 +184,8 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate{
             // data of type VIDVOCRResult
             livenessResultMessage = "Liveness Success!"
             debugPrint("VidVLiveness success, data: \(data)")
+            
+            startAuth()
 
         case .builderError(let code, let message):
             // builder error code & error message
@@ -176,4 +209,24 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate{
 
         }
     }
+    
+    func didFinisAuthSDK(with response: VIDVAuth.VIDVAuthResponse) {
+        switch response {
+        case .success(let data):
+            // Handle success
+            debugPrint("Success! Session ID: \(data.sessionID)")
+            startLogin()
+        case .serviceFailure(let code, let message, let data):
+            // Handle service failure
+            debugPrint("Service Failure: [\(code)] \(message) – Data: \(String(describing: data))")
+        case .exit(let step, let data):
+            // Handle user exit
+            debugPrint("User exited at step \(step). Data: \(String(describing: data))")
+            
+        case .builderError(code: let code, message: let message):
+            // Handle builder error
+            debugPrint("Builder error, code: \(code), message: \(message)")
+        }
+    }
+
 }

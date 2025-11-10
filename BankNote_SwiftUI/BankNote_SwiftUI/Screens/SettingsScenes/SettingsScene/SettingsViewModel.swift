@@ -31,6 +31,10 @@ extension SettingsViewModel {
         coordinator.openBadgesScene()
     }
     
+    func openBuyTransactionsScene() {
+        coordinator.openBuyTransactionsScene()
+    }
+    
     func openHelpScene() {
         coordinator.openHelpScene()
     }

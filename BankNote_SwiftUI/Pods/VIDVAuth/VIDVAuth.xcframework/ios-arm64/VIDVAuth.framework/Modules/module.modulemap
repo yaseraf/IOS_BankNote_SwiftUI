@@ -1,0 +1,4 @@
+framework module VIDVAuth {
+  header "VIDVAuth-Swift.h"
+  requires objc
+}

@@ -54,6 +54,14 @@ extension SettingsCoordinator:SettingsCoordinatorProtocol{
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func openBuyTransactionsScene() {
+        let viewModel = BuyTransactionsViewModel(coordinator: self)
+        let view = BuyTransactionsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
     func openHelpScene() {
         let viewModel = HelpViewModel(coordinator: self)
         let view = HelpScene(viewModel: viewModel)

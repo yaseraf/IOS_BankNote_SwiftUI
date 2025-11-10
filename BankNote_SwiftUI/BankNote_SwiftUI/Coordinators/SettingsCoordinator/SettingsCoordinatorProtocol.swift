@@ -13,6 +13,7 @@ protocol SettingsCoordinatorProtocol: AnyObject,Coordinator {
     func openSettingsScene()
     func openTiersScene()
     func openBadgesScene()
+    func openBuyTransactionsScene()
     func openHelpScene()
     func openBankNotesScene()
 }

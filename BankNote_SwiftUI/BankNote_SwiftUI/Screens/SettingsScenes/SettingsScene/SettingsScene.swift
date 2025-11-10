@@ -23,6 +23,8 @@ struct SettingsScene: BaseSceneType {
                     viewModel.openTiersScene()
                 }, onBadgesTap: {
                     viewModel.openBadgesScene()
+                }, onTransactionsTap: {
+                    viewModel.openBuyTransactionsScene()
                 }, onHelpTap: {
                     viewModel.openHelpScene()
                 }, onLogoutTap: {

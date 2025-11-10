@@ -1,0 +1,101 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name VIDVAuth
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+import Combine
+import CommonCrypto
+import DeveloperToolsSupport
+import Foundation
+import ObjectiveC
+import Security
+import Swift
+import SwiftUI
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import ObjectiveC.runtime
+public enum VIDVAuthFlow : Swift.Equatable, Swift.Hashable {
+  case login(phoneNumber: Swift.String)
+  case registration
+  public static func == (a: VIDVAuth.VIDVAuthFlow, b: VIDVAuth.VIDVAuthFlow) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct VIDVAuthData {
+  public let sessionID: Swift.String
+  public let deviceID: Swift.String?
+  public let hmacDataList: [Swift.String]?
+}
+public enum VIDVAuthResponse {
+  case success(data: VIDVAuth.VIDVAuthData)
+  case serviceFailure(code: Swift.Int, message: Swift.String, data: VIDVAuth.VIDVAuthData?)
+  case exit(step: Swift.String, data: VIDVAuth.VIDVAuthData?)
+  case builderError(code: Swift.Int, message: Swift.String)
+}
+public struct VIDVAuthServiceResult {
+}
+public class VIDVAuthBuilder {
+  public init()
+  @discardableResult
+  public func setBaseURL(_ url: Swift.String) -> VIDVAuth.VIDVAuthBuilder
+  @discardableResult
+  public func setSessionID(_ sessionID: Swift.String) -> VIDVAuth.VIDVAuthBuilder
+  @discardableResult
+  public func setBundleKey(_ key: Swift.String) -> VIDVAuth.VIDVAuthBuilder
+  @discardableResult
+  public func setLanguage(_ lang: Swift.String) -> VIDVAuth.VIDVAuthBuilder
+  @discardableResult
+  public func setPrimaryColor(_ color: UIKit.UIColor) -> VIDVAuth.VIDVAuthBuilder
+  @discardableResult
+  public func setCustomLogo(_ logo: UIKit.UIImage) -> VIDVAuth.VIDVAuthBuilder
+  @discardableResult
+  public func setFlow(_ flow: VIDVAuth.VIDVAuthFlow) -> VIDVAuth.VIDVAuthBuilder
+  @discardableResult
+  public func setCustomFont(_ font: UIKit.UIFont) -> VIDVAuth.VIDVAuthBuilder
+  public func start(with viewController: UIKit.UIViewController, and delegate: any VIDVAuth.VIDVAuthDelegate)
+  @objc deinit
+}
+public protocol VIDVAuthDelegate : AnyObject {
+  func didFinisAuthSDK(with response: VIDVAuth.VIDVAuthResponse)
+}
+
+
+
+extension Swift.Bool : Swift.Identifiable {
+  public var id: Swift.Bool {
+    get
+  }
+  public typealias ID = Swift.Bool
+}
+extension Swift.String : Swift.Identifiable {
+  public var id: Swift.String {
+    get
+  }
+  public typealias ID = Swift.String
+}
+public enum FontRegistry {
+  public static func register(_ font: UIKit.UIFont?)
+}
+public enum AppFont {
+  case `default`
+  public static func == (a: VIDVAuth.AppFont, b: VIDVAuth.AppFont) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func font(_ appFont: VIDVAuth.AppFont, _ size: CoreFoundation.CGFloat, weight: SwiftUICore.Font.Weight) -> some SwiftUICore.View
+  
+}
+extension UIKit.UIFont {
+  convenience public init?(familyName: Swift.String)
+}
+extension UIKit.UIFont {
+  public static func font(_: VIDVAuth.AppFont, size: CoreFoundation.CGFloat, weight: UIKit.UIFont.Weight = .regular) -> UIKit.UIFont
+}
+extension VIDVAuth.AppFont : Swift.Equatable {}
+extension VIDVAuth.AppFont : Swift.Hashable {}

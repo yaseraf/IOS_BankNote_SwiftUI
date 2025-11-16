@@ -7,7 +7,7 @@
 
 import Foundation
 import VIDVLiveness
-import VIDVAuth
+//import VIDVAuth
 import UIKit
 import Combine
 import SwiftUI
@@ -42,7 +42,8 @@ extension UIViewController {
 
 
 
-class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, VIDVAuthDelegate{
+//class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, VIDVAuthDelegate{
+class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate {
     
     // Ensure it conforms to ObservableObject
     @Published var ocrResultMessage: String = "" // Publish OCR result message
@@ -51,7 +52,7 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, 
     
     // SDK Builder instance
     private var vidvLivenessBuilder =  VIDVLivenessBuilder()
-    private var vidvAuthBuilder = VIDVAuthBuilder()
+//    private var vidvAuthBuilder = VIDVAuthBuilder()
 
     // Store credentials( The credentials are out in app interface for testing purposes it's recommended to put in your app backend for better security)
     private let username = "fitmena__49191_integration_bundle"
@@ -136,6 +137,12 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, 
                     .setBundleKey(self.bundleKey)
                     .setBaseURL(self.baseURL)
                     .setAccessToken(accessToken)
+                    .setHeaders(["X-Valify-reference-userid":KeyChainController().valifyRequestId ?? ""]) // !!
+                    .setCollectUserInfo(true) // !!
+                    .setNumberOfInstructions(3) // !!
+                
+                // Face Match
+                
 //                    .setFrontTransactionID(transactionFrontId)
 //                if let rootVC = UIApplication.shared.windows.first?.rootViewController {
                 if let rootVC = UIViewController.topMostViewController() {
@@ -152,29 +159,29 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, 
         }
     }
     
-    func startAuth() {
-        // Registration Flow
-        self.vidvAuthBuilder = self.vidvAuthBuilder
-            .setBaseURL(self.baseURL)
-            .setBundleKey(self.bundleKey)
-//            .setSessionID(<#T##sessionID: String##String#>)
-//            .setOtpSessionId("OTP session ID")
-            .setFlow(.registration)
-
-        
-        self.vidvAuthBuilder.start(with: self, and: self)
-
-    }
-    
-    func startLogin() {
-        // Login Flow
-        self.vidvAuthBuilder = self.vidvAuthBuilder
-            .setBaseURL(self.baseURL)
-            .setBundleKey(self.bundleKey)
-        //            .setSessionID(<#T##sessionID: String##String#>)
-//            .setOtpSessionId("OTP session ID")
-            .setFlow(.login(phoneNumber: "+1234567890"))
-    }
+//    func startAuth() {
+//        // Registration Flow
+//        self.vidvAuthBuilder = self.vidvAuthBuilder
+//            .setBaseURL(self.baseURL)
+//            .setBundleKey(self.bundleKey)
+////            .setSessionID(<#T##sessionID: String##String#>)
+////            .setOtpSessionId("OTP session ID")
+//            .setFlow(.registration)
+//
+//        
+//        self.vidvAuthBuilder.start(with: self, and: self)
+//
+//    }
+//    
+//    func startLogin() {
+//        // Login Flow
+//        self.vidvAuthBuilder = self.vidvAuthBuilder
+//            .setBaseURL(self.baseURL)
+//            .setBundleKey(self.bundleKey)
+//        //            .setSessionID(<#T##sessionID: String##String#>)
+////            .setOtpSessionId("OTP session ID")
+//            .setFlow(.login(phoneNumber: "+1234567890"))
+//    }
         
     //Handling Liveness results
     func onLivenessResult(_ result: VIDVLiveness.VIDVLivenessResponse) {
@@ -184,8 +191,8 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, 
             // data of type VIDVOCRResult
             livenessResultMessage = "Liveness Success!"
             debugPrint("VidVLiveness success, data: \(data)")
-            
-            startAuth()
+            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
+//            startAuth()
 
         case .builderError(let code, let message):
             // builder error code & error message
@@ -210,23 +217,23 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate, 
         }
     }
     
-    func didFinisAuthSDK(with response: VIDVAuth.VIDVAuthResponse) {
-        switch response {
-        case .success(let data):
-            // Handle success
-            debugPrint("Success! Session ID: \(data.sessionID)")
-            startLogin()
-        case .serviceFailure(let code, let message, let data):
-            // Handle service failure
-            debugPrint("Service Failure: [\(code)] \(message) – Data: \(String(describing: data))")
-        case .exit(let step, let data):
-            // Handle user exit
-            debugPrint("User exited at step \(step). Data: \(String(describing: data))")
-            
-        case .builderError(code: let code, message: let message):
-            // Handle builder error
-            debugPrint("Builder error, code: \(code), message: \(message)")
-        }
-    }
+//    func didFinisAuthSDK(with response: VIDVAuth.VIDVAuthResponse) {
+//        switch response {
+//        case .success(let data):
+//            // Handle success
+//            debugPrint("Success! Session ID: \(data.sessionID)")
+//            startLogin()
+//        case .serviceFailure(let code, let message, let data):
+//            // Handle service failure
+//            debugPrint("Service Failure: [\(code)] \(message) – Data: \(String(describing: data))")
+//        case .exit(let step, let data):
+//            // Handle user exit
+//            debugPrint("User exited at step \(step). Data: \(String(describing: data))")
+//            
+//        case .builderError(code: let code, message: let message):
+//            // Handle builder error
+//            debugPrint("Builder error, code: \(code), message: \(message)")
+//        }
+//    }
 
 }

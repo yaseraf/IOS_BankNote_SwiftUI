@@ -33,11 +33,13 @@ struct LandingContentView: View {
                 
                 fieldsView
                     .padding(.bottom, 24)
+                    .opacity(0)
 
                 
                 loginButtonView
                     .padding(.bottom, 24)
-                
+                    .opacity(0)
+
                 signupView
                 
                 Spacer()

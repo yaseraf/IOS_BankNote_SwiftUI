@@ -72,7 +72,9 @@ extension SignUpViewModel {
     // MARK: VALIFY
     
     func sendPhoneOtpValifyAPI(phoneNumber: String) {
-        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber, reqID: "14691")
+        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber, reqID: KeyChainController().valifyRequestId ?? "")
+        
+        KeyChainController().phoneNumberEntered = phoneNumber
         
         sendPhoneOtpValifyAPIResult = .onLoading(show: true)
         
@@ -100,7 +102,7 @@ extension SignUpViewModel {
     }
     
     func sendEmailOtpValifyAPI(email:String) {
-        let requestModel = SendEmailOtpValifyRequestModel(Email: email, Lang: AppUtility.shared.isRTL ? "ar" : "en", reqID: "14691")
+        let requestModel = SendEmailOtpValifyRequestModel(Email: email, Lang: AppUtility.shared.isRTL ? "ar" : "en", reqID: KeyChainController().valifyRequestId)
         
         sendEmailOtpValifyAPIResult = .onLoading(show: true)
         

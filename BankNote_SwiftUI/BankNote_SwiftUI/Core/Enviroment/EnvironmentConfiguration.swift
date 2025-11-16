@@ -48,10 +48,10 @@ class NetworkConfiguration{
 //        basePath: "http://10.120.52.55/MobileServices/", signalRDomain: "http://10.120.52.55/" // uat (development)
 
         // CIBC LIVE
-      basePath: "https://mahfaztyplus.cicapital.com/MobileServices/", signalRDomain:  "https://mahfaztyplus.cicapital.com/"
+//      basePath: "https://mahfaztyplus.cicapital.com/MobileServices/", signalRDomain:  "https://mahfaztyplus.cicapital.com/"
       
         // VALIFY TESTING
-//      basePath: "https://tfit.pioneers-securities.com/MobileServices/", signalRDomain:  "https://tfit.pioneers-securities.com/"
+      basePath: "https://tfit.pioneers-securities.com/MobileServices/", signalRDomain:  "https://tfit.pioneers-securities.com/"
 
     )
 

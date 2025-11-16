@@ -102,7 +102,8 @@ struct LivenessCheckContentView: View {
     private var bottomView: some View {
         return VStack {
             Button {
-                SdkIntegration.startLiveness(transactionFrontId: "123456")
+//                SdkIntegration.startLiveness(transactionFrontId: "123456")
+                onContinueTap()
             } label: {
                 Text("liveness_check".localized)
                     .font(.cairoFont(.semiBold, size: 18))

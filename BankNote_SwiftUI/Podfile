@@ -9,7 +9,6 @@ target 'BankNote_SwiftUI' do
 
   pod 'VIDVOCR','3.1.0'
   pod 'VIDVLiveness','2.3.2'
-  pod 'VIDVAuth','1.0.1'
   pod 'Toast-Swift', '5.0.1'
 
 end

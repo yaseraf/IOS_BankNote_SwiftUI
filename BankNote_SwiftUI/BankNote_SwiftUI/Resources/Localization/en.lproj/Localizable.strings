@@ -23,6 +23,7 @@
 // MARK: Forgot Password Screen
 "please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "Please Enter your Phone Number and we'll send you a link to change Password";
 "resend_link" = "Resend link";
+"click_to_resend_otp" = "Click to resend OTP";
 "continue_with_email" = "Continue with E-mail";
 "continue_with_phone_number" = "Continue with Phone Number";
 

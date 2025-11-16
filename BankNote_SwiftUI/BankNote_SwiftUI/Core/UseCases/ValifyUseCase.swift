@@ -13,6 +13,15 @@ protocol ValifyUseCaseProtocol{
     func SendEmailOtpValify(requestModel: SendEmailOtpValifyRequestModel, completion: @escaping(Result<SendEmailOtpValifyUIModel, NetworkError>) -> Void) async
     func VerifyEmailOtpValify(requestModel: VerifyEmailOtpValifyRequestModel, completion: @escaping(Result<VerifyEmailOtpValifyUIModel, NetworkError>) -> Void) async
     func GetFrontBackValify(requestModel: GetFrontBackValifiyRequestModel, completion: @escaping(Result<GetFrontBackValifiyUIModel, NetworkError>) -> Void) async
+    func GetValifyData(requestModel: GetValifyDataRequestModel, completion: @escaping(Result<GetValifyDataUIModel, NetworkError>) -> Void) async
+    func RegisterValify(requestModel: RegisterValifyRequestModel, completion: @escaping(Result<RegisterValifyUIModel, NetworkError>) -> Void) async
+    func GetQuestionsValify(requestModel: GetQuestionsValifyRequestModel, completion: @escaping(Result<GetQuestionsValifyUIModel, NetworkError>) -> Void) async
+    func SetAnswerValify(requestModel: SetAnswerValifyRequestModel, completion: @escaping(Result<SetAnswerValifyUIModel, NetworkError>) -> Void) async
+    func SetPasswordValify(requestModel: SetPasswordValifyRequestModel, completion: @escaping(Result<SetPasswordValifyUIModel, NetworkError>) -> Void) async
+    func LoginValify(requestModel: LoginValifyRequestModel, completion: @escaping(Result<LoginValifyUIModel, NetworkError>) -> Void) async
+    func ResetPasswordValify(requestModel: ResetPasswordValifyRequestModel, completion: @escaping(Result<ResetPasswordValifyUIModel, NetworkError>) -> Void) async
+    func CsoValify(requestModel: CsoValifyRequestModel, completion: @escaping(Result<CsoValifyUIModel, NetworkError>) -> Void) async
+    func NtraValify(requestModel: NtraValifyRequestModel, completion: @escaping(Result<NtraValifyUIModel, NetworkError>) -> Void) async
 }
     
     class ValifyUseCase {
@@ -87,5 +96,123 @@ extension ValifyUseCase: ValifyUseCaseProtocol {
             }
         }
     }
+
+    func GetValifyData(requestModel: GetValifyDataRequestModel, completion: @escaping (Result<GetValifyDataUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.GetValifyData(requestModel: requestModel)
+        await repository.GetValifyData(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetValifyDataUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func RegisterValify(requestModel: RegisterValifyRequestModel, completion: @escaping (Result<RegisterValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.RegisterValify(requestModel: requestModel)
+        await repository.RegisterValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = RegisterValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func GetQuestionsValify(requestModel: GetQuestionsValifyRequestModel, completion: @escaping (Result<GetQuestionsValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.GetQuestionsValify(requestModel: requestModel)
+        await repository.GetQuestionsValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetQuestionsValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
+    func SetAnswerValify(requestModel: SetAnswerValifyRequestModel, completion: @escaping (Result<SetAnswerValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.SetAnswerValify(requestModel: requestModel)
+        await repository.SetAnswerValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = SetAnswerValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
+    func SetPasswordValify(requestModel: SetPasswordValifyRequestModel, completion: @escaping (Result<SetPasswordValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.SetPasswordValify(requestModel: requestModel)
+        await repository.SetPasswordValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = SetPasswordValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
+    func LoginValify(requestModel: LoginValifyRequestModel, completion: @escaping (Result<LoginValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.LoginValify(requestModel: requestModel)
+        await repository.LoginValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = LoginValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func ResetPasswordValify(requestModel: ResetPasswordValifyRequestModel, completion: @escaping (Result<ResetPasswordValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.ResetPasswordValify(requestModel: requestModel)
+        await repository.ResetPasswordValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = ResetPasswordValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
+    func CsoValify(requestModel: CsoValifyRequestModel, completion: @escaping (Result<CsoValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.CsoValify(requestModel: requestModel)
+        await repository.CsoValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = CsoValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func NtraValify(requestModel: NtraValifyRequestModel, completion: @escaping (Result<NtraValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.NtraValify(requestModel: requestModel)
+        await repository.NtraValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = NtraValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
 
 }

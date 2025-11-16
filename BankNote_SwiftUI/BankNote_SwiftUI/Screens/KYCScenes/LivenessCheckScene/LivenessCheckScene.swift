@@ -19,7 +19,7 @@ struct LivenessCheckScene: BaseSceneType {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 LivenessCheckContentView(onContinueTap: {
-//                    viewModel.openLivenessScanScene()
+                    viewModel.startLiveness(transactionFrontId: "123456")
                 })
             })
         }, showLoading: .constant(viewTypeAction.showLoading))

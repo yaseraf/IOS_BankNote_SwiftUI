@@ -156,10 +156,10 @@ struct LoginInformationContentView: View {
             .focused($pinFocusState, equals: .newPassword)
 
             
-            if pinFocusState == .newPassword{
-                    Spacer().frame(height: 12)
-                    getPasswordListView()
-            }
+//            if pinFocusState == .newPassword{
+//                    Spacer().frame(height: 12)
+//                    getPasswordListView()
+//            }
 
 
             InputField(

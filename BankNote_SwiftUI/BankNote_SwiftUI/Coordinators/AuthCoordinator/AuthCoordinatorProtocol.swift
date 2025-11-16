@@ -21,6 +21,7 @@ protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String, otpExpirationTimer: Double, otpRequestID: String, transactionID: String, requestIDVlens: String, isVlens: Bool)
     func openChooseNationalityScene()
     func openLoginInformationScene()
+    func openLoginValifyScene()
     func openCameraPreviewFor(type:CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool)
     func openVerifyIDConfirmation(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String, gender:String, jobTitle:String, religion:String, maritalStatus:String)
     func openTakeSelfieScene(livenessCheck:Bool)

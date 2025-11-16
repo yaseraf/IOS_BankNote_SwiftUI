@@ -1,28 +1,24 @@
 PODS:
   - Toast-Swift (5.0.1)
-  - VIDVAuth (1.0.1)
   - VIDVLiveness (2.3.2)
   - VIDVOCR (3.1.0)
 
 DEPENDENCIES:
   - Toast-Swift (= 5.0.1)
-  - VIDVAuth (= 1.0.1)
   - VIDVLiveness (= 2.3.2)
   - VIDVOCR (= 3.1.0)
 
 SPEC REPOS:
   trunk:
     - Toast-Swift
-    - VIDVAuth
     - VIDVLiveness
     - VIDVOCR
 
 SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
-  VIDVAuth: 859b206bddfd5b26646f0cfa9f9ccdfbedb45f8b
   VIDVLiveness: 3b081887b458418e3cfedd8af19491159f97b885
   VIDVOCR: 8a829257942cc7d365dd06c0c9a1ae21319c8cc1
 
-PODFILE CHECKSUM: 95a1f4f4ddae273f46f12a5d3465c5bb1777c218
+PODFILE CHECKSUM: 95a6ced060fdf73c2457e9ae78bb6cb8bf2da77a
 
 COCOAPODS: 1.16.2

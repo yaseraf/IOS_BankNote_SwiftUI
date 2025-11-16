@@ -126,9 +126,9 @@ class CameraPreviewViewModel:ObservableObject{
 
 //        let requestModel = VerifyIDBackRequestModel(Image: compressedString, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
         
-        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: ImagesTemplates.init().backImageTemplate, IdFrontBase64: ImagesTemplates.init().frontImageTemplate, reqID: "14691")
-//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: imageBack, IdFrontBase64: imageFront, reqID: "14691")
-//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: "", IdFrontBase64: "", reqID: "14691")
+//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: ImagesTemplates.init().backImageTemplate, IdFrontBase64: ImagesTemplates.init().frontImageTemplate, reqID: KeyChainController().valifyRequestId)
+        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: imageBack, IdFrontBase64: imageFront, reqID: KeyChainController().valifyRequestId)
+//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: "", IdFrontBase64: "", reqID: KeyChainController().valifyRequestId)
         
         //MARK: Template
 //        let requestModel = VerifyIDBackRequestModel(Image: ImagesTemplates.init().backImageTemplate, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)

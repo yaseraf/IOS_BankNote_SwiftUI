@@ -13,12 +13,25 @@ enum AuthRoute:APITargetType{
     case OTP(requestModel: OTPRequestModel )
     case GetDeviceConfigs(requestModel: GetDeviceConfigsRequestModel)
     
-    // Valify
+    // MARK: Valify
     case SendPhoneOtpValify(requestModel: SendPhoneOtpValifyRequestModel)
     case VerifyPhoneOtpValify(requestModel: VerifyPhoneOtpValifyRequestModel)
     case SendEmailOtpValify(requestModel: SendEmailOtpValifyRequestModel)
     case VerifyEmailOtpValify(requestModel: VerifyEmailOtpValifyRequestModel)
     case GetFrontBackValify(requestModel: GetFrontBackValifiyRequestModel)
+    case GetValifyData(requestModel: GetValifyDataRequestModel)
+    
+    // Register
+    case RegisterValify(requestModel: RegisterValifyRequestModel)
+    case GetQuestionsValify(requestModel: GetQuestionsValifyRequestModel)
+    case SetAnswerValify(requestModel: SetAnswerValifyRequestModel)
+    case SetPasswordValify(requestModel: SetPasswordValifyRequestModel)
+    
+    // Login
+    case LoginValify(requestModel: LoginValifyRequestModel)
+    case ResetPasswordValify(requestModel: ResetPasswordValifyRequestModel)
+    case CsoValify(requestModel: CsoValifyRequestModel)
+    case NtraValify(requestModel: NtraValifyRequestModel)
     
     var baseURL: URL{
         get{
@@ -54,6 +67,46 @@ enum AuthRoute:APITargetType{
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = "344553443"
                 return dicHeader
+                
+            case .RegisterValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .GetQuestionsValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .SetAnswerValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .SetPasswordValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .LoginValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .ResetPasswordValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .CsoValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .NtraValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
 
                 
             default:
@@ -80,13 +133,32 @@ enum AuthRoute:APITargetType{
             return "KYCWServices/VerifyEmailOtpValify"
         case .GetFrontBackValify:
             return "KYCWServices/GetFrontBackVilify"
+        case .GetValifyData:
+            return "KYCWServices/GetValifyData"
+        case .RegisterValify:
+            return "KYCWServices/RegisterValify"
+        case .GetQuestionsValify:
+            return "KYCWServices/GetQuestionsValify"
+        case .SetAnswerValify:
+            return "KYCWServices/SetAnswerValify"
+        case .SetPasswordValify:
+            return "KYCWServices/SetPasswordValify"
+        case .LoginValify:
+            return "KYCWServices/LoginValify"
+        case .ResetPasswordValify:
+            return "KYCWServices/ResetPasswordValify"
+        case .CsoValify:
+            return "KYCWServices/CsoValify"
+        case .NtraValify:
+            return "KYCWServices/NtraValify"
+
         }
     }
     
     var method: APIMethodType{
         get{
             switch self {
-            case .login, .OTP, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify:
+            case .login, .OTP, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify:
                 return .post
             case .GetDeviceConfigs:
                 return .get
@@ -112,5 +184,24 @@ enum AuthRoute:APITargetType{
                 .requestJsonEncodable(requestModel)
         case .GetFrontBackValify(let requestModel):
                 .requestJsonEncodable(requestModel)
+        case .GetValifyData(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .RegisterValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetQuestionsValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .SetAnswerValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .SetPasswordValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .LoginValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .ResetPasswordValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .CsoValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .NtraValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+
         }
     }}

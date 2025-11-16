@@ -110,7 +110,7 @@ class AppCoordinator:  ObservableObject {
 }
 
 extension AppCoordinator: AppCoordinatorProtocol {
-    func startFlow(startWith: AuthCoordinator.AuthStartSceneType) {
+    func startFlow(startWith: AuthStartSceneType) {
         let authCoordinator:AuthCoordinator
         if let childCoordinator = self.getChildCoordinator(coordinator: AuthCoordinator.self) as? AuthCoordinator {
             authCoordinator = childCoordinator

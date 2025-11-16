@@ -23,6 +23,7 @@
 // MARK: Forgot Password Screen
 "please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "الرجاء إدخال رقم هاتفك وسنرسل لك رابطًا لتغيير كلمة المرور";
 "resend_link" = "إعادة إرسال الرابط";
+"click_to_resend_otp" = "انقر لإعادة إرسال الرمز";
 "continue_with_email" = "المتابعة باستخدام البريد الإلكتروني";
 "continue_with_phone_number" = "المتابعة باستخدام رقم الهاتف";
 

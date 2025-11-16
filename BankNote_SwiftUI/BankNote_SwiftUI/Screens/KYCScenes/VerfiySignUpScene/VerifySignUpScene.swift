@@ -70,7 +70,7 @@ struct VerifySignUpScene: BaseSceneType {
         viewModel.$verifyPhoneOtpValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{
             case .onFailure(let error):
-                debugPrint("")
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
             case.onLoading(let show):
                 viewTypeAction.showLoading = show
             case.onSuccess(let listResponse):
@@ -85,7 +85,7 @@ struct VerifySignUpScene: BaseSceneType {
         viewModel.$verifyEmailOtpValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{
             case .onFailure(let error):
-                debugPrint("")
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
             case.onLoading(let show):
                 viewTypeAction.showLoading = show
             case.onSuccess(let listResponse):
@@ -103,7 +103,7 @@ struct VerifySignUpScene: BaseSceneType {
         viewModel.$verifyPhoneOtpAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{
             case .onFailure(let error):
-                debugPrint("")
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
             case.onLoading(let show):
                 viewTypeAction.showLoading = show
             case.onSuccess(let listResponse):
@@ -118,7 +118,7 @@ struct VerifySignUpScene: BaseSceneType {
         viewModel.$verifyEmailWithOtpAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{
             case .onFailure(let error):
-                debugPrint("")
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
             case.onLoading(let show):
                 viewTypeAction.showLoading = show
             case.onSuccess(let listResponse):
@@ -133,7 +133,7 @@ struct VerifySignUpScene: BaseSceneType {
         viewModel.$validateOTPBusinessRequestAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{
             case .onFailure(let error):
-                debugPrint("")
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
             case.onLoading(let show):
                 viewTypeAction.showLoading = show
             case.onSuccess(let listResponse):

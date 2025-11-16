@@ -8,6 +8,6 @@
 
 import Foundation
 protocol AppCoordinatorProtocol: AnyObject,Coordinator {
-    func startFlow(startWith:AuthCoordinator.AuthStartSceneType)
+    func startFlow(startWith:AuthStartSceneType)
 //    func showAuthFlow(startWith:AuthCoordinator.AuthStartSceneType)
 }

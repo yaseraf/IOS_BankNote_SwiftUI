@@ -11,13 +11,13 @@ import SwiftUI
 import FlagAndCountryCode
 
 
+enum AuthStartSceneType{
+    case login
+    case boarding
+    case register
+}
 
 class AuthCoordinator:  ObservableObject {
-    enum AuthStartSceneType{
-        case login
-        case boarding
-        case register
-    }
     var childCoordinator: [Coordinator] = []
     var navigationController: BaseNavigationController
     var startViewType: AuthStartSceneType
@@ -136,12 +136,24 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
 
     func openLoginInformationScene() {
         let useCase = KYCUseCase()
-        let viewModel = LoginInformationViewModel(coordinator: self, useCase: useCase)
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = LoginInformationViewModel(coordinator: self, useCase: useCase, valifyUseCase: valifyUseCase)
         let view = LoginInformationScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openLoginValifyScene() {
+        let useCase = KYCUseCase()
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = LoginValifyViewModel(coordinator: self, useCase: useCase, valifyUseCase: valifyUseCase)
+        let view = LoginValifyScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
     
     func openCameraPreviewFor(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool) {
         let kycUseCase = KYCUseCase()

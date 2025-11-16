@@ -23,7 +23,9 @@ struct LoginInformationScene: BaseSceneType {
                         viewModel.checkIsAllPasswordMatch()
                     }
                 }, onContinueTap: { username, password in
-                    viewModel.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "211", Value: username)], password: password)
+//                    viewModel.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "211", Value: username)], password: password)
+//                    viewModel.registerValifyAPI(success: true, username: username, password: password)
+                    viewModel.csoValifyAPI(success: true, username: username, password: password)
                 })
             })
             .onAppear {
@@ -31,10 +33,88 @@ struct LoginInformationScene: BaseSceneType {
             }
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad {
-            StepCreateAPI()
-            getKYCCibcAPI()
+            CsoValifyAPI()
+            ntraValifyAPI()
+            RegisterValifyAPI()
+            SetPasswordValifyAPI()
         }
     }
+    
+    private func CsoValifyAPI() {
+        viewModel.$csoValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func ntraValifyAPI() {
+        viewModel.$ntraValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+
+
+    
+    private func RegisterValifyAPI() {
+        viewModel.$registerValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func SetPasswordValifyAPI() {
+        viewModel.$setPasswordValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+
+
     
     private func StepCreateAPI() {
         viewModel.$stepCreateAPIResult.receive(on: DispatchQueue.main).sink { result  in

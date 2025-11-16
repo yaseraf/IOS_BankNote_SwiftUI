@@ -1,0 +1,337 @@
+//
+//  LoginInformationContentView.swift
+//  BankNote_SwiftUI
+//
+//  Created by FIT on 15/09/2025.
+//
+
+import Foundation
+import SwiftUI
+import FlagAndCountryCode
+
+struct LoginValifyContentView: View {
+    enum FocusPassword {
+        case  newPassword, confirmPassword
+    }
+    var listPasswordValidation: Binding<[PasswordValidationType:ChangePasswordUIModel]>
+    var phone: Binding<String>
+    @Binding var countryCodeUIModel: CountryFlagInfo?
+
+    var onPasswordTextChange: ((String)-> Void)
+
+    @State var stepNumber:Int = 2
+    @State private var username = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
+    @FocusState private var pinFocusState : FocusPassword?
+    @State var continueAttempted: Bool = false
+    @State var showPasswordCheckView: Bool = false
+    @State var errorPasswordNotMatch:Bool = false
+    @State private var enableBtn:Bool = false
+    var onCountryPickerTap:((CountryFlagInfo?) -> Void)
+
+    var isUsernameValid: Bool {
+        // A simple validation rule
+        return username.count > 3
+    }
+
+    var isPasswordValid: Bool {
+        // A simple validation rule
+        return password.count > 7
+    }
+
+    var doPasswordsMatch: Bool {
+        return password == confirmPassword && password.count > 0
+    }
+
+    
+    var onContinueTap:((_ phone: String, _ password: String)->Void)?
+
+    var body: some View {
+        VStack {
+            logoView
+            
+            segmentsView
+            
+            contentView
+                        
+            Spacer()
+            
+            bottomView
+                        
+        }
+    }
+    
+    private var logoView: some View {
+        VStack(spacing: 0) {
+            Image("ic_logo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 225, maxHeight: 225)
+            
+            Text("XNTRQ".localized)
+                .textCase(.uppercase)
+                .font(.cairoFont(.extraBold, size: 40))
+        }
+    }
+    
+    private var segmentsView: some View {
+        HStack(spacing: 4) {
+            ForEach(0...5, id: \.self) { index in
+                if stepNumber > index {
+                    LinearGradient( gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing)
+                    
+                        .cornerRadius(12)
+                } else {
+                    RoundedRectangle(cornerRadius: 12).fill(Color(hex: "#DDDDDD"))
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: 6)
+        .padding(.horizontal, 18)
+    }
+    
+    private var contentView: some View {
+        VStack {
+            Text("login".localized)
+                .font(.cairoFont(.semiBold, size: 18))
+                        
+            
+            fieldsView
+            
+//            HStack(spacing: 8) {
+//                Button(action: {
+//
+//                }, label: {
+//                    HStack {
+//                        Text("nationality".localized)
+//                            .font(.cairoFont(.semiBold, size: 12))
+//                        
+//                        Spacer()
+//                        
+//                        Image("ic_downArrow")
+//                            .renderingMode(.template)
+//                            .resizable()
+//                            .scaledToFit()
+//                            .foregroundStyle(Color(hex: "#9C4EF7"))
+//                            .frame(width: 15, height: 15)
+//                    }
+//                    .foregroundStyle(Color(hex: "#1C1C1C"))
+//                    .padding(.horizontal, 16)
+//                    .frame(height: 56)
+//                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+//                    .padding(.bottom, 24)
+//                })
+//            }
+//            .padding(.horizontal, 18)
+        }
+    }
+    
+    private var fieldsView: some View {
+        VStack(spacing: 20) {
+            HStack(spacing: 8) {
+                Button(action: {
+                    onCountryPickerTap(countryCodeUIModel)
+                }, label: {
+                    HStack {
+                        countryCodeUIModel?.getCountryImage(with: FlagType(rawValue: 0) ?? .roundedRect)
+                            .frame(width: 30)
+                        
+                        Text("\(countryCodeUIModel?.dialCode ?? "")")
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(.black)
+
+                        Image("ic_downArrow")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 12, height: 6)
+                    }
+                    .foregroundStyle(Color(hex: "#1C1C1C"))
+                    .padding(.horizontal, 16)
+                    .frame(height: 56)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                    .padding(.bottom, 24)
+                })
+                TextField("phone_number".localized, text: phone)
+                    .font(.cairoFont(.semiBold, size: 12))
+                    .foregroundStyle(Color(hex: "#1C1C1C"))
+                    .padding(.horizontal, 16)
+                    .frame(height: 56)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                    .padding(.bottom, 24)
+                    .keyboardType(.numberPad)
+                
+                
+
+            }
+                .padding(.horizontal, 18)
+
+            InputField(
+                title: "password",
+                text: $password,
+                isSecure: true,
+                isValid: isPasswordValid,
+                onTextAction: { text in
+                    checkEnableBtn()
+                    checkPasswordMatch()
+                    onPasswordTextChange(text)
+
+                    if continueAttempted && !checkPasswordValidity(password: password) {
+                        showPasswordCheckView = true
+                    } else {
+                        showPasswordCheckView = false
+                    }
+                }
+            )
+            .focused($pinFocusState, equals: .newPassword)
+
+            
+//            if pinFocusState == .newPassword{
+//                    Spacer().frame(height: 12)
+//                    getPasswordListView()
+//            }
+
+
+            InputField(
+                title: "confirm_password",
+                text: $confirmPassword,
+                isSecure: true,
+                isValid: doPasswordsMatch,
+                onTextAction: { text in
+                    checkEnableBtn()
+                    checkPasswordMatch()
+                }
+            )
+            .focused($pinFocusState, equals: .confirmPassword)
+        }
+    }
+
+    private var bottomView: some View {
+        return VStack {
+            Button {
+                onContinueTap?(phone.wrappedValue, password)
+            } label: {
+                Text("continue".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+                    .foregroundStyle(.white)
+                    .frame(minWidth: 357, minHeight: 51)
+                    .background(RoundedRectangle(cornerRadius: 99).fill(enableBtn ? Color.colorPrimary : Color.gray))
+            }
+            .disabled(!enableBtn)
+            
+            Spacer().frame(height: 24)
+        }
+    }
+    
+    private func getPasswordListView() -> some View {
+
+        VStack(alignment: .leading){
+            HStack{
+                Text("your_password_must_include".localized)
+                    .font(Font.apply(.semiBold,size: 13))
+                    .foregroundColor(.colorTextPrimary)
+
+                Spacer()
+
+                if !getPasswordStrong().0.isEmpty{
+                        Text(getPasswordStrong().0)
+                            .font(Font.apply(.semiBold,size: 13))
+                            .foregroundColor(getPasswordStrong().1)
+
+
+                }
+
+            }
+            ForEach(Array(listPasswordValidation.wrappedValue.keys.sorted(by: {$0.index < $1.index})), id: \.self) { key in
+
+                HStack{
+                    passwordItemView(key: key, value: listPasswordValidation.wrappedValue[key] ?? .init(match: .none))
+                }
+
+            }
+
+        }
+            .padding(.vertical,16)
+            .padding(.horizontal,20)
+            .background(RoundedRectangle(cornerRadius: 20)
+                .fill(Color.colorBGTertiary))
+    }
+
+    private func passwordItemView(key:PasswordValidationType,value:ChangePasswordUIModel) -> some View{
+          HStack(alignment: .center,spacing: 0){
+              Image(value.match == .success ? "ic_checkCircleSelected" : "ic_checkCircle")
+                  .resizable()
+                  .frame(width: 18)
+                  .frame(height: 18)
+              Spacer().frame(width: 8)
+              Text(key.message)
+                  .font(Font.apply(.medium,size: 13))
+                  .foregroundColor(.colorTextSecondaryThird)
+          }
+
+      }
+
+    private func getPasswordStrong() ->(String,Color) {
+        let count = Array(listPasswordValidation.wrappedValue.values).filter({
+            $0.match == .success
+        }).count
+        if count == 0 && password.isEmpty{
+            return ("",.clear)
+        }else if count < listPasswordValidation.wrappedValue.count && !password.isEmpty{
+            return ("weak".localized,.colorError)
+        }
+        else{
+            return ("strong".localized,.colorSuccess2)
+
+        }
+    }
+    
+    private var errorView:some View{
+        Text("password_need_to_be_the_same".localized)
+            .foregroundStyle(Color.colorError)
+            .font(.apply(size:13))
+
+    }
+    
+    private func checkEnableBtn() {
+        enableBtn =
+        !phone.wrappedValue.isEmpty && !password.isEmpty &&
+        confirmPassword == password && checkPasswordValidity(password: password)
+
+    }
+
+    
+    private func checkPasswordValidity(password: String) -> Bool {
+        
+//        let lowercaseCheck = password.rangeOfCharacter(from: .lowercaseLetters) != nil
+        let uppercaseCheck = password.rangeOfCharacter(from: .uppercaseLetters) != nil
+        let numberCheck = password.rangeOfCharacter(from: .decimalDigits) != nil
+        let specialCharacterCheck = password.rangeOfCharacter(from: .alphanumerics.inverted) != nil
+        let lengthChecker = password.count >= 8
+        
+//        return lowercaseCheck && uppercaseCheck && numberCheck && specialCharacterCheck && lengthChecker
+        return uppercaseCheck && numberCheck && specialCharacterCheck && lengthChecker
+    }
+
+    private func checkPasswordMatch(){
+        if !enableBtn{
+            return
+        }
+        if confirmPassword != password {
+            errorPasswordNotMatch = true
+       }else{
+           errorPasswordNotMatch = false
+       }
+    }
+
+
+}
+
+
+#Preview {
+    LoginInformationContentView(listPasswordValidation: .constant([:]), onPasswordTextChange:  { text in
+        
+    }, onContinueTap: {username,password in
+        
+    })
+}

@@ -94,7 +94,7 @@ extension VerifySignUpViewModel {
     // MARK: VALIFY
     
     func verifyPhoneOtpValifyAPI(otp: String, isVerifyingWithEmail: Bool) {
-        let requestModel = VerifyPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", OTP: otp, TransactionId: transactionID, reqID: "14691")
+        let requestModel = VerifyPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", OTP: otp, TransactionId: transactionID, reqID: KeyChainController().valifyRequestId)
         
         verifyPhoneOtpValifyAPIResult = .onLoading(show: true)
         
@@ -122,7 +122,7 @@ extension VerifySignUpViewModel {
     }
     
     func verifyEmailOtpValifyAPI(otp: String, isVerifyingWithEmail: Bool) {
-        let requestModel = VerifyEmailOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", OTP: otp, TransactionId: transactionID, reqID: "14691")
+        let requestModel = VerifyEmailOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", OTP: otp, TransactionId: transactionID, reqID: KeyChainController().valifyRequestId)
         
         verifyEmailOtpValifyAPIResult = .onLoading(show: true)
         
@@ -150,7 +150,7 @@ extension VerifySignUpViewModel {
     }
     
     func sendPhoneOtpValifyAPI(phoneNumber: String) {
-        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber, reqID: "14691")
+        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber, reqID: KeyChainController().valifyRequestId)
         
         sendPhoneOtpValifyAPIResult = .onLoading(show: true)
         
@@ -178,7 +178,7 @@ extension VerifySignUpViewModel {
     }
     
     func sendEmailOtpValifyAPI(email:String) {
-        let requestModel = SendEmailOtpValifyRequestModel(Email: email, Lang: AppUtility.shared.isRTL ? "ar" : "en", reqID: "14691")
+        let requestModel = SendEmailOtpValifyRequestModel(Email: email, Lang: AppUtility.shared.isRTL ? "ar" : "en", reqID: KeyChainController().valifyRequestId)
         
         sendEmailOtpValifyAPIResult = .onLoading(show: true)
         

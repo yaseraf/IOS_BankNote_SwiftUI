@@ -38,6 +38,18 @@ class HomeCoordinator:  ObservableObject {
       return coordinator
     }
     
+    func getAuthCoordinator(startViewType: AuthStartSceneType) -> AuthCoordinator {
+        let coordinator:AuthCoordinator
+        if let childCoordinator = self.getChildCoordinator(coordinator: AuthCoordinator.self) as? AuthCoordinator {
+            coordinator = childCoordinator
+        } else {
+            coordinator = .init(navigationController: navigationController, startViewType: startViewType)
+            childCoordinator.append(coordinator)
+        }
+      return coordinator
+    }
+
+    
     func getPortfolioCoordinator() -> PortfolioCoordinator {
         let  coordinator:PortfolioCoordinator
         if let  childCoordinator = self.getChildCoordinator(coordinator: PortfolioCoordinator.self) as? PortfolioCoordinator {

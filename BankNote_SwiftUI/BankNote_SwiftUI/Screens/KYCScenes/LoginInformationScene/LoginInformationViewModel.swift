@@ -15,6 +15,7 @@ struct ChangePasswordUIModel{
 class LoginInformationViewModel: ObservableObject {
     private let coordinator: AuthCoordinatorProtocol
     private let useCase: KYCUseCaseProtocol
+    private let valifyUseCase: ValifyUseCaseProtocol
 
     @Published var getKYCCibcResponse: GetKYCCibcUIModel?
     @Published var stepCreateResponse: StepCreateUIModel?
@@ -23,10 +24,15 @@ class LoginInformationViewModel: ObservableObject {
 
     @Published var getKYCCibcAPIResult:APIResultType<GetKYCCibcUIModel>?
     @Published var stepCreateAPIResult:APIResultType<StepCreateUIModel>?
+    @Published var registerValifyAPIResult:APIResultType<RegisterValifyUIModel>?
+    @Published var csoValifyAPIResult:APIResultType<CsoValifyUIModel>?
+    @Published var ntraValifyAPIResult:APIResultType<NtraValifyUIModel>?
+    @Published var setPasswordValifyAPIResult:APIResultType<SetPasswordValifyUIModel>?
 
-    init(coordinator: AuthCoordinatorProtocol, useCase: KYCUseCaseProtocol) {
+    init(coordinator: AuthCoordinatorProtocol, useCase: KYCUseCaseProtocol, valifyUseCase: ValifyUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
+        self.valifyUseCase = valifyUseCase
     }
 }
 
@@ -36,10 +42,126 @@ extension LoginInformationViewModel {
 //        coordinator.openScanIDFrontScene()
         coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
     }
+    
+    func openLoginValifyScene() {
+        coordinator.openLoginValifyScene()
+    }
 }
 
 // MARK: API Calls
 extension LoginInformationViewModel {
+    
+    // MARK: Valify
+    
+    func csoValifyAPI(success: Bool, username:String, password:String) {
+        
+        let requestModel = CsoValifyRequestModel(bundleSessionId: "", expiration: "", firstName: "", fullName: username, nid: "", serialNumber: KeyChainController().valifyRequestId ?? "", reqID: KeyChainController().valifyRequestId ?? "")
+        
+        csoValifyAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.CsoValify(requestModel: requestModel) {[weak self] result in
+                self?.csoValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    if success.isSuccessful ?? false {
+                        self?.csoValifyAPIResult = .onSuccess(response: success)
+                        self?.ntraValifyAPI(success: true, username: username, password: password)
+                        
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.serverResponse ?? "")
+                    }
+                                        
+                case .failure(let failure):
+                        debugPrint("RegisterValify failed")
+                        self?.csoValifyAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+    
+    func ntraValifyAPI(success: Bool, username:String, password:String) {
+        
+        let requestModel = NtraValifyRequestModel(bundleSessionId: "", nid: "", phoneNumber: KeyChainController().phoneNumberEntered ?? "", reqID: KeyChainController().valifyRequestId ?? "")
+        
+        ntraValifyAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.NtraValify(requestModel: requestModel) {[weak self] result in
+                self?.ntraValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    if success.isSuccessful ?? false {
+                        self?.ntraValifyAPIResult = .onSuccess(response: success)
+                        self?.registerValifyAPI(success: true, username: username, password: password)
+                        
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.serverResponse ?? "")
+                    }
+                                        
+                case .failure(let failure):
+                        debugPrint("RegisterValify failed")
+                        self?.ntraValifyAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+    
+    func registerValifyAPI(success: Bool, username: String, password:String) {
+        
+        let requestModel = RegisterValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", name: username, userReferenceId: KeyChainController().valifyRequestId ?? "", reqID: KeyChainController().valifyRequestId ?? "")
+        
+        registerValifyAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.RegisterValify(requestModel: requestModel) {[weak self] result in
+                self?.registerValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    if success.isSuccessful ?? false {
+                        self?.registerValifyAPIResult = .onSuccess(response: success)
+                        debugPrint("RegisterValify success")
+                        self?.setPasswordValifyAPI(success: true, password: password)
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.serverResponse ?? "")
+                    }
+                                        
+                case .failure(let failure):
+                        debugPrint("RegisterValify failed")
+                        self?.registerValifyAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+    
+    func setPasswordValifyAPI(success: Bool, password: String) {
+        
+        let requestModel = SetPasswordValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", password: password, reqID: KeyChainController().valifyRequestId ?? "")
+        
+        setPasswordValifyAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.SetPasswordValify(requestModel: requestModel) {[weak self] result in
+                self?.setPasswordValifyAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.setPasswordValifyAPIResult = .onSuccess(response: success)
+                    debugPrint("setPasswordValify success")
+                    self?.openLoginValifyScene()
+                                        
+                case .failure(let failure):
+                        debugPrint("setPasswordValify failed")
+                        self?.setPasswordValifyAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+
+    // MARK: VLens
     func getKYCCibcAPI(success: Bool, requestItems: [GetKYCCibcRequestItems], password: String) {
         
         let requestModel = GetKYCCibcRequestModel(RequestItems: requestItems, reqID: KeyChainController().verifyPhoneOtpRequestId)

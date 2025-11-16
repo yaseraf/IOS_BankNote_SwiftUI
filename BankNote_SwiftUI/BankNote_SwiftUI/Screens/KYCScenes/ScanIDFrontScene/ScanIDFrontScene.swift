@@ -52,6 +52,7 @@ struct ScanIDFrontScene: BaseSceneType {
             AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         }
         .onViewDidLoad(){
+            getFrontBackValifyAPI()
             verifyIDFrontVlensAPI()
             verifyIDBackAPI()
             verifyLivenessAPI()
@@ -61,6 +62,25 @@ struct ScanIDFrontScene: BaseSceneType {
         }
 
     }
+    
+    private func getFrontBackValifyAPI() {
+        viewModel.$getFrontBackValifyAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+
 
     private func verifyIDFrontVlensAPI() {
         viewModel.$verifyIDFrontVlensAPIResult.receive(on: DispatchQueue.main).sink { result  in

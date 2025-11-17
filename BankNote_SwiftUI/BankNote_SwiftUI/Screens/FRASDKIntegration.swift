@@ -140,6 +140,9 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate {
                     .setHeaders(["X-Valify-reference-userid":KeyChainController().valifyRequestId ?? ""]) // !!
                     .setCollectUserInfo(true) // !!
                     .setNumberOfInstructions(3) // !!
+                    .withoutSmile()
+                    .withoutCloseEyes()
+                    .withoutVoiceOver()
                 
                 // Face Match
                 

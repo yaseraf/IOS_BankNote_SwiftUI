@@ -59,6 +59,7 @@ extension LandingViewModel {
 //        coordinator.openScanIDFrontScene()
 //        coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
         coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+//        coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
 //        coordinator.openLivenessCheckScene()
     }
     

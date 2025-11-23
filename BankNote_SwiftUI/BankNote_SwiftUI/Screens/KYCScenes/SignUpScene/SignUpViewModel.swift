@@ -46,6 +46,8 @@ class SignUpViewModel: ObservableObject {
         self.verifyWithEmail = verifyWithEmail
         self.selectCountry = AppConstants.defaultEgyptCountry
         checkLocationAuthorization()
+        
+       
     }
     
     

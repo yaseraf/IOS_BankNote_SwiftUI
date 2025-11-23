@@ -88,6 +88,9 @@ class sdkIntegration: UIViewController, ObservableObject, VIDVLivenessDelegate {
             .map { "\($0)=\($1)" }
             .joined(separator: "&")
         
+        debugPrint("valify access token body: \n")
+        debugPrint(bodyComponents)
+        
         request.httpBody = bodyComponents.data(using: .utf8)
         
         // Execute network request

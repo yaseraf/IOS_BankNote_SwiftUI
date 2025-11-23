@@ -435,7 +435,7 @@ struct CameraView: View {
                         if UIDevice.current.userInterfaceIdiom == .phone {
                             getImage()?.resizable()
                                 .aspectRatio(contentMode: .fill)
-//                                .offset(x: 80, y: 15)
+                                .offset(x: 80, y: 15)
                                 .mask(
                                     RoundedRectangle(cornerRadius:  24)
                                         .frame(width: geometry.size.width - 10, height: geometry.size.height / 3.5)

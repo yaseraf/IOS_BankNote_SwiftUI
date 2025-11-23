@@ -27,6 +27,8 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4811E33E2E68312A0010D8F6 /* BankNote_SwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = BankNote_SwiftUI;
 			sourceTree = "<group>";
 		};
@@ -183,13 +185,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

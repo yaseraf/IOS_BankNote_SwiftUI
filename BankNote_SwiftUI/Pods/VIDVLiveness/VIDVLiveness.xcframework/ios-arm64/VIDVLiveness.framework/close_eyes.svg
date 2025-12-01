@@ -1,0 +1,119 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <style>
+      .eye-open {
+        fill: white;
+      }
+      
+      .eye-closed {
+        fill: none;
+        stroke: white;
+        stroke-width: 3;
+        stroke-linecap: round;
+        opacity: 0;
+      }
+      
+      .nose {
+        fill: white;
+      }
+      
+      .mouth {
+        fill: none;
+        stroke: white;
+        stroke-width: 3;
+        stroke-linecap: round;
+      }
+      
+      .eyelash {
+        fill: none;
+        stroke: white;
+        stroke-width: 2;
+        stroke-linecap: round;
+        opacity: 0;
+      }
+      
+      .eye-animate {
+        animation: blinkAnimation 3s ease-in-out 1 forwards;
+      }
+      
+      .eyelash-animate {
+        animation: eyelashAnimation 3s ease-in-out 1 forwards;
+      }
+      
+      @keyframes blinkAnimation {
+        0% {
+          opacity: 1;
+          r: 8;
+        }
+        15% {
+          opacity: 1;
+          r: 6;
+        }
+         25% {
+          opacity: 0;
+          r: 0;
+        }
+        100% {
+          opacity: 0;
+          r: 0;
+        }
+      }
+      
+      .closed-eye-animate {
+        animation: closedEyeAnimation 3s ease-in-out 1 forwards;
+      }
+      
+      @keyframes closedEyeAnimation {
+        0% {
+          opacity: 0;
+        }
+        25% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      
+      @keyframes eyelashAnimation {
+        0% {
+          opacity: 0;
+        }
+        25% {
+          opacity: 0.8;
+        }
+        100% {
+          opacity: 0.8;
+        }
+      }
+    </style>
+  </defs>
+  
+  <!-- Open Eyes -->
+  <circle cx="70" cy="70" r="8" class="eye-open eye-animate"/>
+  <circle cx="130" cy="70" r="8" class="eye-open eye-animate"/>
+  
+  <!-- Closed Eyes -->
+  <path d="M 62 70 Q 70 68 78 70" class="eye-closed closed-eye-animate"/>
+  <path d="M 122 70 Q 130 68 138 70" class="eye-closed closed-eye-animate"/>
+  
+  <!-- Eyelashes -->
+  <path d="M 65 67 L 63 64" class="eyelash eyelash-animate"/>
+  <path d="M 70 66 L 70 63" class="eyelash eyelash-animate"/>
+  <path d="M 75 67 L 77 64" class="eyelash eyelash-animate"/>
+  
+  <path d="M 125 67 L 123 64" class="eyelash eyelash-animate"/>
+  <path d="M 130 66 L 130 63" class="eyelash eyelash-animate"/>
+  <path d="M 135 67 L 137 64" class="eyelash eyelash-animate"/>
+  
+  <!-- Nose -->
+  <ellipse cx="100" cy="90" rx="3" ry="5" class="nose"/>
+  
+  <!-- Slight smile mouth -->
+  <path d="M 85 140 Q 100 145 115 140" class="mouth"/>
+  
+  <!-- Relaxed cheeks (subtle) -->
+  <circle cx="50" cy="100" r="4" fill="rgba(255,255,255,0.2)" opacity="0.5"/>
+  <circle cx="150" cy="100" r="4" fill="rgba(255,255,255,0.2)" opacity="0.5"/>
+  
+</svg>

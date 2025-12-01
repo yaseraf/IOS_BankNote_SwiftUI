@@ -1,14 +1,9 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
-
 target 'BankNote_SwiftUI' do
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for BankNote_SwiftUI
 
   pod 'VIDVOCR','3.1.0'
-  pod 'VIDVLiveness','2.3.2'
+  pod 'VIDVLiveness','4.0.3'
   pod 'Toast-Swift', '5.0.1'
 
 end

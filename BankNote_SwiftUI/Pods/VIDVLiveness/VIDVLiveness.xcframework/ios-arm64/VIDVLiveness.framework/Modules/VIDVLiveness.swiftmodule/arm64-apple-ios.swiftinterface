@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.9.2 (swiftlang-5.9.2.2.56 clang-1500.1.0.2.5)
-// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name VIDVLiveness
-// swift-module-flags-ignorable: -enable-bare-slash-regex
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name VIDVLiveness
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
 import AVFoundation
 import AudioToolbox
 import CommonCrypto
@@ -11,15 +11,18 @@ import CryptoKit
 import DeveloperToolsSupport
 import Foundation
 import ImageIO
+import ObjectiveC
 import Security
 import Swift
 import SwiftUI
 import SystemConfiguration
 import UIKit
 import Vision
+import WebKit
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
+import ObjectiveC.runtime
 extension VIDVLiveness.VIDVLivenessEventsLogEntity {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<VIDVLiveness.VIDVLivenessEventsLogEntity>
   @objc @NSManaged dynamic public var key: Swift.String? {
@@ -125,7 +128,7 @@ extension UIKit.UIImage {
   public class func gifImageWithName(_ name: Swift.String) -> UIKit.UIImage?
 }
 extension UIKit.UIDevice {
-  @_Concurrency.MainActor(unsafe) public static let modelName: Swift.String
+  @_Concurrency.MainActor @preconcurrency public static let modelName: Swift.String
 }
 public var screenWidth: CoreFoundation.CGFloat {
   get
@@ -143,6 +146,9 @@ public class VIDVLivenessFlow {
   public func start()
   @objc deinit
 }
+extension UIKit.UIFont {
+  convenience public init?(familyName: Swift.String)
+}
 @_hasMissingDesignatedInitializers @available(iOS 12.0, *)
 public class CoreDataManager {
   @objc deinit
@@ -155,9 +161,11 @@ public class VIDVLivenessResult : Swift.Codable {
   public var livenessSuccess: Swift.Bool?
   public var facematchSuccess: Swift.Bool?
   public var capturedImage: Swift.String?
+  public var auditCaseCreated: Swift.Bool?
+  public var auditRequired: Swift.Bool?
   public var facematchTransactionID: Swift.String?
   public var hmacDataList: [VIDVLiveness.HMACData]?
-  public init(livenessSuccess: Swift.Bool?, facematchSuccess: Swift.Bool?, capturedImage: Swift.String?, facematchTransactionID: Swift.String?, hmacDataList: [VIDVLiveness.HMACData]?)
+  public init(livenessSuccess: Swift.Bool?, facematchSuccess: Swift.Bool?, capturedImage: Swift.String?, auditingCaseCreated: Swift.Bool? = false, auditingRequired: Swift.Bool? = false, facematchTransactionID: Swift.String?, hmacDataList: [VIDVLiveness.HMACData]?)
   @objc deinit
   public func encode(to encoder: any Swift.Encoder) throws
   required public init(from decoder: any Swift.Decoder) throws
@@ -245,23 +253,28 @@ public enum stages {
     get
   }
 }
-public enum VIDVLivenessLanguage {
+public enum VIDVLivenessLanguage : Swift.String, Swift.CaseIterable {
   case arabic
   case english
-  public static func == (a: VIDVLiveness.VIDVLivenessLanguage, b: VIDVLiveness.VIDVLivenessLanguage) -> Swift.Bool
-  public func hash(into hasher: inout Swift.Hasher)
-  public var hashValue: Swift.Int {
+  case french
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [VIDVLiveness.VIDVLivenessLanguage]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [VIDVLiveness.VIDVLivenessLanguage] {
+    get
+  }
+  public var rawValue: Swift.String {
     get
   }
 }
 @_hasMissingDesignatedInitializers @available(iOS 12.0, *)
 public class VIDVCustomLiveness {
   public static let sharedInstance: VIDVLiveness.VIDVCustomLiveness
-  public var delegate: (any VIDVLiveness.VIDVLivenessDelegate)!
+  public var delegate: (any VIDVLiveness.VIDVLivenessDelegate)?
   public var logsDelegate: (any VIDVLiveness.VIDVLivenessLogsDelegate)?
   @objc deinit
 }
-public protocol VIDVLivenessDelegate {
+public protocol VIDVLivenessDelegate : AnyObject {
   func onLivenessResult(_ VIDVLivenessResponse: VIDVLiveness.VIDVLivenessResponse)
 }
 public protocol VIDVLivenessLogsDelegate : AnyObject {
@@ -274,6 +287,14 @@ public enum VIDVLivenessResponse {
   case builderError(errorCode: Swift.Int, errorMessage: Swift.String)
   case userExited(VIDVLivenessResult: VIDVLiveness.VIDVLivenessResult?, step: Swift.String)
   case capturedActions(capturedActions: VIDVLiveness.VIDVDetectedFace)
+}
+public struct SafeURLBuilder {
+  public static func buildSafeURL(baseURL: Swift.String, endpointPath: Swift.String) throws -> Foundation.URL
+}
+public enum SafeURLError : Swift.Error {
+  case invalidOrUnspecifiedBaseURL
+  case invalidEndpointCharacters
+  case unknown(Swift.String)
 }
 @_hasMissingDesignatedInitializers public class UIUtilities {
   public static func addCircle(atPoint point: CoreFoundation.CGPoint, to view: UIKit.UIView, color: UIKit.UIColor, radius: CoreFoundation.CGFloat)
@@ -363,6 +384,10 @@ public class VIDVLivenessBuilder {
   public func withoutVoiceOver() -> VIDVLiveness.VIDVLivenessBuilder
   public func setPrimaryColor(_ primaryColor: UIKit.UIColor) -> VIDVLiveness.VIDVLivenessBuilder
   public func setCollectUserInfo(_ collectUserInfo: Swift.Bool) -> VIDVLiveness.VIDVLivenessBuilder
+  public func setCustomColor(_ customColor: UIKit.UIColor) -> VIDVLiveness.VIDVLivenessBuilder
+  public func setCustomFont(_ font: UIKit.UIFont) -> VIDVLiveness.VIDVLivenessBuilder
+  public func setCustomFontDescriptor(_ descriptor: UIKit.UIFontDescriptor) -> VIDVLiveness.VIDVLivenessBuilder
+  public func enableSecondChanceFallback(_ enableSecondChanceFallback: Swift.Bool) -> VIDVLiveness.VIDVLivenessBuilder
   @available(iOS 12.0, *)
   public func start(vc: UIKit.UIViewController, livenessDelegate: any VIDVLiveness.VIDVLivenessDelegate)
   @objc deinit
@@ -377,6 +402,7 @@ public enum livenessInstructions {
   case look_str8
   case smile
   case close_eyes
+  case passive_liveness
   public static func == (a: VIDVLiveness.livenessInstructions, b: VIDVLiveness.livenessInstructions) -> Swift.Bool
   public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
@@ -387,5 +413,6 @@ extension VIDVLiveness.stages : Swift.Equatable {}
 extension VIDVLiveness.stages : Swift.Hashable {}
 extension VIDVLiveness.VIDVLivenessLanguage : Swift.Equatable {}
 extension VIDVLiveness.VIDVLivenessLanguage : Swift.Hashable {}
+extension VIDVLiveness.VIDVLivenessLanguage : Swift.RawRepresentable {}
 extension VIDVLiveness.livenessInstructions : Swift.Equatable {}
 extension VIDVLiveness.livenessInstructions : Swift.Hashable {}

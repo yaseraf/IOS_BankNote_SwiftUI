@@ -14,6 +14,7 @@ struct BankNoteApp: App {
     var body: some Scene {
         WindowGroup {
             Spacer()
+//            ContentView()
 //            LivenessCheckContentView {
 //                debugPrint("test")
 //            }

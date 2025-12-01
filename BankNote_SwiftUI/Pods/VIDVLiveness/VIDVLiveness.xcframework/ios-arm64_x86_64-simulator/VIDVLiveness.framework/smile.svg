@@ -1,0 +1,84 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <style>
+      .eye {
+        fill: white;
+      }
+      
+      .nose {
+        fill: white;
+      }
+      
+      .mouth {
+        fill: none;
+        stroke: white;
+        stroke-width: 4;
+        stroke-linecap: round;
+      }
+      
+      .cheek {
+        fill: rgba(255,255,255,0.4);
+      }
+    </style>
+  </defs>
+  
+  <!-- Eyes -->
+  <circle cx="70" cy="70" r="8" class="eye"/>
+  <circle cx="130" cy="70" r="8" class="eye"/>
+  
+  <!-- Nose -->
+  <ellipse cx="100" cy="90" rx="3" ry="5" class="nose"/>
+  
+  <!-- Animated mouth -->
+  <path d="M 80 140 Q 100 145 120 140" class="mouth">
+    <animate
+      attributeName="d"
+      dur="2s"
+      fill="freeze"
+      values="M 80 140 Q 100 145 120 140;
+              M 70 135 Q 100 155 130 135;
+              M 60 130 Q 100 165 140 130;
+              M 55 125 Q 100 170 145 125;
+              M 55 125 Q 100 170 145 125"
+      keyTimes="0; 0.25; 0.5; 0.75; 1"
+    />
+  </path>
+  
+  <!-- Cheeks -->
+  <circle cx="50" cy="100" r="6" class="cheek" transform-origin="50 100">
+    <animate
+      attributeName="opacity"
+      dur="2s"
+      fill="freeze"
+      values="0.2; 0.6; 0.6"
+      keyTimes="0; 0.5; 1"
+    />
+    <animateTransform
+      attributeName="transform"
+      type="scale"
+      dur="2s"
+      fill="freeze"
+      values="0.8; 1.2; 1.2"
+      keyTimes="0; 0.5; 1"
+      additive="sum"
+    />
+  </circle>
+  <circle cx="150" cy="100" r="6" class="cheek" transform-origin="150 100">
+    <animate
+      attributeName="opacity"
+      dur="2s"
+      fill="freeze"
+      values="0.2; 0.6; 0.6"
+      keyTimes="0; 0.5; 1"
+    />
+    <animateTransform
+      attributeName="transform"
+      type="scale"
+      dur="2s"
+      fill="freeze"
+      values="0.8; 1.2; 1.2"
+      keyTimes="0; 0.5; 1"
+      additive="sum"
+    />
+  </circle>
+</svg>

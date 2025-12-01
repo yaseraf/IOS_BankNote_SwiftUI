@@ -55,7 +55,15 @@ extension LoginInformationViewModel {
     
     func csoValifyAPI(success: Bool, username:String, password:String) {
         
-        let requestModel = CsoValifyRequestModel(bundleSessionId: "", expiration: "", firstName: "", fullName: username, nid: "", serialNumber: KeyChainController().valifyRequestId ?? "", reqID: KeyChainController().valifyRequestId ?? "")
+        let requestModel = CsoValifyRequestModel(
+            bundleSessionId: "",
+            expiration: "",
+            firstName: "",
+            fullName: username,
+            nid: "",
+            serialNumber: KeyChainController().valifyRequestId ?? "",
+            reqID: KeyChainController().valifyRequestId ?? ""
+        )
         
         csoValifyAPIResult = .onLoading(show: true)
 
@@ -83,7 +91,12 @@ extension LoginInformationViewModel {
     
     func ntraValifyAPI(success: Bool, username:String, password:String) {
         
-        let requestModel = NtraValifyRequestModel(bundleSessionId: "", nid: "", phoneNumber: KeyChainController().phoneNumberEntered ?? "", reqID: KeyChainController().valifyRequestId ?? "")
+        let requestModel = NtraValifyRequestModel(
+            bundleSessionId: "",
+            nid: "",
+            phoneNumber: KeyChainController().phoneNumberEntered ?? "",
+            reqID: KeyChainController().valifyRequestId ?? ""
+        )
         
         ntraValifyAPIResult = .onLoading(show: true)
 
@@ -111,7 +124,12 @@ extension LoginInformationViewModel {
     
     func registerValifyAPI(success: Bool, username: String, password:String) {
         
-        let requestModel = RegisterValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", name: username, userReferenceId: KeyChainController().valifyRequestId ?? "", reqID: KeyChainController().valifyRequestId ?? "")
+        let requestModel = RegisterValifyRequestModel(
+            lang: AppUtility.shared.isRTL ? "ar" : "en",
+            name: username,
+            userReferenceId: KeyChainController().valifyRequestId ?? "",
+            reqID: KeyChainController().valifyRequestId ?? ""
+        )
         
         registerValifyAPIResult = .onLoading(show: true)
 
@@ -139,7 +157,11 @@ extension LoginInformationViewModel {
     
     func setPasswordValifyAPI(success: Bool, password: String) {
         
-        let requestModel = SetPasswordValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", password: password, reqID: KeyChainController().valifyRequestId ?? "")
+        let requestModel = SetPasswordValifyRequestModel(
+            lang: AppUtility.shared.isRTL ? "ar" : "en",
+            password: password,
+            reqID: KeyChainController().valifyRequestId ?? ""
+        )
         
         setPasswordValifyAPIResult = .onLoading(show: true)
 

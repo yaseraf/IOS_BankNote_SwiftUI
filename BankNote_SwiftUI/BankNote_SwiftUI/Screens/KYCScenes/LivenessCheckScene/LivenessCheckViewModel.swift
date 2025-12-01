@@ -10,7 +10,7 @@ import VIDVLiveness
 import UIKit
 import SwiftUI
 
-class LivenessCheckViewModel: ObservableObject, VIDVLivenessDelegate {
+class LivenessCheckViewModel: NSObject, ObservableObject, VIDVLivenessDelegate {
         
     private let coordinator: AuthCoordinatorProtocol
     
@@ -45,7 +45,9 @@ extension LivenessCheckViewModel {
 
 // MARK: Functions
 extension LivenessCheckViewModel {
+    
     func generateAccessToken(completion: @escaping (String?, Error?) -> Void) {
+        // your token generation code here
         let urlString = "\(baseURL)/api/o/token/"
         guard let url = URL(string: urlString) else {
             completion(nil, NSError(domain: "Invalid URL", code: -1, userInfo: nil))
@@ -66,6 +68,9 @@ extension LivenessCheckViewModel {
         ]
             .map { "\($0)=\($1)" }
             .joined(separator: "&")
+        
+        debugPrint("valify access token body: \n")
+        debugPrint(bodyComponents)
         
         request.httpBody = bodyComponents.data(using: .utf8)
         
@@ -95,39 +100,28 @@ extension LivenessCheckViewModel {
             }
         }
         task.resume()
+
     }
-
-    func startLiveness(transactionFrontId : String){
+    
+    func startLiveness(from topVC: UIViewController) {
         generateAccessToken { [weak self] token, error in
-            guard let self = self else { return }
-            
-            if let vc = UIViewController.topMostViewController() {
-                print("Top VC: \(vc)")
-                print("Has window: \(vc.view.window != nil)")
+            guard let self = self, let token = token else {
+                self?.errorMessage = error?.localizedDescription ?? "Unknown"
+                return
             }
-
             
-            if let token = token {
-                self.accessToken = token // Update published access token
-                self.errorMessage = "" // Clear any previous error message
-                
-                self.vidvLivenessBuilder = self.vidvLivenessBuilder
-                    .setBundleKey(self.bundleKey)
-                    .setBaseURL(self.baseURL)
-                    .setAccessToken(accessToken)
-//                    .setFrontTransactionID(transactionFrontId)
-//                if let rootVC = UIApplication.shared.windows.first?.rootViewController {
-                if let rootVC = UIViewController.topMostViewController() {
-                        self.vidvLivenessBuilder.start(vc: rootVC, livenessDelegate:self)
-                        print("Liveness started") // Log to confirm the method was called
-                    } else {
-                        print("Error: No root view controller found.")
-                    }
-            } else if let error = error {
-                self.accessToken = "" // Clear access token on error
-                self.errorMessage = error.localizedDescription // Update error message
-                print("Failed to generate access token: \(error.localizedDescription)")
-            }
+            self.accessToken = token
+            self.vidvLivenessBuilder = self.vidvLivenessBuilder
+                .setBundleKey(self.bundleKey)
+                .setBaseURL(self.baseURL)
+                .setAccessToken(token)
+//            
+//            let bridge = sdkIntegration()
+//            bridge.modalPresentationStyle = .fullScreen
+//            bridge.builder = self.vidvLivenessBuilder
+//            bridge.delegate = bridge // or self if needed
+//            
+//            topVC.present(bridge, animated: true)
         }
     }
 }

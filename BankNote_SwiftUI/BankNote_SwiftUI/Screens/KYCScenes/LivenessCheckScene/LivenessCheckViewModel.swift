@@ -13,7 +13,10 @@ import SwiftUI
 class LivenessCheckViewModel: NSObject, ObservableObject, VIDVLivenessDelegate {
         
     private let coordinator: AuthCoordinatorProtocol
-    
+    private let valifyUseCase: ValifyUseCaseProtocol
+
+    @Published var getValifyDataAPIResult:APIResultType<GetValifyDataUIModel>?
+
     var vidvLivenessBuilder = VIDVLivenessBuilder()
     @Published var livenessResultMessage: String = "" // Publish Liveness result message
 
@@ -28,8 +31,9 @@ class LivenessCheckViewModel: NSObject, ObservableObject, VIDVLivenessDelegate {
 
     @Published var startLivenessAPIResult:APIResultType<VerifyLivenessUIModel>?
 
-    init(coordinator: AuthCoordinatorProtocol) {
+    init(coordinator: AuthCoordinatorProtocol, valifyUseCase: ValifyUseCaseProtocol) {
         self.coordinator = coordinator
+        self.valifyUseCase = valifyUseCase
         
 //        vidvLivensssInit()
     }
@@ -41,89 +45,35 @@ extension LivenessCheckViewModel {
     func openQuestioneerScene() {
         coordinator.openQuestioneerScene()
     }
+    
+    func getValifyData() {
+        
+        let requestModel = GetValifyDataRequestModel(reqID: KeyChainController().valifyRequestId ?? "")
+                
+        getValifyDataAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await valifyUseCase.GetValifyData(requestModel: requestModel) {[weak self] result in
+                self?.getValifyDataAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+
+                    KeyChainController().valifyTransactionId = success.resData?.transactionId
+                    debugPrint("get valify success")
+                    
+                case .failure(let failure):
+                    self?.getValifyDataAPIResult = .onFailure(error: failure)
+                    debugPrint("get valify failed: \(failure)")
+                }
+            }
+        }
+    }
+
 }
 
 // MARK: Functions
 extension LivenessCheckViewModel {
     
-    func generateAccessToken(completion: @escaping (String?, Error?) -> Void) {
-        // your token generation code here
-        let urlString = "\(baseURL)/api/o/token/"
-        guard let url = URL(string: urlString) else {
-            completion(nil, NSError(domain: "Invalid URL", code: -1, userInfo: nil))
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        
-        // Form URL-encoded request body
-        let bodyComponents = [
-            "username": username,
-            "password": password,
-            "client_id": clientId,
-            "client_secret": clientSecret,
-            "grant_type": "password"
-        ]
-            .map { "\($0)=\($1)" }
-            .joined(separator: "&")
-        
-        debugPrint("valify access token body: \n")
-        debugPrint(bodyComponents)
-        
-        request.httpBody = bodyComponents.data(using: .utf8)
-        
-        // Execute network request
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(nil, error)
-                    return
-                }
-                
-                guard let data = data else {
-                    completion(nil, NSError(domain: "No data", code: -1, userInfo: nil))
-                    return
-                }
-                
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                       let token = json["access_token"] as? String {
-                        completion(token, nil)
-                    } else {
-                        completion(nil, NSError(domain: "Token Error", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid token response"]))
-                    }
-                } catch {
-                    completion(nil, error)
-                }
-            }
-        }
-        task.resume()
-
-    }
-    
-    func startLiveness(from topVC: UIViewController) {
-        generateAccessToken { [weak self] token, error in
-            guard let self = self, let token = token else {
-                self?.errorMessage = error?.localizedDescription ?? "Unknown"
-                return
-            }
-            
-            self.accessToken = token
-            self.vidvLivenessBuilder = self.vidvLivenessBuilder
-                .setBundleKey(self.bundleKey)
-                .setBaseURL(self.baseURL)
-                .setAccessToken(token)
-//            
-//            let bridge = sdkIntegration()
-//            bridge.modalPresentationStyle = .fullScreen
-//            bridge.builder = self.vidvLivenessBuilder
-//            bridge.delegate = bridge // or self if needed
-//            
-//            topVC.present(bridge, animated: true)
-        }
-    }
 }
 
 // MARK: Delegates

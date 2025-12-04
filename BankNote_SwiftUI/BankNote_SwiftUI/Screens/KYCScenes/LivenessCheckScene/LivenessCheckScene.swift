@@ -19,22 +19,20 @@ struct LivenessCheckScene: BaseSceneType {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 LivenessCheckContentView(onContinueTap: {
-                    guard let topVC = UIViewController.topMostViewController() else {
-                        debugPrint("Not here")
-                        return }
-                    viewModel.startLiveness(from: topVC)
-
 //                    viewModel.startLiveness(transactionFrontId: "123456")
                 })
             })
+            .onAppear {
+//                viewModel.getValifyData()
+            }
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad {
-            startLiveness()
+            getValifyDataAPI()
         }
     }
     
-    private func startLiveness() {
-        viewModel.$startLivenessAPIResult.receive(on: DispatchQueue.main).sink { result  in
+    private func getValifyDataAPI() {
+        viewModel.$getValifyDataAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{
             case .onFailure(let error):
                 SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)

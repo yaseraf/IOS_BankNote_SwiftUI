@@ -225,7 +225,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     }
 
     func openLivenessCheckScene() {
-        let viewModel = LivenessCheckViewModel(coordinator: self)
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = LivenessCheckViewModel(coordinator: self, valifyUseCase: valifyUseCase)
         let view = LivenessCheckScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

@@ -17,6 +17,7 @@ struct GetFrontBackValifiyResponseModel: Codable {
     let ErrorMsg: String?
     let IsSuccessful: Bool?
     let Message: String?
+    let TransactionId: String?
     let reqID: String?
 }
 
@@ -24,9 +25,10 @@ struct GetFrontBackValifiyUIModel {
     var ErrorMsg: String?
     var IsSuccessful: Bool?
     var Message: String?
+    var TransactionId: String?
     var reqID: String?
     
     static func mapToUIModel(_ model: GetFrontBackValifiyResponseModel) -> Self {
-        return GetFrontBackValifiyUIModel(ErrorMsg: model.ErrorMsg, IsSuccessful: model.IsSuccessful, Message: model.Message, reqID: model.reqID)
+        return GetFrontBackValifiyUIModel(ErrorMsg: model.ErrorMsg, IsSuccessful: model.IsSuccessful, Message: model.Message, TransactionId: model.TransactionId, reqID: model.reqID)
     }
 }

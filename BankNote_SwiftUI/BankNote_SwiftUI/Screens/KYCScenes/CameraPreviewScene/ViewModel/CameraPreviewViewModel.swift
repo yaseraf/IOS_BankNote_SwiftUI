@@ -124,15 +124,11 @@ class CameraPreviewViewModel:ObservableObject{
         
         imageBack = compressedString
 
-//        let requestModel = VerifyIDBackRequestModel(Image: compressedString, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
-        
-        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: ImagesTemplates.init().backImageTemplate, IdFrontBase64: ImagesTemplates.init().frontImageTemplate, reqID: KeyChainController().valifyRequestId)
-//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: imageBack, IdFrontBase64: imageFront, reqID: KeyChainController().valifyRequestId)
-//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: "", IdFrontBase64: "", reqID: KeyChainController().valifyRequestId)
         
         //MARK: Template
-//        let requestModel = VerifyIDBackRequestModel(Image: ImagesTemplates.init().backImageTemplate, Request_Id: KeyChainController().verifyPhoneOtpRequestId, accessToken: KeyChainController().stepCreateAccessToken, transaction_id: KeyChainController().transactionId)
+//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: ImagesTemplates.init().backImageTemplate, IdFrontBase64: ImagesTemplates.init().frontImageTemplate, reqID: KeyChainController().valifyRequestId)
         
+        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: imageBack, IdFrontBase64: imageFront, reqID: KeyChainController().valifyRequestId)
 
         
         Task.init {
@@ -146,6 +142,7 @@ class CameraPreviewViewModel:ObservableObject{
                         
                         self?.getFrontBackValifyAPIResult = .onSuccess(response: success)
                         self?.getFrontBackValifyResponse = success
+                        KeyChainController().valifyTransactionId = success.TransactionId
 //                        self?.coordinator.openTakeSelfieScene(livenessCheck: true)
                         self?.coordinator.openLivenessCheckScene()
 //                        self?.openVerifyIDConfirmationScene(savedImageOne: self?.savedImageOne, isFrontID: false, address: "", name: "", dateOfBirth: "", idNumber: "", idKey: "", gender: success.data?.idBackData?.gender ?? "", jobTitle: success.data?.idBackData?.jobTitle ?? "", religion: success.data?.idBackData?.religion ?? "", maritalStatus: success.data?.idBackData?.maritalStatus ?? "")

@@ -99,8 +99,12 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
                     .setAccessToken(accessToken)
                     .setHeaders(["X-Valify-reference-userid":KeyChainController().valifyRequestId ?? ""]) // !!
                     .setCollectUserInfo(true)
-                    .setFrontTransactionID(transactionFrontId)
+//                    .setNumberOfInstructions(3)
+                    .setFrontTransactionID(KeyChainController().valifyTransactionId)
                     .setLanguage("en")
+//                    .withoutSmile()
+//                    .withoutCloseEyes()
+                    
 
                 // Face Match
                 debugPrint("Windows:", UIApplication.shared.connectedScenes.compactMap { ($0 as? UIWindowScene)?.windows })
@@ -138,6 +142,7 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
             // data of type VIDVOCRResult
             livenessResultMessage = "Liveness Success!"
             debugPrint("VidVLiveness success, data: \(data)")
+            SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "VidVLiveness success, data: \(data)")
             SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
 //            startAuth()
 
@@ -145,21 +150,25 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
             // builder error code & error message
             livenessResultMessage = "Liveness Error! Code: \(code), Message: \(message)"
             debugPrint("VidVLiveness builderError, code: \(code), message: \(message)")
+            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness builderError, code: \(code), message: \(message)")
 
         case .serviceFailure(let code, let message, let data):
             // service faluire error code & error message & data of type VIDVOCRResult
             livenessResultMessage = "Service Error! Code: \(code), Message: \(message)"
             debugPrint("VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
+            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
 
         case .userExited(let data, let step):
             // last step in the SDK & data of type VIDVOCRResult
             livenessResultMessage = "User exited at step \(step)"
             debugPrint("VidVLiveness userExit, data: \(data), step: \(step)")
+            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness userExit, data: \(data), step: \(step)")
 
         case .capturedActions(let capturedActions):
             // capturedImageData of type CapturedImageData
             livenessResultMessage = "Liveness Image Captured"
             debugPrint("VidVLiveness capturedImages, actions: \(capturedActions)")
+            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness capturedImages, actions: \(capturedActions)")
 
         }
     }

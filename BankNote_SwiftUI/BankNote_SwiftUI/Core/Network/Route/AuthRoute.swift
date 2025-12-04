@@ -68,6 +68,11 @@ enum AuthRoute:APITargetType{
                 dicHeader["access-token"] = "344553443"
                 return dicHeader
                 
+            case .GetValifyData:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+                
             case .RegisterValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = "344553443"

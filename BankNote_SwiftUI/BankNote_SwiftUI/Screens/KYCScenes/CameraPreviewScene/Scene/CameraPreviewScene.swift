@@ -21,9 +21,9 @@ struct CameraPreviewScene: BaseSceneType{
 
             }) { imageData1, imageData2, imageData3, isFrontImage in
                 if viewModel.viewType == .selfieMode(liveness: true) {
-                    Task {
-                        await viewModel.VerifyLivenessAPI(success: true, image1: imageData1 ?? Data(), image2: imageData2 ?? Data(), image3: imageData3 ?? Data())
-                    }
+//                    Task {
+//                        await viewModel.VerifyLivenessAPI(success: true, image1: imageData1 ?? Data(), image2: imageData2 ?? Data(), image3: imageData3 ?? Data())
+//                    }
                 } else if viewModel.viewType == .selfieMode(liveness: false) {
                     viewModel.handleImageData(imageDataOne: imageData1, ImageDataTwo: imageData2)
                 } else {

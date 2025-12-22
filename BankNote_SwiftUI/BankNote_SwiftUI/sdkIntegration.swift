@@ -6,6 +6,9 @@ import Combine
 //import Toast_Swift
 
 class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
+    
+    static let shared = sdkIntegration()
+
     // Ensure it conforms to ObservableObject
     @Published var ocrResultMessage: String = "" // Publish OCR result message
     @Published var livenessResultMessage: String = "" // Publish Liveness result message
@@ -25,6 +28,8 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
 
     @Published var accessToken: String = "" // Publish access token to UI
     @Published var errorMessage: String = "" // Publish error message to UI
+    
+    var LivenessDelegate: LivenessResultDelegate?
     
     
     // Generate access token from API to connect to the SDK
@@ -99,7 +104,6 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
                     .setAccessToken(accessToken)
                     .setHeaders(["X-Valify-reference-userid":KeyChainController().valifyRequestId ?? ""]) // !!
                     .setCollectUserInfo(true)
-//                    .setNumberOfInstructions(3)
                     .setFrontTransactionID(KeyChainController().valifyTransactionId)
                     .setLanguage("en")
 //                    .withoutSmile()
@@ -144,31 +148,37 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
             debugPrint("VidVLiveness success, data: \(data)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "VidVLiveness success, data: \(data)")
             SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
-//            startAuth()
+            LivenessDelegate?.onLivenessSuccess()
+            //            startAuth()
 
         case .builderError(let code, let message):
             // builder error code & error message
             livenessResultMessage = "Liveness Error! Code: \(code), Message: \(message)"
             debugPrint("VidVLiveness builderError, code: \(code), message: \(message)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness builderError, code: \(code), message: \(message)")
-
+            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
+            LivenessDelegate?.onLivenessSuccess()
+            
         case .serviceFailure(let code, let message, let data):
             // service faluire error code & error message & data of type VIDVOCRResult
             livenessResultMessage = "Service Error! Code: \(code), Message: \(message)"
             debugPrint("VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
-
+            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
+            LivenessDelegate?.onLivenessSuccess()
+            
         case .userExited(let data, let step):
             // last step in the SDK & data of type VIDVOCRResult
             livenessResultMessage = "User exited at step \(step)"
             debugPrint("VidVLiveness userExit, data: \(data), step: \(step)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness userExit, data: \(data), step: \(step)")
+            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
 
         case .capturedActions(let capturedActions):
             // capturedImageData of type CapturedImageData
             livenessResultMessage = "Liveness Image Captured"
             debugPrint("VidVLiveness capturedImages, actions: \(capturedActions)")
-            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness capturedImages, actions: \(capturedActions)")
+//            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness capturedImages, actions: \(capturedActions)")
 
         }
     }

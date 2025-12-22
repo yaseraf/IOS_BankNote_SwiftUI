@@ -43,7 +43,7 @@ struct SignUpScene: BaseSceneType {
             })
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onAppear {
-            KeyChainController().valifyRequestId = "37284"
+            KeyChainController().valifyRequestId = "23912"
             // Dont call getAccessToken when going to Email
 //            if viewModel.verifyWithEmail == false {
 //                viewModel.getAccessTokenAPI(success: true)

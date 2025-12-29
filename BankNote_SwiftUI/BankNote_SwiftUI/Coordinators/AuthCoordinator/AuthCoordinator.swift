@@ -154,7 +154,26 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
 
-    
+    func openQuestionsScene() {
+        let useCase = KYCUseCase()
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = QuestionsViewModel(coordinator: self, useCase: useCase, valifyUseCase: valifyUseCase)
+        let view = QuestionsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func openSetPasswordScene() {
+        let useCase = KYCUseCase()
+        let valifyUseCase = ValifyUseCase()
+        let viewModel = SetPasswordViewModel(coordinator: self, useCase: useCase, valifyUseCase: valifyUseCase)
+        let view = SetPasswordScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
     func openCameraPreviewFor(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool) {
         let kycUseCase = KYCUseCase()
         let valifyUseCase = ValifyUseCase()

@@ -249,6 +249,7 @@
 "search_for_name" = "ابحث";
 "by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service" = "بالضغط على متابعة، فإنك توافق على سياسة الخصوصية وشروط الخدمة الخاصة بنا";
 "login_information" = "معلومات تسجيل الدخول";
+"set_password" = "قم بتعيين كلمة المرور";
 "you_will_use_these_details_to_login_to_your_account" = "ستستخدم هذه التفاصيل لتسجيل الدخول إلى حسابك";
 "user_name" = "اسم المستخدم";
 "password" = "كلمة المرور";

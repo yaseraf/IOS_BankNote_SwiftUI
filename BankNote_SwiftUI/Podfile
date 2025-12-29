@@ -3,7 +3,7 @@ target 'BankNote_SwiftUI' do
 
 
   pod 'VIDVOCR','3.1.0'
-  pod 'VIDVLiveness','4.0.3'
+  pod 'VIDVLiveness','4.1.0'
   pod 'Toast-Swift', '5.0.1'
 
 end

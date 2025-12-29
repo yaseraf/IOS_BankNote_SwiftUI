@@ -10,11 +10,13 @@ import Foundation
 struct SetPasswordValifyRequestModel: Codable {
     let lang: String
     let password: String
+    let accessToken: String
     let reqID: String
     
     enum CodingKeys: String, CodingKey {
         case lang = "Lang"
         case password = "Password"
+        case accessToken = "accessToken"
         case reqID = "reqID"
     }
 }

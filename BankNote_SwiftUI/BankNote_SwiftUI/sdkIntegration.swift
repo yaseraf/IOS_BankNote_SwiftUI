@@ -142,43 +142,33 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
     func onLivenessResult(_ result: VIDVLiveness.VIDVLivenessResponse) {
         switch result {
         case .success(let data):
-            //This is excecuted when the ocr is completed successfully
-            // data of type VIDVOCRResult
-            livenessResultMessage = "Liveness Success!"
             debugPrint("VidVLiveness success, data: \(data)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "VidVLiveness success, data: \(data)")
-            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
-            LivenessDelegate?.onLivenessSuccess()
-            //            startAuth()
+            
+            let authCoordinator = SceneDelegate.getAppCoordinator()?.getChildCoordinator(coordinator: AuthCoordinator.self) as? AuthCoordinator
+            authCoordinator?.openLoginInformationScene()
 
         case .builderError(let code, let message):
-            // builder error code & error message
-            livenessResultMessage = "Liveness Error! Code: \(code), Message: \(message)"
             debugPrint("VidVLiveness builderError, code: \(code), message: \(message)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness builderError, code: \(code), message: \(message)")
-            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
-            LivenessDelegate?.onLivenessSuccess()
             
+            let authCoordinator = SceneDelegate.getAppCoordinator()?.getChildCoordinator(coordinator: AuthCoordinator.self) as? AuthCoordinator
+            authCoordinator?.openLoginInformationScene()
+
         case .serviceFailure(let code, let message, let data):
-            // service faluire error code & error message & data of type VIDVOCRResult
-            livenessResultMessage = "Service Error! Code: \(code), Message: \(message)"
             debugPrint("VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
-            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
-            LivenessDelegate?.onLivenessSuccess()
+            
+            let authCoordinator = SceneDelegate.getAppCoordinator()?.getChildCoordinator(coordinator: AuthCoordinator.self) as? AuthCoordinator
+            authCoordinator?.openLoginInformationScene()
             
         case .userExited(let data, let step):
-            // last step in the SDK & data of type VIDVOCRResult
-            livenessResultMessage = "User exited at step \(step)"
             debugPrint("VidVLiveness userExit, data: \(data), step: \(step)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness userExit, data: \(data), step: \(step)")
-            SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getAuthCoordinator(startViewType: .register).openLoginInformationScene()
 
         case .capturedActions(let capturedActions):
-            // capturedImageData of type CapturedImageData
             livenessResultMessage = "Liveness Image Captured"
             debugPrint("VidVLiveness capturedImages, actions: \(capturedActions)")
-//            SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness capturedImages, actions: \(capturedActions)")
 
         }
     }

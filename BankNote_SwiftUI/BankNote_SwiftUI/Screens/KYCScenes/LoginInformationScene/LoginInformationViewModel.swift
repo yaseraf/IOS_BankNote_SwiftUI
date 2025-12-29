@@ -8,9 +8,9 @@
 import Foundation
 import MapKit
 
-struct ChangePasswordUIModel{
-    var match:OptionsType
-}
+//struct ChangePasswordUIModel{
+//    var match:OptionsType
+//}
 
 class LoginInformationViewModel: ObservableObject {
     private let coordinator: AuthCoordinatorProtocol
@@ -38,6 +38,9 @@ class LoginInformationViewModel: ObservableObject {
 
 // MARK: Routing
 extension LoginInformationViewModel {
+    func popViewController() {
+        coordinator.popViewController(animated: true)
+    }
     func openScanIDFrontScene() {
 //        coordinator.openScanIDFrontScene()
         coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
@@ -45,6 +48,10 @@ extension LoginInformationViewModel {
     
     func openLoginValifyScene() {
         coordinator.openLoginValifyScene()
+    }
+    
+    func openQuestionsScene() {
+        coordinator.openQuestioneerScene()
     }
 }
 
@@ -59,7 +66,7 @@ extension LoginInformationViewModel {
             bundleSessionId: "",
             expiration: "",
             firstName: "",
-            fullName: username,
+            fullName: KeyChainController().phoneNumberEntered ?? "",
             nid: "",
             serialNumber: KeyChainController().valifyRequestId ?? "",
             reqID: KeyChainController().valifyRequestId ?? ""
@@ -107,7 +114,7 @@ extension LoginInformationViewModel {
                 case .success(let success):
                     if success.isSuccessful ?? false {
                         self?.ntraValifyAPIResult = .onSuccess(response: success)
-                        self?.registerValifyAPI(success: true, username: username, password: password)
+                        self?.registerValifyAPI(success: true)
                         
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.serverResponse ?? "")
@@ -122,11 +129,11 @@ extension LoginInformationViewModel {
         }
     }
     
-    func registerValifyAPI(success: Bool, username: String, password:String) {
+    func registerValifyAPI(success: Bool) {
         
         let requestModel = RegisterValifyRequestModel(
             lang: AppUtility.shared.isRTL ? "ar" : "en",
-            name: username,
+            name: KeyChainController().phoneNumberEntered ?? "",
             userReferenceId: KeyChainController().valifyRequestId ?? "",
             reqID: KeyChainController().valifyRequestId ?? ""
         )
@@ -138,10 +145,18 @@ extension LoginInformationViewModel {
                 self?.registerValifyAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
+                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Message: \(success.message ?? "")")
+                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Server response: \(success.serverResponse ?? "")")
+                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "scope: \(success.scope ?? "")")
+                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "errormsg: \(success.errorMsg ?? "")")
+                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "IsSuccessful: \(String(success.isSuccessful ?? false))")
+
                     if success.isSuccessful ?? false {
                         self?.registerValifyAPIResult = .onSuccess(response: success)
                         debugPrint("RegisterValify success")
-                        self?.setPasswordValifyAPI(success: true, password: password)
+//                        self?.setPasswordValifyAPI(success: true, password: password)
+                        KeyChainController().valifyAccessToken = success.accessToken
+                        self?.openQuestionsScene()
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.serverResponse ?? "")
                     }
@@ -160,6 +175,7 @@ extension LoginInformationViewModel {
         let requestModel = SetPasswordValifyRequestModel(
             lang: AppUtility.shared.isRTL ? "ar" : "en",
             password: password,
+            accessToken: KeyChainController().accessToken ?? "",
             reqID: KeyChainController().valifyRequestId ?? ""
         )
         

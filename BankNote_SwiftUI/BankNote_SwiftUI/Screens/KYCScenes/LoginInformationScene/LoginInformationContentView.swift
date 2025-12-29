@@ -14,6 +14,7 @@ struct LoginInformationContentView: View {
     }
     var listPasswordValidation: Binding<[PasswordValidationType:ChangePasswordUIModel]>
     var onPasswordTextChange: ((String)-> Void)
+    var onBack:()->Void
 
     @State var stepNumber:Int = 2
     @State private var username = ""
@@ -44,6 +45,9 @@ struct LoginInformationContentView: View {
 
     var body: some View {
         VStack {
+            
+            headerView
+            
             logoView
             
             segmentsView
@@ -54,6 +58,21 @@ struct LoginInformationContentView: View {
             
             bottomView
                         
+        }
+    }
+    
+    private var headerView: some View {
+        HStack {
+            Button {
+                onBack()
+            } label: {
+                Image("ic_leftArrow")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 45, maxHeight: 45)
+            }
+            
+            Spacer()
         }
     }
     
@@ -128,32 +147,33 @@ struct LoginInformationContentView: View {
     private var fieldsView: some View {
         VStack(spacing: 20) {
             InputField(
-                title: "user_name",
-                text: $username,
+                title: "phone_number",
+                text: .constant(KeyChainController().phoneNumberEntered ?? ""),
                 isValid: isUsernameValid,
                 onTextAction: { text in
-                    
-                }
-            )
-
-            InputField(
-                title: "password",
-                text: $password,
-                isSecure: true,
-                isValid: isPasswordValid,
-                onTextAction: { text in
                     checkEnableBtn()
-                    checkPasswordMatch()
-                    onPasswordTextChange(text)
-
-                    if continueAttempted && !checkPasswordValidity(password: password) {
-                        showPasswordCheckView = true
-                    } else {
-                        showPasswordCheckView = false
-                    }
                 }
             )
-            .focused($pinFocusState, equals: .newPassword)
+            .disabled(true)
+
+//            InputField(
+//                title: "password",
+//                text: $password,
+//                isSecure: true,
+//                isValid: isPasswordValid,
+//                onTextAction: { text in
+//                    checkEnableBtn()
+//                    checkPasswordMatch()
+//                    onPasswordTextChange(text)
+//
+//                    if continueAttempted && !checkPasswordValidity(password: password) {
+//                        showPasswordCheckView = true
+//                    } else {
+//                        showPasswordCheckView = false
+//                    }
+//                }
+//            )
+//            .focused($pinFocusState, equals: .newPassword)
 
             
 //            if pinFocusState == .newPassword{
@@ -162,17 +182,17 @@ struct LoginInformationContentView: View {
 //            }
 
 
-            InputField(
-                title: "confirm_password",
-                text: $confirmPassword,
-                isSecure: true,
-                isValid: doPasswordsMatch,
-                onTextAction: { text in
-                    checkEnableBtn()
-                    checkPasswordMatch()
-                }
-            )
-            .focused($pinFocusState, equals: .confirmPassword)
+//            InputField(
+//                title: "confirm_password",
+//                text: $confirmPassword,
+//                isSecure: true,
+//                isValid: doPasswordsMatch,
+//                onTextAction: { text in
+//                    checkEnableBtn()
+//                    checkPasswordMatch()
+//                }
+//            )
+//            .focused($pinFocusState, equals: .confirmPassword)
         }
     }
 
@@ -185,9 +205,10 @@ struct LoginInformationContentView: View {
                     .font(.cairoFont(.semiBold, size: 18))
                     .foregroundStyle(.white)
                     .frame(minWidth: 357, minHeight: 51)
-                    .background(RoundedRectangle(cornerRadius: 99).fill(enableBtn ? Color.colorPrimary : Color.gray))
+//                    .background(RoundedRectangle(cornerRadius: 99).fill(enableBtn ? Color.colorPrimary : Color.gray))
+                    .background(RoundedRectangle(cornerRadius: 99).fill(Color.colorPrimary))
             }
-            .disabled(!enableBtn)
+//            .disabled(!enableBtn)
             
             Spacer().frame(height: 24)
         }
@@ -264,10 +285,8 @@ struct LoginInformationContentView: View {
     }
     
     private func checkEnableBtn() {
-        enableBtn =
-        !username.isEmpty && !password.isEmpty &&
-        confirmPassword == password && checkPasswordValidity(password: password)
-
+//        enableBtn = !username.isEmpty
+        enableBtn = true
     }
 
     
@@ -358,10 +377,10 @@ struct InputField: View {
 }
 
 
-#Preview {
-    LoginInformationContentView(listPasswordValidation: .constant([:]), onPasswordTextChange:  { text in
-        
-    }, onContinueTap: {username,password in
-        
-    })
-}
+//#Preview {
+//    LoginInformationContentView(listPasswordValidation: .constant([:]), onPasswordTextChange:  { text in
+//        
+//    }, onContinueTap: {username,password in
+//        
+//    })
+//}

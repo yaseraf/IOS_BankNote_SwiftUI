@@ -11,12 +11,14 @@ struct SetAnswerValifyRequestModel: Codable {
     let answer: String
     let lang: String
     let questionId: String
+    let accessToken: String
     let reqID: String
     
     enum CodingKeys: String, CodingKey {
         case answer = "Answer"
         case lang = "Lang"
         case questionId = "QuestionId"
+        case accessToken = "accessToken"
         case reqID = "reqID"
     }
 }

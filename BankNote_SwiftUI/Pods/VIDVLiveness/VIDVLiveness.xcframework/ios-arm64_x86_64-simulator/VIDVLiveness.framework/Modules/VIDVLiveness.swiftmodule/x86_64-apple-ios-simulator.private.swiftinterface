@@ -164,8 +164,9 @@ public class VIDVLivenessResult : Swift.Codable {
   public var auditCaseCreated: Swift.Bool?
   public var auditRequired: Swift.Bool?
   public var facematchTransactionID: Swift.String?
+  public var livenessTransactionID: Swift.String?
   public var hmacDataList: [VIDVLiveness.HMACData]?
-  public init(livenessSuccess: Swift.Bool?, facematchSuccess: Swift.Bool?, capturedImage: Swift.String?, auditingCaseCreated: Swift.Bool? = false, auditingRequired: Swift.Bool? = false, facematchTransactionID: Swift.String?, hmacDataList: [VIDVLiveness.HMACData]?)
+  public init(livenessSuccess: Swift.Bool?, facematchSuccess: Swift.Bool?, capturedImage: Swift.String?, auditingCaseCreated: Swift.Bool? = false, auditingRequired: Swift.Bool? = false, facematchTransactionID: Swift.String?, livenessTransactionID: Swift.String? = nil, hmacDataList: [VIDVLiveness.HMACData]?)
   @objc deinit
   public func encode(to encoder: any Swift.Encoder) throws
   required public init(from decoder: any Swift.Decoder) throws

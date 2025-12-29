@@ -45,6 +45,7 @@ class HomeCoordinator:  ObservableObject {
         } else {
             coordinator = .init(navigationController: navigationController, startViewType: startViewType)
             childCoordinator.append(coordinator)
+            
         }
       return coordinator
     }

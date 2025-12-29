@@ -16,35 +16,32 @@ struct GetQuestionsValifyRequestModel: Codable {
 }
 
 struct GetQuestionsValifyResponseModel: Codable {
-    let isSuccessful: Bool
-    let errorMsg: String
-    let message: String
-    let registered: String
-    let serverResponse: String
+    let questions: [QuestionsModel]
     
     enum CodingKeys: String, CodingKey {
-        case isSuccessful = "IsSuccessful"
-        case errorMsg = "ErrorMsg"
-        case message = "Message"
-        case registered = "Registered"
-        case serverResponse = "ServerResponse"
+        case questions = "questions"
     }
 }
 
-struct GetQuestionsValifyUIModel {
-    var isSuccessful: Bool?
-    var errorMsg: String?
-    var message: String?
-    var registered: String?
-    var serverResponse: String?
+struct QuestionsModel: Codable {
+    let id: String
+    let ar: String
+    let en: String
     
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case ar = "ar"
+        case en = "en"
+    }
+
+}
+
+struct GetQuestionsValifyUIModel {
+    var questions: [QuestionsModel]?
+
     static func mapToUIModel(_ model: GetQuestionsValifyResponseModel) -> Self {
         return GetQuestionsValifyUIModel(
-            isSuccessful: model.isSuccessful,
-            errorMsg: model.errorMsg,
-            message: model.message,
-            registered: model.registered,
-            serverResponse: model.serverResponse
+            questions: model.questions,
         )
     }
     

@@ -19,12 +19,13 @@ struct LoginInformationScene: BaseSceneType {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
                 LoginInformationContentView(listPasswordValidation: $viewModel.listPasswordValidation, onPasswordTextChange: { text in
                     viewModel.checkValidation(text: text)
-                    withAnimation{
+                    withAnimation {
                         viewModel.checkIsAllPasswordMatch()
                     }
+                }, onBack: {
+                    viewModel.popViewController()
                 }, onContinueTap: { username, password in
-//                    viewModel.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "211", Value: username)], password: password)
-//                    viewModel.registerValifyAPI(success: true, username: username, password: password)
+//                    viewModel.registerValifyAPI(success: true)
                     viewModel.csoValifyAPI(success: true, username: username, password: password)
                 })
             })

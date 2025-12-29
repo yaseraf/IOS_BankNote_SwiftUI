@@ -26,6 +26,8 @@ class LandingViewModel:ObservableObject {
 //            }
 //        }
         
+        KeyChainController().valifyRequestId = String(Int.random(in: 10000..<99999))
+
     }
     
     func encParam(item:String) -> String {
@@ -59,6 +61,9 @@ extension LandingViewModel {
 //        coordinator.openScanIDFrontScene()
 //        coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
         coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+//        coordinator.openLoginInformationScene()
+//        coordinator.openSetPasswordScene()
+//        coordinator.openQuestionsScene()
 //        coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
 //        coordinator.openLivenessCheckScene()
     }

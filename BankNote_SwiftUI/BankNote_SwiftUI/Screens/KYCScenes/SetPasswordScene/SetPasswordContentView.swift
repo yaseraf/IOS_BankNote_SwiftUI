@@ -7,19 +7,15 @@
 
 import Foundation
 import SwiftUI
-import FlagAndCountryCode
 
-struct LoginValifyContentView: View {
+struct SetPasswordContentView: View {
     enum FocusPassword {
         case  newPassword, confirmPassword
     }
     var listPasswordValidation: Binding<[PasswordValidationType:ChangePasswordUIModel]>
-    var phone: Binding<String>
-    @Binding var countryCodeUIModel: CountryFlagInfo?
-
     var onPasswordTextChange: ((String)-> Void)
 
-    @State var stepNumber:Int = 2
+    @State var stepNumber:Int = 4
     @State private var username = ""
     @State private var password = ""
     @State private var confirmPassword = ""
@@ -28,7 +24,6 @@ struct LoginValifyContentView: View {
     @State var showPasswordCheckView: Bool = false
     @State var errorPasswordNotMatch:Bool = false
     @State private var enableBtn:Bool = false
-    var onCountryPickerTap:((CountryFlagInfo?) -> Void)
 
     var isUsernameValid: Bool {
         // A simple validation rule
@@ -45,10 +40,14 @@ struct LoginValifyContentView: View {
     }
 
     
-    var onContinueTap:((_ phone: String, _ password: String)->Void)?
-
+    var onContinueTap:((_ password: String)->Void)?
+    var onBack:()->Void
+    
     var body: some View {
         VStack {
+            
+            headerView
+            
             logoView
             
             segmentsView
@@ -61,6 +60,22 @@ struct LoginValifyContentView: View {
                         
         }
     }
+    
+    private var headerView: some View {
+        HStack {
+            Button {
+                onBack()
+            } label: {
+                Image("ic_leftArrow")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 45, maxHeight: 45)
+            }
+            
+            Spacer()
+        }
+    }
+
     
     private var logoView: some View {
         VStack(spacing: 0) {
@@ -93,9 +108,12 @@ struct LoginValifyContentView: View {
     
     private var contentView: some View {
         VStack {
-            Text("login".localized)
+            Text("set_password".localized)
                 .font(.cairoFont(.semiBold, size: 18))
-                        
+            
+            Text("you_will_use_these_details_to_login_to_your_account".localized)
+                .font(.cairoFont(.light ,size: 12))
+            
             
             fieldsView
             
@@ -129,42 +147,14 @@ struct LoginValifyContentView: View {
     
     private var fieldsView: some View {
         VStack(spacing: 20) {
-            HStack(spacing: 8) {
-                Button(action: {
-                    onCountryPickerTap(countryCodeUIModel)
-                }, label: {
-                    HStack {
-                        countryCodeUIModel?.getCountryImage(with: FlagType(rawValue: 0) ?? .roundedRect)
-                            .frame(width: 30)
-                        
-                        Text("\(countryCodeUIModel?.dialCode ?? "")")
-                            .font(.cairoFont(.semiBold, size: 12))
-                            .foregroundStyle(.black)
-
-                        Image("ic_downArrow")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 12, height: 6)
-                    }
-                    .foregroundStyle(Color(hex: "#1C1C1C"))
-                    .padding(.horizontal, 16)
-                    .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
-                    .padding(.bottom, 24)
-                })
-                TextField("phone_number".localized, text: phone)
-                    .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundStyle(Color(hex: "#1C1C1C"))
-                    .padding(.horizontal, 16)
-                    .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
-                    .padding(.bottom, 24)
-                    .keyboardType(.numberPad)
-                
-                
-
-            }
-                .padding(.horizontal, 18)
+//            InputField(
+//                title: "user_name",
+//                text: $username,
+//                isValid: isUsernameValid,
+//                onTextAction: { text in
+//                    
+//                }
+//            )
 
             InputField(
                 title: "password",
@@ -209,7 +199,7 @@ struct LoginValifyContentView: View {
     private var bottomView: some View {
         return VStack {
             Button {
-                onContinueTap?(phone.wrappedValue, password)
+                onContinueTap?(password)
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -294,9 +284,7 @@ struct LoginValifyContentView: View {
     }
     
     private func checkEnableBtn() {
-        enableBtn =
-        !phone.wrappedValue.isEmpty && !password.isEmpty &&
-        confirmPassword == password && checkPasswordValidity(password: password)
+        enableBtn = !password.isEmpty && confirmPassword == password && checkPasswordValidity(password: password)
 
     }
 
@@ -327,11 +315,10 @@ struct LoginValifyContentView: View {
 
 }
 
-
 //#Preview {
 //    LoginInformationContentView(listPasswordValidation: .constant([:]), onPasswordTextChange:  { text in
 //        
-//    }, onContinueTap: {username,password in
+//    }, onContinueTap: {password in
 //        
 //    })
 //}

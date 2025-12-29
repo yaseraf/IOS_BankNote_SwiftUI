@@ -7352,6 +7352,116 @@
           },
           {
             "kind": "Var",
+            "name": "livenessTransactionID",
+            "printedName": "livenessTransactionID",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvp",
+            "mangledName": "$s12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvp",
+            "moduleName": "VIDVLiveness",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvg",
+                "mangledName": "$s12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvg",
+                "moduleName": "VIDVLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvs",
+                "mangledName": "$s12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvs",
+                "moduleName": "VIDVLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvM",
+                "mangledName": "$s12VIDVLiveness0A6ResultC21livenessTransactionIDSSSgvM",
+                "moduleName": "VIDVLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
             "name": "hmacDataList",
             "printedName": "hmacDataList",
             "children": [
@@ -7487,7 +7597,7 @@
           {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(livenessSuccess:facematchSuccess:capturedImage:auditingCaseCreated:auditingRequired:facematchTransactionID:hmacDataList:)",
+            "printedName": "init(livenessSuccess:facematchSuccess:capturedImage:auditingCaseCreated:auditingRequired:facematchTransactionID:livenessTransactionID:hmacDataList:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -7584,6 +7694,21 @@
               {
                 "kind": "TypeNominal",
                 "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
                 "printedName": "[VIDVLiveness.HMACData]?",
                 "children": [
                   {
@@ -7605,8 +7730,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:12VIDVLiveness0A6ResultC15livenessSuccess09facematchD013capturedImage19auditingCaseCreated0H8Required0E13TransactionID12hmacDataListACSbSg_AKSSSgA2kLSayAA8HMACDataCGSgtcfc",
-            "mangledName": "$s12VIDVLiveness0A6ResultC15livenessSuccess09facematchD013capturedImage19auditingCaseCreated0H8Required0E13TransactionID12hmacDataListACSbSg_AKSSSgA2kLSayAA8HMACDataCGSgtcfc",
+            "usr": "s:12VIDVLiveness0A6ResultC15livenessSuccess09facematchD013capturedImage19auditingCaseCreated0H8Required0E13TransactionID0clM012hmacDataListACSbSg_ALSSSgA2l2MSayAA8HMACDataCGSgtcfc",
+            "mangledName": "$s12VIDVLiveness0A6ResultC15livenessSuccess09facematchD013capturedImage19auditingCaseCreated0H8Required0E13TransactionID0clM012hmacDataListACSbSg_ALSSSgA2l2MSayAA8HMACDataCGSgtcfc",
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "AccessControl"
@@ -17251,43 +17376,36 @@
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
-      "kind": "BooleanLiteral",
-      "offset": 1547,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "FloatLiteral",
-      "offset": 2610,
+      "offset": 2578,
       "length": 3,
       "value": "0.0"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "FloatLiteral",
-      "offset": 2635,
+      "offset": 2603,
       "length": 3,
       "value": "0.0"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "FloatLiteral",
-      "offset": 2673,
+      "offset": 2641,
       "length": 3,
       "value": "0.0"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "StringLiteral",
-      "offset": 3961,
+      "offset": 3929,
       "length": 15,
       "value": "\"session queue\""
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "IntegerLiteral",
-      "offset": 4001,
+      "offset": 3969,
       "length": 1,
       "value": "1"
     },
@@ -17504,56 +17622,42 @@
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 200,
+      "offset": 196,
       "length": 12,
       "value": "\"\/api\/v1.1\/\""
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 240,
+      "offset": 236,
       "length": 23,
       "value": "\"\/api\/v1.1\/face\/match\/\""
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 294,
-      "length": 39,
-      "value": "\"\""
+      "offset": 290,
+      "length": 28,
+      "value": "\"\/api\/v3\/sdk-session\/start\/\""
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 313,
-      "length": 1,
-      "value": "\"\/sdk-session\/start\/\""
-    },
-    {
-      "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 370,
-      "length": 32,
-      "value": "\"\/api\/v1\/\/bundle\/start-session\/\""
-    },
-    {
-      "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
-      "kind": "StringLiteral",
-      "offset": 461,
+      "offset": 373,
       "length": 23,
       "value": "\"\/sdk\/v1.1\/events\/log\/\""
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 520,
+      "offset": 432,
       "length": 43,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Global\/Networking\/Constants.swift",
       "kind": "StringLiteral",
-      "offset": 548,
+      "offset": 460,
       "length": 1,
       "value": "\"\/liveness\/log\/\""
     },
@@ -17574,14 +17678,14 @@
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/FrameworkClasses\/FrameworkResponse\/ValifyResult.swift",
       "kind": "BooleanLiteral",
-      "offset": 625,
+      "offset": 671,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/FrameworkClasses\/FrameworkResponse\/ValifyResult.swift",
       "kind": "BooleanLiteral",
-      "offset": 666,
+      "offset": 712,
       "length": 5,
       "value": "false"
     },

@@ -128,7 +128,11 @@ extension ValifyUseCase: ValifyUseCaseProtocol {
         await repository.GetQuestionsValify(route: route) { result in
             switch result {
             case .success(let responseModel):
+                
                 let uiModel = GetQuestionsValifyUIModel.mapToUIModel(responseModel)
+
+                completion(.success(uiModel))
+
                 completion(.success(uiModel))
             case .failure(let failure):
                 completion(.failure(failure))

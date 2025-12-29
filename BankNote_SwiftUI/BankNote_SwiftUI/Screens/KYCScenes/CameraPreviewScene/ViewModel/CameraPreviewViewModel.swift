@@ -66,10 +66,10 @@ class CameraPreviewViewModel:ObservableObject{
         
         imageBack = compressedString
 
-//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: imageBack, IdFrontBase64: imageFront, reqID: KeyChainController().valifyRequestId)
+        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: imageBack, IdFrontBase64: imageFront, reqID: KeyChainController().valifyRequestId)
         
         //MARK: Template
-        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: ImagesTemplates.init().backImageTemplate, IdFrontBase64: ImagesTemplates.init().frontImageTemplate, reqID: KeyChainController().valifyRequestId)
+//        let requestModel = GetFrontBackValifiyRequestModel(IdBackBase64: ImagesTemplates.init().backImageTemplate, IdFrontBase64: ImagesTemplates.init().frontImageTemplate, reqID: KeyChainController().valifyRequestId)
         
 
         

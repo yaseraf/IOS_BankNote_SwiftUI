@@ -51,7 +51,7 @@ extension LoginInformationViewModel {
     }
     
     func openQuestionsScene() {
-        coordinator.openQuestioneerScene()
+        coordinator.openQuestionsScene()
     }
 }
 

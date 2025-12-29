@@ -60,9 +60,9 @@ extension LandingViewModel {
     func openSignUpScene() {
 //        coordinator.openScanIDFrontScene()
 //        coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
-        coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+//        coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
 //        coordinator.openLoginInformationScene()
-//        coordinator.openSetPasswordScene()
+        coordinator.openSetPasswordScene()
 //        coordinator.openQuestionsScene()
 //        coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
 //        coordinator.openLivenessCheckScene()

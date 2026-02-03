@@ -19,7 +19,9 @@ class PortfolioCoordinator:  ObservableObject {
     }
 
     func start() {
-        self.navigationController.viewControllers = []
+//        self.navigationController.viewControllers = []
+        AppUtility.shared.screenTransition(navigationController: navigationController, animationOptions: .transitionCrossDissolve, duration: 0.3, animated: false)
+
         openPortfolioScene()
     }
 

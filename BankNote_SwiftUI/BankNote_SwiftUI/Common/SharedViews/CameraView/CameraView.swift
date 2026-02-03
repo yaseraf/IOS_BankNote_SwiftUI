@@ -70,6 +70,10 @@ struct CameraView: View {
         .onChange(of: failedProcess) { newValue in
             if stepIndex == 0 || stepIndex == 1 {
                 model.imageOne = nil
+                model.imageTwo = nil
+                model.imageDataOne = nil
+                model.imageDataTwo = nil
+                isFrontBind = true
             } else if stepIndex == 2 {
                 model.imageTwo = nil
             }
@@ -77,6 +81,10 @@ struct CameraView: View {
         .onChange(of: resetData) { newValue in
             if stepIndex == 0 || stepIndex == 1 {
                 model.imageOne = nil
+                model.imageTwo = nil
+                model.imageDataOne = nil
+                model.imageDataTwo = nil
+                isFrontBind = true
             } else if stepIndex == 2 {
                 model.imageTwo = nil
             }
@@ -600,7 +608,7 @@ struct CameraView: View {
 
     private func bottomButtonView(geometry: GeometryProxy) -> some View {
         HStack(){
-            CustomButton(type: .darkGrey, title: "retake".localized) {
+            CustomButton(type: .custom(Color(hex: "#828282")), title: "retake".localized) {
                 if model.imageTwo != nil {
                     model.imageTwo = nil
                     
@@ -625,10 +633,11 @@ struct CameraView: View {
                 }
 
             }
+            .cornerRadius(32)
 
             Spacer().frame(width: 8)
 
-            CustomButton(type: .primary, title: "next".localized,iconImageName: "ic_rightArrow",onTap:  {
+            CustomButton(type: .primary, title: "next".localized,onTap:  {
 //                stepIndex += 1
                 stepIndexBind = stepIndex
                 
@@ -660,6 +669,7 @@ struct CameraView: View {
 //                    }
                 }
             })
+            .cornerRadius(32)
         }
         .frame(maxWidth: .infinity)
 

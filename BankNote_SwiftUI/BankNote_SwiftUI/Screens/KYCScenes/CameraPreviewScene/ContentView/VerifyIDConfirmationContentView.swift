@@ -11,104 +11,177 @@ import SwiftUI
 
 struct VerifyIDConfirmationContentView: View {
     
-    var isFrontID:Binding<Bool>
+    var stepNumber = 4
+    
+    var fullName:Binding<String>
     var address:Binding<String>
-    var name:Binding<String>
     var dateOfBirth:Binding<String>
     var idNumber:Binding<String>
     var idKey:Binding<String>
-    var gender:Binding<String>
-    var jobTitle:Binding<String>
-    var religion:Binding<String>
-    var maritalStatus:Binding<String>
     
     var onRetakeTap:(()->Void)
     var onNextTap:(()->Void)
     
     var body: some View {
         ZStack {
-            GeometryReader { geometry in
-                VStack(alignment: .center) {
-                    
-                    Spacer()
-                    
-                    fieldsView
-                        .padding()
-                    bottomButtonView(geometry: geometry)
-                        .padding()
+            VStack(alignment: .center) {
+                
+                headerView
+                
+                logoView
+                
+                segmentsView
+                
+                fieldsView
+                    .padding()
+                
+                Spacer()
 
-                    Spacer()
-                }
+                bottomButtonView()
+                    .padding()
+
             }
         }
     }
     
-    private func bottomButtonView(geometry: GeometryProxy) -> some View {
+    private var headerView: some View {
+        HStack {
+            Button {
+                onRetakeTap()
+            } label: {
+                Image("ic_leftArrow")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 45, maxHeight: 45)
+            }
+            
+            Spacer()
+        }
+    }
+    
+    private var logoView: some View {
+        VStack(spacing: 0) {
+            Image("ic_logo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 225, maxHeight: 225)
+            
+            Text("XNTRQ".localized)
+                .textCase(.uppercase)
+                .font(.cairoFont(.extraBold, size: 40))
+        }
+    }
+    
+    private var segmentsView: some View {
+        HStack(spacing: 4) {
+            ForEach(0...5, id: \.self) { index in
+                if stepNumber > index {
+                    LinearGradient( gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing)
+                    
+                        .cornerRadius(12)
+                } else {
+                    RoundedRectangle(cornerRadius: 12).fill(Color(hex: "#DDDDDD"))
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: 6)
+        .padding(.horizontal, 18)
+    }
+    
+    private var fieldsView: some View {
+        return VStack(spacing: 12) {
+            
+            Text("confirm_data".localized)
+                .font(.cairoFont(.medium, size: 18))
+
+            InputField(
+                title: "full_name",
+                text: fullName,
+                isValid: true,
+                onTextAction: { text in
+                    
+                }
+            )
+            .disabled(true)
+
+            InputField(
+                title: "address",
+                text: address,
+                isValid: true,
+                onTextAction: { text in
+                    
+                }
+            )
+            .disabled(true)
+            
+            InputField(
+                title: "date_of_birth",
+                text: dateOfBirth,
+                isValid: true,
+                onTextAction: { text in
+                    
+                }
+            )
+            .disabled(true)
+            
+            InputField(
+                title: "id_number",
+                text: idNumber,
+                isValid: true,
+                onTextAction: { text in
+                    
+                }
+            )
+            .disabled(true)
+            
+            InputField(
+                title: "id_key",
+                text: idKey,
+                isValid: true,
+                onTextAction: { text in
+                    
+                }
+            )
+            .disabled(true)
+        }
+    }
+
+    
+    private func bottomButtonView() -> some View {
         HStack(){
-            CustomButton(type: .darkGrey, title: "retake".localized) {
+            CustomButton(type: .custom(Color(hex: "#828282")), title: "retake".localized) {
                 // pop to previous scene
                 onRetakeTap()
             }
+            .cornerRadius(32)
 
             Spacer().frame(width: 8)
 
-            CustomButton(type: .primary, title: "next".localized,iconImageName: "ic_rightArrow",onTap:  {
+            CustomButton(type: .primary, title: "next".localized,onTap:  {
                 
                 // Push the camera scene with the new step index
                 onNextTap()
                 }
             )
+            .cornerRadius(32)
+
         }
         .frame(maxWidth: .infinity)
-
     }
-    
-    
-    
-    private var fieldsView: some View {
-        return VStack {
-            if isFrontID.wrappedValue {
-                ZStack(alignment: .leading) {
-                    Text("address".localized)
-                        .foregroundStyle( Color.colorTextPlaceHolder)
-                        .font(.system(size: 8))
-                        .offset(y:  -15)
-                        .frame(maxWidth: .infinity, alignment: AppUtility.shared.isRTL ? .trailing : .leading)
+}
 
-                    HStack(alignment:.center){
-                        Text(address.wrappedValue)
-                    }
-
-
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color.colorBorderPrimary, lineWidth: 1)
-                )
-                .background(
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.colorBGTertiary)
-                )
-                
-                CustomTextField(type: .name, title: "name".localized, value: name, countryCodeUIModel: .constant(nil)).disabled(true)
-                
-                CustomTextField(type: .name, title: "dateOfBirth".localized, value: dateOfBirth, countryCodeUIModel: .constant(nil)).disabled(true)
-                
-                CustomTextField(type: .name, title: "idNumber".localized, value: idNumber, countryCodeUIModel: .constant(nil)).disabled(true)
-                
-                CustomTextField(type: .name, title: "idKey".localized, value: idKey, countryCodeUIModel: .constant(nil)).disabled(true)
-            } else {
-                CustomTextField(type: .name, title: "gender".localized, value: gender, countryCodeUIModel: .constant(nil)).disabled(true)
-                
-                CustomTextField(type: .name, title: "jobTitle".localized, value: jobTitle, countryCodeUIModel: .constant(nil)).disabled(true)
-                
-                CustomTextField(type: .name, title: "religion".localized, value: religion, countryCodeUIModel: .constant(nil)).disabled(true)
-                
-                CustomTextField(type: .name, title: "maritalStatus".localized, value: maritalStatus, countryCodeUIModel: .constant(nil)).disabled(true)
-            }
+#Preview {
+    VerifyIDConfirmationContentView(
+        fullName: .constant("ahmad"),
+        address: .constant(""),
+        dateOfBirth: .constant(""),
+        idNumber: .constant(""),
+        idKey: .constant(""),
+        onRetakeTap: {
+        
+        },
+        onNextTap: {
+        
         }
-    }
-
+    )
 }

@@ -26,8 +26,6 @@ class LandingViewModel:ObservableObject {
 //            }
 //        }
         
-        KeyChainController().valifyRequestId = String(Int.random(in: 10000..<99999))
-
     }
     
     func encParam(item:String) -> String {
@@ -58,11 +56,14 @@ class LandingViewModel:ObservableObject {
 // MARK: Routing
 extension LandingViewModel {
     func openSignUpScene() {
+        // MARK: Primary
+        coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+        
 //        coordinator.openScanIDFrontScene()
 //        coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
-//        coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+//        coordinator.openVerifyIDConfirmation()
 //        coordinator.openLoginInformationScene()
-        coordinator.openSetPasswordScene()
+//        coordinator.openSetPasswordScene()
 //        coordinator.openQuestionsScene()
 //        coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
 //        coordinator.openLivenessCheckScene()

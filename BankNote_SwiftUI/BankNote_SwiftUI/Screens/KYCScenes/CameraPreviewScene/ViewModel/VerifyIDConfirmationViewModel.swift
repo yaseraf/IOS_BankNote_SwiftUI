@@ -12,39 +12,21 @@ import SwiftUI
 //import MLKit
 
 class VerifyIDConfirmationViewModel:ObservableObject{
+    
     private let coordinator: AuthCoordinatorProtocol
-    private let delegate:CameraPreviewDelegate
-    
-    @Published var savedImageOne:Image?
-    @Published var isFrontID:Bool
-    @Published var address:String
-    @Published var name:String
-    @Published var dateOfBirth:String
-    @Published var idNumber:String
-    @Published var idKey:String
-    @Published var gender:String
-    @Published var jobTitle:String
-    @Published var religion:String
-    @Published var maritalStatus:String
-    
-    init(coordinator: AuthCoordinatorProtocol, delegate: CameraPreviewDelegate, savedImageOne:Image?, isFrontID: Bool, address: String, name: String, dateOfBirth: String, idNumber: String, idKey: String, gender: String, jobTitle: String, religion: String, maritalStatus: String) {
+    private let valifyUseCase: ValifyUseCaseProtocol
         
+    @Published var getValifyDataAPIResult:APIResultType<GetValifyDataUIModel>?
+    
+    @Published var fullName: String = ""
+    @Published var address: String = ""
+    @Published var dateOfBith: String = ""
+    @Published var idNumber: String = ""
+    @Published var idKey: String = ""
+
+    init(coordinator: AuthCoordinatorProtocol, valifyUseCase: ValifyUseCaseProtocol) {
         self.coordinator = coordinator
-        self.delegate = delegate
-        self.savedImageOne = savedImageOne
-        self.isFrontID = isFrontID
-        self.address = address
-        self.name = name
-        self.dateOfBirth = dateOfBirth
-        self.idNumber = idNumber
-        self.idKey = idKey
-        self.gender = gender
-        self.jobTitle = jobTitle
-        self.religion = religion
-        self.maritalStatus = maritalStatus
-        
-        self.dateOfBirth = formatJsonDate(self.dateOfBirth)
-        
+        self.valifyUseCase = valifyUseCase
     }
     
     func formatJsonDate(_ jsonDate: String) -> String {
@@ -68,18 +50,55 @@ class VerifyIDConfirmationViewModel:ObservableObject{
         return "Invalid date"
     }
     
+}
+
+// MARK: Routing
+extension VerifyIDConfirmationViewModel {
     func dismiss() {
-        delegate.onRetake(isFrontScan: isFrontID)
         coordinator.popViewController()
     }
     
-    func openTakeSelfieScene() {
-        
-        if isFrontID {
-            coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: savedImageOne, stepIndexBind: 2, isFrontBind: false)
-        } else {
-            coordinator.openTakeSelfieScene(livenessCheck: true)
+    func openLivenessCheckScene() {
+        coordinator.openLivenessCheckScene()
+    }
 
+}
+
+// MARK: API Calls
+extension VerifyIDConfirmationViewModel {
+    func getValifyDataAPI(success: Bool) {
+
+        getValifyDataAPIResult = .onLoading(show: true)
+
+        let requestModel = GetValifyDataRequestModel(reqID: KeyChainController().valifyRequestId ?? "")
+        
+        Task.init {
+            await valifyUseCase.GetValifyData(requestModel: requestModel) {[weak self] result in
+                self?.getValifyDataAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    debugPrint("getValifyData success")
+                    
+                    if success.resData != nil {
+                        
+                        self?.getValifyDataAPIResult = .onSuccess(response: success)
+                        self?.fullName = success.resData?.fullName ?? ""
+                        self?.address = success.resData?.street ?? ""
+                        self?.dateOfBith = success.resData?.dateOfBirth ?? ""
+                        self?.idNumber = success.resData?.frontNid ?? ""
+                        self?.idKey = success.resData?.backNid ?? ""
+
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.errorMsg ?? "")
+                    }
+                    
+                case .failure(let failure):
+                    debugPrint("GetFrontBackValify failed")
+                    self?.getValifyDataAPIResult = .onFailure(error: failure)
+                    
+                }
+            }
         }
     }
+
 }

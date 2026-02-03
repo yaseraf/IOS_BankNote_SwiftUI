@@ -150,7 +150,7 @@ extension VerifySignUpViewModel {
     }
     
     func sendPhoneOtpValifyAPI(phoneNumber: String) {
-        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber, reqID: KeyChainController().valifyRequestId)
+        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber)
         
         sendPhoneOtpValifyAPIResult = .onLoading(show: true)
         
@@ -161,6 +161,7 @@ extension VerifySignUpViewModel {
                 case .success(let success):
                     
                     if success.IsSuccessful ?? false {
+                        KeyChainController().valifyRequestId = success.reqID ?? ""
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "resend_code_status".localized)
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")

@@ -32,7 +32,9 @@ class AuthCoordinator:  ObservableObject {
     }
 
     func start() {
-        self.navigationController.viewControllers = []
+//        self.navigationController.viewControllers = []
+        AppUtility.shared.screenTransition(navigationController: navigationController, animationOptions: .transitionCrossDissolve, duration: 0.3, animated: false)
+
         switch startViewType {
         case .login:
             openLandingScene()
@@ -191,8 +193,9 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
 //        }
     }
     
-    func openVerifyIDConfirmation(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String, gender:String, jobTitle:String, religion:String, maritalStatus:String) {
-        let viewModel = VerifyIDConfirmationViewModel(coordinator: self, delegate: delegate, savedImageOne: savedImageOne, isFrontID: isFrontID, address: address, name: name, dateOfBirth: dateOfBirth, idNumber: idNumber, idKey: idKey, gender: gender, jobTitle: jobTitle, religion: religion, maritalStatus: maritalStatus)
+    func openVerifyIDConfirmation() {
+        let useCase = ValifyUseCase()
+        let viewModel = VerifyIDConfirmationViewModel(coordinator: self, valifyUseCase: useCase)
         let view =  VerifyIDConfirmationScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

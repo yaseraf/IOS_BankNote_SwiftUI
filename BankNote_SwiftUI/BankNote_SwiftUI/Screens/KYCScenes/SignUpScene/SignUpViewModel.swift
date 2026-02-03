@@ -74,7 +74,7 @@ extension SignUpViewModel {
     // MARK: VALIFY
     
     func sendPhoneOtpValifyAPI(phoneNumber: String) {
-        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber, reqID: KeyChainController().valifyRequestId ?? "")
+        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber)
         
         KeyChainController().phoneNumberEntered = phoneNumber
         
@@ -88,6 +88,7 @@ extension SignUpViewModel {
                     
                     if success.IsSuccessful ?? false {
                         self?.openVerifySignUpScene(transactionID: success.TransactionId ?? "", verifyWithEmail: self?.verifyWithEmail ?? false, phoneNumber: phoneNumber, email: "")
+                        KeyChainController().valifyRequestId = success.reqID ?? ""
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
                     }

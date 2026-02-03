@@ -20,6 +20,7 @@ class CameraPreviewViewModel:ObservableObject{
     @Published var verifyIDFrontVlensAPIResult:APIResultType<VerifyIDFrontVlensUIModel>?
     @Published var VerifyIDBackAPIResult:APIResultType<VerifyIDBackUIModel>?
     @Published var getFrontBackValifyAPIResult:APIResultType<GetFrontBackValifiyUIModel>?
+    @Published var getValifyDataAPIResult:APIResultType<GetValifyDataUIModel>?
     @Published var verifyLivenessAPIResult:APIResultType<VerifyLivenessUIModel>?
     @Published var verifyIDFrontVlensResponse: VerifyIDFrontVlensUIModel?
     @Published var VerifyIDBackResponse: VerifyIDBackUIModel?
@@ -85,22 +86,25 @@ class CameraPreviewViewModel:ObservableObject{
                         self?.getFrontBackValifyAPIResult = .onSuccess(response: success)
                         self?.getFrontBackValifyResponse = success
                         KeyChainController().valifyTransactionId = success.TransactionId
-                        self?.coordinator.openLivenessCheckScene()
+//                        self?.coordinator.openLivenessCheckScene()
+                        self?.coordinator.openVerifyIDConfirmation()
+
                         self?.stepIndexBind += 1
-                        
 
                     } else {
                         self?.getFrontBackValifyAPIResult = .onFailure(error: .custom(error: success.ErrorMsg ?? ""))
-                        self?.stepIndexBind -= 1
+                        self?.stepIndexBind  = 0
                         self?.failedProcess.toggle()
+                        self?.isFrontBind = true
 
                     }
                     
                 case .failure(let failure):
                         debugPrint("GetFrontBackValify failed")
                         self?.getFrontBackValifyAPIResult = .onFailure(error: failure)
-                    self?.stepIndexBind -= 1
+                    self?.stepIndexBind = 0
                     self?.failedProcess.toggle()
+                    self?.isFrontBind = true
 
                 }
             }
@@ -182,8 +186,7 @@ class CameraPreviewViewModel:ObservableObject{
         }
     }
     
-     func handleImageData(imageDataOne:Data?,ImageDataTwo:Data?)
-    {
+     func handleImageData(imageDataOne:Data?,ImageDataTwo:Data?) {
         nextScene()
     }
 
@@ -209,10 +212,6 @@ extension CameraPreviewViewModel{
     private func openQuestionnaireRegisterScene(){
 //        coordinator.openQuestionnaireRegisterScene()
 
-    }
-    
-    private func openVerifyIDConfirmationScene(savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String, gender:String, jobTitle:String, religion:String, maritalStatus:String) {
-        coordinator.openVerifyIDConfirmation(delegate: self, savedImageOne: savedImageOne, isFrontID: isFrontID, address: address, name: name, dateOfBirth: dateOfBirth, idNumber: idNumber, idKey: idKey, gender: gender, jobTitle: jobTitle, religion: religion, maritalStatus: maritalStatus)
     }
 
 }

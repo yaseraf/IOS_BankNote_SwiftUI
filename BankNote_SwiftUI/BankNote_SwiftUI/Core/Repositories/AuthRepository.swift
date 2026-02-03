@@ -10,6 +10,7 @@ protocol AuthRepositoryProtocol {
     func login(route:AuthRoute, completion: @escaping(Result<LoginResponseModel, NetworkError>) -> Void) async
     func OTP (route:AuthRoute, completion: @escaping(Result<OTPResponseModel, NetworkError>) -> Void) async
     func GetDeviceConfigs (route:AuthRoute, completion: @escaping(Result<GetDeviceConfigsResponseModel, NetworkError>) -> Void) async
+    func GetKYCCibc(route:AuthRoute, completion: @escaping(Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async
 }
 
 class AuthRepository: AuthRepositoryProtocol {
@@ -25,5 +26,7 @@ class AuthRepository: AuthRepositoryProtocol {
     func GetDeviceConfigs(route: AuthRoute, completion: @escaping (Result<GetDeviceConfigsResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: GetDeviceConfigsResponseModel.self, completion: completion).requestApi()
     }
-
+    func GetKYCCibc(route: AuthRoute, completion: @escaping (Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: GetKYCCibcResponseModel.self, completion: completion).requestApi()
+    }
 }

@@ -7,8 +7,10 @@
 
 import Foundation
 protocol ValifyRepositoryProtocol {
+    
     func SendPhoneOtpValify(route:AuthRoute, completion: @escaping(Result<SendPhoneOtpValifyResponseModel, NetworkError>) -> Void) async
     func VerifyPhoneOtpValify (route:AuthRoute, completion: @escaping(Result<VerifyPhoneOtpValifyResponseModel, NetworkError>) -> Void) async
+    func RegistrationStatusValify (route:AuthRoute, completion: @escaping(Result<RegistrationStatusValifyResponseModel, NetworkError>) -> Void) async
     func SendEmailOtpValify (route:AuthRoute, completion: @escaping(Result<SendEmailOtpValifyResponseModel, NetworkError>) -> Void) async
     func VerifyEmailOtpValify (route:AuthRoute, completion: @escaping(Result<VerifyEmailOtpValifyResponseModel, NetworkError>) -> Void) async
     func GetFrontBackValify (route:AuthRoute, completion: @escaping(Result<GetFrontBackValifiyResponseModel, NetworkError>) -> Void) async
@@ -21,6 +23,9 @@ protocol ValifyRepositoryProtocol {
     func ResetPasswordValify (route:AuthRoute, completion: @escaping(Result<ResetPasswordValifyResponseModel, NetworkError>) -> Void) async
     func CsoValify (route:AuthRoute, completion: @escaping(Result<CsoValifyResponseModel, NetworkError>) -> Void) async
     func NtraValify (route:AuthRoute, completion: @escaping(Result<NtraValifyResponseModel, NetworkError>) -> Void) async
+    func GetKYCFieldValify (route:AuthRoute, completion: @escaping(Result<GetKycFieldValifyResponseModel, NetworkError>) -> Void) async
+    func GetKYCContractValify (route:AuthRoute, completion: @escaping(Result<GetKycContractValifyResponseModel, NetworkError>) -> Void) async
+    func GetContractValify (route:AuthRoute, completion: @escaping(Result<GetContractValifyResponseModel, NetworkError>) -> Void) async
 }
 
 class ValifyRepository: ValifyRepositoryProtocol {
@@ -30,6 +35,10 @@ class ValifyRepository: ValifyRepositoryProtocol {
     
     func VerifyPhoneOtpValify(route: AuthRoute, completion: @escaping (Result<VerifyPhoneOtpValifyResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: VerifyPhoneOtpValifyResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func RegistrationStatusValify(route: AuthRoute, completion: @escaping (Result<RegistrationStatusValifyResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: RegistrationStatusValifyResponseModel.self, completion: completion).requestApi()
     }
     
     func SendEmailOtpValify(route: AuthRoute, completion: @escaping (Result<SendEmailOtpValifyResponseModel, NetworkError>) -> Void) async {
@@ -78,6 +87,18 @@ class ValifyRepository: ValifyRepositoryProtocol {
 
     func NtraValify(route: AuthRoute, completion: @escaping (Result<NtraValifyResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: NtraValifyResponseModel.self, completion: completion).requestApi()
+    }
+
+    func GetKYCFieldValify(route: AuthRoute, completion: @escaping (Result<GetKycFieldValifyResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: GetKycFieldValifyResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func GetKYCContractValify(route: AuthRoute, completion: @escaping (Result<GetKycContractValifyResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: GetKycContractValifyResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func GetContractValify(route: AuthRoute, completion: @escaping (Result<GetContractValifyResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: GetContractValifyResponseModel.self, completion: completion).requestApi()
     }
 
 

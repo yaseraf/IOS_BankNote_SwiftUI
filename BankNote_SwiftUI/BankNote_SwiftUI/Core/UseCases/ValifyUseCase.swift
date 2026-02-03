@@ -12,6 +12,7 @@ protocol ValifyUseCaseProtocol{
     func VerifyPhoneOtpValify(requestModel: VerifyPhoneOtpValifyRequestModel, completion: @escaping(Result<VerifyPhoneOtpValifyUIModel, NetworkError>) -> Void) async
     func SendEmailOtpValify(requestModel: SendEmailOtpValifyRequestModel, completion: @escaping(Result<SendEmailOtpValifyUIModel, NetworkError>) -> Void) async
     func VerifyEmailOtpValify(requestModel: VerifyEmailOtpValifyRequestModel, completion: @escaping(Result<VerifyEmailOtpValifyUIModel, NetworkError>) -> Void) async
+    func RegistrationStatusValify(requestModel: RegistrationStatusValifyRequestModel, completion: @escaping(Result<RegistrationStatusValifyUIModel, NetworkError>) -> Void) async
     func GetFrontBackValify(requestModel: GetFrontBackValifiyRequestModel, completion: @escaping(Result<GetFrontBackValifiyUIModel, NetworkError>) -> Void) async
     func GetValifyData(requestModel: GetValifyDataRequestModel, completion: @escaping(Result<GetValifyDataUIModel, NetworkError>) -> Void) async
     func RegisterValify(requestModel: RegisterValifyRequestModel, completion: @escaping(Result<RegisterValifyUIModel, NetworkError>) -> Void) async
@@ -22,6 +23,9 @@ protocol ValifyUseCaseProtocol{
     func ResetPasswordValify(requestModel: ResetPasswordValifyRequestModel, completion: @escaping(Result<ResetPasswordValifyUIModel, NetworkError>) -> Void) async
     func CsoValify(requestModel: CsoValifyRequestModel, completion: @escaping(Result<CsoValifyUIModel, NetworkError>) -> Void) async
     func NtraValify(requestModel: NtraValifyRequestModel, completion: @escaping(Result<NtraValifyUIModel, NetworkError>) -> Void) async
+    func GetKYCFieldValify(requestModel: GetKycFieldValifyRequestModel, completion: @escaping(Result<GetKycFieldValifyUIModel, NetworkError>) -> Void) async
+    func GetKYCContractValify(requestModel: GetKycContractValifyRequestModel, completion: @escaping(Result<GetKycContractValifyUIModel, NetworkError>) -> Void) async
+    func GetContractValify(requestModel: GetContractValifyRequestModel, completion: @escaping(Result<GetContractValifyUIModel, NetworkError>) -> Void) async
 }
     
     class ValifyUseCase {
@@ -51,6 +55,19 @@ extension ValifyUseCase: ValifyUseCaseProtocol {
             switch result {
             case .success(let responseModel):
                 let uiModel = VerifyPhoneOtpValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func RegistrationStatusValify(requestModel: RegistrationStatusValifyRequestModel, completion: @escaping (Result<RegistrationStatusValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.RegistrationStatusValify(requestModel: requestModel)
+        await repository.RegistrationStatusValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = RegistrationStatusValifyUIModel.mapToUIModel(responseModel)
                 completion(.success(uiModel))
             case .failure(let failure):
                 completion(.failure(failure))
@@ -218,5 +235,43 @@ extension ValifyUseCase: ValifyUseCaseProtocol {
         }
     }
 
+    func GetKYCFieldValify(requestModel: GetKycFieldValifyRequestModel, completion: @escaping (Result<GetKycFieldValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.GetKYCFieldValify(requestModel: requestModel)
+        await repository.GetKYCFieldValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetKycFieldValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func GetKYCContractValify(requestModel: GetKycContractValifyRequestModel, completion: @escaping (Result<GetKycContractValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.GetKYCContractValify(requestModel: requestModel)
+        await repository.GetKYCContractValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetKycContractValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func GetContractValify(requestModel: GetContractValifyRequestModel, completion: @escaping (Result<GetContractValifyUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.GetContractValify(requestModel: requestModel)
+        await repository.GetContractValify(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetContractValifyUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
 
 }

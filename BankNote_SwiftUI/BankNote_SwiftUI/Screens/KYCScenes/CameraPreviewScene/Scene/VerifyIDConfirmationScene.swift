@@ -17,10 +17,10 @@ struct VerifyIDConfirmationScene: BaseSceneType{
     @State var viewTypeAction:BaseSceneViewType  = DefaultBaseSceneViewType()
     var body: some View {
         BaseScene( backgroundType: .colorBGSecondary,contentView: {
-            VerifyIDConfirmationContentView(isFrontID: $viewModel.isFrontID, address: $viewModel.address, name: $viewModel.name, dateOfBirth: $viewModel.dateOfBirth, idNumber: $viewModel.idNumber, idKey: $viewModel.idKey, gender: $viewModel.gender, jobTitle: $viewModel.jobTitle, religion: $viewModel.religion, maritalStatus: $viewModel.maritalStatus, onRetakeTap: {
+            VerifyIDConfirmationContentView(fullName: $viewModel.fullName, address: $viewModel.address, dateOfBirth: $viewModel.dateOfBith, idNumber: $viewModel.idNumber, idKey: $viewModel.idKey, onRetakeTap: {
                 viewModel.dismiss()
             }, onNextTap: {
-                viewModel.openTakeSelfieScene()
+                viewModel.openLivenessCheckScene()
             })
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad(){

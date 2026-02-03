@@ -10,7 +10,6 @@ import Foundation
 struct SendPhoneOtpValifyRequestModel: Codable {
     let Lang: String?
     let PhoneNumber: String?
-    let reqID: String?
 }
 
 struct SendPhoneOtpValifyResponseModel: Codable {

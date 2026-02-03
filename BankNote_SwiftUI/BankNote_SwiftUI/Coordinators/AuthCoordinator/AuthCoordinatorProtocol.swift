@@ -25,7 +25,7 @@ protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openQuestionsScene()
     func openSetPasswordScene()
     func openCameraPreviewFor(type:CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool)
-    func openVerifyIDConfirmation(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String, gender:String, jobTitle:String, religion:String, maritalStatus:String)
+    func openVerifyIDConfirmation()
     func openTakeSelfieScene(livenessCheck:Bool)
     func openScanIDFrontScene(type: CameraPreviewType, savedImageOne:Image?, stepIndexBind:Int, isFrontBind:Bool)
     func openVerifyScanIDFrontScene(delegate:CameraPreviewDelegate, savedImageOne:Image?, isFrontID:Bool, address:String, name:String, dateOfBirth:String, idNumber:String, idKey:String)

@@ -13,6 +13,16 @@ class AppUtility {
     @Inject private var userDefaultController: UserDefaultController?
     @Inject private var keyChainController: KeyChainController?
     
+    func screenTransition(navigationController: BaseNavigationController, animationOptions: UIView.AnimationOptions, duration: TimeInterval, animated: Bool) {
+        UIView.transition(
+            with: navigationController.view,
+            duration: duration,
+            options: animationOptions,
+            animations: {
+                navigationController.setViewControllers([], animated: animated)
+            }
+        )
+    }
     
     static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
         AppDelegate.shared.orientationLock = orientation

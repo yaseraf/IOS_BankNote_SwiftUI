@@ -12,10 +12,12 @@ enum AuthRoute:APITargetType{
     case login(requestModel: LoginRequestModel )
     case OTP(requestModel: OTPRequestModel )
     case GetDeviceConfigs(requestModel: GetDeviceConfigsRequestModel)
+    case GetKYCCibc(requestModel: GetKYCCibcRequestModel)
     
     // MARK: Valify
     case SendPhoneOtpValify(requestModel: SendPhoneOtpValifyRequestModel)
     case VerifyPhoneOtpValify(requestModel: VerifyPhoneOtpValifyRequestModel)
+    case RegistrationStatusValify(requestModel: RegistrationStatusValifyRequestModel)
     case SendEmailOtpValify(requestModel: SendEmailOtpValifyRequestModel)
     case VerifyEmailOtpValify(requestModel: VerifyEmailOtpValifyRequestModel)
     case GetFrontBackValify(requestModel: GetFrontBackValifiyRequestModel)
@@ -33,6 +35,11 @@ enum AuthRoute:APITargetType{
     case CsoValify(requestModel: CsoValifyRequestModel)
     case NtraValify(requestModel: NtraValifyRequestModel)
     
+    // Contracts
+    case GetKYCFieldValify(requestModel: GetKycFieldValifyRequestModel)
+    case GetKYCContractValify(requestModel: GetKycContractValifyRequestModel)
+    case GetContractValify(requestModel: GetContractValifyRequestModel)
+    
     var baseURL: URL{
         get{
             return URL(string: AppEnvironmentController.currentNetworkConfiguration.basePath
@@ -43,12 +50,21 @@ enum AuthRoute:APITargetType{
     var headers: [String : String]{
         get{
             switch self {
+            case .GetKYCCibc:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
             case .SendPhoneOtpValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = "344553443"
                 return dicHeader
 
             case .VerifyPhoneOtpValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+                
+            case .RegistrationStatusValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = "344553443"
                 return dicHeader
@@ -112,6 +128,21 @@ enum AuthRoute:APITargetType{
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = "344553443"
                 return dicHeader
+                
+            case .GetKYCFieldValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .GetKYCContractValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
+
+            case .GetContractValify:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = "344553443"
+                return dicHeader
 
                 
             default:
@@ -128,10 +159,14 @@ enum AuthRoute:APITargetType{
            return  "GeneralWServices/RegistrationsOTPByEmailAndMobile"
         case .GetDeviceConfigs:
             return "GeneralWServices/GetDeviceConfigs"
+        case .GetKYCCibc:
+            return "KYCWServices/GetKYCCibc"
         case .SendPhoneOtpValify:
             return "KYCWServices/SendPhoneOtpValify"
         case .VerifyPhoneOtpValify:
             return "KYCWServices/VerifyPhoneOtpValify"
+        case .RegistrationStatusValify:
+            return "KYCWServices/RegistrationStatusValify"
         case .SendEmailOtpValify:
             return "KYCWServices/SendEmailOtpValify"
         case .VerifyEmailOtpValify:
@@ -156,6 +191,12 @@ enum AuthRoute:APITargetType{
             return "KYCWServices/CsoValify"
         case .NtraValify:
             return "KYCWServices/NtraValify"
+        case .GetKYCFieldValify:
+            return "KYCWServices/GetKycFiledValify"
+        case .GetKYCContractValify:
+            return "KYCWServices/GetKycContractValify"
+        case .GetContractValify:
+            return "KYCWServices/GetContractValify"
 
         }
     }
@@ -163,7 +204,7 @@ enum AuthRoute:APITargetType{
     var method: APIMethodType{
         get{
             switch self {
-            case .login, .OTP, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify:
+            case .login, .OTP, .GetKYCCibc, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .RegistrationStatusValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify, .GetKYCFieldValify, .GetKYCContractValify, .GetContractValify:
                 return .post
             case .GetDeviceConfigs:
                 return .get
@@ -179,9 +220,13 @@ enum AuthRoute:APITargetType{
                 .requestJsonEncodable(requestModel)
         case .GetDeviceConfigs:
                 .requestPlain
+        case .GetKYCCibc(let requestModel):
+                .requestJsonEncodable(requestModel)
         case .SendPhoneOtpValify(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .VerifyPhoneOtpValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .RegistrationStatusValify(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .SendEmailOtpValify(let requestModel):
                 .requestJsonEncodable(requestModel)
@@ -207,6 +252,11 @@ enum AuthRoute:APITargetType{
                 .requestJsonEncodable(requestModel)
         case .NtraValify(let requestModel):
                 .requestJsonEncodable(requestModel)
-
+        case .GetKYCFieldValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetKYCContractValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetContractValify(let requestModel):
+                .requestJsonEncodable(requestModel)
         }
     }}

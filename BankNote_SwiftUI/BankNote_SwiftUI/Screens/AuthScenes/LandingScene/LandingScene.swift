@@ -30,10 +30,33 @@ struct LandingScene: BaseSceneType {
                 })
             })
         }, showLoading: .constant(viewTypeAction.showLoading))
+        .onAppear {
+            viewModel.callUrlIPAddressAPI(success: true)
+        }
         .onViewDidLoad {
             loginAPI()
+            UrlIpAddressAPI()
         }
     }
+    
+    private func UrlIpAddressAPI() {
+        viewModel.$urlAPIAddressAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(_):
+                debugPrint("Loading..")
+                
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+
     
     private func loginAPI() {
         viewModel.$LoginResponseModelAPIResult.receive(on: DispatchQueue.main).sink { result  in

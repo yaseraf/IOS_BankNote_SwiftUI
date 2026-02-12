@@ -9,6 +9,7 @@
 import Foundation
 enum AuthRoute:APITargetType{
     
+    case urlIPAddress(requestModel: String)
     case login(requestModel: LoginRequestModel )
     case OTP(requestModel: OTPRequestModel )
     case GetDeviceConfigs(requestModel: GetDeviceConfigsRequestModel)
@@ -42,8 +43,13 @@ enum AuthRoute:APITargetType{
     
     var baseURL: URL{
         get{
-            return URL(string: AppEnvironmentController.currentNetworkConfiguration.basePath
-                       + path)!
+            switch self {
+                case .urlIPAddress:
+                    return URL(string: "https://httpbin.org/ip")!
+
+                default:
+                    return URL(string: AppEnvironmentController.currentNetworkConfiguration.basePath + path)!
+            }
         }
     }
     
@@ -52,96 +58,96 @@ enum AuthRoute:APITargetType{
             switch self {
             case .GetKYCCibc:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
-            case .SendPhoneOtpValify:
-                var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
-                return dicHeader
+//            case .SendPhoneOtpValify:
+//                var dicHeader = NetworkUtility.getHeader(.token)
+//                dicHeader["access-token"] = "344553443"
+//                return dicHeader
 
             case .VerifyPhoneOtpValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
                 
             case .RegistrationStatusValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .SendEmailOtpValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .VerifyEmailOtpValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .GetFrontBackValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
                 
             case .GetValifyData:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
                 
             case .RegisterValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .GetQuestionsValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .SetAnswerValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .SetPasswordValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .LoginValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .ResetPasswordValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .CsoValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .NtraValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
                 
             case .GetKYCFieldValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .GetKYCContractValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
             case .GetContractValify:
                 var dicHeader = NetworkUtility.getHeader(.token)
-                dicHeader["access-token"] = "344553443"
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
 
                 
@@ -153,6 +159,8 @@ enum AuthRoute:APITargetType{
 
     var path: String{
         switch self {
+        case .urlIPAddress:
+            return ""
         case .login:
             return "GeneralWServices/UsrAuthinticationByEmailAndMobile"
         case .OTP:
@@ -206,7 +214,7 @@ enum AuthRoute:APITargetType{
             switch self {
             case .login, .OTP, .GetKYCCibc, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .RegistrationStatusValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify, .GetKYCFieldValify, .GetKYCContractValify, .GetContractValify:
                 return .post
-            case .GetDeviceConfigs:
+            case .GetDeviceConfigs, .urlIPAddress:
                 return .get
             }
         }
@@ -214,6 +222,8 @@ enum AuthRoute:APITargetType{
 
     var requestType: APITypeOfRequest{
         switch self {
+        case .urlIPAddress:
+                .requestPlain
         case .login( let RequestModel):
                 .requestJsonEncodable(RequestModel)
         case .OTP(requestModel: let requestModel):

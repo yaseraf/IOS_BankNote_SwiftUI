@@ -86,11 +86,12 @@ extension SignUpViewModel {
                 switch result {
                 case .success(let success):
                     
-                    if success.IsSuccessful ?? false {
-                        self?.openVerifySignUpScene(transactionID: success.TransactionId ?? "", verifyWithEmail: self?.verifyWithEmail ?? false, phoneNumber: phoneNumber, email: "")
-                        KeyChainController().valifyRequestId = success.reqID ?? ""
+                    if success.isSuccessful ?? false {
+                        self?.openVerifySignUpScene(transactionID: success.transactionId ?? "", verifyWithEmail: self?.verifyWithEmail ?? false, phoneNumber: phoneNumber, email: "")
+                        KeyChainController().valifyRequestId = success.requestId ?? ""
+                        KeyChainController().loginAccessToken = success.accessToken ?? ""
                     } else {
-                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.errorMsg ?? "")
                     }
 
 

@@ -23,6 +23,9 @@ struct VerifyIDConfirmationScene: BaseSceneType{
                 viewModel.openLivenessCheckScene()
             })
         }, showLoading: .constant(viewTypeAction.showLoading))
+        .onAppear {
+            viewModel.getValifyDataAPI(success: true)
+        }
         .onViewDidLoad(){
            
         }

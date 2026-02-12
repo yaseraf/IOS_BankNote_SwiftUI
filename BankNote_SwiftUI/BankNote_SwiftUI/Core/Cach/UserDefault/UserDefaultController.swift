@@ -30,6 +30,7 @@ enum CachingKey: String {
     
     // MARK: Strings
     
+    case userIPAddress
     case appLanguage
     case currentDeviceLanguage
     case sessiontimeoutPerSec
@@ -86,6 +87,7 @@ class UserDefaultController: ObservableObject {
 
     // MARK: Strings
 
+    @CachingCodable<String>(.userIPAddress) var userIPAddress
     @CachingCodable<String>(.appLanguage) var appLanguage
     @CachingCodable<String>(.currentDeviceLanguage) var currentDeviceLanguage
     @CachingCodable<String>(.username) var username
@@ -127,6 +129,7 @@ class UserDefaultController: ObservableObject {
     }
     
     func clearTempData(){
+        userIPAddress = nil
         profileID = nil
         signalRConnected = nil
         marketStatusTitle = nil

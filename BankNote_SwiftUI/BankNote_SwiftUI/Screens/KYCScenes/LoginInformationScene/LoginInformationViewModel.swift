@@ -145,11 +145,11 @@ extension LoginInformationViewModel {
                 self?.registerValifyAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
-                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Message: \(success.message ?? "")")
-                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Server response: \(success.serverResponse ?? "")")
-                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "scope: \(success.scope ?? "")")
-                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "errormsg: \(success.errorMsg ?? "")")
-                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "IsSuccessful: \(String(success.isSuccessful ?? false))")
+//                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Message: \(success.message ?? "")")
+//                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Server response: \(success.serverResponse ?? "")")
+//                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "scope: \(success.scope ?? "")")
+//                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "errormsg: \(success.errorMsg ?? "")")
+//                    SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "IsSuccessful: \(String(success.isSuccessful ?? false))")
 
                     if success.isSuccessful ?? false {
                         self?.registerValifyAPIResult = .onSuccess(response: success)
@@ -284,11 +284,11 @@ extension LoginInformationViewModel {
 extension LoginInformationViewModel {
     private func setPasswordValidationList(){
          var listPasswordValidation : [PasswordValidationType:ChangePasswordUIModel] = [:]
-         listPasswordValidation[.eightDigitCount] = .init( match: .none)
-         listPasswordValidation[.atLeastOneNumber] = .init( match: .none)
-         listPasswordValidation[.atLeastOneChar] = .init( match: .none)
-        listPasswordValidation[.atLeastOneSpecialCharacter] = .init( match: .none)
-        listPasswordValidation[.atLeastOneCapitalLetter] = .init( match: .none)
+            listPasswordValidation[.eightDigitCount] = .init( match: .none)
+            listPasswordValidation[.atLeastOneNumber] = .init( match: .none)
+            listPasswordValidation[.atLeastOneChar] = .init( match: .none)
+            listPasswordValidation[.atLeastOneSpecialCharacter] = .init( match: .none)
+            listPasswordValidation[.atLeastOneCapitalLetter] = .init( match: .none)
 
          self.listPasswordValidation = listPasswordValidation
 

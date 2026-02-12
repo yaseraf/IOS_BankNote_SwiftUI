@@ -75,7 +75,8 @@ extension SetPasswordViewModel {
                     
                     if success.isSuccessful == true {
                         debugPrint("setPasswordValify success")
-                        self?.openLoginValifyScene()
+//                        self?.openLoginValifyScene()
+                        self?.coordinator.openQuestioneerScene()
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.serverResponse ?? "")
                     }

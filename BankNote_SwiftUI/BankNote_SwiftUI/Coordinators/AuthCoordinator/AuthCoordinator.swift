@@ -268,7 +268,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
 
 
     func openQuestioneerScene() {
-        let viewModel = QuestioneerViewModel(coordinator: self)
+        let useCase = ValifyUseCase()
+        let viewModel = QuestioneerViewModel(coordinator: self, valifyUseCase: useCase)
         let view = QuestioneerScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

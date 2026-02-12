@@ -249,8 +249,10 @@
 "search_for_name" = "ابحث";
 "by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service" = "بالضغط على متابعة، فإنك توافق على سياسة الخصوصية وشروط الخدمة الخاصة بنا";
 "login_information" = "معلومات تسجيل الدخول";
+"register_information" = "معلومات التسجيل";
 "set_password" = "قم بتعيين كلمة المرور";
 "you_will_use_these_details_to_login_to_your_account" = "ستستخدم هذه التفاصيل لتسجيل الدخول إلى حسابك";
+"you_will_use_these_details_to_register_your_account" = "سوف تستخدم هذه البيانات لتسجيل حسابك";
 "user_name" = "اسم المستخدم";
 "password" = "كلمة المرور";
 "confirm_password" = "تأكيد كلمة المرور";
@@ -286,6 +288,22 @@
 "thanks_for_registering" = "شكرًا لتسجيلك";
 "were_reviewing_your_info_now" = "نقوم بمراجعة معلوماتك الآن.";
 "well_email_you_with_next_steps" = "سنرسل لك بريدًا إلكترونيًا بالخطوات التالية.";
+
+"do_any_of_these_apply_to_you" = "هل ينطبق عليك أيٌّ مما يلي؟";
+"select_contracts" = "اختر العقود";
+
+"investment_risks" = "مخاطر الاستثمار:";
+"investing_in_nature_funds_and_bonds_involves_risks" = "الاستثمار في الصناديق الاستثمارية والسندات ينطوي على مخاطر.";
+"the_value_of_your_investment_can_go_up_or_down._you_might_not_get_back_the_amount_you_originally_invested." = "قد ترتفع أو تنخفض قيمة استثمارك، وقد لا تسترد المبلغ الذي قمت باستثماره في الأصل.";
+
+"no_guarantee" = "لا يوجد ضمان:";
+"there_is_no_guarantee_of_returns_past_performance" = "لا يوجد أي ضمان للعوائد. الأداء السابق";
+"is_not_indicative_of_the_future_results" = "لا يُعد مؤشرًا على النتائج المستقبلية.";
+
+"fees_and_charges" = "الرسوم والمصاريف:";
+"there_may_be_fees_and_charges_associated_with" = "قد تكون هناك رسوم ومصاريف مرتبطة بـ";
+"your_investment_please_review_the_fee_schedule_for_details" = "استثمارك. يرجى مراجعة جدول الرسوم للاطلاع على التفاصيل.";
+
 
 // MARK: Countries List Screen
 "select_country" = "اختر الدولة";

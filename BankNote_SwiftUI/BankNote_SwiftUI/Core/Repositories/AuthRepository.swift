@@ -7,6 +7,7 @@
 
 import Foundation
 protocol AuthRepositoryProtocol {
+    func urlIPAddress(route:AuthRoute, completion: @escaping(Result<UrlIPAddressResponseModel, NetworkError>) -> Void) async
     func login(route:AuthRoute, completion: @escaping(Result<LoginResponseModel, NetworkError>) -> Void) async
     func OTP (route:AuthRoute, completion: @escaping(Result<OTPResponseModel, NetworkError>) -> Void) async
     func GetDeviceConfigs (route:AuthRoute, completion: @escaping(Result<GetDeviceConfigsResponseModel, NetworkError>) -> Void) async
@@ -14,6 +15,10 @@ protocol AuthRepositoryProtocol {
 }
 
 class AuthRepository: AuthRepositoryProtocol {
+    func urlIPAddress(route: AuthRoute, completion: @escaping (Result<UrlIPAddressResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: UrlIPAddressResponseModel.self, completion: completion).requestApi()
+    }
+
     func OTP(route: AuthRoute, completion: @escaping (Result<OTPResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: OTPResponseModel.self, completion: completion).requestApi()
     }

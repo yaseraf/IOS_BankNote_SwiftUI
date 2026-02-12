@@ -18,7 +18,7 @@ protocol KYCRepositoryProtocol {
     func VerifyIDFrontVlens(route:KYCRoute, completion: @escaping(Result<VerifyIDFrontVlensResponseModel, NetworkError>) -> Void) async
     func VerifyIDBack(route:KYCRoute, completion: @escaping(Result<VerifyIDBackResponseModel, NetworkError>) -> Void) async
     func VerifyLiveness(route:KYCRoute, completion: @escaping(Result<VerifyLivenessResponseModel, NetworkError>) -> Void) async
-    func GetKYCCibc(route:KYCRoute, completion: @escaping(Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async
+    func GetKYCCibc(route:AuthRoute, completion: @escaping(Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async
     func GetSourceOfIncome(route:KYCRoute, completion: @escaping(Result<GetSourceOfIncomeResponseModel, NetworkError>) -> Void) async
     func GetInvestObjective(route:KYCRoute, completion: @escaping(Result<GetInvestObjectiveResponseModel, NetworkError>) -> Void) async
     func GetNationality(route:KYCRoute, completion: @escaping(Result<GetNationalityResponseModel, NetworkError>) -> Void) async
@@ -111,7 +111,7 @@ class KYCRepository: KYCRepositoryProtocol {
         await RequestApi(route: route,responseType: VerifyLivenessResponseModel.self, completion: completion).requestApi()
     }
     
-    func GetKYCCibc(route: KYCRoute, completion: @escaping (Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async {
+    func GetKYCCibc(route: AuthRoute, completion: @escaping (Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: GetKYCCibcResponseModel.self, completion: completion).requestApi()
     }
     

@@ -16,7 +16,8 @@ class LandingViewModel:ObservableObject {
     private var useCase: AuthUseCase
     
     @Published var LoginResponseModelAPIResult: APIResultType<LoginUIModel>?
-    
+    @Published var urlAPIAddressAPIResult: APIResultType<UrlIPAddressResponseModel>?
+
     init(coordinator: AuthCoordinatorProtocol, useCase: AuthUseCase) {
         self.coordinator = coordinator
         self.useCase = useCase
@@ -59,6 +60,7 @@ extension LandingViewModel {
         // MARK: Primary
         coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
         
+//        coordinator.openQuestioneerScene()
 //        coordinator.openScanIDFrontScene()
 //        coordinator.openCameraPreviewFor(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
 //        coordinator.openVerifyIDConfirmation()
@@ -91,6 +93,28 @@ extension LandingViewModel {
 
 // MARK: API Calling
 extension LandingViewModel {
+    func callUrlIPAddressAPI(success:Bool) {
+        urlAPIAddressAPIResult = .onLoading(show: true)
+        Task.init {
+            await useCase.urlIPAddress(requestModel: "") {[weak self] result in
+                self?.urlAPIAddressAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.urlAPIAddressAPIResult = .onSuccess(response: success)
+                    
+                    if success.origin?.isEmpty == true {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "Sorry, We Cannot get you IP Address, Please Close VPN if you use and try again")
+                    } else {
+                        UserDefaultController().userIPAddress = success.origin ?? ""
+                    }
+                    
+                case .failure(let failure):
+                    self?.urlAPIAddressAPIResult = .onFailure(error: failure)
+                }
+            }
+        }
+    }
+    
     func UsrAuthinticationByEmailAndMobileAPI(email : String = "" , phoneNo : String  , Password : String, isRememberMe: Bool)  {
         
         // MARK: - Save email & password in keychain

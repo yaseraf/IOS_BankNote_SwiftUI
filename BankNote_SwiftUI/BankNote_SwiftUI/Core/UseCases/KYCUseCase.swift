@@ -277,7 +277,7 @@ extension KYCUseCase: KYCUseCaseProtocol {
     }
     
     func GetKYCCibc(requestModel: GetKYCCibcRequestModel, completion: @escaping (Result<GetKYCCibcUIModel, NetworkError>) -> Void) async {
-        let route = KYCRoute.GetKYCCibc(requestModel: requestModel)
+        let route = AuthRoute.GetKYCCibc(requestModel: requestModel)
         await repository.GetKYCCibc(route: route) { result in
             switch result {
             case .success(let responseModel):

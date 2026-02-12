@@ -123,7 +123,7 @@ struct QuestionsContentView: View {
     private var bottomView: some View {
         return VStack {
             Button {
-                onContinueTap(questionsData.wrappedValue?.questions?.first?.id ?? "", answer)
+                onContinueTap(answer, questionsData.wrappedValue?.questions?.first?.id ?? "")
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))

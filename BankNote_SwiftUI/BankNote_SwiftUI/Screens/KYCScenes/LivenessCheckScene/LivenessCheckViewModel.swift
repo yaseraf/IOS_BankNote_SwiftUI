@@ -40,28 +40,6 @@ extension LivenessCheckViewModel {
 
 // MARK: API Calls
 extension LivenessCheckViewModel {
-    func getValifyData() {
-        
-        let requestModel = GetValifyDataRequestModel(reqID: KeyChainController().valifyRequestId ?? "")
-                
-        getValifyDataAPIResult = .onLoading(show: true)
-        
-        Task.init {
-            await valifyUseCase.GetValifyData(requestModel: requestModel) {[weak self] result in
-                self?.getValifyDataAPIResult = .onLoading(show: false)
-                switch result {
-                case .success(let success):
-
-                    KeyChainController().valifyTransactionId = success.resData?.transactionId
-                    debugPrint("get valify success")
-                    
-                case .failure(let failure):
-                    self?.getValifyDataAPIResult = .onFailure(error: failure)
-                    debugPrint("get valify failed: \(failure)")
-                }
-            }
-        }
-    }
 }
 
 // MARK: Functions

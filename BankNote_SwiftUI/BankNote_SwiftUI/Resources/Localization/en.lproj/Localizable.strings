@@ -248,8 +248,10 @@
 "search_for_name" = "Search for name";
 "by_clicking_continue_you_agree_to\nour_privacy_policy_and_terms_and_service" = "By clicking continue you agree to\nour privacy policy and terms and service";
 "login_information" = "Login Information";
+"register_information" = "Registeration Information";
 "set_password" = "Set Password";
 "you_will_use_these_details_to_login_to_your_account" = "You will use these details to login to your account";
+"you_will_use_these_details_to_register_to_your_account" = "You will use these details to register your account";
 "user_name" = "Username";
 "password" = "Password";
 "confirm_password" = "Confirm Password";
@@ -278,6 +280,7 @@
 "there_is_no_guarantee_of_returns_past_performance" = "There is no guarantee of returns past performance";
 "is_not_indicative_of_the_future_results" = " is not indicative of the future results.";
 "there_may_be_fees_and_charges_associated_with" = "There may be fees and charges associated with";
+"you_will_use_these_details_to_register_your_account" = "You will use these details to register your account.";
 "your_investment_please_review_the_fee_schedule_for_details" = "your investment. please review the fee schedule for details";
 "source_of_fund" = "Source of Fund";
 "investment_objectives" = "Investment Objective";
@@ -285,6 +288,22 @@
 "thanks_for_registering" = "Thanks For Registering";
 "were_reviewing_your_info_now" = "We're reviweing your info now.";
 "well_email_you_with_next_steps" = "We'll email you with next steps.";
+
+"do_any_of_these_apply_to_you" = "Do any of these apply to you?";
+"select_contracts" = "Select Contracts";
+
+"investment_risks" = "Investment Risks:";
+"investing_in_nature_funds_and_bonds_involves_risks" = "Investing in mutual funds and bonds involves risks.";
+"the_value_of_your_investment_can_go_up_or_down._you_might_not_get_back_the_amount_you_originally_invested." = "The value of your investment can go up or down. You might not get back the amount you originally invested.";
+
+"no_guarantee" = "No Guarantee:";
+"there_is_no_guarantee_of_returns_past_performance" = "There is no guarantee of returns. Past performance";
+"is_not_indicative_of_the_future_results" = "is not indicative of future results.";
+
+"fees_and_charges" = "Fees and Charges:";
+"there_may_be_fees_and_charges_associated_with" = "There may be fees and charges associated with";
+"your_investment_please_review_the_fee_schedule_for_details" = "your investment. Please review the fee schedule for details.";
+
 
 // MARK: Countries List Screen
 "select_country" = "Select Country";

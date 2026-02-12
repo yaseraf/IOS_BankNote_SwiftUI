@@ -22,13 +22,15 @@ class LoginValifyViewModel: ObservableObject {
     @Published var selectCountry: CountryFlagInfo?
 
     @Published var loginValifyAPIResult:APIResultType<LoginValifyUIModel>?
+    @Published var getKycFieldAPIResult:APIResultType<GetKycFieldValifyUIModel>?
 
     init(coordinator: AuthCoordinatorProtocol, useCase: KYCUseCaseProtocol, valifyUseCase: ValifyUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
         self.valifyUseCase = valifyUseCase
         self.selectCountry = AppConstants.defaultEgyptCountry
-
+        
+        phone = KeyChainController().phoneNumberEntered ?? ""
     }
 }
 
@@ -36,6 +38,10 @@ class LoginValifyViewModel: ObservableObject {
 extension LoginValifyViewModel {
     func openCountryPickerScene(countryModel:CountryFlagInfo?) {
         coordinator.openCountiesScene(delegate: self, selectCountry: countryModel)
+    }
+    
+    func openContractsScene() {
+        coordinator.openQuestioneerScene()
     }
 }
 
@@ -45,7 +51,23 @@ extension LoginValifyViewModel {
     // MARK: Valify
     func loginValifyAPI(success: Bool, phone: String, password: String) {
         
-        let requestModel = LoginValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", password: password, phoneNumber: phone, reqID: KeyChainController().valifyRequestId ?? "")
+        var currentLocation: CLLocation?
+
+        if( CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() ==  .authorizedAlways){
+
+          currentLocation = UserData.shared.locManager.location
+
+        }
+        
+        let longitude = String(currentLocation?.coordinate.longitude ?? 0.0)
+        let latitude = String(currentLocation?.coordinate.latitude ?? 0.0)
+                
+        let timezone = TimeZone.current.identifier
+
+        
+//        let requestModel = LoginValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", password: password, phoneNumber: KeyChainController().phoneNumberEntered ?? "", reqID: KeyChainController().valifyRequestId ?? "")
+        let requestModel = LoginValifyRequestModel(deviceId: "", deviceType: "IOS", ipAddress: UserDefaultController().userIPAddress ?? "", lang: AppUtility.shared.isRTL ? "ar" : "en", latitude: latitude, longitude: longitude, password: password, phoneNumber: phone, timezone: timezone)
         
         loginValifyAPIResult = .onLoading(show: true)
 
@@ -56,9 +78,11 @@ extension LoginValifyViewModel {
                 case .success(let success):
                     self?.loginValifyAPIResult = .onSuccess(response: success)
                     debugPrint("LoginValify success")
+                    
+                    self?.coordinator.openQuestioneerScene()
                                         
                 case .failure(let failure):
-                        debugPrint("LoginValify failed")
+                        debugPrint("LoginValify failed, \(failure)")
                         self?.loginValifyAPIResult = .onFailure(error: failure)
                
                 }
@@ -76,7 +100,6 @@ extension LoginValifyViewModel {
          listPasswordValidation[.atLeastOneChar] = .init( match: .none)
         listPasswordValidation[.atLeastOneSpecialCharacter] = .init( match: .none)
         listPasswordValidation[.atLeastOneCapitalLetter] = .init( match: .none)
-
          self.listPasswordValidation = listPasswordValidation
 
      }

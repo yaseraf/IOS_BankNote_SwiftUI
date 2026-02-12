@@ -51,6 +51,7 @@ class NetworkConfiguration{
 //      basePath: "https://mahfaztyplus.cicapital.com/MobileServices/", signalRDomain:  "https://mahfaztyplus.cicapital.com/"
       
         // VALIFY TESTING
+        
 //      basePath: "https://tfit.pioneers-securities.com/MobileServices/", signalRDomain:  "https://tfit.pioneers-securities.com/"
       basePath: "https://tfit.pioneers-securities.com/MobileServicesRoya/", signalRDomain:  "https://tfit.pioneers-securities.com/"
 

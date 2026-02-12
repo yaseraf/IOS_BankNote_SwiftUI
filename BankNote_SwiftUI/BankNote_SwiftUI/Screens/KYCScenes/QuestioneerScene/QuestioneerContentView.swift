@@ -8,11 +8,41 @@
 import Foundation
 import SwiftUI
 
+import WebKit
+
+struct IFrameWebView: UIViewRepresentable {
+    let url: URL
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.allowsBackForwardNavigationGestures = true
+        return webView
+    }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        let request = URLRequest(url: url)
+        uiView.load(request)
+    }
+}
+
+
 struct QuestioneerContentView: View {
     
     @State var stepNumber: Int = 6
+    @Binding var fieldValues: [String: String]
+
+    @Binding var kycFieldsData: GetKycFieldValifyUIModel?
+    @Binding var showContract: Bool
+    @Binding var contractURL: String
+    
+    @Binding var selectContractsItemPicker: [ItemPickerModelType]
+    
+    @State private var riskAnswer = false
+
     
     var onConfirmTap:()->Void
+    var onContractsTap:()->Void
+    var onEndContractSigning:()->Void
     
     var body: some View {
         VStack {
@@ -21,14 +51,31 @@ struct QuestioneerContentView: View {
             SegmentsView(stepNumber: stepNumber)
             
             VStack(spacing: 17) {
-                contentView
+                
+                ScrollView(showsIndicators: false) {
+                    contentView
+                    valifyFieldsView
+                }
                 
                 fieldsView
+                
                 
                 bottomView
             }
             
             Spacer()
+        }
+        .sheet(isPresented: $showContract, onDismiss: {
+            showContract = false
+            if selectContractsItemPicker.isEmpty == false {
+                selectContractsItemPicker.removeFirst()
+            } else {
+                onEndContractSigning()
+            }
+        }) {
+            if let url = URL(string: contractURL) {
+                IFrameWebView(url: url)
+            }
         }
     }
     
@@ -102,6 +149,9 @@ struct QuestioneerContentView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(RoundedRectangle(cornerRadius: 4).fill(.white))
+                .onTapGesture {
+                    riskAnswer = true
+                }
                 
                 HStack {
                     Text("no".localized)
@@ -116,9 +166,50 @@ struct QuestioneerContentView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(RoundedRectangle(cornerRadius: 4).fill(.white))
+                .onTapGesture {
+                    riskAnswer = false
+                }
+
             }
         }
         .padding(.horizontal, 18)
+    }
+    
+    func binding(for fieldId: String) -> Binding<String> {
+        Binding(
+            get: {
+                fieldValues[fieldId] ?? ""
+            },
+            set: {
+                fieldValues[fieldId] = $0
+            }
+        )
+    }
+
+    private var valifyFieldsView: some View {
+        VStack {
+            ForEach(kycFieldsData?.data ?? [], id: \.id) { item in
+                if item.isMandatory?.lowercased() == "y", let fieldId = item.fieldId {
+                    VStack(alignment: .leading, spacing: 4) {
+                        
+                        Text(item.label ?? "")
+                            .font(.cairoFont(.light, size: 12))
+
+                        TextField("\(item.label ?? "")",text: binding(for: fieldId))
+                        .font(.cairoFont(.semiBold, size: 12))
+                        .keyboardType(item.type?.lowercased() == "text" ? .default : .numberPad)
+                        .foregroundStyle(Color(hex: "#1C1C1C"))
+                        .padding(.horizontal, 16)
+                        .frame(height: 56)
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+
+                    }
+                    .padding(.horizontal, 16)
+                    
+
+                }
+            }
+        }
     }
     
     private var fieldsView: some View {
@@ -182,13 +273,13 @@ struct QuestioneerContentView: View {
 
             HStack(spacing: 8) {
                 Button(action: {
-
+                    onContractsTap()
                 }, label: {
                     HStack {
                         VStack(spacing: 0) {
                             Text("investment_product".localized)
                                 .font(.cairoFont(.light, size: 12))
-                            Text("open_account".localized)
+                            Text(selectContractsItemPicker.map { $0.name }.joined(separator: ", "))
                                 .font(.cairoFont(.semiBold, size: 12))
                         }
 
@@ -230,8 +321,8 @@ struct QuestioneerContentView: View {
 
 }
 
-#Preview {
-    QuestioneerContentView(onConfirmTap: {
-        
-    })
-}
+//#Preview {
+//    QuestioneerContentView(onConfirmTap: {
+//        
+//    })
+//}

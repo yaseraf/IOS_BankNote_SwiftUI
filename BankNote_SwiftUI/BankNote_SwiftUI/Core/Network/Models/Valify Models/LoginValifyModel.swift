@@ -8,16 +8,26 @@
 import Foundation
 
 struct LoginValifyRequestModel: Codable {
+    let deviceId: String
+    let deviceType: String
+    let ipAddress: String
     let lang: String
+    let latitude: String
+    let longitude: String
     let password: String
     let phoneNumber: String
-    let reqID: String
+    let timezone: String
     
     enum CodingKeys: String, CodingKey {
+        case deviceId = "DeviceId"
+        case deviceType = "DeviceType"
+        case ipAddress = "IpAddress"
         case lang = "Lang"
+        case latitude = "Latitude"
+        case longitude = "Longitude"
         case password = "Password"
         case phoneNumber = "PhoneNumber"
-        case reqID = "reqID"
+        case timezone = "Timezone"
     }
 }
 
@@ -35,7 +45,7 @@ struct LoginValifyResponseModel: Codable {
         case message = "Message"
         case registered = "Registered"
         case serverResponse = "ServerResponse"
-        case reqID = "reqID"
+        case reqID = "Request_Id"
     }
 }
 

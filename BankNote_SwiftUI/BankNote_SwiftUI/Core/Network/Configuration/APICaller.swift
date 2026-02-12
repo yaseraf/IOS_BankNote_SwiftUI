@@ -26,6 +26,23 @@ public class APICaller{
 
         return request
     }
+    
+    class UnsafeSessionDelegate: NSObject, URLSessionDelegate {
+        func urlSession(_ session: URLSession,
+                        didReceive challenge: URLAuthenticationChallenge,
+                        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+            
+            // Trust any certificate
+            if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+               let serverTrust = challenge.protectionSpace.serverTrust {
+                let credential = URLCredential(trust: serverTrust)
+                completionHandler(.useCredential, credential)
+            } else {
+                completionHandler(.performDefaultHandling, nil)
+            }
+        }
+    }
+
 
     private func getURLSession() -> URLSession {
         let configuration = URLSessionConfiguration.default
@@ -37,7 +54,10 @@ public class APICaller{
 
 //        let urlSession = URLSession(configuration: configuration, delegate: NetworkManagerSessionDelegate(), delegateQueue: delegateQueue)
         
-        let urlSession = URLSession(configuration: configuration)
+        let urlSession = URLSession(configuration: configuration, delegate: UnsafeSessionDelegate(), delegateQueue: delegateQueue)
+
+        
+//        let urlSession = URLSession(configuration: configuration)
         
         return urlSession
     }

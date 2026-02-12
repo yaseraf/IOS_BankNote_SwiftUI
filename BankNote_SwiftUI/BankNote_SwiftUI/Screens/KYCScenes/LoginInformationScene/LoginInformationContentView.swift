@@ -107,10 +107,10 @@ struct LoginInformationContentView: View {
     
     private var contentView: some View {
         VStack {
-            Text("login_information".localized)
+            Text("register_information".localized)
                 .font(.cairoFont(.semiBold, size: 18))
             
-            Text("you_will_use_these_details_to_login_to_your_account".localized)
+            Text("you_will_use_these_details_to_register_your_account".localized)
                 .font(.cairoFont(.light ,size: 12))
             
             
@@ -377,10 +377,13 @@ struct InputField: View {
 }
 
 
-//#Preview {
-//    LoginInformationContentView(listPasswordValidation: .constant([:]), onPasswordTextChange:  { text in
-//        
-//    }, onContinueTap: {username,password in
-//        
-//    })
-//}
+#Preview {
+    LoginInformationContentView(listPasswordValidation: .constant([:]), onPasswordTextChange:  { text in
+        
+    }, onBack: {
+        
+    }, onContinueTap: {username,password in
+        
+    })
+    
+}

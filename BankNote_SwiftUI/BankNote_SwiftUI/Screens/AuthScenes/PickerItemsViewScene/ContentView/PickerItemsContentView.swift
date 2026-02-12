@@ -122,7 +122,8 @@ struct PickerItemsContentView: View {
                         .frame(width: 20)
                         .frame(height:  20)
                 }else{
-                    Image(selectModels.wrappedValue.filter({$0.id == model.id}).isEmpty ?  "ic_checkbox" : "ic_checkboxSelected")
+//                    Image(selectModels.wrappedValue.filter({$0.id == model.id}).isEmpty ?  "ic_checkbox" : "ic_checkboxSelected")
+                    Image(selectModels.wrappedValue.filter({$0.id == model.id}).isEmpty ?  "ic_radioEmpty" : "ic_radioFill")
                         .resizable()
                         .frame(width: 20)
                         .frame(height:  20)

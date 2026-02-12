@@ -32,6 +32,7 @@ class VerifySignUpViewModel: ObservableObject {
     @Published var validateOTPBusinessRequestAPIResult:APIResultType<ValidateOtpBusinessRequestUIModel>?
     @Published var verifyEmailWithOtpAPIResult:APIResultType<VerifyEmailWithOtpUIModel>?
     @Published var getKYCCibcAPIResult:APIResultType<GetKYCCibcUIModel>?
+    @Published var getRegistrationStatusAPIResult:APIResultType<RegistrationStatusValifyUIModel>?
     
     // MARK: VALIFY
     @Published var verifyPhoneOtpValifyAPIResult:APIResultType<VerifyPhoneOtpValifyUIModel>?
@@ -105,7 +106,9 @@ extension VerifySignUpViewModel {
                 case .success(let success):
                     
                     if success.IsSuccessful ?? false {
-                        self?.nextScene(verifyWithEmail: isVerifyingWithEmail, phoneNumber: self?.phone ?? "")
+//                        self?.coordinator.openQuestioneerScene()
+                        self?.callGetRegistrationStatusAPI(success: true)
+//                        self?.nextScene(verifyWithEmail: isVerifyingWithEmail, phoneNumber: self?.phone ?? "")
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
                     }
@@ -133,7 +136,7 @@ extension VerifySignUpViewModel {
                 case .success(let success):
                     
                     if success.IsSuccessful ?? false {
-                        self?.nextScene(verifyWithEmail: isVerifyingWithEmail, phoneNumber: self?.phone ?? "")
+                        self?.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "18", Value: self?.email)], isVerifyingWithEmail: isVerifyingWithEmail)
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
                     }
@@ -160,11 +163,11 @@ extension VerifySignUpViewModel {
                 switch result {
                 case .success(let success):
                     
-                    if success.IsSuccessful ?? false {
-                        KeyChainController().valifyRequestId = success.reqID ?? ""
+                    if success.isSuccessful ?? false {
+                        KeyChainController().valifyRequestId = success.requestId ?? ""
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "resend_code_status".localized)
                     } else {
-                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMsg ?? "")
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.errorMsg ?? "")
                     }
 
 
@@ -201,6 +204,78 @@ extension VerifySignUpViewModel {
                 case .failure(let failure):
                     self?.sendEmailOtpValifyAPIResult = .onFailure(error: failure)
                     debugPrint("Send email otp valify failed: \(failure)")
+                }
+            }
+        }
+    }
+    
+    func getKYCCibcAPI(success: Bool, requestItems: [GetKYCCibcRequestItems], isVerifyingWithEmail: Bool) {
+        
+        let requestModel = GetKYCCibcRequestModel(RequestItems: requestItems, reqID: KeyChainController().valifyRequestId)
+        
+        getKYCCibcAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await useCase.GetKYCCibc(requestModel: requestModel) {[weak self] result in
+                self?.getKYCCibcAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    if success.ErrorCode == "0" || success.ErrorCode == "" {
+                        self?.nextScene(verifyWithEmail: isVerifyingWithEmail, phoneNumber: self?.phone ?? "")
+                    } else {
+                        SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.ErrorMessage ?? "")
+                    }
+                    debugPrint("getKYCCibc success")
+                    
+                case .failure(let failure):
+                        debugPrint("getKYCCibc failed")
+                        self?.getKYCCibcAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+    
+    func callGetRegistrationStatusAPI(success: Bool) {
+        
+        let requestModel = RegistrationStatusValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", userReferenceId: KeyChainController().valifyRequestId ?? "")
+        
+        getRegistrationStatusAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.RegistrationStatusValify(requestModel: requestModel) {[weak self] result in
+                self?.getRegistrationStatusAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    if success.data?.registered == "true" {
+                        // Go to login (not first session)
+                        self?.coordinator.openLoginValifyScene()
+//                        self?.coordinator.openLoginInformationScene()
+
+                    } else {
+                        if success.data?.status?.emailOtpSend?.lowercased() == "pending" || success.data?.status?.emailOtpVerify?.lowercased() == "pending" || success.data?.status?.emailOtpSend?.lowercased() == "not_started" || success.data?.status?.emailOtpVerify?.lowercased() == "not_started" {
+                            // Go to email verification
+                            self?.coordinator.openSignUpScene(verificationType: .email, verifyWithEmail: true)
+                        } else if success.data?.status?.ocr?.lowercased() == "pending" || success.data?.status?.ocr?.lowercased() == "not_started" {
+                            // Go to ocr
+                            self?.coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
+                        } else if success.data?.status?.liveness?.lowercased() == "pending" || success.data?.status?.facematch?.lowercased() == "pending" || success.data?.status?.liveness?.lowercased() == "not_started" || success.data?.status?.facematch?.lowercased() == "not_started" {
+                            // Go to liveness
+                            self?.coordinator.openLivenessCheckScene()
+                        } else if success.data?.status?.ntraCheck?.lowercased() == "pending" || success.data?.status?.csoCheck?.lowercased() == "pending" || success.data?.status?.ntraCheck?.lowercased() == "not_started" || success.data?.status?.csoCheck?.lowercased() == "not_started" {
+                            // Go to registration
+                            self?.coordinator.openLoginInformationScene()
+                        }
+                    }
+                    
+                    debugPrint("getKYCCibc success")
+                    
+                case .failure(let failure):
+                        debugPrint("getKYCCibc failed")
+                        self?.getRegistrationStatusAPIResult = .onFailure(error: failure)
+               
                 }
             }
         }
@@ -317,7 +392,7 @@ extension VerifySignUpViewModel {
                         if UserDefaultController().investmentProductKeys?.isEmpty == false {
                             self?.coordinator.openTermsAndConditionsScene()
                         } else {
-                            self?.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "258", Value: "2")])
+//                            self?.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "258", Value: "2")])
                             self?.coordinator.openThanksForRegisteringScene()
                         }
                     }
@@ -332,28 +407,7 @@ extension VerifySignUpViewModel {
         }
     }
 
-    func getKYCCibcAPI(success: Bool, requestItems: [GetKYCCibcRequestItems]) {
-        
-        let requestModel = GetKYCCibcRequestModel(RequestItems: requestItems, reqID: KeyChainController().verifyPhoneOtpRequestId)
-        
-        getKYCCibcAPIResult = .onLoading(show: true)
-
-        Task.init {
-            await useCase.GetKYCCibc(requestModel: requestModel) {[weak self] result in
-                self?.getKYCCibcAPIResult = .onLoading(show: false)
-                switch result {
-                case .success(let success):
-                    
-                    debugPrint("getKYCCibc success")
-                    
-                case .failure(let failure):
-                        debugPrint("getKYCCibc failed")
-                        self?.getKYCCibcAPIResult = .onFailure(error: failure)
-               
-                }
-            }
-        }
-    }
+    
 
 }
 

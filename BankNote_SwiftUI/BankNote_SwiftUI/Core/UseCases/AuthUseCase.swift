@@ -7,6 +7,7 @@
 
 import Foundation
 protocol AuthUseCaseProtocol{
+    func urlIPAddress(requestModel: String, completion: @escaping(Result<UrlIPAddressResponseModel, NetworkError>) -> Void) async
     func OTPMap(requestModel: OTPRequestModel , completion: @escaping(Result<otpUIModel, NetworkError>) -> Void) async
     func loginMap(requestModel: LoginRequestModel , completion: @escaping(Result<LoginUIModel, NetworkError>, [HTTPCookie]?) -> Void) async
     func GetKYCCibc(requestModel: GetKYCCibcRequestModel, completion: @escaping(Result<GetKYCCibcUIModel, NetworkError>) -> Void) async
@@ -20,6 +21,23 @@ protocol AuthUseCaseProtocol{
     }
 
 extension AuthUseCase: AuthUseCaseProtocol {
+    
+    func urlIPAddress(requestModel: String, completion: @escaping (Result<UrlIPAddressResponseModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.urlIPAddress(requestModel: requestModel)
+        await repository.urlIPAddress(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                
+
+                let uiModel = responseModel
+                completion(.success(uiModel))
+                
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
     func OTPMap(requestModel: OTPRequestModel, completion: @escaping (Result<otpUIModel, NetworkError>) -> Void) async {
         let route = AuthRoute.OTP(requestModel: requestModel)
         await repository.OTP(route: route) { result in

@@ -164,7 +164,8 @@ struct LoginValifyContentView: View {
                 
 
             }
-                .padding(.horizontal, 18)
+            .padding(.horizontal, 18)
+            .disabled(true)
 
             InputField(
                 title: "password",
@@ -173,7 +174,7 @@ struct LoginValifyContentView: View {
                 isValid: isPasswordValid,
                 onTextAction: { text in
                     checkEnableBtn()
-                    checkPasswordMatch()
+//                    checkPasswordMatch()
                     onPasswordTextChange(text)
 
                     if continueAttempted && !checkPasswordValidity(password: password) {
@@ -192,17 +193,17 @@ struct LoginValifyContentView: View {
 //            }
 
 
-            InputField(
-                title: "confirm_password",
-                text: $confirmPassword,
-                isSecure: true,
-                isValid: doPasswordsMatch,
-                onTextAction: { text in
-                    checkEnableBtn()
-                    checkPasswordMatch()
-                }
-            )
-            .focused($pinFocusState, equals: .confirmPassword)
+//            InputField(
+//                title: "confirm_password",
+//                text: $confirmPassword,
+//                isSecure: true,
+//                isValid: doPasswordsMatch,
+//                onTextAction: { text in
+//                    checkEnableBtn()
+//                    checkPasswordMatch()
+//                }
+//            )
+//            .focused($pinFocusState, equals: .confirmPassword)
         }
     }
 
@@ -295,8 +296,9 @@ struct LoginValifyContentView: View {
     
     private func checkEnableBtn() {
         enableBtn =
-        !phone.wrappedValue.isEmpty && !password.isEmpty &&
-        confirmPassword == password && checkPasswordValidity(password: password)
+        !phone.wrappedValue.isEmpty && !password.isEmpty
+//        && checkPasswordValidity(password: password)
+//        confirmPassword == password && checkPasswordValidity(password: password)
 
     }
 

@@ -26,6 +26,10 @@ protocol HomeUseCaseProtocol{
     func GetClientTransActionsPackages(requestModel: GetClientTransactionsPackagesRequestModel, completion: @escaping(Result<GetClientTransactionsPackagesUIModel, NetworkError>) -> Void) async
     func CalcFreeSubBadgesBankNotes(requestModel: CalcFreeSubBadgesBankNotesRequestModel, completion: @escaping(Result<CalcFreeSubBadgesBankNotesUIModel, NetworkError>) -> Void) async
     func TransferAmountToAccounts(requestModel: TransferAmountToAccountsRequestModel, completion: @escaping(Result<TransferAmountToAccountsUIModel, NetworkError>) -> Void) async
+    
+    // MARK: Paymob
+    
+    func PaymobAuthorize(requestModel: PaymobAuthorizeRequestModel, completion: @escaping(Result<PaymobAuthorizeUIModel, NetworkError>) -> Void) async
 
 }
 
@@ -289,9 +293,19 @@ extension HomeUseCase: HomeUseCaseProtocol {
         }
     }
 
+    func PaymobAuthorize(requestModel: PaymobAuthorizeRequestModel, completion: @escaping (Result<PaymobAuthorizeUIModel, NetworkError>) -> Void) async {
+        let route = HomeRoute.PaymobAuthorize(requestModel: requestModel)
+        await repository.PaymobAuthorize(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = PaymobAuthorizeUIModel.mapToUIModel(m: responseModel)
+                completion(.success(uiModel))
 
-
-
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
 
 
 }

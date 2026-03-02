@@ -30,6 +30,9 @@ protocol HomeRepositoryProtocol {
     func CalcFreeSubBadgesBankNotes(route: HomeRoute, completion: @escaping(Result<CalcFreeSubBadgesBankNotesResponseModel, NetworkError>) -> Void) async
     func TransferAmountToAccounts(route: HomeRoute, completion: @escaping(Result<TransferAmountToAccountsResponseModel, NetworkError>) -> Void) async
 
+    // MARK: Paymob
+
+    func PaymobAuthorize(route: HomeRoute, completion: @escaping(Result<PaymobAuthorizeResponseModel, NetworkError>) -> Void) async
 
 }
 
@@ -99,6 +102,7 @@ class HomeRepository: HomeRepositoryProtocol {
     func TransferAmountToAccounts(route: HomeRoute, completion: @escaping (Result<TransferAmountToAccountsResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: TransferAmountToAccountsResponseModel.self, completion: completion).requestApi()
     }
-
-
+    func PaymobAuthorize(route: HomeRoute, completion: @escaping (Result<PaymobAuthorizeResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: PaymobAuthorizeResponseModel.self, completion: completion).requestApi()
+    }
 }

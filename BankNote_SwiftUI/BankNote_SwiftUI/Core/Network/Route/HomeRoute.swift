@@ -33,6 +33,9 @@ enum HomeRoute:APITargetType{
     case CalcFreeSubBadgesBankNotes(requestModel: CalcFreeSubBadgesBankNotesRequestModel)
     case TransferAmountToAccounts(requestModel: TransferAmountToAccountsRequestModel)
     
+    // MARK: Paymob
+    case PaymobAuthorize(requestModel: PaymobAuthorizeRequestModel)
+    
     var baseURL: URL{
         get{
             return URL(string: AppEnvironmentController.currentNetworkConfiguration.basePath
@@ -107,6 +110,11 @@ enum HomeRoute:APITargetType{
             return "GeneralWServices/CalcFreeSubBadgesBankNotes"
         case .TransferAmountToAccounts:
             return "GeneralWServices/TransferAmountToAccounts"
+            
+            // MARK: Paymob
+            
+        case .PaymobAuthorize:
+            return "GeneralWServices/PaymobAuthorize"
         }
     }
     
@@ -115,7 +123,7 @@ enum HomeRoute:APITargetType{
             switch self {
             case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
                 return .get
-            case .GetRiskManagement, .GetBankNote, .GetTiers, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts:
+            case .GetRiskManagement, .GetBankNote, .GetTiers, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts, .PaymobAuthorize:
                 return .post
             }
         }
@@ -149,6 +157,8 @@ enum HomeRoute:APITargetType{
         case .CalcFreeSubBadgesBankNotes(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .TransferAmountToAccounts(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .PaymobAuthorize(let requestModel):
                 .requestJsonEncodable(requestModel)
         }
     }

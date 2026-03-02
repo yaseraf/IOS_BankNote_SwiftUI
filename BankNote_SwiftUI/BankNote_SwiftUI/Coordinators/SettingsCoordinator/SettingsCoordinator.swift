@@ -60,7 +60,8 @@ extension SettingsCoordinator:SettingsCoordinatorProtocol{
     }
     
     func openBuyTransactionsScene() {
-        let viewModel = BuyTransactionsViewModel(coordinator: self)
+        let homeUseCase = HomeUseCase()
+        let viewModel = BuyTransactionsViewModel(coordinator: self, homeUseCase: homeUseCase)
         let view = BuyTransactionsScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

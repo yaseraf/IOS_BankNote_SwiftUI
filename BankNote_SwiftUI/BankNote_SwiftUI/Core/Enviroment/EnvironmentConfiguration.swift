@@ -42,7 +42,7 @@ class NetworkConfiguration{
     static let development:NetworkConfiguration = .init(
         
         // FIT OMAN
-//      basePath: "http://develop.fitoman.com:8090/MobileServicesRoya/", signalRDomain: "http://develop.fitoman.com:8090/"
+      basePath: "http://develop.fitoman.com:8090/MobileServicesRoya/", signalRDomain: "http://develop.fitoman.com:8090/"
         
         // CIBC UAT
 //        basePath: "http://10.120.52.55/MobileServices/", signalRDomain: "http://10.120.52.55/" // uat (development)
@@ -52,7 +52,7 @@ class NetworkConfiguration{
       
         // VALIFY TESTING
         
-      basePath: "https://tfit.pioneers-securities.com/MobileServicesRoya/", signalRDomain:  "https://tfit.pioneers-securities.com/"
+//      basePath: "https://tfit.pioneers-securities.com/MobileServicesRoya/", signalRDomain:  "https://tfit.pioneers-securities.com/"
 
     )
 

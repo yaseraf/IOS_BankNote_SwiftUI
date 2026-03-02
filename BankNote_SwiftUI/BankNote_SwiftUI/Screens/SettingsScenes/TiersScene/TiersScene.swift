@@ -17,7 +17,7 @@ struct TiersScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                TiersContentView(tiersData: $viewModel.tiersData, onBackTap: {
+                TiersContentView(tiersData: $viewModel.tiersData, tiers: $viewModel.tiers, onBackTap: {
                     viewModel.popViewController()
                 })
             })

@@ -10,6 +10,10 @@ import SwiftUI
 
 struct BuyTransactionsContentView: View {
     
+    @Binding var transactionsPackagesData: GetTransactionsPackagesUIModel
+    @Binding var clientTransactions: String
+    @Binding var clientBankNotes: String
+    
     var topUpItems: Binding<[RowItem]>
     var rewardsItems: Binding<[RowItem]>
     @State private var selectedSegment: Segment = .topUp
@@ -17,6 +21,7 @@ struct BuyTransactionsContentView: View {
     
     var onBackTap:()->Void
     var onTopUpTap:()->Void
+    var onPurchaseTransaction:()->Void
     
     // An enum to represent our segmented control.
     enum Segment: String, CaseIterable {
@@ -71,16 +76,19 @@ struct BuyTransactionsContentView: View {
                     HStack(spacing: 0) {
                         Text("you_have".localized)
                             .font(.cairoFont(.bold, size: 32))
-                        
+                            .minimumScaleFactor(0.5)
+
                         AppUtility.shared.APP_GRADIENT
-                        .frame(maxWidth: 110, maxHeight: 60)
+                        .frame(maxWidth: 180, maxHeight: 60)
                         .mask{
-                            Text("499\("bn".localized)".uppercased())
+                            Text("\(clientTransactions)")
                                 .font(.cairoFont(.bold, size: 32))
+                                .minimumScaleFactor(0.5)
                         }
 
                         Text("transactions".localized)
                             .font(.cairoFont(.bold, size: 32))
+                            .minimumScaleFactor(0.5)
 
                     }
                 }
@@ -99,11 +107,11 @@ struct BuyTransactionsContentView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 12) {
                         if selectedSegment == .topUp {
-                            ForEach(Array(topUpItems.wrappedValue)) { item in
+                            ForEach(transactionsPackagesData.data?.sorted {$0.code ?? "" > $1.code ?? ""} ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         } else {
-                            ForEach(Array(rewardsItems.wrappedValue)) { item in
+                            ForEach(transactionsPackagesData.data?.sorted {$0.code ?? "" > $1.code ?? ""} ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         }
@@ -144,39 +152,45 @@ struct BuyTransactionsContentView: View {
     }
     
     // A reusable view for a list row.
-    private func listItem(item: RowItem) -> some View {
-        HStack {
-            Text(item.title)
-                .font(.cairoFont(.semiBold, size: 18))
-
-            Spacer()
-            
+    private func listItem(item: GetTransactionsPackagesItemUIModel) -> some View {
+        Button(action: {
+            if Double(item.priceByBanknotes ?? "") ?? 0 > Double(clientBankNotes) ?? 0 {
+                withAnimation {
+                    showInsufficientFunds = true
+                }
+            } else {
+                onPurchaseTransaction()
+            }
+        }, label: {
             HStack {
-                Image("ic_newCoin")
+                Text("\(item.transactionsQty ?? "") \("transactions".localized)")
+                    .font(.cairoFont(.semiBold, size: 18))
+
+                Spacer()
+                
+                HStack {
+                    Image("ic_newCoin")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 25, height: 25)
+
+                    Text(item.priceByBanknotes ?? "")
+                        .font(.cairoFont(.semiBold, size: 18))
+                }
+            }
+            .padding(.horizontal, 34)
+            .padding(.vertical, 16)
+            .background(
+                Image("topUpBackground")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 25, height: 25)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 70)
+                    .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
+            )
+            .padding(.top, 2)
 
-                Text(item.value)
-                    .font(.cairoFont(.semiBold, size: 18))
-            }
-        }
-        .padding(.horizontal, 34)
-        .padding(.vertical, 16)
-        .background(
-            Image("topUpBackground")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-                .frame(minHeight: 70)
-                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
-        )
-        .padding(.top, 2)
-        .onTapGesture {
-            withAnimation {
-                showInsufficientFunds = true
-            }
-        }
+        })
     }
     
     // The pop-up view for insufficient funds.

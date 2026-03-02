@@ -17,12 +17,72 @@ struct BuyTransactionsScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                BuyTransactionsContentView(topUpItems: $viewModel.topUpItems, rewardsItems: $viewModel.rewardsItems, onBackTap: {
+                BuyTransactionsContentView(transactionsPackagesData: $viewModel.transactionsPackagesData, clientTransactions: $viewModel.clientTransactions, clientBankNotes: $viewModel.clientBankNotes, topUpItems: $viewModel.topUpItems, rewardsItems: $viewModel.rewardsItems, onBackTap: {
                     viewModel.popViewController()
                 }, onTopUpTap: {
-                    viewModel.openPaymentMethodScene()
+                    viewModel.openBankNotesScene()
+                }, onPurchaseTransaction: {
+                    viewModel.onPurchaseTransaction()
                 })
             })
-        })
+        }, showLoading: .constant(viewTypeAction.showLoading))
+        .onAppear {
+            viewModel.callGetTransactionsPackagesAPI(success: true)
+            viewModel.callGetClientTransactionsPackagesAPI(success: true)
+            viewModel.callGetClientBankNotesAPI(success: true)
+        }
+        .onViewDidLoad {
+            getTransactionsPackagesAPI()
+            getClientTransactionsPackagesAPI()
+            getClientBankNotesAPI()
+        }
     }
+    
+    private func getTransactionsPackagesAPI() {
+        viewModel.$getTransactionsPackagesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+    
+    private func getClientTransactionsPackagesAPI() {
+        viewModel.$getClientTransactionsPackagesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+    
+    private func getClientBankNotesAPI() {
+        viewModel.$getClientBankNotesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
+
+
 }

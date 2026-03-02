@@ -14,6 +14,7 @@ class TiersViewModel: ObservableObject {
     @Published var getTiersAPIResult:APIResultType<GetTiersUIModel>?
 
     @Published var tiersData: GetTiersUIModel = .initializer()
+    @Published var tiers: [Tier] = []
 
     init(coordinator: SettingsCoordinatorProtocol, homeUseCase: HomeUseCaseProtocol) {
         self.coordinator = coordinator
@@ -40,6 +41,19 @@ extension TiersViewModel {
                     self?.getTiersAPIResult = .onSuccess(response: success)
                     debugPrint("get tiers success")
                     self?.tiersData = success
+                    
+                    for item in self?.tiersData.data ?? [] {
+                        self?.tiers.append(
+                            Tier(
+                                nameKey: (AppUtility.shared.isRTL ? item.arabicDescription : item.englishDescription) ?? "",
+                                imageName: "ic_rookie",
+                                descriptionKeys: [],
+                                howToBecomeKeys: [],
+                                benefitKeys: [item.notes ?? ""]
+                            )
+                        )
+                    }
+
                     
                 case .failure(let failure):
                         self?.getTiersAPIResult = .onFailure(error: failure)

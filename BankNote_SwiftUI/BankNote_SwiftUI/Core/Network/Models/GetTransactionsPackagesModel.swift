@@ -46,6 +46,8 @@ struct GetTransactionsPackagesUIModel {
 }
 
 struct GetTransactionsPackagesItemUIModel {
+    var id = UUID().uuidString
+
     var code: String?
     var nameEnglish: String?
     var notes: String?

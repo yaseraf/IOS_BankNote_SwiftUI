@@ -12,7 +12,7 @@ struct SplashContentView: View {
     var body: some View {
         ZStack{
             
-            Image("ic_logo")
+            Image(AppUtility.shared.APP_LOGO)
                 .resizable()
                 .scaledToFit()
                 .padding(20)

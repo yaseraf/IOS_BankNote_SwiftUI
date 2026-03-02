@@ -17,8 +17,10 @@ struct QuestioneerScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                QuestioneerContentView(fieldValues: $viewModel.kycFieldsValues, kycFieldsData: $viewModel.kycFieldsData, showContract: $viewModel.showContract, contractURL: $viewModel.contractURL, selectContractsItemPicker: $viewModel.selectContractsItemPicker, onConfirmTap: {
+                QuestioneerContentView(fieldValues: $viewModel.kycFieldsValues, kycFieldsData: $viewModel.kycFieldsData, showContract: $viewModel.showContract, contractURL: $viewModel.contractURL, contractId: $viewModel.contractId, selectContractsItemPicker: $viewModel.selectContractsItemPicker, onConfirmTap: {
                     viewModel.getContractValifyAPI(success: true)
+                }, onSignContract: { contractId in
+                    viewModel.KnfrmGetContractDetailsAPI(success: true)
                 }, onContractsTap: {
                     viewModel.openContractsScene()
                 }, onEndContractSigning: {

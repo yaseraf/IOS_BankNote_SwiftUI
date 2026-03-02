@@ -56,13 +56,15 @@ struct PortfolioContentView: View {
 //            .padding(.bottom, 80)
             
            ScrollView(.vertical, showsIndicators: false) {
-                ForEach(0...3, id: \.self) { id in
-                    Button {
-                        onPortfolioTap(portfolioData.wrappedValue?.portfolioes[id].symbol ?? "", portfolioData.wrappedValue?.portfolioes[id].marketType ?? "", portfolioData.wrappedValue?.portfolioes[id].custodianID ?? "", AppUtility.shared.isRTL ? portfolioData.wrappedValue?.portfolioes[id].custodianA ?? "" : portfolioData.wrappedValue?.portfolioes[id].custodianE ?? "")
-                    } label: {
-                        PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
-                    }
-                }
+               ForEach(portfolioData.wrappedValue?.portfolioes ?? [], id:\.id) { item in
+                   Button {
+                       onPortfolioTap(item.symbol ?? "", item.marketType ?? "", item.custodianID ?? "", AppUtility.shared.isRTL ? item.custodianA ?? "" : item.custodianE ?? "")
+                   } label: {
+                       PortfolioCell(portfolioData: item)
+                   }
+
+               }
+
             }
             .padding(.bottom, 80)
         }

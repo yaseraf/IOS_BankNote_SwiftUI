@@ -12,13 +12,13 @@ struct HeaderView: View {
     var body: some View {
         HStack {
             VStack(spacing: 0) {
-                Image("ic_logo")
+                Image(AppUtility.shared.APP_LOGO)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 40, height: 40)
                 
-                Text("XNTRQ".localized)
-                    .textCase(.uppercase)
+                Text(AppUtility.shared.APP_NAME)
+                    .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
                     .font(.cairoFont(.extraBold, size: 14))
             }
             

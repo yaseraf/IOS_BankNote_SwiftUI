@@ -17,7 +17,7 @@ struct SettingsScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                SettingsContentView(onBankNotesTap: {
+                SettingsContentView(clientBankNotes: $viewModel.clientBankNotes, onBankNotesTap: {
                     viewModel.openBankNotesScene()
                 }, onTiersTap: {
                     viewModel.openTiersScene()
@@ -32,12 +32,30 @@ struct SettingsScene: BaseSceneType {
                 })
             })
         }, showLoading: .constant(viewTypeAction.showLoading))
+        .onAppear {
+            viewModel.callGetClientBankNotesAPI(success: true)
+        }
         .onViewDidLoad {
             logoutAPI()
+            getClientBankNotesAPI()
         }
 
     }
-    
+    private func getClientBankNotesAPI() {
+        viewModel.$getClientBankNotesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
     private func logoutAPI() {
         viewModel.$usersLogOffAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{

@@ -79,13 +79,13 @@ struct SetPasswordContentView: View {
     
     private var logoView: some View {
         VStack(spacing: 0) {
-            Image("ic_logo")
+            Image(AppUtility.shared.APP_LOGO)
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 225, maxHeight: 225)
             
-            Text("XNTRQ".localized)
-                .textCase(.uppercase)
+            Text(AppUtility.shared.APP_NAME)
+                .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
                 .font(.cairoFont(.extraBold, size: 40))
         }
     }
@@ -94,9 +94,8 @@ struct SetPasswordContentView: View {
         HStack(spacing: 4) {
             ForEach(0...5, id: \.self) { index in
                 if stepNumber > index {
-                    LinearGradient( gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing)
-                    
-                        .cornerRadius(12)
+                    AppUtility.shared.APP_GRADIENT
+                    .cornerRadius(12)
                 } else {
                     RoundedRectangle(cornerRadius: 12).fill(Color(hex: "#DDDDDD"))
                 }

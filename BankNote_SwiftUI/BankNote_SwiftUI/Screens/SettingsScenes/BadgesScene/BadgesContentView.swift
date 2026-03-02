@@ -162,7 +162,7 @@ struct BadgeCard: View {
                             
                             // A gradient for the progress bar.
                             RoundedRectangle(cornerRadius: 5)
-                                .fill(LinearGradient(gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing))
+                                .fill(AppUtility.shared.APP_GRADIENT)
                                 .frame(width: geometry.size.width * CGFloat(badge.progress / Double(badge.total)), height: 10)
                         }
                     }

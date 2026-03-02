@@ -33,7 +33,8 @@ extension SettingsCoordinator:SettingsCoordinatorProtocol{
 
     func openSettingsScene() {
         let useCase = SettingsUseCase()
-        let viewModel = SettingsViewModel(coordinator: self, useCase: useCase)
+        let homeUseCase = HomeUseCase()
+        let viewModel = SettingsViewModel(coordinator: self, useCase: useCase, homeUseCase: homeUseCase)
         let view = SettingsScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -41,7 +42,8 @@ extension SettingsCoordinator:SettingsCoordinatorProtocol{
     }
 
     func openTiersScene() {
-        let viewModel = TiersViewModel(coordinator: self)
+        let homeUseCase = HomeUseCase()
+        let viewModel = TiersViewModel(coordinator: self, homeUseCase: homeUseCase)
         let view = TiersScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -49,7 +51,8 @@ extension SettingsCoordinator:SettingsCoordinatorProtocol{
     }
 
     func openBadgesScene() {
-        let viewModel = BadgesViewModel(coordinator: self)
+        let homeUseCase = HomeUseCase()
+        let viewModel = BadgesViewModel(coordinator: self, homeUseCase: homeUseCase)
         let view = BadgesScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -73,7 +76,8 @@ extension SettingsCoordinator:SettingsCoordinatorProtocol{
     }
     
     func openBankNotesScene() {
-        let viewModel = BankNotesViewModel(coordinator: self)
+        let homeUseCase = HomeUseCase()
+        let viewModel = BankNotesViewModel(coordinator: self, homeUseCase: homeUseCase)
         let view = BankNotesScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

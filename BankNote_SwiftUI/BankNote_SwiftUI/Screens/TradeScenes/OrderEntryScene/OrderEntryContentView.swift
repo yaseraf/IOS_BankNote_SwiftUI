@@ -174,11 +174,7 @@ struct OrderEntryContentView: View {
         VStack {
             HStack {
                 if selectedOrderPriceType.wrappedValue == .market {
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
+                    AppUtility.shared.APP_GRADIENT
                     .mask {
                         HStack(spacing: 6){
                             Circle()
@@ -202,11 +198,7 @@ struct OrderEntryContentView: View {
                 }
 
                 if selectedOrderPriceType.wrappedValue == .limit {
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
+                    AppUtility.shared.APP_GRADIENT
                     .mask {
                         HStack(spacing: 6){
                             Circle()
@@ -261,11 +253,7 @@ struct OrderEntryContentView: View {
                             .foregroundStyle(Color(hex: "#629AF9"))
                             .zIndex(1)
 
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
+                        AppUtility.shared.APP_GRADIENT
                         .mask {
                             RoundedRectangle(cornerRadius: 99)
                                 .frame(maxWidth: .infinity)

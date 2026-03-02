@@ -34,14 +34,14 @@ struct LivenessCheckContentView: View {
     
     private var logoView: some View {
         VStack(spacing: 0) {
-            Image("ic_logo")
+            Image(AppUtility.shared.APP_LOGO)
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 225, maxHeight: 225)
             
-            Text("XNTRQ".localized)
-                .textCase(.uppercase)
-                .font(.cairoFont(.extraBold, size: 40))
+            Text(AppUtility.shared.APP_NAME)
+                .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
+                 .font(.cairoFont(.extraBold, size: 40))
         }
     }
     

@@ -26,6 +26,8 @@ protocol ValifyRepositoryProtocol {
     func GetKYCFieldValify (route:AuthRoute, completion: @escaping(Result<GetKycFieldValifyResponseModel, NetworkError>) -> Void) async
     func GetKYCContractValify (route:AuthRoute, completion: @escaping(Result<GetKycContractValifyResponseModel, NetworkError>) -> Void) async
     func GetContractValify (route:AuthRoute, completion: @escaping(Result<GetContractValifyResponseModel, NetworkError>) -> Void) async
+    func KnfrmGetContractDetails (route:AuthRoute, completion: @escaping(Result<KnfrmGetContractDetailsResponseModel, NetworkError>) -> Void) async
+    func GetKycDataById(route:AuthRoute, completion: @escaping(Result<GetKYCDataByIDResponseModel, NetworkError>) -> Void) async
 }
 
 class ValifyRepository: ValifyRepositoryProtocol {
@@ -101,5 +103,12 @@ class ValifyRepository: ValifyRepositoryProtocol {
         await RequestApi(route: route,responseType: GetContractValifyResponseModel.self, completion: completion).requestApi()
     }
 
-
+    func KnfrmGetContractDetails(route: AuthRoute, completion: @escaping (Result<KnfrmGetContractDetailsResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: KnfrmGetContractDetailsResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func GetKycDataById(route: AuthRoute, completion: @escaping (Result<GetKYCDataByIDResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: GetKYCDataByIDResponseModel.self, completion: completion).requestApi()
+    }
+    
 }

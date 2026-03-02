@@ -19,7 +19,20 @@ enum HomeRoute:APITargetType{
     case GetAllMarketNewsBySymbol(requestModel: GetAllMarketNewsBySymbolRequestModel)
     case GetExpectedProfitLoss(requestModel: GetExpectedProfitLossRequestModel)
     case GetRiskManagement(requestModel: GetRiskManagementRequestModel)
-
+    
+    // MARK: Banknote / Tiers / Badges / Transactions Packages
+    case GetBankNote(requestModel: GetBankNoteRequestModel)
+    case GetTiers(requestModel: GetTiersRequestModel)
+    case GetBankNotesMainBadges(requestModel: GetBankNotesMainBadgesRequestModel)
+    case GetBankNotesBadges(requestModel: GetBankNotesBadgesRequestModel)
+    case GetTransactionsPackages(requestModel: GetTransactionsPackagesRequestModel)
+    case CreateBuyBankNotesJV(requestModel: CreateBuyBankNotesJVRequestModel)
+    case UpdateBankNotesTransQTY(requestModel: UpdateBankNotesTransQTYRequestModel)
+    case GetClientBankNotes(requestModel: GetClientBankNotesRequestModel)
+    case GetClientTransActionsPackages(requestModel: GetClientTransactionsPackagesRequestModel)
+    case CalcFreeSubBadgesBankNotes(requestModel: CalcFreeSubBadgesBankNotesRequestModel)
+    case TransferAmountToAccounts(requestModel: TransferAmountToAccountsRequestModel)
+    
     var baseURL: URL{
         get{
             return URL(string: AppEnvironmentController.currentNetworkConfiguration.basePath
@@ -69,7 +82,31 @@ enum HomeRoute:APITargetType{
             return "FinancialWServices/GetExpectedProfitLoss/\(KeyChainController.shared().mainClientID ?? "")/\(KeyChainController.shared().clientID ?? "")/\(KeyChainController.shared().webCode ?? "")/\(getCurrentDateString())/\(KeyChainController.shared().brokerID ?? "")"
         case .GetRiskManagement:
             return "TradingWServices/GetRiskManagment"
+            
+            // MARK: Banknote / Tiers / Badges / Transactions Packages
 
+        case .GetBankNote:
+            return "GeneralWservices/GetBankNote"
+        case .GetTiers:
+            return "GeneralWServices/GetTiers"
+        case .GetBankNotesMainBadges:
+            return "GeneralWServices/GetBankNotesMainBadges"
+        case .GetBankNotesBadges:
+            return "GeneralWServices/GetBankNotesBadges"
+        case .GetTransactionsPackages:
+            return "GeneralWServices/GetTransactionsPackages"
+        case .CreateBuyBankNotesJV:
+            return "GeneralWServices/CreateBuyBankNotesJV"
+        case .UpdateBankNotesTransQTY:
+            return "GeneralWServices/UpdateBankNotesTransQTY"
+        case .GetClientBankNotes:
+            return "GeneralWServices/GetClinetBankNotes"
+        case .GetClientTransActionsPackages:
+            return "GeneralWServices/GetClientTransActionsPackages"
+        case .CalcFreeSubBadgesBankNotes:
+            return "GeneralWServices/CalcFreeSubBadgesBankNotes"
+        case .TransferAmountToAccounts:
+            return "GeneralWServices/TransferAmountToAccounts"
         }
     }
     
@@ -78,7 +115,7 @@ enum HomeRoute:APITargetType{
             switch self {
             case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
                 return .get
-            case .GetRiskManagement:
+            case .GetRiskManagement, .GetBankNote, .GetTiers, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts:
                 return .post
             }
         }
@@ -91,7 +128,28 @@ enum HomeRoute:APITargetType{
             
         case .GetRiskManagement(let requestModel):
                 .requestJsonEncodable(requestModel)
-
+        case .GetBankNote(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetTiers(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetBankNotesMainBadges(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetBankNotesBadges(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetTransactionsPackages(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .CreateBuyBankNotesJV(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .UpdateBankNotesTransQTY(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetClientBankNotes(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetClientTransActionsPackages(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .CalcFreeSubBadgesBankNotes(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .TransferAmountToAccounts(let requestModel):
+                .requestJsonEncodable(requestModel)
         }
     }
 }

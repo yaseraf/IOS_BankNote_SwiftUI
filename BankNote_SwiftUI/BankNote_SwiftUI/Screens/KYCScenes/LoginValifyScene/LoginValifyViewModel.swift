@@ -67,7 +67,8 @@ extension LoginValifyViewModel {
 
         
 //        let requestModel = LoginValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", password: password, phoneNumber: KeyChainController().phoneNumberEntered ?? "", reqID: KeyChainController().valifyRequestId ?? "")
-        let requestModel = LoginValifyRequestModel(deviceId: "", deviceType: "IOS", ipAddress: UserDefaultController().userIPAddress ?? "", lang: AppUtility.shared.isRTL ? "ar" : "en", latitude: latitude, longitude: longitude, password: password, phoneNumber: phone, timezone: timezone)
+        
+        let requestModel = LoginValifyRequestModel(deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "", deviceType: "IOS", ipAddress: "", lang: AppUtility.shared.isRTL ? "ar" : "en", latitude: latitude, longitude: longitude, password: password, phoneNumber: phone, timezone: "")
         
         loginValifyAPIResult = .onLoading(show: true)
 
@@ -80,6 +81,8 @@ extension LoginValifyViewModel {
                     debugPrint("LoginValify success")
                     
                     self?.coordinator.openQuestioneerScene()
+                    
+//                    if success.
                                         
                 case .failure(let failure):
                         debugPrint("LoginValify failed, \(failure)")

@@ -34,13 +34,14 @@ struct QuestioneerContentView: View {
     @Binding var kycFieldsData: GetKycFieldValifyUIModel?
     @Binding var showContract: Bool
     @Binding var contractURL: String
-    
+    @Binding var contractId: String
     @Binding var selectContractsItemPicker: [ItemPickerModelType]
     
     @State private var riskAnswer = false
 
     
     var onConfirmTap:()->Void
+    var onSignContract:(String)->Void
     var onContractsTap:()->Void
     var onEndContractSigning:()->Void
     
@@ -53,20 +54,23 @@ struct QuestioneerContentView: View {
             VStack(spacing: 17) {
                 
                 ScrollView(showsIndicators: false) {
-                    contentView
+                    if kycFieldsData == nil {
+                        contentView
+                    }
                     valifyFieldsView
                 }
                 
                 fieldsView
                 
-                
                 bottomView
             }
             
             Spacer()
+            
         }
         .sheet(isPresented: $showContract, onDismiss: {
             showContract = false
+            onSignContract(contractId)
             if selectContractsItemPicker.isEmpty == false {
                 selectContractsItemPicker.removeFirst()
             } else {
@@ -81,13 +85,13 @@ struct QuestioneerContentView: View {
     
     private var logoView: some View {
         VStack(spacing: 0) {
-            Image("ic_logo")
+            Image(AppUtility.shared.APP_LOGO)
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 90, maxHeight: 90)
             
-            Text("XNTRQ".localized)
-                .textCase(.uppercase)
+            Text(AppUtility.shared.APP_NAME)
+                .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
                 .font(.cairoFont(.extraBold, size: 16))
         }
     }
@@ -188,7 +192,7 @@ struct QuestioneerContentView: View {
 
     private var valifyFieldsView: some View {
         VStack {
-            ForEach(kycFieldsData?.data ?? [], id: \.id) { item in
+            ForEach(kycFieldsData?.data ?? [], id: \.fieldId) { item in
                 if item.isMandatory?.lowercased() == "y", let fieldId = item.fieldId {
                     VStack(alignment: .leading, spacing: 4) {
                         
@@ -214,62 +218,64 @@ struct QuestioneerContentView: View {
     
     private var fieldsView: some View {
         VStack(spacing: 4) {
-            HStack(spacing: 8) {
-                Button(action: {
+            if kycFieldsData == nil {
+                HStack(spacing: 8) {
+                    Button(action: {
 
-                }, label: {
-                    HStack {
-                        VStack(spacing: 0) {
-                            Text("source_of_fund".localized)
-                                .font(.cairoFont(.light, size: 12))
-                            Text("salary".localized)
-                                .font(.cairoFont(.semiBold, size: 12))
+                    }, label: {
+                        HStack {
+                            VStack(spacing: 0) {
+                                Text("source_of_fund".localized)
+                                    .font(.cairoFont(.light, size: 12))
+                                Text("salary".localized)
+                                    .font(.cairoFont(.semiBold, size: 12))
+                            }
+
+                            Spacer()
+                            
+                            Image("ic_downArrow")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundStyle(Color(hex: "#9C4EF7"))
+                                .frame(width: 15, height: 15)
                         }
+                        .foregroundStyle(Color(hex: "#1C1C1C"))
+                        .padding(.horizontal, 16)
+                        .frame(height: 56)
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                    })
+                }
+                .padding(.horizontal, 18)
+                HStack(spacing: 8) {
+                    Button(action: {
 
-                        Spacer()
-                        
-                        Image("ic_downArrow")
-                            .renderingMode(.template)
-                            .resizable()
-                            .scaledToFit()
-                            .foregroundStyle(Color(hex: "#9C4EF7"))
-                            .frame(width: 15, height: 15)
-                    }
-                    .foregroundStyle(Color(hex: "#1C1C1C"))
-                    .padding(.horizontal, 16)
-                    .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
-                })
-            }
-            .padding(.horizontal, 18)
-            HStack(spacing: 8) {
-                Button(action: {
+                    }, label: {
+                        HStack {
+                            VStack(spacing: 0) {
+                                Text("investment_objectives".localized)
+                                    .font(.cairoFont(.light, size: 12))
+                                Text("fixed_income".localized)
+                                    .font(.cairoFont(.semiBold, size: 12))
+                            }
 
-                }, label: {
-                    HStack {
-                        VStack(spacing: 0) {
-                            Text("investment_objectives".localized)
-                                .font(.cairoFont(.light, size: 12))
-                            Text("fixed_income".localized)
-                                .font(.cairoFont(.semiBold, size: 12))
+                            Spacer()
+                            
+                            Image("ic_downArrow")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundStyle(Color(hex: "#9C4EF7"))
+                                .frame(width: 15, height: 15)
                         }
-
-                        Spacer()
-                        
-                        Image("ic_downArrow")
-                            .renderingMode(.template)
-                            .resizable()
-                            .scaledToFit()
-                            .foregroundStyle(Color(hex: "#9C4EF7"))
-                            .frame(width: 15, height: 15)
-                    }
-                    .foregroundStyle(Color(hex: "#1C1C1C"))
-                    .padding(.horizontal, 16)
-                    .frame(height: 56)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
-                })
+                        .foregroundStyle(Color(hex: "#1C1C1C"))
+                        .padding(.horizontal, 16)
+                        .frame(height: 56)
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
+                    })
+                }
+                .padding(.horizontal, 18)
             }
-            .padding(.horizontal, 18)
 
             HStack(spacing: 8) {
                 Button(action: {
@@ -314,6 +320,7 @@ struct QuestioneerContentView: View {
                     .frame(minWidth: 357, minHeight: 51)
                     .background(RoundedRectangle(cornerRadius: 99).fill(Color.colorPrimary))
             }
+            .disabled(false)
             
             Spacer().frame(height: 24)
         }

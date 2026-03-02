@@ -14,6 +14,7 @@ enum AuthRoute:APITargetType{
     case OTP(requestModel: OTPRequestModel )
     case GetDeviceConfigs(requestModel: GetDeviceConfigsRequestModel)
     case GetKYCCibc(requestModel: GetKYCCibcRequestModel)
+    case GetKYCDataById(requestModel: GetKYCDataByIDRequestModel)
     
     // MARK: Valify
     case SendPhoneOtpValify(requestModel: SendPhoneOtpValifyRequestModel)
@@ -40,6 +41,7 @@ enum AuthRoute:APITargetType{
     case GetKYCFieldValify(requestModel: GetKycFieldValifyRequestModel)
     case GetKYCContractValify(requestModel: GetKycContractValifyRequestModel)
     case GetContractValify(requestModel: GetContractValifyRequestModel)
+    case KnfrmGetContractDetails(requestModel: KnfrmGetContractDetailsRequestModel)
     
     var baseURL: URL{
         get{
@@ -60,6 +62,12 @@ enum AuthRoute:APITargetType{
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
+                
+            case .GetKYCDataById:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
+                return dicHeader
+
 //            case .SendPhoneOtpValify:
 //                var dicHeader = NetworkUtility.getHeader(.token)
 //                dicHeader["access-token"] = "344553443"
@@ -149,8 +157,12 @@ enum AuthRoute:APITargetType{
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = KeyChainController().loginAccessToken
                 return dicHeader
-
                 
+            case .KnfrmGetContractDetails:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["access-token"] = KeyChainController().loginAccessToken
+                return dicHeader
+
             default:
                 return  NetworkUtility.getHeader(.withoutToken)
             }
@@ -169,6 +181,8 @@ enum AuthRoute:APITargetType{
             return "GeneralWServices/GetDeviceConfigs"
         case .GetKYCCibc:
             return "KYCWServices/GetKYCCibc"
+        case .GetKYCDataById:
+            return "KYCWServices/GetKYCDataByID"
         case .SendPhoneOtpValify:
             return "KYCWServices/SendPhoneOtpValify"
         case .VerifyPhoneOtpValify:
@@ -205,14 +219,15 @@ enum AuthRoute:APITargetType{
             return "KYCWServices/GetKycContractValify"
         case .GetContractValify:
             return "KYCWServices/GetContractValify"
-
+        case .KnfrmGetContractDetails:
+            return "KYCWServices/KnfrmGetContractDetails"
         }
     }
     
     var method: APIMethodType{
         get{
             switch self {
-            case .login, .OTP, .GetKYCCibc, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .RegistrationStatusValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify, .GetKYCFieldValify, .GetKYCContractValify, .GetContractValify:
+            case .login, .OTP, .GetKYCCibc, .GetKYCDataById, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .RegistrationStatusValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify, .GetKYCFieldValify, .GetKYCContractValify, .GetContractValify, .KnfrmGetContractDetails:
                 return .post
             case .GetDeviceConfigs, .urlIPAddress:
                 return .get
@@ -231,6 +246,8 @@ enum AuthRoute:APITargetType{
         case .GetDeviceConfigs:
                 .requestPlain
         case .GetKYCCibc(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .GetKYCDataById(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .SendPhoneOtpValify(let requestModel):
                 .requestJsonEncodable(requestModel)
@@ -267,6 +284,8 @@ enum AuthRoute:APITargetType{
         case .GetKYCContractValify(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .GetContractValify(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .KnfrmGetContractDetails(let requestModel):
                 .requestJsonEncodable(requestModel)
         }
     }}

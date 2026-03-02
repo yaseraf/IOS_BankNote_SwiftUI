@@ -10,6 +10,8 @@ import SwiftUI
 
 struct TiersContentView: View {
     
+    @Binding var tiersData: GetTiersUIModel
+    
     var onBackTap:()->Void
     
     var body: some View {
@@ -22,6 +24,20 @@ struct TiersContentView: View {
             
             Spacer()
         }
+        .onAppear {
+            for item in tiersData.data ?? [] {
+                tiers.append(
+                    Tier(
+                        nameKey: (AppUtility.shared.isRTL ? item.arabicDescription : item.englishDescription) ?? "",
+                        imageName: "ic_rookie",
+                        descriptionKeys: [],
+                        howToBecomeKeys: [],
+                        benefitKeys: [item.notes ?? ""]
+                    )
+                )
+            }
+        }
+
     }
     
     private var titleView: some View {
@@ -78,42 +94,42 @@ struct Tier: Identifiable {
 }
 
 
-let tiers: [Tier] = [
-    Tier(
-        nameKey: "tier_rookie".localized,
-        imageName: "ic_rookie",
-        descriptionKeys: ["rookie_desc1".localized, "rookie_desc2".localized],
-        howToBecomeKeys: nil,
-        benefitKeys: ["rookie_benefit1".localized, "rookie_benefit2".localized, "rookie_benefit3".localized]
-    ),
-    Tier(
-        nameKey: "tier_casual".localized,
-        imageName: "ic_rookie",
-        descriptionKeys: ["casual_desc1".localized, "casual_desc2".localized],
-        howToBecomeKeys: ["casual_how1".localized, "casual_how2".localized],
-        benefitKeys: ["casual_benefit1".localized, "casual_benefit2".localized, "casual_benefit3".localized, "casual_benefit4".localized, "casual_benefit5".localized]
-    ),
-    Tier(
-        nameKey: "tier_pro".localized,
-        imageName: "ic_rookie",
-        descriptionKeys: ["pro_desc1".localized, "pro_desc2".localized],
-        howToBecomeKeys: ["pro_how1".localized, "pro_how2".localized],
-        benefitKeys: ["pro_benefit1".localized, "pro_benefit2".localized, "pro_benefit3".localized, "pro_benefit4".localized, "pro_benefit5".localized]
-    ),
-    Tier(
-        nameKey: "tier_rolling_star".localized,
-        imageName: "ic_rookie",
-        descriptionKeys: ["rolling_desc1".localized, "rolling_desc2".localized],
-        howToBecomeKeys: ["rolling_how1".localized, "rolling_how2".localized],
-        benefitKeys: ["rolling_benefit1".localized, "rolling_benefit2".localized, "rolling_benefit3".localized, "rolling_benefit4".localized, "rolling_benefit5".localized, "rolling_benefit6".localized]
-    ),
-    Tier(
-        nameKey: "tier_tycoon".localized,
-        imageName: "ic_rookie",
-        descriptionKeys: ["tycoon_desc1".localized, "tycoon_desc2".localized],
-        howToBecomeKeys: ["tycoon_how1".localized, "tycoon_how2".localized],
-        benefitKeys: ["tycoon_benefit1".localized, "tycoon_benefit2".localized, "tycoon_benefit3".localized, "tycoon_benefit4".localized, "tycoon_benefit5".localized, "tycoon_benefit6".localized, "tycoon_benefit7".localized, "tycoon_benefit8".localized]
-    )
+var tiers: [Tier] = [
+//    Tier(
+//        nameKey: "tier_rookie".localized,
+//        imageName: "ic_rookie",
+//        descriptionKeys: ["rookie_desc1".localized, "rookie_desc2".localized],
+//        howToBecomeKeys: nil,
+//        benefitKeys: ["rookie_benefit1".localized, "rookie_benefit2".localized, "rookie_benefit3".localized]
+//    ),
+//    Tier(
+//        nameKey: "tier_casual".localized,
+//        imageName: "ic_rookie",
+//        descriptionKeys: ["casual_desc1".localized, "casual_desc2".localized],
+//        howToBecomeKeys: ["casual_how1".localized, "casual_how2".localized],
+//        benefitKeys: ["casual_benefit1".localized, "casual_benefit2".localized, "casual_benefit3".localized, "casual_benefit4".localized, "casual_benefit5".localized]
+//    ),
+//    Tier(
+//        nameKey: "tier_pro".localized,
+//        imageName: "ic_rookie",
+//        descriptionKeys: ["pro_desc1".localized, "pro_desc2".localized],
+//        howToBecomeKeys: ["pro_how1".localized, "pro_how2".localized],
+//        benefitKeys: ["pro_benefit1".localized, "pro_benefit2".localized, "pro_benefit3".localized, "pro_benefit4".localized, "pro_benefit5".localized]
+//    ),
+//    Tier(
+//        nameKey: "tier_rolling_star".localized,
+//        imageName: "ic_rookie",
+//        descriptionKeys: ["rolling_desc1".localized, "rolling_desc2".localized],
+//        howToBecomeKeys: ["rolling_how1".localized, "rolling_how2".localized],
+//        benefitKeys: ["rolling_benefit1".localized, "rolling_benefit2".localized, "rolling_benefit3".localized, "rolling_benefit4".localized, "rolling_benefit5".localized, "rolling_benefit6".localized]
+//    ),
+//    Tier(
+//        nameKey: "tier_tycoon".localized,
+//        imageName: "ic_rookie",
+//        descriptionKeys: ["tycoon_desc1".localized, "tycoon_desc2".localized],
+//        howToBecomeKeys: ["tycoon_how1".localized, "tycoon_how2".localized],
+//        benefitKeys: ["tycoon_benefit1".localized, "tycoon_benefit2".localized, "tycoon_benefit3".localized, "tycoon_benefit4".localized, "tycoon_benefit5".localized, "tycoon_benefit6".localized, "tycoon_benefit7".localized, "tycoon_benefit8".localized]
+//    )
 ]
 
 
@@ -207,7 +223,10 @@ struct TierCarouselView: View {
     }
 }
 #Preview {
-    TiersContentView(onBackTap: {
+    TiersContentView(
+        tiersData: .constant(.initializer()),
+        onBackTap: {
         
-    })
+        }
+    )
 }

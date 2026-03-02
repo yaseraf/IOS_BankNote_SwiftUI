@@ -69,7 +69,7 @@ struct HomeBottomBarView: View {
                     }
                     
                     Text(item.title)
-                        .foregroundStyle(selectedItem == item ? Color(hex: "#9C4EF7") : Color(hex: "#1C1C1C"))
+                        .foregroundStyle(selectedItem == item ? Color(hex: "#9C4EF7") : Color(hex: "#DDDDDD"))
                         .font(.cairoFont(.semiBold, size: selectedItem == item ? 14 : 12))
                     
                     

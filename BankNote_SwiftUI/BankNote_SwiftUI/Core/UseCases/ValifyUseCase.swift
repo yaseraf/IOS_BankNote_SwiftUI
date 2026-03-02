@@ -26,6 +26,8 @@ protocol ValifyUseCaseProtocol{
     func GetKYCFieldValify(requestModel: GetKycFieldValifyRequestModel, completion: @escaping(Result<GetKycFieldValifyUIModel, NetworkError>) -> Void) async
     func GetKYCContractValify(requestModel: GetKycContractValifyRequestModel, completion: @escaping(Result<GetKycContractValifyUIModel, NetworkError>) -> Void) async
     func GetContractValify(requestModel: GetContractValifyRequestModel, completion: @escaping(Result<GetContractValifyUIModel, NetworkError>) -> Void) async
+    func KnfrmGetContractDetails(requestModel: KnfrmGetContractDetailsRequestModel, completion: @escaping(Result<KnfrmGetContractDetailsUIModel, NetworkError>) -> Void) async
+    func GetKYCDataById(requestModel: GetKYCDataByIDRequestModel, completion: @escaping(Result<GetKYCDataByIDUIModel, NetworkError>) -> Void) async
 }
     
     class ValifyUseCase {
@@ -36,6 +38,19 @@ protocol ValifyUseCaseProtocol{
     }
 
 extension ValifyUseCase: ValifyUseCaseProtocol {
+    func GetKYCDataById(requestModel: GetKYCDataByIDRequestModel, completion: @escaping (Result<GetKYCDataByIDUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.GetKYCDataById(requestModel: requestModel)
+        await repository.GetKycDataById(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetKYCDataByIDUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
     func SendPhoneOtpValify(requestModel: SendPhoneOtpValifyRequestModel, completion: @escaping (Result<SendPhoneOtpValifyUIModel, NetworkError>) -> Void) async {
         let route = AuthRoute.SendPhoneOtpValify(requestModel: requestModel)
         await repository.SendPhoneOtpValify(route: route) { result in
@@ -273,5 +288,18 @@ extension ValifyUseCase: ValifyUseCaseProtocol {
             }
         }
     }
-
+    
+    func KnfrmGetContractDetails(requestModel: KnfrmGetContractDetailsRequestModel, completion: @escaping (Result<KnfrmGetContractDetailsUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.KnfrmGetContractDetails(requestModel: requestModel)
+        await repository.KnfrmGetContractDetails(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = KnfrmGetContractDetailsUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
 }

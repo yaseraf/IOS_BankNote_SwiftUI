@@ -47,8 +47,23 @@ class AppUtility {
 
    var isRTL: Bool {
         return userDefaultController?.isArabicLanguage ?? false
-    } 
-
+    }
+    
+    let APP_LOGO = "ic_newLogo"
+    let APP_NAME = "HSSL"
+    let APP_COIN_ICON = "ic_newCoin"
+    let APP_MAIN_COLOR = "#9C4EF7"
+    let APP_GRADIANT_COLOR_VARIANT_1 = "#55D876"
+    let APP_GRADIANT_COLOR_VARIANT_2 = "#9C4EF7"
+    
+    var APP_GRADIENT: LinearGradient {
+        LinearGradient(
+            gradient: Gradient(colors: [Color(hex: AppUtility.shared.APP_GRADIANT_COLOR_VARIANT_1), Color(hex: AppUtility.shared.APP_GRADIANT_COLOR_VARIANT_2)]),
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+    
     var isDarkTheme: Bool {
         get {
             return switch AppUtility.shared.currentAppTheme {

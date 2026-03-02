@@ -21,6 +21,45 @@ struct BadgesScene: BaseSceneType {
                     viewModel.popViewController()
                 })
             })
-        })
+        }, showLoading: .constant(viewTypeAction.showLoading))
+        .onAppear {
+            viewModel.callGetTiersAPI(success: true)
+            viewModel.callGetBankNotesMainBadgesAPI(success: true)
+        }
+        .onViewDidLoad {
+            getTiersAPI()
+            getBankNotesMainBadgesAPI()
+        }
     }
+    
+    private func getTiersAPI() {
+        viewModel.$getTiersAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+    
+    private func getBankNotesMainBadgesAPI() {
+        viewModel.$getBankNotesMainBadgesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+    
 }

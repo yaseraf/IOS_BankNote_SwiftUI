@@ -143,7 +143,7 @@ struct LandingScene: BaseSceneType {
 //                      SceneDelegate.getAppCoordinator()?.showMessage(type: .success,msg)
    
                       if data.isFirstLogin?.lowercased() ?? "" == "y" {
-                        
+                          viewModel.openPinScene()
                       } else if data.isFirstLogin?.lowercased() ?? "" == "n" {
                           DispatchQueue.main.async {
                               viewModel.openPinScene()

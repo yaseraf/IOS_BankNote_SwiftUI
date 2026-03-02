@@ -181,11 +181,7 @@ struct StockDetailsContentView: View {
                     ForEach(StockSegment.allCases, id: \.self) { segment in
                         VStack(spacing: 0) {
                             if selectedSegment == segment {
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
+                                AppUtility.shared.APP_GRADIENT
                                 .frame(maxHeight: 50)
                                 .mask(
                                     HStack(alignment: .center, spacing: 4) {

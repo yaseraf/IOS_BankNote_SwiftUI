@@ -10,12 +10,17 @@ import Foundation
 class SettingsViewModel: ObservableObject {
     private let coordinator: SettingsCoordinatorProtocol
     private let useCase: SettingsUseCaseProtocol
+    private let homeUseCase: HomeUseCaseProtocol
     
     @Published var usersLogOffAPIResult:APIResultType<UsersLogOffUIModel>?
+    @Published var getClientBankNotesAPIResult:APIResultType<GetClientBankNotesUIModel>?
 
-    init(coordinator: SettingsCoordinatorProtocol, useCase: SettingsUseCaseProtocol) {
+    @Published var clientBankNotes: String = ""
+    
+    init(coordinator: SettingsCoordinatorProtocol, useCase: SettingsUseCaseProtocol, homeUseCase: HomeUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
+        self.homeUseCase = homeUseCase
     }
     
     
@@ -71,6 +76,28 @@ extension SettingsViewModel {
             }
         }
     }
+    
+    func callGetClientBankNotesAPI(success:Bool) {
+        let requestModel = GetClientBankNotesRequestModel(ClientID: "-1", MainClientID: KeyChainController().mainClientID ?? "", WebCode: KeyChainController().webCode ?? "")
+        getClientBankNotesAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await homeUseCase.GetClientBankNotes(requestModel: requestModel) {[weak self] result in
+                self?.getClientBankNotesAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.getClientBankNotesAPIResult = .onSuccess(response: success)
+                    debugPrint("get client bank notes success")
+                    self?.clientBankNotes = success.balance ?? ""
+                    
+                case .failure(let failure):
+                        self?.getClientBankNotesAPIResult = .onFailure(error: failure)
+                    debugPrint("get client bank notes failed")
+                }
+            }
+        }
+    }
+
 }
 
 // MARK: Functions

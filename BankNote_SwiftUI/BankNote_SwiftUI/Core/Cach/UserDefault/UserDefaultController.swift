@@ -27,6 +27,7 @@ enum CachingKey: String {
     case signalRConnected
     case isBiometricEnabled
     case isMarketOpen
+    case isFirstOnBoardingSession
     
     // MARK: Strings
     
@@ -84,6 +85,7 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<Bool>(.signalRConnected) var signalRConnected
     @CachingCodable<Bool>(.isBiometricEnabled) var isBiometricEnabled
     @CachingCodable<Bool>(.isMarketOpen) var isMarketOpen
+    @CachingCodable<Bool>(.isFirstOnBoardingSession) var isFirstOnBoardingSession
 
     // MARK: Strings
 
@@ -146,6 +148,7 @@ class UserDefaultController: ObservableObject {
         cameraType = nil
         tifList = nil
         CUSTODYID = nil
+        isFirstOnBoardingSession = nil
     }
 }
 

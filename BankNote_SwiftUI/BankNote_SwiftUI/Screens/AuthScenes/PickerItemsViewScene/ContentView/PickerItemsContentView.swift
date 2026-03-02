@@ -86,6 +86,7 @@ struct PickerItemsContentView: View {
                     ForEach(list,id:\.id){ model in
                         cellView(model.wrappedValue)
                             .frame(height: 40)
+                            .disabled(model.key.wrappedValue == "contract already exist")
                         Divider()
                     }
                 }
@@ -123,14 +124,15 @@ struct PickerItemsContentView: View {
                         .frame(height:  20)
                 }else{
 //                    Image(selectModels.wrappedValue.filter({$0.id == model.id}).isEmpty ?  "ic_checkbox" : "ic_checkboxSelected")
-                    Image(selectModels.wrappedValue.filter({$0.id == model.id}).isEmpty ?  "ic_radioEmpty" : "ic_radioFill")
+                    Image(model.key == "contract already exist" ? "ic_radioFill" : selectModels.wrappedValue.filter({$0.id == model.id}).isEmpty ?  "ic_radioEmpty" : "ic_radioFill")
                         .resizable()
                         .frame(width: 20)
                         .frame(height:  20)
                 }
             }
 
-        }.padding(.vertical,8)
+        }
+        .padding(.vertical,8)
 
     }
 

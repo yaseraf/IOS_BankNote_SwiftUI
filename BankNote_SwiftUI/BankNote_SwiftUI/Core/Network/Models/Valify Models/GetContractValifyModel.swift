@@ -69,12 +69,14 @@ struct GetContractValifyResponseModel: Codable {
     let errorMsg: String?
     let isSuccessful: Bool?
     let message: String?
+    let contractId: String?
     let iframeUrl: String?
 
     enum CodingKeys: String, CodingKey {
         case errorMsg = "ErrorMsg"
         case isSuccessful = "IsSuccessful"
         case message = "Message"
+        case contractId = "contractId"
         case iframeUrl = "iframe_url"
     }
 }

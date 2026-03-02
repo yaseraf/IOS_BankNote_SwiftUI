@@ -11,7 +11,7 @@ import SwiftUI
 struct ThanksForRegisteringContentView: View {
     var body: some View {
         VStack {
-            Image("ic_bnCoin")
+            Image("ic_newCoin")
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 200, maxHeight: 200)

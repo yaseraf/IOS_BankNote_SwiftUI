@@ -52,7 +52,7 @@ struct BuyTransactionsContentView: View {
                 headerView
                 // Top section with BN Coins
                 VStack(spacing: 0) {
-                    Image("ic_bnCoin")
+                    Image("ic_newCoin")
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: 200, maxHeight: 200)
@@ -72,11 +72,7 @@ struct BuyTransactionsContentView: View {
                         Text("you_have".localized)
                             .font(.cairoFont(.bold, size: 32))
                         
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
+                        AppUtility.shared.APP_GRADIENT
                         .frame(maxWidth: 110, maxHeight: 60)
                         .mask{
                             Text("499\("bn".localized)".uppercased())
@@ -156,7 +152,7 @@ struct BuyTransactionsContentView: View {
             Spacer()
             
             HStack {
-                Image("ic_bnCoin")
+                Image("ic_newCoin")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 25, height: 25)
@@ -227,7 +223,7 @@ struct BuyTransactionsContentView: View {
 }
 
 #Preview {
-    BankNotesContentView(topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
+    BankNotesContentView(bankNotesData: .constant(.initializer()), clientBankNotes: .constant(""), topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
         
     }, onTopUpTap: {
         

@@ -16,9 +16,8 @@ struct SegmentsView: View {
         HStack(spacing: 4) {
             ForEach(0...5, id: \.self) { index in
                 if stepNumber > index {
-                    LinearGradient( gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]), startPoint: .leading, endPoint: .trailing)
-                    
-                        .cornerRadius(12)
+                    AppUtility.shared.APP_GRADIENT
+                    .cornerRadius(12)
                 } else {
                     RoundedRectangle(cornerRadius: 12).fill(Color(hex: "#DDDDDD"))
                 }

@@ -17,12 +17,51 @@ struct BankNotesScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                BankNotesContentView(topUpItems: $viewModel.topUpItems, rewardsItems: $viewModel.rewardsItems, onBackTap: {
+                BankNotesContentView(bankNotesData: $viewModel.bankNotesData, clientBankNotes: $viewModel.clientBankNotes, topUpItems: $viewModel.topUpItems, rewardsItems: $viewModel.rewardsItems, onBackTap: {
                     viewModel.popViewController()
                 }, onTopUpTap: {
                     viewModel.openPaymentMethodScene()
                 })
             })
-        })
+        }, showLoading: .constant(viewTypeAction.showLoading))
+        .onAppear {
+            viewModel.callGetBankNotesAPI(success: true)
+        }
+        .onViewDidLoad {
+            getBankNotesAPI()
+            getClientBankNotesAPI()
+        }
     }
+    
+    private func getBankNotesAPI() {
+        viewModel.$getBankNotesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+    
+    private func getClientBankNotesAPI() {
+        viewModel.$getClientBankNotesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
+
 }

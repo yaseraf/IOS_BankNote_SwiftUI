@@ -14,24 +14,31 @@ class QuestioneerViewModel: ObservableObject {
     private let coordinator: AuthCoordinatorProtocol
     
     private let valifyUseCase: ValifyUseCaseProtocol
+    private let useCase: KYCUseCaseProtocol
 
     @Published var getKycFieldAPIResult:APIResultType<GetKycFieldValifyUIModel>?
     @Published var getKycContractAPIResult:APIResultType<GetKycContractValifyUIModel>?
+    @Published var knfrmGetContractDetailsAPIResult:APIResultType<KnfrmGetContractDetailsUIModel>?
     @Published var getContractAPIResult:APIResultType<GetContractValifyUIModel>?
-    
+    @Published var getKYCCibcAPIResult:APIResultType<GetKYCCibcUIModel>?
+    @Published var getKYCDataByIdAPIResult:APIResultType<GetKYCDataByIDUIModel>?
+
     @Published var kycFieldsData: GetKycFieldValifyUIModel?
     @Published var contractsData: GetKycContractValifyUIModel?
     @Published var selectContractsItemPicker: [ItemPickerModelType] = []
+    @Published var signedContractsItemPicker: [ItemPickerModelType] = []
     
     @Published var kycFieldsValues: [String: String] = [:]
     @Published var contractURL: String = ""
+    @Published var contractId: String = ""
     @Published var showContract: Bool = false
     
     private let tagInvestmentProduct = 2
 
-    init(coordinator: AuthCoordinatorProtocol, valifyUseCase: ValifyUseCaseProtocol) {
+    init(coordinator: AuthCoordinatorProtocol, valifyUseCase: ValifyUseCaseProtocol, useCase: KYCUseCaseProtocol) {
         self.coordinator = coordinator
         self.valifyUseCase = valifyUseCase
+        self.useCase = useCase
         
         self.kycFieldsData = GetKycFieldValifyUIModel(data: [], errorCode: "", errorDescriptions: "", errorMessage: "")
     }
@@ -53,7 +60,11 @@ extension QuestioneerViewModel {
     private func getContracts() -> [ItemPickerUIModel] {
         var list:[ItemPickerUIModel] = []
         for i in 0..<(contractsData?.data?.count ?? 0){
-            list.append(.init(key: contractsData?.data?[i].contractVersion ?? "", name: contractsData?.data?[i].contractName ?? "", id: contractsData?.data?[i].id ?? ""))
+            if signedContractsItemPicker.contains(where: {$0.id == contractsData?.data?[i].id ?? ""}) == true {
+                list.append(.init(key: "contract already exist", name: contractsData?.data?[i].contractName ?? "", id: contractsData?.data?[i].id ?? ""))
+            } else {
+                list.append(.init(key: contractsData?.data?[i].contractVersion ?? "", name: contractsData?.data?[i].contractName ?? "", id: contractsData?.data?[i].id ?? ""))
+            }
         }
     return list
     }
@@ -115,6 +126,64 @@ extension QuestioneerViewModel {
         }
     }
     
+    func getKYCCibcAPI(success: Bool, requestItems: [GetKYCCibcRequestItems]) {
+        
+        let requestModel = GetKYCCibcRequestModel(RequestItems: requestItems, reqID: KeyChainController().valifyRequestId)
+        
+        getKYCCibcAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await useCase.GetKYCCibc(requestModel: requestModel) {[weak self] result in
+                self?.getKYCCibcAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    debugPrint("getKYCCibc success")
+                    
+                case .failure(let failure):
+                        debugPrint("getKYCCibc failed")
+                        self?.getKYCCibcAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+
+    func getKYCDataByIdAPI(success: Bool) {
+        
+        let requestModel = GetKYCDataByIDRequestModel(IDs: "285", USER_ID: "", req_ID: KeyChainController().valifyRequestId ?? "")
+        
+        getKYCDataByIdAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.GetKYCDataById(requestModel: requestModel) {[weak self] result in
+                self?.getKYCDataByIdAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    debugPrint("getKYCCibc success")
+                    
+                    let dataContracts = success.resData?.filter({$0.ID == "285"}).first?.VALUE
+
+                    if dataContracts?.isEmpty == false {
+                        for item in self?.contractsData?.data ?? [] {
+                            if dataContracts?.contains(item.id ?? "") == true {
+                                self?.signedContractsItemPicker.append(ItemPickerUIModel(key: item.contractVersion ?? "", name: item.contractName ?? "", id: item.id ?? ""))
+                            }
+                        }
+                    }
+
+                    
+                case .failure(let failure):
+                        debugPrint("getKYCCibc failed")
+                        self?.getKYCDataByIdAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+
+    
     func getContractValifyAPI(success: Bool) {
         
         var currentLocation: CLLocation?
@@ -139,7 +208,7 @@ extension QuestioneerViewModel {
         
 //        let requestModel = GetContractValifyRequestModel(crmNumber: "", fields: fields, lang: "", tenantId: "", token: "", userId: "", autofill: "", expiryMinutes: "", metadata: .none, reqID: KeyChainController().valifyRequestId ?? "", templateVersionId: "\(self.contractsData?.data?.first?.contractVersion)")
         
-        let requestModel = GetContractValifyRequestModel(crmNumber: "", fields: fields, lang: "", tenantId: "", token: "", userId: "", autofill: "", expiryMinutes: "", metadata: GetContractValifyMetadataModel(deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "", deviceIp: UserDefaultController().userIPAddress ?? "", deviceType: "IOS", kycRefId: KeyChainController().valifyRequestId ?? "", latitude: latitude, longitude: longitude), reqID: KeyChainController().valifyRequestId ?? "", templateVersionId: selectContractsItemPicker.first?.key ?? "")
+        let requestModel = GetContractValifyRequestModel(crmNumber: "", fields: fields, lang: "", tenantId: "", token: "", userId: "", autofill: "", expiryMinutes: "", metadata: .init(deviceId: "", deviceIp: "", deviceType: "", kycRefId: "", latitude: "", longitude: "") /*GetContractValifyMetadataModel(deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "", deviceIp: UserDefaultController().userIPAddress ?? "", deviceType: "IOS", kycRefId: KeyChainController().valifyRequestId ?? "", latitude: latitude, longitude: longitude)*/, reqID: KeyChainController().valifyRequestId ?? "", templateVersionId: selectContractsItemPicker.first?.key ?? "")
         
         getContractAPIResult = .onLoading(show: true)
 
@@ -155,6 +224,7 @@ extension QuestioneerViewModel {
                         guard let url = URL(string: success.data?.iframeUrl ?? "") else { return }
                         self?.contractURL = success.data?.iframeUrl ?? ""
                         self?.showContract = true
+                        self?.contractId = success.data?.contractId ?? ""
 
 //                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     } else {
@@ -169,6 +239,62 @@ extension QuestioneerViewModel {
             }
         }
     }
+    
+    func KnfrmGetContractDetailsAPI(success: Bool) {
+        
+        let requestModel = KnfrmGetContractDetailsRequestModel(RequestId: KeyChainController().valifyRequestId ?? "", Token: "", contract_id: contractId)
+        
+        knfrmGetContractDetailsAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.KnfrmGetContractDetails(requestModel: requestModel) {[weak self] result in
+                self?.knfrmGetContractDetailsAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.knfrmGetContractDetailsAPIResult = .onSuccess(response: success)
+                    debugPrint("get kyc contract success")
+                    
+                    if success.data?.filter({$0.contract_id == self?.contractId}).first?.status?.lowercased() == "approved" {
+                        self?.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "285", Value: self?.contractId ?? "")])
+                    }
+                    
+                case .failure(let failure):
+                        debugPrint("get kyc contract failed")
+                        self?.knfrmGetContractDetailsAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+    
+    func getKycDataByIdAPI(success: Bool) {
+        
+        let requestModel = KnfrmGetContractDetailsRequestModel(RequestId: KeyChainController().valifyRequestId ?? "", Token: "", contract_id: contractId)
+        
+        knfrmGetContractDetailsAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await valifyUseCase.KnfrmGetContractDetails(requestModel: requestModel) {[weak self] result in
+                self?.knfrmGetContractDetailsAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.knfrmGetContractDetailsAPIResult = .onSuccess(response: success)
+                    debugPrint("get kyc contract success")
+                    
+                    if success.data?.filter({$0.contract_id == self?.contractId}).first?.status?.lowercased() == "approved" {
+                        self?.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "285", Value: self?.contractId ?? "")])
+                    }
+                    
+                case .failure(let failure):
+                        debugPrint("get kyc contract failed")
+                        self?.knfrmGetContractDetailsAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+
+
 }
 
 extension QuestioneerViewModel:PickerItemsDelegate {

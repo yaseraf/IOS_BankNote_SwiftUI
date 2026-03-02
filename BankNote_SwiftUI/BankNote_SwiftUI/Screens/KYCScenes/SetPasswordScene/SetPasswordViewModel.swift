@@ -65,7 +65,7 @@ extension SetPasswordViewModel {
         )
         
         setPasswordValifyAPIResult = .onLoading(show: true)
-
+        
         Task.init {
             await valifyUseCase.SetPasswordValify(requestModel: requestModel) {[weak self] result in
                 self?.setPasswordValifyAPIResult = .onLoading(show: false)
@@ -75,20 +75,45 @@ extension SetPasswordViewModel {
                     
                     if success.isSuccessful == true {
                         debugPrint("setPasswordValify success")
-//                        self?.openLoginValifyScene()
+                        //                        self?.openLoginValifyScene()
+                        self?.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "200", Value: password)])
                         self?.coordinator.openQuestioneerScene()
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.serverResponse ?? "")
                     }
-                                        
+                    
                 case .failure(let failure):
-                        debugPrint("setPasswordValify failed")
-                        self?.setPasswordValifyAPIResult = .onFailure(error: failure)
+                    debugPrint("setPasswordValify failed")
+                    self?.setPasswordValifyAPIResult = .onFailure(error: failure)
+                    
+                }
+            }
+        }
+    }
+
+    func getKYCCibcAPI(success: Bool, requestItems: [GetKYCCibcRequestItems]) {
+        
+        let requestModel = GetKYCCibcRequestModel(RequestItems: requestItems, reqID: KeyChainController().valifyRequestId)
+        
+        getKYCCibcAPIResult = .onLoading(show: true)
+
+        Task.init {
+            await useCase.GetKYCCibc(requestModel: requestModel) {[weak self] result in
+                self?.getKYCCibcAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    debugPrint("getKYCCibc success")
+                    
+                case .failure(let failure):
+                        debugPrint("getKYCCibc failed")
+                        self?.getKYCCibcAPIResult = .onFailure(error: failure)
                
                 }
             }
         }
     }
+    
 }
 
 // MARK: Functions

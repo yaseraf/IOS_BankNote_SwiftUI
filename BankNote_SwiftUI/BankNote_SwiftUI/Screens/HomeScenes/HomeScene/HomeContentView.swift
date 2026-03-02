@@ -179,11 +179,11 @@ struct HomeContentView: View {
             
             if portfolioData.wrappedValue?.portfolioes.isEmpty == false{
                 ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(0...3, id: \.self) { id in
+                    ForEach(portfolioData.wrappedValue?.portfolioes ?? [], id:\.id) { item in
                         Button {
-                            onStockTap(portfolioData.wrappedValue?.portfolioes[id].symbol ?? "", portfolioData.wrappedValue?.portfolioes[id].marketType ?? "", portfolioData.wrappedValue?.portfolioes[id].custodianID ?? "", AppUtility.shared.isRTL ? portfolioData.wrappedValue?.portfolioes[id].custodianA ?? "" : portfolioData.wrappedValue?.portfolioes[id].custodianE ?? "")
+                            onStockTap(item.symbol ?? "", item.marketType ?? "", item.custodianID ?? "", AppUtility.shared.isRTL ? item.custodianA ?? "" : item.custodianE ?? "")
                         } label: {
-                            PortfolioCell(portfolioData: portfolioData.wrappedValue?.portfolioes[id] ?? .initializer())
+                            PortfolioCell(portfolioData: item)
                         }
 
                     }

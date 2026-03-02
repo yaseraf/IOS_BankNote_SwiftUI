@@ -99,12 +99,12 @@ struct LandingContentView: View {
                 
                 fieldsView
                     .padding(.bottom, 24)
-                    .opacity(0)
+//                    .opacity(0)
 
                 
                 loginButtonView
                     .padding(.bottom, 24)
-                    .opacity(0)
+//                    .opacity(0)
 
                 signupView
                 
@@ -125,15 +125,15 @@ struct LandingContentView: View {
     
     private var logoView: some View {
         VStack(spacing: 0) {
-            Image("ic_logo")
+            Image(AppUtility.shared.APP_LOGO)
                 .resizable()
                 .scaledToFit()
-                .frame(maxWidth: 225, maxHeight: 225)
-            
-            Text("XNTRQ".localized)
-                .textCase(.uppercase)
+                .frame(maxWidth: 150, maxHeight: 150)
+                .padding(.top, 90)
+
+            Text(AppUtility.shared.APP_NAME)
+                .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
                 .font(.cairoFont(.extraBold, size: 40))
-                .foregroundStyle(.black)
                 .padding(.bottom, 60)
         }
     }

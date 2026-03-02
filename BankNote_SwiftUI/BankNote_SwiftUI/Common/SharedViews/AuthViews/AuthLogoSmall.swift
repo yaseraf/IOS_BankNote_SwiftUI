@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 struct AuthLogoSmallView:View{
     var body: some View{
-        Image("ic_logo")
+        Image(AppUtility.shared.APP_LOGO)
             .resizable()
             .scaledToFit()
             .frame(maxWidth: 120, maxHeight: 120)

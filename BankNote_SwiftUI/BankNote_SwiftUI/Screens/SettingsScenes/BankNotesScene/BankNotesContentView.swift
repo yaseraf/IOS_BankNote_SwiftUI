@@ -13,6 +13,9 @@ import SwiftUI
 
 struct BankNotesContentView: View {
     
+    @Binding var bankNotesData: GetBankNoteUIModel
+    @Binding var clientBankNotes: String
+
     var topUpItems: Binding<[RowItem]>
     var rewardsItems: Binding<[RowItem]>
     @State private var selectedSegment: Segment = .topUp
@@ -55,11 +58,10 @@ struct BankNotesContentView: View {
                 headerView
                 // Top section with BN Coins
                 VStack(spacing: 0) {
-                    Image("ic_bnCoin")
+                    Image("ic_newCoin")
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: 200, maxHeight: 200)
-                        .shadow(color: .purple.opacity(0.5), radius: 10, x: 0, y: 5)
                         .background {
                             VStack {
                                 Spacer()
@@ -74,20 +76,19 @@ struct BankNotesContentView: View {
                     HStack(spacing: 0) {
                         Text("you_have".localized)
                             .font(.cairoFont(.bold, size: 32))
-                        
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color(hex: "#FC814B"), Color(hex: "#9C4EF7"), Color(hex: "#629AF9")]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                        .frame(maxWidth: 110, maxHeight: 60)
+                            .minimumScaleFactor(0.5)
+
+                        AppUtility.shared.APP_GRADIENT
+                        .frame(maxWidth: 180, maxHeight: 60)
                         .mask{
-                            Text("499\("bn".localized)".uppercased())
+                            Text("\(clientBankNotes) Hsslaya")
                                 .font(.cairoFont(.bold, size: 32))
+                                .minimumScaleFactor(0.5)
                         }
 
                         Text("coins".localized)
                             .font(.cairoFont(.bold, size: 32))
+                            .minimumScaleFactor(0.5)
 
                     }
                 }
@@ -106,11 +107,11 @@ struct BankNotesContentView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 12) {
                         if selectedSegment == .topUp {
-                            ForEach(Array(topUpItems.wrappedValue)) { item in
+                            ForEach(bankNotesData.data ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         } else {
-                            ForEach(Array(rewardsItems.wrappedValue)) { item in
+                            ForEach(bankNotesData.data ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         }
@@ -151,20 +152,20 @@ struct BankNotesContentView: View {
     }
     
     // A reusable view for a list row.
-    private func listItem(item: RowItem) -> some View {
+    private func listItem(item: GetBankNoteItemUIModel) -> some View {
         HStack {
-            Text(item.title)
+            Text(item.name ?? "")
                 .font(.cairoFont(.semiBold, size: 18))
 
             Spacer()
             
             HStack {
-                Image("ic_bnCoin")
+                Image("ic_newCoin")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 25, height: 25)
 
-                Text(item.value)
+                Text(item.price ?? "")
                     .font(.cairoFont(.semiBold, size: 18))
             }
         }
@@ -230,7 +231,7 @@ struct BankNotesContentView: View {
 }
 
 #Preview {
-    BankNotesContentView(topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
+    BankNotesContentView(bankNotesData: .constant(.initializer()), clientBankNotes: .constant("444"), topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
         
     }, onTopUpTap: {
         

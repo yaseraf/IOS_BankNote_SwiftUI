@@ -251,21 +251,29 @@ extension VerifySignUpViewModel {
                     
                     if success.data?.registered == "true" {
                         // Go to login (not first session)
+                        UserDefaultController().isFirstOnBoardingSession = false
                         self?.coordinator.openLoginValifyScene()
 //                        self?.coordinator.openLoginInformationScene()
 
                     } else {
                         if success.data?.status?.emailOtpSend?.lowercased() == "pending" || success.data?.status?.emailOtpVerify?.lowercased() == "pending" || success.data?.status?.emailOtpSend?.lowercased() == "not_started" || success.data?.status?.emailOtpVerify?.lowercased() == "not_started" {
                             // Go to email verification
+                            UserDefaultController().isFirstOnBoardingSession = false
                             self?.coordinator.openSignUpScene(verificationType: .email, verifyWithEmail: true)
                         } else if success.data?.status?.ocr?.lowercased() == "pending" || success.data?.status?.ocr?.lowercased() == "not_started" {
                             // Go to ocr
+                            UserDefaultController().isFirstOnBoardingSession = false
                             self?.coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
                         } else if success.data?.status?.liveness?.lowercased() == "pending" || success.data?.status?.facematch?.lowercased() == "pending" || success.data?.status?.liveness?.lowercased() == "not_started" || success.data?.status?.facematch?.lowercased() == "not_started" {
                             // Go to liveness
+                            UserDefaultController().isFirstOnBoardingSession = false
                             self?.coordinator.openLivenessCheckScene()
                         } else if success.data?.status?.ntraCheck?.lowercased() == "pending" || success.data?.status?.csoCheck?.lowercased() == "pending" || success.data?.status?.ntraCheck?.lowercased() == "not_started" || success.data?.status?.csoCheck?.lowercased() == "not_started" {
                             // Go to registration
+                            UserDefaultController().isFirstOnBoardingSession = false
+                            self?.coordinator.openLoginInformationScene()
+                        } else {
+                            // No pending steps, just not registered
                             self?.coordinator.openLoginInformationScene()
                         }
                     }

@@ -14,8 +14,9 @@ class NetworkConfiguration{
     static let api:String = "api/"
     static let version:String = "v2/"
     
-    // SignalR
-    private let mobileServices:String = "MobileServicesRoya/"
+    // MARK: SignalR
+//    private let mobileServices:String = "MobileServicesRoya/"
+    private let mobileServices:String = "MobileServices/"
     private let sr:String = "sr/"
     private let signalr:String = "signalr/"
     private let hubs: String = "hubs"
@@ -42,7 +43,7 @@ class NetworkConfiguration{
     static let development:NetworkConfiguration = .init(
         
         // FIT OMAN
-      basePath: "http://develop.fitoman.com:8090/MobileServicesRoya/", signalRDomain: "http://develop.fitoman.com:8090/"
+//      basePath: "http://develop.fitoman.com:8090/MobileServicesRoya/", signalRDomain: "http://develop.fitoman.com:8090/"
         
         // CIBC UAT
 //        basePath: "http://10.120.52.55/MobileServices/", signalRDomain: "http://10.120.52.55/" // uat (development)
@@ -52,6 +53,9 @@ class NetworkConfiguration{
       
         // VALIFY TESTING
         
+      basePath: "https://trade.rol.com.eg/MobileServices/", signalRDomain:  "https://trade.rol.com.eg/"
+      
+      
 //      basePath: "https://tfit.pioneers-securities.com/MobileServicesRoya/", signalRDomain:  "https://tfit.pioneers-securities.com/"
 
     )

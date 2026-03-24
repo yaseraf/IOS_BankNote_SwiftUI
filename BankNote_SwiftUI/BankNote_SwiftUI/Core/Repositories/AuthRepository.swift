@@ -12,6 +12,12 @@ protocol AuthRepositoryProtocol {
     func OTP (route:AuthRoute, completion: @escaping(Result<OTPResponseModel, NetworkError>) -> Void) async
     func GetDeviceConfigs (route:AuthRoute, completion: @escaping(Result<GetDeviceConfigsResponseModel, NetworkError>) -> Void) async
     func GetKYCCibc(route:AuthRoute, completion: @escaping(Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async
+    
+    // MARK: Forget Password
+    func UserAuthinticationAdvance(route:AuthRoute, completion: @escaping(Result<UserAuthenticationAdvanceResponseModel, NetworkError>) -> Void) async
+    func RegistrationsOTPReset(route:AuthRoute, completion: @escaping(Result<RegistrationsOTPResetResponseModel, NetworkError>) -> Void) async
+    func ChangesPassword(route:AuthRoute, completion: @escaping(Result<ChangePasswordResponseModel, NetworkError>) -> Void) async
+
 }
 
 class AuthRepository: AuthRepositoryProtocol {
@@ -27,11 +33,25 @@ class AuthRepository: AuthRepositoryProtocol {
         await RequestApi(route: route,responseType: LoginResponseModel.self, completion: completion).requestApi()
     }
     
-    
     func GetDeviceConfigs(route: AuthRoute, completion: @escaping (Result<GetDeviceConfigsResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: GetDeviceConfigsResponseModel.self, completion: completion).requestApi()
     }
+    
     func GetKYCCibc(route: AuthRoute, completion: @escaping (Result<GetKYCCibcResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: GetKYCCibcResponseModel.self, completion: completion).requestApi()
     }
+    
+    // MARK: Forget Password
+    func UserAuthinticationAdvance(route: AuthRoute, completion: @escaping (Result<UserAuthenticationAdvanceResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: UserAuthenticationAdvanceResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func RegistrationsOTPReset(route: AuthRoute, completion: @escaping (Result<RegistrationsOTPResetResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: RegistrationsOTPResetResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func ChangesPassword(route: AuthRoute, completion: @escaping (Result<ChangePasswordResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: ChangePasswordResponseModel.self, completion: completion).requestApi()
+    }
+
 }

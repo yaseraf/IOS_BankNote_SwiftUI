@@ -19,11 +19,18 @@ class StockDetailsViewModel: ObservableObject {
     @Published var getExpectedProfitLossList: [GetExpectedProfitLossUIModel]?
     @Published var expectedProfitLoss: GetExpectedProfitLossUIModel?
     @Published var ownedShares: Int?
+    @Published var ordersData: [OrderListUIModel]?
 
     @Published var getAllMarketWatchBySymbolAPIResult:APIResultType<GetALLMarketWatchBySymbolUIModel>?
     @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
     @Published var getAllMarketNewsBySymbolAPIResult:APIResultType<[GetAllMarketNewsBySymbolUIModel]>?
     @Published var GetExpectedProfitLossAPIResult:APIResultType<[GetExpectedProfitLossUIModel]>?
+
+    @Published var sendOrdersAPIResult: APIResultType<OrderListUIModel>?
+    
+    @Published var qtyT0: Int = 0
+    @Published var qtyT1: Int = 0
+    @Published var qtyT2: Int = 0
 
     init(coordinator: PortfolioCoordinatorProtocol, useCase: HomeUseCaseProtocol, symbol: String, marketType: String) {
         self.coordinator = coordinator
@@ -32,6 +39,12 @@ class StockDetailsViewModel: ObservableObject {
         self.marketType = marketType
         
         Connection_Hub.shared.marketWatchDelegate = self
+        Connection_Hub.shared.orderListDelegate = self
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.sendOrdersSignalR()
+        }
+
     }
 }
 
@@ -141,18 +154,18 @@ extension StockDetailsViewModel {
     
         if Connection_Hub.shared.chatHub != nil {
             do {
-                printToLog("test invoke subscribeMarketWatchSymbols '\(self.stockData?.symbol ?? "")'")
-                try Connection_Hub.shared.chatHub?.invoke("SubscribeMarketWatchSymbols", arguments: [UserDefaultController().username ?? "", self.stockData?.symbol ?? ""]) { (result, error) in
+                debugPrint("test invoke subscribeMarketWatchSymbols '\(self.stockData?.symbol ?? "")'")
+                try Connection_Hub.shared.chatHub?.invoke("SubscribeMarketWatchSymbols", arguments: [UserDefaultController().username ?? "", [self.stockData?.symbol ?? ""]]) { (result, error) in
                     if let e = error {
-                        printToLog("SubscribeMarketWatchSymbols invoke '\(self.stockData?.symbol ?? "")' Error: \(e)")
+                        debugPrint("SubscribeMarketWatchSymbols invoke '\(self.stockData?.symbol ?? "")' Error: \(e)")
                         self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
                     } else {
-                        printToLog("SubscribeMarketWatchSymbols invoke '\(self.stockData?.symbol ?? "")' Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+                        debugPrint("SubscribeMarketWatchSymbols invoke '\(self.stockData?.symbol ?? "")' Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
                         self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
                     }
                 }
             } catch let error {
-                printToLog("SubscribeMarketWatchSymbols chatHub '\(self.stockData?.symbol ?? "")' error: \(error.localizedDescription)")
+                debugPrint("SubscribeMarketWatchSymbols chatHub '\(self.stockData?.symbol ?? "")' error: \(error.localizedDescription)")
                 self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
 
             }
@@ -164,20 +177,65 @@ extension StockDetailsViewModel {
         
         if Connection_Hub.shared.chatHub != nil {
             do {
-                printToLog("test invoke unSubscribeMarketWatchSymbols")
+                debugPrint("test invoke unSubscribeMarketWatchSymbols")
                 try Connection_Hub.shared.chatHub?.invoke(HubMethodType.unSubscribeMarketWatchSymbols.rawValue, arguments: [UserDefaultController().username ?? ""]) { (result, error) in
                     if let e = error {
-                        printToLog("unSubscribeMarketWatchSymbols invoke Error: \(e)")
+                        debugPrint("unSubscribeMarketWatchSymbols invoke Error: \(e)")
                     } else {
-                        printToLog("unSubscribeMarketWatchSymbols invoke Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
-                        printToLog("unSubscribeMarketWatchSymbols invoke result: \(result)")
+                        debugPrint("unSubscribeMarketWatchSymbols invoke Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+                        debugPrint("unSubscribeMarketWatchSymbols invoke result: \(result)")
                     }
                 }
             } catch let error {
-                printToLog("unSubscribeMarketWatchSymbols chatHub error: \(error.localizedDescription)")
+                debugPrint("unSubscribeMarketWatchSymbols chatHub error: \(error.localizedDescription)")
             }
         }
     }
+    
+    func sendOrdersSignalR(){
+        debugPrint("Trying signalR method")
+        if Connection_Hub.shared.isConnected() {
+            debugPrint("SignalR is connected")
+        } else {
+            debugPrint("SignalR is not connected")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.sendOrdersSignalR()
+            }
+        }
+        
+        sendOrdersAPIResult = .onLoading(show:  true)
+        
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                
+                let string = "[{\"ClientID\": \"\(KeyChainController.shared().clientID ?? "")\" , \"WebUserID\": \"\(KeyChainController.shared().webCode ?? "")\" , \"Exchange\": \"\" , \"Symbol\": \"\" , \"OrderID\": \"\" , \"SellBuyFlag\": \"\"}]"
+                
+                let data = string.data(using: .utf8)!
+                do {
+                    if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>] {
+
+                        try Connection_Hub.shared.chatHub?.invoke(HubMethodType.sendOrders.rawValue, arguments: [UserDefaultController().username ?? "", jsonArray[0]]) { (result, error) in
+                            if let e = error {
+                                printToLog("sendOrders invoke Error: \(e)")
+                            } else {
+                                self.sendOrdersAPIResult = .onLoading(show: false)
+                                printToLog("sendOrders invoke, \([UserDefaultController().username ?? "", jsonArray[0]]) Success!")
+//                                self.GetLookupsAPI(success: true)
+
+                            }
+                        }
+                    } else {
+                        printToLog("sendOrders bad json")
+                    }
+                } catch let error {
+                        printToLog("sendOrders chatHub error: \(error.localizedDescription)")
+                    }
+                  }  catch let error {
+                      printToLog("sendOrders chatHub error: \(error.localizedDescription)")
+                  }
+                }
+        }
+
 }
 
 // MARK: Delegates
@@ -203,9 +261,22 @@ extension StockDetailsViewModel {
                 UserDefaultController().selectedCustodian = getExpectedProfitLossList?[i].custodianID
                 expectedProfitLoss = getExpectedProfitLossList?[i]
                 ownedShares = Int(expectedProfitLoss?.qtyT0 ?? 0) + Int(expectedProfitLoss?.qtyT1 ?? 0) + Int(expectedProfitLoss?.qtyT2 ?? 0)
+                
             }
         }
     }
-
 }
 
+// MARK: Delegates
+extension StockDetailsViewModel: OrderListDelegate {
+    func onOrderReceived(orders: [OrderListUIModel]) {
+        ordersData = orders.sorted { first, second in
+            let firstDate = AppUtility.shared.orderDateFromString(first.ModifyDate) ?? .distantPast
+            let secondDate = AppUtility.shared.orderDateFromString(second.ModifyDate) ?? .distantPast
+            return firstDate > secondDate // NEWEST FIRST
+        }
+        
+        ordersData = ordersData?.filter({$0.Symbol == stockData?.symbol})
+
+    }
+}

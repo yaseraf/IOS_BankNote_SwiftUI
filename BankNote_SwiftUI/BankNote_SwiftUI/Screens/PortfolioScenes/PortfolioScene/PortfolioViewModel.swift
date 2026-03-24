@@ -24,6 +24,8 @@ class PortfolioViewModel: ObservableObject {
         self.useCase = useCase
         
         pieChartData = []
+        Connection_Hub.shared.notifyOrderDelegate = self
+
     }
     
     
@@ -53,6 +55,7 @@ extension PortfolioViewModel {
         UserDefaultController().selectedSymbolID = selectedStock.symbolID
         UserDefaultController().selectedSymbolType = marketType
         UserDefaultController().selectedCustodian = custodianID
+        UserDefaultController().CUSTODYID = custodianID
         UserDefaultController().selectedCustodianName = custodianName
         coordinator.openStockDetailsScene(symbol: symbol, marketType: marketType)
     }
@@ -78,7 +81,7 @@ extension PortfolioViewModel {
                         self?.getPortfolioAPIResult = .onSuccess(response: success)
                     
                     self?.portfolioData = success
-                    self?.pieChartData = self?.makePieSliceData(from: success.portfolioes)
+                    self?.pieChartData = self?.makePieSliceData(from: success.portfolioChart.chartData ?? [])
                     
                 case .failure(let failure):
                         debugPrint("Failed to get user portfolio")
@@ -91,16 +94,16 @@ extension PortfolioViewModel {
 
 // MARK: Functions
 extension PortfolioViewModel {
-    func makePieSliceData(from portfolioes: [Portfolio]) -> [PieSliceData] {
+    func makePieSliceData(from portfolioes: [ChartDatum]) -> [PieSliceData] {
         
         // 1. Sort descending by prClosePrice
-        let sorted = portfolioes.sorted{$0.prClosePrice ?? 0 > $1.prClosePrice ?? 0}
+        let sorted = portfolioes.sorted{(Double($0.avg ?? "") ?? 0) > (Double($1.avg ?? "") ?? 0)}
         
         // 2. Take top 4
-        let top4 = Array(sorted.prefix(4))
+//        let top4 = Array(sorted.prefix(4))
         
         // 3. Compute total of top4 prices
-        let total = top4.map { Double($0.prClosePrice ?? 0) }.reduce(0, +)
+        let total = sorted.map { Double($0.avg ?? "") ?? 0 }.reduce(0, +)
         
         let pieColors = [
             Color(hex: "#629AF9"), // blue
@@ -110,13 +113,24 @@ extension PortfolioViewModel {
         ]
         
         // 4. Normalize to 100%
-        return top4.enumerated().map { index, portfolio in
-            let percentage = ((portfolio.prClosePrice ?? 0) / total) * 100
+        return sorted.enumerated().map { index, portfolio in
+            let percentage = ((Double(portfolio.avg ?? "") ?? 0) / total) * 100
             return PieSliceData(
                 value: percentage,
                 color: pieColors[index % pieColors.count], // or your colorForCompany mapping
-                label: portfolio.companyNameE ?? ""
+                label: portfolio.tickerID ?? ""
             )
         }
+    }
+}
+
+// MARK: - Delegates
+extension PortfolioViewModel: NotifyOrderDelegate {
+    func onNotifyOrder(newOrder: SendOrdersUIModel) {
+        if newOrder.StatusCode?.lowercased() == "p" || newOrder.StatusCode?.lowercased() == "s" { // Partially or fully filled
+            callGetPortfolioAPI(success: true)
+        }
+    }
+    func onNewOrder(newOrder: OrderListUIModel) {
     }
 }

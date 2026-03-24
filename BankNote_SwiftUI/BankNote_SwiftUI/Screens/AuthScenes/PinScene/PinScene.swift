@@ -49,7 +49,7 @@ struct PinScene: BaseSceneType{
                 if data.status == "0" {
 //                    let newMsg = "success \(String(describing: Date().toString(dateFormat: .MMMdd_yyyy)))"
 
-//                        SceneDelegate.getAppCoordinator()?.showMessage(type: .success,newMsg)
+//                    SceneDelegate.getAppCoordinator()?.showMessage(type: .success,newMsg)
                             
                     var isUserSaved = false
                     
@@ -61,6 +61,7 @@ struct PinScene: BaseSceneType{
                     }
                     
                     viewModel.finishAndStartHomeFlow()
+                    Connection_Hub.shared.resetOnGoingConnection()
 //                    if isUserSaved {
 //                        viewModel.finishAndStartHomeFlow()
 //                    } else {

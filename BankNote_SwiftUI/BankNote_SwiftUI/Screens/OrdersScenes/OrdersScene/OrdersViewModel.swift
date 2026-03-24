@@ -24,6 +24,8 @@ class OrdersViewModel: ObservableObject {
         ordersData = []
         
         Connection_Hub.shared.orderListDelegate = self
+        Connection_Hub.shared.notifyOrderDelegate = self
+
         GetLookupsAPI(success: true)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -145,13 +147,6 @@ extension OrdersViewModel {
 
 }
 
-// MARK: Delegates
-extension OrdersViewModel: OrderListDelegate {
-    func onOrderReceived(orders: [OrderListUIModel]) {
-        ordersData = orders
-    }
-}
-
 // MARK: Functions
 extension OrdersViewModel {
     func filterLookUps(_ type: String) {
@@ -170,6 +165,16 @@ extension OrdersViewModel {
 
 
 // MARK: Delegates
+extension OrdersViewModel: OrderListDelegate {
+    func onOrderReceived(orders: [OrderListUIModel]) {
+        ordersData = orders.sorted { first, second in
+            let firstDate = AppUtility.shared.orderDateFromString(first.ModifyDate) ?? .distantPast
+            let secondDate = AppUtility.shared.orderDateFromString(second.ModifyDate) ?? .distantPast
+            return firstDate > secondDate // NEWEST FIRST
+        }
+    }
+}
+
 extension OrdersViewModel: OrderEditDelegate {
     func onCancelOrder() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -186,3 +191,18 @@ extension OrdersViewModel: OrderEditDelegate {
     }
 }
 
+extension OrdersViewModel: NotifyOrderDelegate {
+    func onNotifyOrder(newOrder: SendOrdersUIModel) {
+        
+    }
+    
+    func onNewOrder(newOrder: OrderListUIModel) {
+        if let orderIndex = ordersData?.firstIndex(where: {$0.OrderID == newOrder.OrderID}) {
+            ordersData?[orderIndex] = newOrder
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.sendOrdersSignalR()
+            }
+        }
+    }
+}

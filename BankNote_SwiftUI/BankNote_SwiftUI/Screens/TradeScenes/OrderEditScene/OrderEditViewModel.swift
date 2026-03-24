@@ -23,7 +23,14 @@ class OrderEditViewModel: ObservableObject {
 
 // MARK: Routing
 extension OrderEditViewModel {
-    
+    func editOrder() {
+        coordinator.dismiss()
+        UserDefaultController().selectedSymbol = orderDetails?.Symbol ?? ""
+        UserDefaultController().selectedCustodian = orderDetails?.CustodianID ?? ""
+        UserDefaultController().CUSTODYID = orderDetails?.CustodianID ?? ""
+        delegate.onEditOrder(order: orderDetails ?? .initializer())
+    }
+
 }
 
 // MARK: SignalR
@@ -83,10 +90,6 @@ extension OrderEditViewModel {
         setCancelOrder()
     }
     
-    func editOrder() {
-        coordinator.dismiss()
-        delegate.onEditOrder(order: orderDetails ?? .initializer())
-    }
     
     func dismiss() {
         coordinator.dismiss()

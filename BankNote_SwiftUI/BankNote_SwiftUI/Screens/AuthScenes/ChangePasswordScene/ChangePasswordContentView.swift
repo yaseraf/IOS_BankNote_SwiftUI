@@ -10,16 +10,18 @@ import SwiftUI
 
 struct ChangePasswordContentView: View {
     
+    @State var oldPassword = ""
     @State var newPassword = ""
     @State var confirmNewPassword = ""
     
+    @State var isOldPasswordHidden = false
     @State var isNewPasswordHidden = false
     @State var isConfirmNewPasswordHidden = false
     
     @State var isConfirmPasswordMatching = true
     
     var onBack:()->Void
-    var onConfirmChangePassword:()->Void = { }
+    var onConfirmChangePassword:(_ oldPassword: String, _ newPassword: String, _ pin: String)->Void
     
     var body: some View {
         VStack {
@@ -46,7 +48,7 @@ struct ChangePasswordContentView: View {
                 .frame(width: 40, height: 40)
                 .foregroundColor(Color(hex: "#EDEEF6"))
                 .overlay {
-                    Image("ic_back")
+                    Image("ic_leftArrow")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
@@ -73,6 +75,36 @@ struct ChangePasswordContentView: View {
     
     private var inputFieldsView: some View {
         VStack(alignment: .leading) {
+            
+            Text("old_password".localized)
+                .font(.apply(.bold, size: 14))
+                .foregroundStyle(Color.colorTextPrimary)
+            
+            HStack {
+                if isOldPasswordHidden {
+                    SecureField("old_password".localized, text: $oldPassword)
+                        .font(.apply(size: 14))
+                        .textInputAutocapitalization(.never)
+                } else {
+                    TextField("old_password".localized, text: $oldPassword)
+                        .font(.apply(size: 14))
+                        .textInputAutocapitalization(.never)
+                }
+                
+                Image(isOldPasswordHidden ? "ic_eyeInvisible" : "ic_eyeVisible")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
+                    .onTapGesture {
+                        isOldPasswordHidden.toggle()
+                    }
+                
+            }
+            .padding(.horizontal, 16)
+            .frame(height: 56)
+            .background(RoundedRectangle(cornerRadius: 8).stroke(lineWidth: 1).fill(Color.colorBorder))
+            .padding(.bottom, 8)
+
             Text("new_password".localized)
                 .font(.apply(.bold, size: 14))
                 .foregroundStyle(Color.colorTextPrimary)
@@ -81,9 +113,11 @@ struct ChangePasswordContentView: View {
                 if isNewPasswordHidden {
                     SecureField("new_password".localized, text: $newPassword)
                         .font(.apply(size: 14))
+                        .textInputAutocapitalization(.never)
                 } else {
                     TextField("new_password".localized, text: $newPassword)
                         .font(.apply(size: 14))
+                        .textInputAutocapitalization(.never)
                 }
                 
                 Image(isNewPasswordHidden ? "ic_eyeInvisible" : "ic_eyeVisible")
@@ -108,6 +142,7 @@ struct ChangePasswordContentView: View {
                 if isConfirmNewPasswordHidden {
                     SecureField("confirm_new_password".localized, text: $confirmNewPassword)
                         .font(.apply(size: 14))
+                        .textInputAutocapitalization(.never)
                         .onChange(of: confirmNewPassword) { newVal in
                             if confirmNewPassword == newPassword {
                                 isConfirmPasswordMatching = true
@@ -118,6 +153,7 @@ struct ChangePasswordContentView: View {
                 } else {
                     TextField("confirm_new_password".localized, text: $confirmNewPassword)
                         .font(.apply(size: 14))
+                        .textInputAutocapitalization(.never)
                         .onChange(of: confirmNewPassword) { newVal in
                             if confirmNewPassword == newPassword {
                                 isConfirmPasswordMatching = true
@@ -165,11 +201,12 @@ struct ChangePasswordContentView: View {
             .frame(height: 48)
             .frame(maxWidth: .infinity)
             .foregroundStyle(.white)
-            .background(RoundedRectangle(cornerRadius: 16).fill(Color.colorPrimary).opacity(newPassword.isEmpty == false && confirmNewPassword.isEmpty == false ? 1 : 0.5))
+            .background(RoundedRectangle(cornerRadius: 16).fill(Color.colorPrimary).opacity(oldPassword.isEmpty == false && newPassword.isEmpty == false && confirmNewPassword.isEmpty == false ? 1 : 0.5))
             .padding(.horizontal, 20)
             .onTapGesture {
-                onConfirmChangePassword()
+                onConfirmChangePassword(oldPassword, confirmNewPassword, "")
             }
+            .disabled(oldPassword.isEmpty == false && newPassword.isEmpty == false && confirmNewPassword.isEmpty == false ? false : true)
         
     }
 }

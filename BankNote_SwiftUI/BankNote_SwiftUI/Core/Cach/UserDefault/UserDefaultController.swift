@@ -28,6 +28,7 @@ enum CachingKey: String {
     case isBiometricEnabled
     case isMarketOpen
     case isFirstOnBoardingSession
+    case isSignalRConnected
     
     // MARK: Strings
     
@@ -58,13 +59,26 @@ enum CachingKey: String {
     case completedInvestmentProductKeys
     case investmentProductValues
     case CUSTODYID
-    
+    case tierCode
+    case mainBadgeCodes
+    case subBadgeCodes
+    case dateFrom
+    case dateTo
+    case paymobID
+    case paymobSpecialRefID
+    case paymobMerchantID
+    case paymobSpecialRef
+    case userBalance
+    case isMarginableAccount
+
     // MARK: Other
     
     case appTheme
+    case allSubAccounts
     case selectedUserAccount
     case cameraType
     case tifList
+    case notifiedOrders
 
 }
 
@@ -86,6 +100,7 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<Bool>(.isBiometricEnabled) var isBiometricEnabled
     @CachingCodable<Bool>(.isMarketOpen) var isMarketOpen
     @CachingCodable<Bool>(.isFirstOnBoardingSession) var isFirstOnBoardingSession
+    @CachingCodable<Bool>(.isSignalRConnected) var isSignalRConnected
 
     // MARK: Strings
 
@@ -116,13 +131,26 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<[String:String]>(.completedInvestmentProductKeys) var completedInvestmentProductKeys
     @CachingCodable<[String]>(.investmentProductValues) var investmentProductValues
     @CachingCodable<String>(.CUSTODYID) var CUSTODYID
+    @CachingCodable<String>(.tierCode) var tierCode
+    @CachingCodable<String>(.mainBadgeCodes) var mainBadgeCodes
+    @CachingCodable<String>(.subBadgeCodes) var subBadgeCodes
+    @CachingCodable<String>(.dateFrom) var dateFrom
+    @CachingCodable<String>(.dateTo) var dateTo
+    @CachingCodable<String>(.paymobID) var paymobID
+    @CachingCodable<String>(.paymobSpecialRefID) var paymobSpecialRefID
+    @CachingCodable<String>(.paymobMerchantID) var paymobMerchantID
+    @CachingCodable<String>(.paymobSpecialRef) var paymobSpecialRef
+    @CachingCodable<String>(.userBalance) var userBalance
+    @CachingCodable<String>(.isMarginableAccount) var isMarginableAccount
 
     // MARK: Others
 
     @CachingCodable<GetUserAccountsUIModel>(.selectedUserAccount) var selectedUserAccount
+    @CachingCodable<[GetUserAccountsUIModel]>(.allSubAccounts) var allSubAccounts
     @CachingCodable<ThemeType>(.appTheme) var appTheme
     @CachingCodable<CameraType>(.cameraType) var cameraType
     @CachingCodable<[GetLookupsUIModel]>(.tifList) var tifList
+    @CachingCodable<[NotificationObject]>(.notifiedOrders) var notifiedOrders
 
     var isArabicLanguage: Bool {
         get {
@@ -142,13 +170,36 @@ class UserDefaultController: ObservableObject {
         selectedMarket = nil
         selectedCustodian = nil
         selectedCustodianName = nil
-        investmentProductKeys = nil
-        completedInvestmentProductKeys = nil
-        investmentProductValues = nil
         cameraType = nil
         tifList = nil
         CUSTODYID = nil
         isFirstOnBoardingSession = nil
+        isSignalRConnected = nil
+        isLoggedIn = nil
+        currentDeviceLanguage = nil
+        currentDate = nil
+        yesterdayDate = nil
+        selectedUserAccount = nil
+        username = nil
+        iconPath = nil
+        BackgroundWatchList = nil
+        nameFullNameA = nil
+        nameFullNameE = nil
+        sessiontimeoutPerSec = nil
+        investmentProductKeys = []
+        completedInvestmentProductKeys = [:]
+        investmentProductValues = []
+        marketStatusTitleE = nil
+        marketStatusTitleA = nil
+        marketStatusCode = nil
+        hasCheckedInactivity = false
+        isUserInactive = false
+        isAutoLogin = false
+        notifiedOrders = nil
+        tierCode = nil
+        dateFrom = nil
+        dateTo = nil
+        userBalance = nil
     }
 }
 

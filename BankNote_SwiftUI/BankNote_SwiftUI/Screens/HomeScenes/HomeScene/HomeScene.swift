@@ -15,24 +15,43 @@ struct HomeScene: BaseSceneType {
     @State var viewTypeAction:BaseSceneViewType = DefaultBaseSceneViewType()
     
     var body: some View {
-        BaseScene(backgroundType: .clear, contentView: {
-            BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                HomeContentView(portfolioData: $viewModel.portfolioData, onTopUpTap: {
-                    viewModel.openTopUpScene(transactionType: .topUp)
-                }, onStockTap: { symbol, marketType, custodianID, custodianName in
-                    viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType, custodianID: custodianID, custodianName: custodianName)
-                }, onWithdrawalTap: {
-                    viewModel.openTopUpScene(transactionType: .withdrawal)
-                })
-            })
-            .onAppear {
-                viewModel.callGetUserAccountsAPI(success: true)
-                viewModel.GetCompaniesLookupsAPI(success: true)
-            }
-        }, showLoading: .constant(viewTypeAction.showLoading))
+        BaseScene(
+            backgroundType: .clear,
+            contentView: {
+                BaseContentView(
+                    withScroll:false,
+                    paddingValue: 0,
+                    backgroundType: .gradient,
+                    content: {
+                        HomeContentView(
+                            viewController: $viewModel.viewController,
+                            portfolioData: $viewModel.portfolioData,
+                            onTopUpTap: {
+                                viewModel.openTopUpScene(transactionType: .topUp)
+                            },
+                                onStockTap: { symbol, marketType, custodianID, custodianName in
+                                viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType, custodianID: custodianID, custodianName: custodianName)
+                            },
+                                onWithdrawalTap: {
+                                viewModel.openTopUpScene(transactionType: .withdrawal)
+                            }, onViewHistoryTap: {
+                                viewModel.openTransactionHistoryScene()
+                            }, onPortfolioViewAllTap: {
+                                viewModel.openPortfolioScene()
+                            }
+                        )
+                    }
+                )
+                .onAppear {
+                    viewModel.callGetUserAccountsAPI(success: true)
+                    viewModel.GetCompaniesLookupsAPI(success: true)
+                }
+            },
+            showLoading: .constant(viewTypeAction.showLoading)
+        )
         .onViewDidLoad {
             portfolioAPI()
-
+            paymobAuthorizeAPI()
         }
     }
     
@@ -50,6 +69,22 @@ struct HomeScene: BaseSceneType {
             }
         }.store(in: &anyCancellable)
     }
+    
+    private func paymobAuthorizeAPI() {
+        viewModel.$getPaymobAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
 
 
 }

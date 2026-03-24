@@ -50,7 +50,7 @@ struct OrdersContentView:View {
             segmentSelection
             
             ScrollView(.vertical, showsIndicators: false) {
-                ForEach(Array((ordersData.wrappedValue ?? []).enumerated()).reversed(), id: \.offset) { idnex, element in
+                ForEach(ordersData.wrappedValue ?? [], id: \.id) { element in
                     if selectedOrderType == .all {
                         
                         Button {

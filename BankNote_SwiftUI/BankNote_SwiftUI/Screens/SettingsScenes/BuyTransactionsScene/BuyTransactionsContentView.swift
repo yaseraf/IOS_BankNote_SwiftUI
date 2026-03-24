@@ -21,7 +21,7 @@ struct BuyTransactionsContentView: View {
     
     var onBackTap:()->Void
     var onTopUpTap:()->Void
-    var onPurchaseTransaction:()->Void
+    var onPurchaseTransaction:(String)->Void
     
     // An enum to represent our segmented control.
     enum Segment: String, CaseIterable {
@@ -75,19 +75,19 @@ struct BuyTransactionsContentView: View {
                     
                     HStack(spacing: 0) {
                         Text("you_have".localized)
-                            .font(.cairoFont(.bold, size: 32))
+                            .font(.cairoFont(.bold, size: 24))
                             .minimumScaleFactor(0.5)
 
                         AppUtility.shared.APP_GRADIENT
-                        .frame(maxWidth: 180, maxHeight: 60)
+                        .frame(maxWidth: 60, maxHeight: 60)
                         .mask{
                             Text("\(clientTransactions)")
-                                .font(.cairoFont(.bold, size: 32))
+                                .font(.cairoFont(.bold, size: 24))
                                 .minimumScaleFactor(0.5)
                         }
 
                         Text("transactions".localized)
-                            .font(.cairoFont(.bold, size: 32))
+                            .font(.cairoFont(.bold, size: 24))
                             .minimumScaleFactor(0.5)
 
                     }
@@ -107,11 +107,11 @@ struct BuyTransactionsContentView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 12) {
                         if selectedSegment == .topUp {
-                            ForEach(transactionsPackagesData.data?.sorted {$0.code ?? "" > $1.code ?? ""} ?? [], id: \.id) { item in
+                            ForEach(transactionsPackagesData.data?.sorted {$0.code ?? "" < $1.code ?? ""} ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         } else {
-                            ForEach(transactionsPackagesData.data?.sorted {$0.code ?? "" > $1.code ?? ""} ?? [], id: \.id) { item in
+                            ForEach(transactionsPackagesData.data?.sorted {$0.code ?? "" < $1.code ?? ""} ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         }
@@ -126,8 +126,8 @@ struct BuyTransactionsContentView: View {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
+                        showInsufficientFunds = false
                         withAnimation {
-                            showInsufficientFunds = false
                         }
                     }
                 insufficientFundsPopup
@@ -155,11 +155,11 @@ struct BuyTransactionsContentView: View {
     private func listItem(item: GetTransactionsPackagesItemUIModel) -> some View {
         Button(action: {
             if Double(item.priceByBanknotes ?? "") ?? 0 > Double(clientBankNotes) ?? 0 {
+                showInsufficientFunds = true
                 withAnimation {
-                    showInsufficientFunds = true
                 }
             } else {
-                onPurchaseTransaction()
+                onPurchaseTransaction(item.transactionsQty ?? "")
             }
         }, label: {
             HStack {
@@ -191,6 +191,7 @@ struct BuyTransactionsContentView: View {
             .padding(.top, 2)
 
         })
+        .buttonStyle(.plain)
     }
     
     // The pop-up view for insufficient funds.
@@ -215,8 +216,8 @@ struct BuyTransactionsContentView: View {
             )
 
             Button {
+                showInsufficientFunds = false
                 withAnimation {
-                    showInsufficientFunds = false
                 }
                 onTopUpTap()
             } label: {
@@ -236,10 +237,10 @@ struct BuyTransactionsContentView: View {
     }
 }
 
-#Preview {
-    BankNotesContentView(bankNotesData: .constant(.initializer()), clientBankNotes: .constant(""), topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
-        
-    }, onTopUpTap: {
-        
-    })
-}
+//#Preview {
+//    BankNotesContentView(bankNotesData: .constant(.initializer()), clientBankNotes: .constant(""), topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
+//        
+//    }, onTopUpTap: {
+//        
+//    })
+//}

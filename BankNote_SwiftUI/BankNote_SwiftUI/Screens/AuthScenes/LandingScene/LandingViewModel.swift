@@ -14,19 +14,16 @@ import CryptoKit
 class LandingViewModel:ObservableObject {
     private var coordinator: AuthCoordinatorProtocol
     private var useCase: AuthUseCase
+    private var homeUseCase: HomeUseCaseProtocol
     
     @Published var LoginResponseModelAPIResult: APIResultType<LoginUIModel>?
     @Published var urlAPIAddressAPIResult: APIResultType<UrlIPAddressResponseModel>?
+    @Published var getTiersAPIResult: APIResultType<GetTiersUIModel>?
 
-    init(coordinator: AuthCoordinatorProtocol, useCase: AuthUseCase) {
+    init(coordinator: AuthCoordinatorProtocol, useCase: AuthUseCase, homeUseCase: HomeUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
-//        for family in UIFont.familyNames {
-//            for name in UIFont.fontNames(forFamilyName: family) {
-//                print(name)
-//            }
-//        }
-        
+        self.homeUseCase = homeUseCase
     }
     
     func encParam(item:String) -> String {
@@ -115,6 +112,37 @@ extension LandingViewModel {
         }
     }
     
+    func callGetTiersAPI(success:Bool) {
+        let requestModel = GetTiersRequestModel(WebCode: KeyChainController().webCode ?? "")
+        
+        getTiersAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await homeUseCase.GetTiers(requestModel: requestModel) {[weak self] result in
+                self?.getTiersAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.getTiersAPIResult = .onSuccess(response: success)
+                    debugPrint("get tiers success")
+                    
+                    let myTier = success.data?.filter({$0.code == UserDefaultController().tierCode ?? ""}).first
+                    
+                    if myTier?.ALLOW_MARGIN?.lowercased() == "y" {
+                        UserDefaultController().isMarginableAccount = "y"
+                    } else {
+                        UserDefaultController().isMarginableAccount = "n"
+                    }
+
+                    
+                case .failure(let failure):
+                        self?.getTiersAPIResult = .onFailure(error: failure)
+                    debugPrint("get tiers failed")
+                }
+            }
+        }
+    }
+
+    
     func UsrAuthinticationByEmailAndMobileAPI(email : String = "" , phoneNo : String  , Password : String, isRememberMe: Bool)  {
         
         // MARK: - Save email & password in keychain
@@ -172,7 +200,7 @@ extension LandingViewModel {
             fingerPrintId: "",
             mainClientID: "",
             mobileNo: encParam(item: phoneNo),
-            mobileType: "iOS/unrecognized/17.3.1/V.1",
+            mobileType: "iOS/\(UIDevice.current.identifierForVendor?.uuidString ?? "")/OS Version: \(UIDevice.current.systemVersion)/App Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0")",
             newUser: "",
             oldPassword: "",
             password: encParam(item: password1),
@@ -182,7 +210,7 @@ extension LandingViewModel {
             tokenID: "",
             touchToken: "",
             tradingNo: "",
-            userIPAddress: "192.168.68.118",
+            userIPAddress: "212.35.74.210",
             userName: "",
             versionNumber: "100",
             webCode: "",
@@ -198,8 +226,9 @@ extension LandingViewModel {
 
                     
                     KeyChainController().authToken = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? ""
-                    KeyChainController().loginCookieName = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.name ?? ""
-                    KeyChainController().loginCookieValue = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? ""
+                    
+//                    KeyChainController().loginCookieName = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.name ?? ""
+//                    KeyChainController().loginCookieValue = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? ""
 
                     
                     if success.isFirstLogin?.lowercased() ?? "" == "y" {
@@ -210,15 +239,20 @@ extension LandingViewModel {
 
 //                        self?.openResetPasswordScene(cookies: cookies)
                     }
-                    
+
                     KeyChainController().username = success.userName ?? ""
+                    UserDefaultController().tierCode = success.TIERS_CODE ?? ""
+                    UserDefaultController().mainBadgeCodes = success.MAIN_BADGES_CODE ?? ""
+                    UserDefaultController().subBadgeCodes = success.SUB_BADGES_CODE ?? ""
+                    
+                    self?.callGetTiersAPI(success: true)
 
 //                    SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "login_success".localized)
                     self?.LoginResponseModelAPIResult = .onSuccess(response: success)
                     
                 case .failure(let failure):
 
-                        self?.LoginResponseModelAPIResult = .onFailure(error: failure)
+                    self?.LoginResponseModelAPIResult = .onFailure(error: failure)
                
                 }
             }

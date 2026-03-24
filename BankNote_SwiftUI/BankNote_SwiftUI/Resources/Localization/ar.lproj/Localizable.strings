@@ -20,13 +20,29 @@
 "loading" = "تحميل";
 "invalid_username_password" = "اسم المستخدم أو كلمة المرور غير صحيحة";
 
+// MARK: - OTP Screen
+"invalid_pin" = "الرمز غير صحيح";
+
 // MARK: Forgot Password Screen
-"please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "الرجاء إدخال رقم هاتفك وسنرسل لك رابطًا لتغيير كلمة المرور";
+"please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "يرجى إدخال رقم هاتفك وسنرسل لك رابطًا لتغيير كلمة المرور";
+"please_enter_your_phone_number" = "يرجى إدخال رقم هاتفك";
+"please_enter_your_email" = "يرجى إدخال بريدك الإلكتروني";
+"email_address" = "البريد الإلكتروني";
 "resend_link" = "إعادة إرسال الرابط";
-"click_to_resend_otp" = "انقر لإعادة إرسال الرمز";
+"click_to_resend_otp" = "اضغط لإعادة إرسال رمز التحقق";
 "continue_with_email" = "المتابعة باستخدام البريد الإلكتروني";
 "continue_with_phone_number" = "المتابعة باستخدام رقم الهاتف";
+"please_enter_your_otp_to_confirm" = "يرجى إدخال رمز التحقق للتأكيد";
+"resend_otp" = "إعادة إرسال رمز التحقق";
+"verify" = "تأكيد";
+"incorrect_email_entered" = "تم إدخال بريد إلكتروني غير صحيح";
+"incorrect_phone_entered" = "تم إدخال رقم هاتف غير صحيح";
 
+// MARK: Change password screen
+"change_password" = "تغيير كلمة المرور";
+"old_password" = "كلمة المرور القديمة";
+"new_password" = "كلمة المرور الجديدة";
+"confirm_new_password" = "تأكيد كلمة المرور الجديدة";
 // MARK: Payment Method Screen
 "payment_method" = "طريقة الدفع";
 "debit_card" = "بطاقة خصم";
@@ -51,6 +67,28 @@
 "my_portfolio" = "محفظتي";
 "view_all" = "عرض الكل";
 "egp" = "جنيه مصري";
+
+// MARK: - Transaction History Screen
+"symbol" = "الرمز";
+"transaction_history" = "سجل المعاملات";
+"date" = "التاريخ";
+"currency" = "العملة";
+"buy_qty" = "كمية الشراء";
+"sell_qty" = "كمية البيع";
+"buy_value" = "قيمة الشراء";
+"sell_value" = "قيمة البيع";
+"sell_cost" = "تكلفة البيع";
+"delay_pnl" = "الربح/الخسارة المؤجلة";
+"share_balance" = "رصيد الأسهم";
+"total_cost" = "إجمالي التكلفة";
+"share_cost" = "تكلفة السهم";
+"pnl" = "الربح/الخسارة %";
+
+// MARK: Notifications Screen
+"notifications" = "الإشعارات";
+"order_id" = "رقم الطلب";
+"status" = "الحالة";
+"news_has_been_received" = "تم استلام الخبر";
 
 // MARK: Top Up Screen
 "top_up_balance" = "إيداع رصيد";
@@ -86,6 +124,24 @@
 "all" = "الكل";
 "stocks" = "الأسهم";
 "markets" = "الأسواق";
+"modify_order" = "تعديل الأمر";
+"modify_order_desc" = "تم تعديل أمرك";
+"fully_filled_order" = "أمر منفذ بالكامل";
+"fully_filled_order_desc" = "تم تنفيذ أمرك بالكامل";
+"partially_filled_order" = "أمر منفذ جزئياً";
+"partially_filled_order_desc" = "تم تنفيذ أمرك جزئياً";
+"waiting_order" = "أمر قيد الانتظار";
+"waiting_order_desc" = "أمرك قيد الانتظار";
+"rejected_order" = "أمر مرفوض";
+"rejected_order_desc" = "تم رفض أمرك";
+"cancel_order" = "إلغاء الأمر";
+"cancel_order_desc" = "تم إلغاء أمرك";
+"active_order" = "أمر نشط";
+"active_order_desc" = "أمرك نشط";
+"expired_order" = "أمر منتهي الصلاحية";
+"expired_order_desc" = "انتهت صلاحية أمرك";
+"sent_order" = "أمر مُرسل";
+"sent_order_desc" = "تم إرسال أمرك";
 
 // MARK: Orders Screen
 "pending" = "قيد الانتظار";
@@ -98,6 +154,7 @@
 "limit_price" = "سعر محدد";
 "available_amount" = "الكمية المتاحة";
 "cash" = "نقدي";
+"one_day" = "يوم واحد";
 
 // MARK: Order Details Screen
 "order_details" = "تفاصيل الطلب";
@@ -107,6 +164,7 @@
 "quantity" = "الكمية";
 "execution_type" = "نوع التنفيذ";
 "price" = "السعر";
+"remaining" = "المتبقي";
 "execution_rule" = "قاعدة التنفيذ";
 "validity_date" = "تاريخ الصلاحية";
 "order_value" = "قيمة الطلب";
@@ -143,10 +201,35 @@
 "about_us" = "من نحن";
 "help" = "مساعدة";
 "rating_app" = "تقييم التطبيق";
+"buy_transactions" = "شراء معاملات";
 
+// MARK: Statements Screen
+"statements" = "كشف الحساب";
+"credit" = "دائن";
+"debit" = "مدين";
+"balance" = "الرصيد";
+"remarks" = "ملاحظات";
+"starting_balance" = "الرصيد الافتتاحي";
+"ending_balance" = "الرصيد الختامي";
+
+// MARK: Invoices Screen
+"invoices" = "الفواتير";
+"avg_price" = "متوسط السعر";
+"qty" = "الكمية";
 
 // MARK: Tiers Screen
 "buy_now" = "اشتر الان";
+"notes" = "ملاحظات";
+
+// MARK: Badges Screen
+"unlock_badges_and_elevate_your_game" = "افتح الشارات وارتقِ بأدائك";
+"how_to" = "كيفية";
+"locked" = "مغلق";
+"bronze" = "برونزي";
+"silver" = "فضي";
+"gold" = "ذهبي";
+"plat" = "بلاتيني";
+"diamond" = "ماسي";
 
 // Tier names
 "tier_rookie" = "مبتدئ";

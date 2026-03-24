@@ -108,7 +108,10 @@ class KeyChainController {
         valifyRequestId = nil
         valifyAccessToken = nil
         loginAccessToken = nil
-        
+        clientID = nil
+        mainClientID = nil
+        username = nil
+
     }
 }
 

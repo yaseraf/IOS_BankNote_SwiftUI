@@ -29,7 +29,7 @@ struct ConfirmOtpPopupContentView: View {
     
     var onDismiss:() -> Void
     var onResendOtpTap:()->Void
-    var onVerify:() -> Void
+    var onVerify:(String) -> Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -115,7 +115,11 @@ struct ConfirmOtpPopupContentView: View {
                     TextField("-", text: $pinOne)
                         .modifier(OtpModifer(pin: $pinOne))
                         .onChange(of: pinOne) { newValue in
-                            selectedPin = .pinTwo
+                            if newValue.count == 1 {
+                                selectedPin = .pinTwo
+                            } else {
+                                selectedPin = nil
+                            }
                         }
                         .focused($selectedPin, equals: .pinOne)
                         .textContentType(.oneTimeCode)
@@ -128,7 +132,11 @@ struct ConfirmOtpPopupContentView: View {
                     TextField("-", text: $pinTwo)
                         .modifier(OtpModifer(pin: $pinTwo))
                         .onChange(of: pinTwo) { newValue in
-                            selectedPin = .pinThree
+                            if newValue.count == 1 {
+                                selectedPin = .pinThree
+                            } else {
+                                selectedPin = .pinOne
+                            }
                         }
                         .focused($selectedPin, equals: .pinTwo)
                         .textContentType(.oneTimeCode)
@@ -141,7 +149,11 @@ struct ConfirmOtpPopupContentView: View {
                     TextField("-", text: $pinThree)
                         .modifier(OtpModifer(pin: $pinThree))
                         .onChange(of: pinThree) { newValue in
-                            selectedPin = .pinFour
+                            if newValue.count == 1 {
+                                selectedPin = .pinFour
+                            } else {
+                                selectedPin = .pinTwo
+                            }
                         }
                         .focused($selectedPin, equals: .pinThree)
                         .textContentType(.oneTimeCode)
@@ -154,7 +166,11 @@ struct ConfirmOtpPopupContentView: View {
                     TextField("-", text: $pinFour)
                         .modifier(OtpModifer(pin: $pinFour))
                         .onChange(of: pinFour) { newValue in
-                            selectedPin = .pinFive
+                            if newValue.count == 1 {
+                                selectedPin = .pinFive
+                            } else {
+                                selectedPin = .pinThree
+                            }
                         }
                         .focused($selectedPin, equals: .pinFour)
                         .textContentType(.oneTimeCode)
@@ -167,7 +183,11 @@ struct ConfirmOtpPopupContentView: View {
                     TextField("-", text: $pinFive)
                         .modifier(OtpModifer(pin: $pinFive))
                         .onChange(of: pinFive) { newValue in
-                            selectedPin = .pinSix
+                            if newValue.count == 1 {
+                                selectedPin = .pinSix
+                            } else {
+                                selectedPin = .pinFour
+                            }
                         }
                         .focused($selectedPin, equals: .pinFive)
                         .textContentType(.oneTimeCode)
@@ -180,7 +200,11 @@ struct ConfirmOtpPopupContentView: View {
                     TextField("-", text: $pinSix)
                         .modifier(OtpModifer(pin: $pinSix))
                         .onChange(of: pinSix) { newValue in
-                            selectedPin = nil
+                            if newValue.count == 1 {
+                                selectedPin = nil
+                            } else {
+                                selectedPin = .pinFive
+                            }
                         }
                         .focused($selectedPin, equals: .pinSix)
                         .textContentType(.oneTimeCode)
@@ -221,7 +245,7 @@ struct ConfirmOtpPopupContentView: View {
             .background(RoundedRectangle(cornerRadius: 16).fill(Color.colorPrimary))
             .padding(.horizontal, 24)
             .onTapGesture {
-                onVerify()
+                onVerify(pinOne+pinTwo+pinThree+pinFive+pinFive+pinSix)
             }
     }
 }

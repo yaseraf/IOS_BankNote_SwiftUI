@@ -21,8 +21,8 @@ struct BuyTransactionsScene: BaseSceneType {
                     viewModel.popViewController()
                 }, onTopUpTap: {
                     viewModel.openBankNotesScene()
-                }, onPurchaseTransaction: {
-                    viewModel.onPurchaseTransaction()
+                }, onPurchaseTransaction: { quantity in
+                    viewModel.onPurchaseTransaction(quantity: quantity)
                 })
             })
         }, showLoading: .constant(viewTypeAction.showLoading))
@@ -35,6 +35,7 @@ struct BuyTransactionsScene: BaseSceneType {
             getTransactionsPackagesAPI()
             getClientTransactionsPackagesAPI()
             getClientBankNotesAPI()
+            updateBankNotesTransQtyAPI()
         }
     }
     
@@ -70,6 +71,21 @@ struct BuyTransactionsScene: BaseSceneType {
     
     private func getClientBankNotesAPI() {
         viewModel.$getClientBankNotesAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
+    private func updateBankNotesTransQtyAPI() {
+        viewModel.$updateBankNotesTransQtyAPIResult.receive(on: DispatchQueue.main).sink { result  in
             switch result{
             case .onFailure(let error):
                 debugPrint("")

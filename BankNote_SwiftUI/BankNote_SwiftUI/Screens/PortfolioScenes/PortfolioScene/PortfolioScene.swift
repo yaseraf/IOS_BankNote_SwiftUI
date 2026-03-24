@@ -15,19 +15,31 @@ struct PortfolioScene: BaseSceneType {
     @State var viewTypeAction:BaseSceneViewType = DefaultBaseSceneViewType()
     
     var body: some View {
-        BaseScene(backgroundType: .clear, contentView: {
-            BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                PortfolioContentView(portfolioData: $viewModel.portfolioData, pieChartData: $viewModel.pieChartData, onPortfolioTap: { symbol, marketType, custodianID, custodianName in
-                    viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType, custodianID: custodianID, custodianName: custodianName)
-                })
-            })
-            .onAppear {
-                viewModel.callGetPortfolioAPI(success: true)
-            }
-        }, showLoading: .constant(viewTypeAction.showLoading))
+        BaseScene(
+            backgroundType: .clear,
+            contentView: {
+                BaseContentView(
+                    withScroll:false,
+                    paddingValue: 0,
+                    backgroundType: .gradient,
+                    content: {
+                        PortfolioContentView(
+                            portfolioData: $viewModel.portfolioData,
+                            pieChartData: $viewModel.pieChartData,
+                            onPortfolioTap: { symbol, marketType, custodianID, custodianName in
+                                viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType, custodianID: custodianID, custodianName: custodianName)
+                            }
+                        )
+                    }
+                )
+                .onAppear {
+                    viewModel.callGetPortfolioAPI(success: true)
+                }
+            },
+            showLoading: .constant(viewTypeAction.showLoading)
+        )
         .onViewDidLoad {
             portfolioAPI()
-
         }
     }
     

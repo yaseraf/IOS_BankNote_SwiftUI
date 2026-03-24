@@ -6,8 +6,23 @@
 //
 
 import Foundation
+import UIKit
+import PaymobSDK
 
-class HomeViewModel: ObservableObject {
+class HomeViewModel: ObservableObject, PaymobSDKDelegate {
+    func transactionRejected(message: String) {
+        debugPrint("Transaction Rejected home: \(message)")
+    }
+
+    func transactionAccepted(transactionDetails: [String : Any]) {
+        debugPrint("Transaction Successfull home: \(transactionDetails)")
+    }
+
+    func transactionPending() {
+        debugPrint("Transaction Pending home")
+    }
+
+    
     private let coordinator: HomeCoordinatorProtocol
     private let useCase: HomeUseCaseProtocol
     private let lookupsUseCase: LookupsUseCaseProtocol
@@ -17,8 +32,10 @@ class HomeViewModel: ObservableObject {
     
     @Published var getUserAccountsAPIResult:APIResultType<[GetUserAccountsUIModel]>?
     @Published var getPortfolioAPIResult:APIResultType<GetPortfolioUIModel>?
+    @Published var getPaymobAPIResult:APIResultType<PaymobGetSdkTokenUIModel>?
     @Published var getCompaniesLookupsAPIResult:APIResultType<[GetCompaniesLookupsUIModel]>?
 
+    @Published var viewController: UIViewController?
     
     init(coordinator: HomeCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol) {
         self.coordinator = coordinator
@@ -26,6 +43,12 @@ class HomeViewModel: ObservableObject {
         self.lookupsUseCase = lookupsUseCase
         
         connectAndSetupSignalR()
+        Connection_Hub.shared.notifyOrderDelegate = self
+        PaymobViewController.shared.paymob.delegate = self
+        Connection_Hub.shared.connectionDelegate = self
+        
+        UserDefaultController().allSubAccounts = []
+
     }
     
     func connectAndSetupSignalR() {
@@ -55,6 +78,11 @@ extension HomeViewModel {
 extension HomeViewModel {
     func openTopUpScene(transactionType: TransactionTypes) {
         coordinator.openTopUpScene(transactionType: transactionType)
+//        callGetPaymobAPI(success: true)
+    }
+    
+    func openPortfolioScene() {
+        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().openPortfolioScene()
     }
     
     func openStockDetailsScene(symbol: String, marketType: String, custodianID: String, custodianName: String) {
@@ -65,8 +93,17 @@ extension HomeViewModel {
         UserDefaultController().selectedSymbolID = selectedStock.symbolID
         UserDefaultController().selectedSymbolType = marketType
         UserDefaultController().selectedCustodian = custodianID
+        UserDefaultController().CUSTODYID = custodianID
         UserDefaultController().selectedCustodianName = custodianName
         SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().openStockDetailsScene(symbol: symbol, marketType: marketType)
+    }
+    
+    func openNotificationsScene() {
+        
+    }
+    
+    func openTransactionHistoryScene() {
+        coordinator.openTransactionHistoryScene()
     }
 
 }
@@ -85,6 +122,8 @@ extension HomeViewModel {
                 switch result {
                 case .success(let success):
                         self?.getUserAccountsAPIResult = .onSuccess(response: success)
+                    
+                    UserDefaultController().allSubAccounts = success
                     
                     if KeyChainController.shared().clientID != nil && KeyChainController.shared().clientID != "" && KeyChainController.shared().mainClientID != nil && KeyChainController.shared().mainClientID != "" && UserDefaultController().selectedUserAccount?.AccType != "all" {
                         self?.callGetPortfolioAPI(success: true)
@@ -135,6 +174,8 @@ extension HomeViewModel {
                     
                     self?.portfolioData = success
                     
+                    UserDefaultController().userBalance = success.accountSummaries.balance ?? ""
+                    
                 case .failure(let failure):
                         debugPrint("Failed to get user portfolio")
                         self?.getPortfolioAPIResult = .onFailure(error: failure)
@@ -167,3 +208,25 @@ extension HomeViewModel {
     }
 
 }
+
+// MARK: - Delegates
+extension HomeViewModel: NotifyOrderDelegate {
+    func onNotifyOrder(newOrder: SendOrdersUIModel) {
+        if newOrder.StatusCode?.lowercased() == "p" || newOrder.StatusCode?.lowercased() == "s" { // Partially or fully filled
+            callGetPortfolioAPI(success: true)
+        }
+    }
+    func onNewOrder(newOrder: OrderListUIModel) {
+    }
+}
+
+extension HomeViewModel: ConnectionDelegate {
+    func onConnect() {
+        UserDefaultController.instance.isSignalRConnected = true
+    }
+    
+    func onDisconnect() {
+        UserDefaultController.instance.isSignalRConnected = false
+    }
+}
+

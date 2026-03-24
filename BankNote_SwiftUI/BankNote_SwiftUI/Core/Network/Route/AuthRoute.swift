@@ -16,6 +16,11 @@ enum AuthRoute:APITargetType{
     case GetKYCCibc(requestModel: GetKYCCibcRequestModel)
     case GetKYCDataById(requestModel: GetKYCDataByIDRequestModel)
     
+    // MARK: Forget Password
+    case UserAuthinticationAdvance(requestModel: UserAuthenticationAdvanceRequestModel)
+    case RegistrationsOTPReset(requestModel: RegistrationsOTPResetRequestModel)
+    case ChangesPassword(requestModel: ChangePasswordRequestModel)
+    
     // MARK: Valify
     case SendPhoneOtpValify(requestModel: SendPhoneOtpValifyRequestModel)
     case VerifyPhoneOtpValify(requestModel: VerifyPhoneOtpValifyRequestModel)
@@ -58,6 +63,12 @@ enum AuthRoute:APITargetType{
     var headers: [String : String]{
         get{
             switch self {
+                
+            case .ChangesPassword:
+                var dicHeader = NetworkUtility.getHeader(.token)
+                dicHeader["Cookie"] = KeyChainController().resetPasswordCookies
+                return dicHeader
+
             case .GetKYCCibc:
                 var dicHeader = NetworkUtility.getHeader(.token)
                 dicHeader["access-token"] = KeyChainController().loginAccessToken
@@ -183,6 +194,12 @@ enum AuthRoute:APITargetType{
             return "KYCWServices/GetKYCCibc"
         case .GetKYCDataById:
             return "KYCWServices/GetKYCDataByID"
+        case .UserAuthinticationAdvance:
+            return "GeneralWServices/UserAuthinticationAdvance"
+        case .RegistrationsOTPReset:
+            return "GeneralWServices/RegistrationsOTPReset"
+        case .ChangesPassword:
+            return "GeneralWServices/ChangesPassword"
         case .SendPhoneOtpValify:
             return "KYCWServices/SendPhoneOtpValify"
         case .VerifyPhoneOtpValify:
@@ -227,7 +244,7 @@ enum AuthRoute:APITargetType{
     var method: APIMethodType{
         get{
             switch self {
-            case .login, .OTP, .GetKYCCibc, .GetKYCDataById, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .RegistrationStatusValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify, .GetKYCFieldValify, .GetKYCContractValify, .GetContractValify, .KnfrmGetContractDetails:
+            case .login, .OTP, .GetKYCCibc, .GetKYCDataById, .UserAuthinticationAdvance, .RegistrationsOTPReset, .ChangesPassword, .SendPhoneOtpValify, .VerifyPhoneOtpValify, .RegistrationStatusValify, .SendEmailOtpValify, .VerifyEmailOtpValify, .GetFrontBackValify, .GetValifyData, .RegisterValify, .GetQuestionsValify, .SetAnswerValify, .SetPasswordValify, .LoginValify, .ResetPasswordValify, .CsoValify, .NtraValify, .GetKYCFieldValify, .GetKYCContractValify, .GetContractValify, .KnfrmGetContractDetails:
                 return .post
             case .GetDeviceConfigs, .urlIPAddress:
                 return .get
@@ -248,6 +265,12 @@ enum AuthRoute:APITargetType{
         case .GetKYCCibc(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .GetKYCDataById(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .UserAuthinticationAdvance(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .RegistrationsOTPReset(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .ChangesPassword(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .SendPhoneOtpValify(let requestModel):
                 .requestJsonEncodable(requestModel)

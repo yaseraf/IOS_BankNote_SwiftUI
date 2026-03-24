@@ -21,12 +21,32 @@ struct ConfirmOtpPopupScene: BaseSceneType {
                     viewModel.onDismiss()
                 }, onResendOtpTap: {
                     viewModel.startTimer()
-                }, onVerify: {
-                    viewModel.onVerify()
+                }, onVerify: { otp in
+                    viewModel.onVerify(otp: otp)
                 })
             })
-        })
+        }, showLoading: .constant(viewTypeAction.showLoading))
+        .onViewDidLoad(){
+            registrationsOTPResetAPI()
+        }
         .background(Color.clear)
         .ignoresSafeArea()
+    }
+    
+    private func registrationsOTPResetAPI() {
+        viewModel.$registrationsOTPResetAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("Loading..")
+
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
     }
 }

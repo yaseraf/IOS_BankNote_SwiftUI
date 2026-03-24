@@ -34,7 +34,8 @@ extension TradeCoordinator:TradeCoordinatorProtocol{
     func openTradeScene() {
         let useCase = TradeUseCase()
         let lookupsUseCase = LookupsUseCase()
-        let viewModel = TradeViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase)
+        let homeUseCase = HomeUseCase()
+        let viewModel = TradeViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase, homeUseCase: homeUseCase)
         let view = TradeScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -50,9 +51,9 @@ extension TradeCoordinator:TradeCoordinatorProtocol{
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func openWatchlistScene() {
+    func openWatchlistScene(watchlist: [GetMarketWatchByProfileIDUIModel], portfolioData: GetPortfolioUIModel) {
         let useCase = TradeUseCase()
-        let viewModel = WatchlistViewModel(coordinator: self, useCase: useCase)
+        let viewModel = WatchlistViewModel(coordinator: self, useCase: useCase, watchlist: watchlist, portfolioData: portfolioData)
         let view = WatchlistScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

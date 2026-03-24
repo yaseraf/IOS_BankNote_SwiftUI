@@ -73,6 +73,9 @@ struct QuestioneerContentView: View {
             onSignContract(contractId)
             if selectContractsItemPicker.isEmpty == false {
                 selectContractsItemPicker.removeFirst()
+                if selectContractsItemPicker.isEmpty == true {
+                    onEndContractSigning()
+                }
             } else {
                 onEndContractSigning()
             }

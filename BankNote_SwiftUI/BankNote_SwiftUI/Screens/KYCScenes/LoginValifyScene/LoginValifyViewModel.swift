@@ -82,8 +82,44 @@ extension LoginValifyViewModel {
                     
                     self?.coordinator.openQuestioneerScene()
                     
-//                    if success.
-                                        
+                    if success.internalErrorCode == "2010" {
+//                        Error 2010: Device mismatch (Phone OTP Required)
+//                        Call the below APIs:
+//                        SendPhoneOtpValify
+//                        VerifyPhoneOtpValify
+//                        LoginValify
+                        
+                        self?.coordinator.openSignUpScene(verificationType: .phone, verifyWithEmail: false)
+                        
+                    } else if success.internalErrorCode == "2011" {
+//                        Error 2011: Phone OTP failure (Email OTP Required)
+//                        Call the below APIs:
+//                        SendEmailOtpValify
+//                        VerifyEmailOtpValify
+//                        LoginValify
+                        
+                        self?.coordinator.openSignUpScene(verificationType: .email, verifyWithEmail: true)
+
+                    } else if success.internalErrorCode == "2012" {
+//                        Error 2012: Email OTP fallback (NID OCR required)
+//                        Call the below APIs:
+//                        GetFrontBackVilify (OCR)
+//                        LoginValify
+                        
+                        self?.coordinator.openScanIDFrontScene(type: .scanMode(.nationalId), savedImageOne: nil, stepIndexBind: 0, isFrontBind: true)
+
+                    } else if success.internalErrorCode == "2014" {
+//                        Error 2014: Geolocation too far (Liveness + Face Match required)
+//                        Call SDK:
+//                        Face Match
+//                        Liveness
+//                        LoginValify
+                        
+                        self?.coordinator.openLivenessCheckScene()
+
+                    }
+
+
                 case .failure(let failure):
                         debugPrint("LoginValify failed, \(failure)")
                         self?.loginValifyAPIResult = .onFailure(error: failure)

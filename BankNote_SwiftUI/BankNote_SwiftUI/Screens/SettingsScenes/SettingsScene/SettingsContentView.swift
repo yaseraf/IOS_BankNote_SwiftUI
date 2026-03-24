@@ -11,10 +11,13 @@ import SwiftUI
 struct SettingsContentView: View {
     
     @Binding var clientBankNotes: String
+    @Binding var userTier: GetTiersItemUIModel?
     
     var onBankNotesTap:()->Void
     var onTiersTap:()->Void
     var onBadgesTap:()->Void
+    var onStatementsTap:()->Void
+    var onInvoicesTap:()->Void
     var onTransactionsTap:()->Void
     var onHelpTap:()->Void
     var onLogoutTap:()->Void
@@ -54,23 +57,24 @@ struct SettingsContentView: View {
                     .fill(Color.gray)
                     .frame(width: 114, height: 114)
                     .overlay {
-                        Image("ic_johnDou")
+                        Image(systemName: "person.circle.fill")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 114, height: 114)
                     }
                 
                 HStack {
-                    Text("John Dou")
-                        .font(.cairoFont(.semiBold, size: 18))
+                    Text(AppUtility.shared.isRTL ? UserDefaultController().selectedUserAccount?.ClientNameA ?? "" : UserDefaultController().selectedUserAccount?.ClientNameE ?? "")
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .minimumScaleFactor(0.5)
                     
-                    Image("ic_badges")
+                    Image(tiers(code: userTier?.userCode ?? "")?.tierImage ?? "")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
                 }
                 
-                Text("Rookie")
+                Text(AppUtility.shared.isRTL ? userTier?.arabicDescription ?? "" : userTier?.englishDescription ?? "")
                     .font(.cairoFont(.light, size: 12))
             }
             
@@ -135,7 +139,7 @@ struct SettingsContentView: View {
                             Text("tiers".localized)
                                 .font(.cairoFont(.semiBold, size: 12))
                             
-                            Text("rookie".localized)
+                            Text(AppUtility.shared.isRTL ? userTier?.arabicDescription ?? "" : userTier?.englishDescription ?? "")
                                 .font(.cairoFont(.semiBold, size: 14))
                         }
                         .foregroundStyle(.black)
@@ -269,6 +273,9 @@ struct SettingsContentView: View {
                         .scaledToFit()
                         .frame(width: 22, height: 22)
                 }
+                .onTapGesture {
+                    onStatementsTap()
+                }
                 
                 Divider()
                 
@@ -288,6 +295,9 @@ struct SettingsContentView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
+                }
+                .onTapGesture {
+                    onInvoicesTap()
                 }
                 
                 Divider()
@@ -522,18 +532,18 @@ struct SettingsContentView: View {
     }
 }
 
-#Preview {
-    SettingsContentView(clientBankNotes: .constant(""), onBankNotesTap: {
-        
-    }, onTiersTap: {
-        
-    }, onBadgesTap: {
-        
-    }, onTransactionsTap: {
-        
-    }, onHelpTap: {
-        
-    }, onLogoutTap: {
-        
-    })
-}
+//#Preview {
+//    SettingsContentView(clientBankNotes: .constant(""), onBankNotesTap: {
+//        
+//    }, onTiersTap: {
+//        
+//    }, onBadgesTap: {
+//        
+//    }, onTransactionsTap: {
+//        
+//    }, onHelpTap: {
+//        
+//    }, onLogoutTap: {
+//        
+//    })
+//}

@@ -15,6 +15,9 @@ struct BankNotesContentView: View {
     
     @Binding var bankNotesData: GetBankNoteUIModel
     @Binding var clientBankNotes: String
+    @Binding var selectedPrice: String
+    @Binding var selectedQuantity: String
+    @Binding var viewController: UIViewController?
 
     var topUpItems: Binding<[RowItem]>
     var rewardsItems: Binding<[RowItem]>
@@ -23,6 +26,7 @@ struct BankNotesContentView: View {
     
     var onBackTap:()->Void
     var onTopUpTap:()->Void
+    var onBuyBankNotes:(GetBankNoteItemUIModel)->Void
     
     // An enum to represent our segmented control.
     enum Segment: String, CaseIterable {
@@ -107,11 +111,11 @@ struct BankNotesContentView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 12) {
                         if selectedSegment == .topUp {
-                            ForEach(bankNotesData.data ?? [], id: \.id) { item in
+                            ForEach(bankNotesData.data?.sorted {$0.code ?? "" < $1.code ?? ""} ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         } else {
-                            ForEach(bankNotesData.data ?? [], id: \.id) { item in
+                            ForEach(bankNotesData.data?.sorted {$0.code ?? "" < $1.code ?? ""} ?? [], id: \.id) { item in
                                 listItem(item: item)
                             }
                         }
@@ -126,12 +130,18 @@ struct BankNotesContentView: View {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
+                        showInsufficientFunds = false
                         withAnimation {
-                            showInsufficientFunds = false
                         }
                     }
                 insufficientFundsPopup
             }
+            
+            ViewControllerResolver { vc in
+                self.viewController = vc
+            }
+            .frame(width: 0, height: 0)
+
         }
     }
     
@@ -153,38 +163,56 @@ struct BankNotesContentView: View {
     
     // A reusable view for a list row.
     private func listItem(item: GetBankNoteItemUIModel) -> some View {
-        HStack {
-            Text(item.name ?? "")
-                .font(.cairoFont(.semiBold, size: 18))
-
-            Spacer()
-            
+        Button {
+            if (Double(UserDefaultController().userBalance ?? "") ?? 0) < Double(item.price ?? "0") ?? 0 {
+                showInsufficientFunds = true
+                withAnimation {
+                }
+            } else {
+                onBuyBankNotes(item)
+                selectedPrice = item.price ?? ""
+                selectedQuantity = item.bankNoteQty ?? ""
+            }
+        } label: {
             HStack {
-                Image("ic_newCoin")
+                VStack(alignment: .leading) {
+                    Text(item.name ?? "")
+                        .font(.cairoFont(.semiBold, size: 18))
+                    
+                    Text("\(item.price ?? "") EGP")
+                        .font(.cairoFont(.semiBold, size: 12))
+
+                }
+
+                Spacer()
+                
+                HStack {
+                    Image("ic_newCoin")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 25, height: 25)
+
+                    Text(item.bankNoteQty ?? "")
+                        .font(.cairoFont(.semiBold, size: 18))
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
+            .background(
+                Image("topUpBackground")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 25, height: 25)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 70)
+                    .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
+            )
+            .padding(.top, 2)
+            .padding(.horizontal, 16)
 
-                Text(item.price ?? "")
-                    .font(.cairoFont(.semiBold, size: 18))
-            }
         }
-        .padding(.horizontal, 34)
-        .padding(.vertical, 16)
-        .background(
-            Image("topUpBackground")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-                .frame(minHeight: 70)
-                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
-        )
-        .padding(.top, 2)
-        .onTapGesture {
-            withAnimation {
-                showInsufficientFunds = true
-            }
-        }
+        .buttonStyle(.plain)
+
+        
     }
     
     // The pop-up view for insufficient funds.
@@ -209,8 +237,8 @@ struct BankNotesContentView: View {
             )
 
             Button {
+                showInsufficientFunds = false
                 withAnimation {
-                    showInsufficientFunds = false
                 }
                 onTopUpTap()
             } label: {
@@ -230,10 +258,10 @@ struct BankNotesContentView: View {
     }
 }
 
-#Preview {
-    BankNotesContentView(bankNotesData: .constant(.initializer()), clientBankNotes: .constant("444"), topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
-        
-    }, onTopUpTap: {
-        
-    })
-}
+//#Preview {
+//    BankNotesContentView(bankNotesData: .constant(.initializer()), clientBankNotes: .constant("444"), topUpItems: .constant([RowItem(title: "100 EGP", value: "1000 BN", color: .purple, icon: nil), RowItem(title: "150 EGP", value: "1500 BN", color: .purple, icon: nil), RowItem(title: "200 EGP", value: "2000 BN", color: .purple, icon: nil), RowItem(title: "250 EGP", value: "2500 BN", color: .purple, icon: nil), RowItem(title: "300 EGP", value: "3000 BN", color: .purple, icon: nil),]), rewardsItems: .constant([RowItem(title: "1 Month Spotify", value: "1000 BN", color: Color("SpotifyGreen"), icon: "play.circle"), RowItem(title: "25% OFF Netflix", value: "1500 BN", color: Color("NetflixRed"), icon: "play.rectangle")]), onBackTap: {
+//        
+//    }, onTopUpTap: {
+//        
+//    })
+//}

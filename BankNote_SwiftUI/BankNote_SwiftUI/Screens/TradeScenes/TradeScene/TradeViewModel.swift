@@ -9,6 +9,7 @@ import Foundation
 class TradeViewModel: ObservableObject {
     private let coordinator: TradeCoordinatorProtocol
     private let useCase: TradeUseCaseProtocol
+    private let homeUseCase: HomeUseCaseProtocol
     private let lookupsUseCase: LookupsUseCaseProtocol
 
     @Published var newsData: [NewsUIModel]?
@@ -17,6 +18,7 @@ class TradeViewModel: ObservableObject {
     @Published var watchlistData:[GetAllProfilesLookupsByUserCodeUIModel]?
     @Published var list:[GetMarketWatchByProfileIDUIModel]?
     @Published var marketNews:[GetAllMarketNewsUIModel]?
+    @Published var portfolioData: GetPortfolioUIModel?
 
     @Published var getExchangeSummaryAPIResult:APIResultType<[GetExchangeSummaryUIModel]>?
     @Published var getLookupsAPIResult:APIResultType<[GetLookupsUIModel]>?
@@ -24,11 +26,13 @@ class TradeViewModel: ObservableObject {
     @Published var getMarketWatchByProfileIDAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
     @Published var getAllMarketNewsAPIResult:APIResultType<[GetAllMarketNewsUIModel]>?
     @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
+    @Published var getPortfolioAPIResult:APIResultType<GetPortfolioUIModel>?
 
-    init(coordinator: TradeCoordinatorProtocol, useCase: TradeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol) {
+    init(coordinator: TradeCoordinatorProtocol, useCase: TradeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol, homeUseCase: HomeUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
         self.lookupsUseCase = lookupsUseCase
+        self.homeUseCase = homeUseCase
         
         Connection_Hub.shared.exchangeSummaryDelegate = self
         Connection_Hub.shared.marketWatchDelegate = self
@@ -57,7 +61,7 @@ extension TradeViewModel {
 //        var data: [WatchlistUIModel] = []
 //        data.append(WatchlistUIModel(image: "ic_fawry", name: "FWRY", fullName: "Fawry For Banking Technology", change: 35, changePerc: 3.01))
 //        data.append(WatchlistUIModel(image: "ic_etel", name: "ETEL", fullName: "Telecom Egypt", change: 35, changePerc: -2.1))
-//        
+
 //        watchlistData = data
     }
     
@@ -77,9 +81,25 @@ extension TradeViewModel {
         coordinator.openIndexScene()
     }
     
-    func openWatchlistScene() {
-        coordinator.openWatchlistScene()
+    func openWatchlistScene(watchlist: [GetMarketWatchByProfileIDUIModel]) {
+        coordinator.openWatchlistScene(watchlist: watchlist, portfolioData: portfolioData ?? .initializer())
     }
+    
+    func openStockDetailsScene(symbol: String, marketType: String) {
+        
+        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == UserDefaultController().selectedSymbol ?? ""}).first ?? .testUIModel()
+
+        let portfolioSymbol = portfolioData?.portfolioes.filter({$0.symbol == symbol}).first
+        
+        UserDefaultController().selectedSymbol = symbol
+        UserDefaultController().selectedSymbolID = selectedStock.symbolID
+        UserDefaultController().selectedSymbolType = marketType
+        UserDefaultController().selectedCustodian = portfolioSymbol?.custodianID ?? "-1"
+        UserDefaultController().CUSTODYID = portfolioSymbol?.custodianID ?? "-1"
+        UserDefaultController().selectedCustodianName = AppUtility.shared.isRTL ? portfolioSymbol?.custodianA ?? "" : portfolioSymbol?.custodianE ?? ""
+        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().openStockDetailsScene(symbol: symbol, marketType: marketType)
+    }
+
     
     func openNewsScene() {
         coordinator.openNewsScene()
@@ -115,34 +135,37 @@ extension TradeViewModel {
         }
     }
     
-//    func GetAllProfilesLookupsByUserCodeAPI(success:Bool) {
-//        let requestModel = GetAllProfilesLookupsByUserCodeRequestModel()
-//        
-//        getAllProfilesLookupsByUserCodeAPIResult = .onLoading(show: true)
-//        
-//        Task.init {
-//            await useCase.GetAllProfilesLookupsByUserCode(requestModel: requestModel) {[weak self] result in
-//
-//                switch result {
-//                case .success(let success):
-//                    self?.getAllProfilesLookupsByUserCodeAPIResult = .onSuccess(response: success)
-//                    debugPrint("Watchlist success")
-//                    
-//                    self?.watchlistData = success.reversed()
-//                    
-//                case .failure(let failure):
-//                        self?.getAllProfilesLookupsByUserCodeAPIResult = .onFailure(error: failure)
-//                    debugPrint("Watchlist failure: \(failure)")
-//                }
-//            }
-//        }
-//    }
+    func GetAllProfilesLookupsByUserCodeAPI(success:Bool) {
+        let requestModel = GetAllProfilesLookupsByUserCodeRequestModel()
+        
+        getAllProfilesLookupsByUserCodeAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await useCase.GetAllProfilesLookupsByUserCode(requestModel: requestModel) {[weak self] result in
+
+                switch result {
+                case .success(let success):
+                    self?.getAllProfilesLookupsByUserCodeAPIResult = .onSuccess(response: success)
+                    debugPrint("Watchlist success")
+                    
+//                    self?.watchlistData = success
+                    UserDefaultController().profileID = success.filter({$0.isDefault?.lowercased() == "y"}).first?.profileID ?? ""
+                    
+                    self?.GetMarketWatchByProfileIDAPI(success: true)
+                    
+                case .failure(let failure):
+                        self?.getAllProfilesLookupsByUserCodeAPIResult = .onFailure(error: failure)
+                    debugPrint("Watchlist failure: \(failure)")
+                }
+            }
+        }
+    }
     
     func GetMarketWatchByProfileIDAPI(success:Bool) {
         let requestModel = GetMarketWatchByProfileIDRequestModel()
         getMarketWatchByProfileIDAPIResult = .onLoading(show: true)
         
-        UserDefaultController().profileID = "2"
+//        UserDefaultController().profileID = "2"
         
         Task.init {
             await useCase.GetMarketWatchByProfileID(requestModel: requestModel) {[weak self] result in
@@ -207,6 +230,36 @@ extension TradeViewModel {
             }
         }
     }
+    
+    func callGetPortfolioAPI(success: Bool) {
+                
+        let requestModel = GetPortfolioRequestModel()
+        
+        getPortfolioAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await homeUseCase.getPortfolio(requestModel: requestModel) {[weak self] result in
+                
+                self?.getPortfolioAPIResult = .onLoading(show: false)
+                
+                switch result {
+                case .success(let success):
+                    
+                    debugPrint("Success to get user portfolio")
+                        self?.getPortfolioAPIResult = .onSuccess(response: success)
+                    
+                    self?.portfolioData = success
+                    
+                    UserDefaultController().userBalance = success.accountSummaries.balance ?? ""
+                    
+                case .failure(let failure):
+                        debugPrint("Failed to get user portfolio")
+                        self?.getPortfolioAPIResult = .onFailure(error: failure)
+                }
+            }
+        }
+    }
+
 }
 
 // MARK: SignalR
@@ -265,6 +318,7 @@ extension TradeViewModel {
             }
         }
     }
+    
 }
 
 

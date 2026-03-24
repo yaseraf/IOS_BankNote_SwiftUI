@@ -21,9 +21,10 @@ enum OrderPriceType {
 
 struct OrderEntryContentView: View {
     @State private var selectedTab: TradingType = .cash
+    var isRiskManagementLoading:Binding<Bool>
     var cashInputValue:Binding<String>
     var stocksInputValue:Binding<String>
-    @State private var availableAmount: Int = 1000
+    var availableAmount:Binding<String?>
     var selectedOrderPriceType:Binding<OrderPriceType>
     var newMarketSymbol:Binding<GetALLMarketWatchBySymbolUIModel?>
     var orderDetails:Binding<OrderListUIModel?>
@@ -33,6 +34,7 @@ struct OrderEntryContentView: View {
     var flagMessage:Binding<String>
     var isEditOrder:Binding<Bool>
     
+    var onMaxTap: () -> Void
     var onContinueTap: () -> Void
     var onValuesChange:() -> Void
     var onBackTap: () -> Void
@@ -304,7 +306,6 @@ struct OrderEntryContentView: View {
             .background(Color(hex: "#DDDDDD"))
             .clipShape(Capsule())
 
-
             VStack(spacing: 0) {
                 HStack(alignment: .firstTextBaseline, spacing:6) {
                     Text(selectedTab == .cash ? "egp".localized : "stocks".localized)
@@ -319,22 +320,27 @@ struct OrderEntryContentView: View {
                     .foregroundStyle(Color(hex: "#AA1A1A"))
 
                 
-                Button(action: { handleButtonTap("MAX") }) {
-                    Text("MAX")
-                        .font(.cairoFont(.semiBold, size: 18))
-                        .foregroundStyle(.black)
-                        .padding(.horizontal, 11)
-                        .background(Color(hex: "#DDDDDD"))
-                        .clipShape(RoundedRectangle(cornerRadius: 99))
+                if selectedTab == .stocks {
+                    Button(action: {
+//                        handleButtonTap("MAX")
+                        onMaxTap()
+                    }) {
+                        Text("MAX")
+                            .font(.cairoFont(.semiBold, size: 18))
+                            .foregroundStyle(.black)
+                            .padding(.horizontal, 11)
+                            .background(Color(hex: "#DDDDDD"))
+                            .clipShape(RoundedRectangle(cornerRadius: 99))
+                    }
+                    .padding(.bottom, 10)
                 }
-                .padding(.bottom, 10)
                 
                 Divider()
                 
                 VStack {
                     Text("available_amount".localized)
                         .font(.cairoFont(.semiBold, size: 12))
-                    Text("\("egp".localized) \(availableAmount)")
+                    Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(availableAmount.wrappedValue ?? "") ?? 0))")
                         .font(.cairoFont(.semiBold, size: 18))
                 }
                 .padding(.top, 10)
@@ -364,7 +370,7 @@ struct OrderEntryContentView: View {
                 }
             } else if character == "MAX" {
                 // Set the input to the maximum available amount
-                cashInputValue.wrappedValue = String(availableAmount)
+                cashInputValue.wrappedValue = availableAmount.wrappedValue ?? ""
             } else if cashInputValue.wrappedValue == "0" && character != "." {
                 // Replace the leading "0" with the new digit, unless it's a decimal point
                 cashInputValue.wrappedValue = character
@@ -386,7 +392,7 @@ struct OrderEntryContentView: View {
                 }
             } else if character == "MAX" {
                 // Set the input to the maximum available amount
-                stocksInputValue.wrappedValue = String(availableAmount)
+                stocksInputValue.wrappedValue = availableAmount.wrappedValue ?? ""
             } else if stocksInputValue.wrappedValue == "0" && character != "." {
                 // Replace the leading "0" with the new digit, unless it's a decimal point
                 stocksInputValue.wrappedValue = character
@@ -448,7 +454,16 @@ struct OrderEntryContentView: View {
     }
     
     private func checkEnabledBtn() -> Bool {
-        if Double(stocksInputValue.wrappedValue) ?? 0 > 0 && ((Double(cashInputValue.wrappedValue) ?? 0 > 0 && selectedOrderPriceType.wrappedValue == .limit) || (selectedOrderPriceType.wrappedValue == .market)) && flagMessage.wrappedValue.isEmpty {
+        if Double(stocksInputValue.wrappedValue) ?? 0 > 0 &&
+            (
+                (
+                    Double(cashInputValue.wrappedValue) ?? 0 > 0 &&
+                    selectedOrderPriceType.wrappedValue == .limit
+                ) ||
+                selectedOrderPriceType.wrappedValue == .market
+            ) &&
+            flagMessage.wrappedValue.isEmpty &&
+            isRiskManagementLoading.wrappedValue == false {
             return true
         } else {
             return false
@@ -456,12 +471,12 @@ struct OrderEntryContentView: View {
     }
 }
 
-#Preview {
-    OrderEntryContentView(cashInputValue: .constant(""), stocksInputValue: .constant(""), selectedOrderPriceType: .constant(.limit), newMarketSymbol: .constant(.initializer()), orderDetails: .constant(.initializer()), netChange: .constant(""), netChangePerc: .constant(""), lastTradePrice: .constant(""), flagMessage: .constant(""), isEditOrder: .constant(false), onContinueTap: {
-        
-    }, onValuesChange: {
-        
-    }, onBackTap: {
-        
-    })
-}
+//#Preview {
+//    OrderEntryContentView(cashInputValue: .constant(""), stocksInputValue: .constant(""), availableAmount: .constant(""), selectedOrderPriceType: .constant(.limit), newMarketSymbol: .constant(.initializer()), orderDetails: .constant(.initializer()), netChange: .constant(""), netChangePerc: .constant(""), lastTradePrice: .constant(""), flagMessage: .constant(""), isEditOrder: .constant(false), onContinueTap: {
+//        
+//    }, onValuesChange: {
+//        
+//    }, onBackTap: {
+//        
+//    })
+//}

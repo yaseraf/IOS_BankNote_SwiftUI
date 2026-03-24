@@ -8,9 +8,15 @@
 import Foundation
 protocol AuthUseCaseProtocol{
     func urlIPAddress(requestModel: String, completion: @escaping(Result<UrlIPAddressResponseModel, NetworkError>) -> Void) async
-    func OTPMap(requestModel: OTPRequestModel , completion: @escaping(Result<otpUIModel, NetworkError>) -> Void) async
+    func OTPMap(requestModel: OTPRequestModel , completion: @escaping(Result<otpUIModel, NetworkError>, [HTTPCookie]?) -> Void) async
     func loginMap(requestModel: LoginRequestModel , completion: @escaping(Result<LoginUIModel, NetworkError>, [HTTPCookie]?) -> Void) async
     func GetKYCCibc(requestModel: GetKYCCibcRequestModel, completion: @escaping(Result<GetKYCCibcUIModel, NetworkError>) -> Void) async
+    
+    // MARK: Forget Password
+    func UserAuthinticationAdvance(requestModel: UserAuthenticationAdvanceRequestModel, completion: @escaping(Result<UserAuthenticationAdvanceUIModel, NetworkError>) -> Void) async
+    func RegistrationsOTPReset(requestModel: RegistrationsOTPResetRequestModel, completion: @escaping(Result<RegistrationsOTPResetUIModel, NetworkError>, [HTTPCookie]?) -> Void) async
+    func ChangesPassword(requestModel: ChangePasswordRequestModel, completion: @escaping(Result<changePasswordUIModel, NetworkError>) -> Void) async
+
 }
     
     class AuthUseCase {
@@ -38,18 +44,20 @@ extension AuthUseCase: AuthUseCaseProtocol {
         }
     }
     
-    func OTPMap(requestModel: OTPRequestModel, completion: @escaping (Result<otpUIModel, NetworkError>) -> Void) async {
+    func OTPMap(requestModel: OTPRequestModel, completion: @escaping (Result<otpUIModel, NetworkError>, [HTTPCookie]?) -> Void) async {
         let route = AuthRoute.OTP(requestModel: requestModel)
         await repository.OTP(route: route) { result in
             switch result {
             case .success(let responseModel):
                 
+                let cookies = HTTPCookieStorage.shared.cookies(for: route.baseURL)
+
                 let uiModel = otpUIModel.mapToUIModel(responseModel)
                 
-                completion(.success(uiModel))
-                
+                completion(.success(uiModel), cookies)
+
             case .failure(let failure):
-                completion(.failure(failure))
+                completion(.failure(failure), [])
             }
         }
     }
@@ -84,5 +92,46 @@ extension AuthUseCase: AuthUseCaseProtocol {
             }
         }
     }
-
+    
+    // MARK: Forget Password
+    func UserAuthinticationAdvance(requestModel: UserAuthenticationAdvanceRequestModel, completion: @escaping (Result<UserAuthenticationAdvanceUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.UserAuthinticationAdvance(requestModel: requestModel)
+        await repository.UserAuthinticationAdvance(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = UserAuthenticationAdvanceUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func RegistrationsOTPReset(requestModel: RegistrationsOTPResetRequestModel, completion: @escaping (Result<RegistrationsOTPResetUIModel, NetworkError>, [HTTPCookie]?) -> Void) async {
+        let route = AuthRoute.RegistrationsOTPReset(requestModel: requestModel)
+        await repository.RegistrationsOTPReset(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let cookies = HTTPCookieStorage.shared.cookies(for: route.baseURL)
+                let uiModel = RegistrationsOTPResetUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel), cookies)
+            case .failure(let failure):
+                completion(.failure(failure), [])
+            }
+        }
+    }
+    
+    func ChangesPassword(requestModel: ChangePasswordRequestModel, completion: @escaping (Result<changePasswordUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.ChangesPassword(requestModel: requestModel)
+        await repository.ChangesPassword(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = changePasswordUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
 }

@@ -658,7 +658,7 @@ enum  ComplaintSuggestionSceneSourceType{
 
 }
 
-enum   TermsAndPrivacySourceType{
+enum TermsAndPrivacySourceType{
     case  privacyPolicy
     case termsAndConditions
 
@@ -673,4 +673,330 @@ enum   TermsAndPrivacySourceType{
     }
 
 
+}
+
+enum tiers {
+    case rookie
+    case casual
+    case pro
+    case rollingStar
+    case tycoon
+    
+    init?(code: String) {
+        switch code {
+            case "1": self = .rookie
+            case "2": self = .casual
+            case "3": self = .pro
+            case "4": self = .rollingStar
+            case "5": self = .tycoon
+            default: return nil
+        }
+    }
+    
+    var tierImage: String {
+        switch self {
+            case .rookie:
+                return "ic_rookie"
+            case .casual:
+                return "ic_casual"
+            case .pro:
+                return "ic_pro"
+            case .rollingStar:
+                return "ic_rollingStar"
+            case .tycoon:
+                return "ic_tycoon"
+        }
+    }
+    
+    var tierCode: String {
+        switch self {
+            case .rookie:
+                return "1"
+            case .casual:
+                return "2"
+            case .pro:
+                return "3"
+            case .rollingStar:
+                return "4"
+            case .tycoon:
+                return "5"
+        }
+    }
+}
+
+//enum badges {
+//    
+//    case hustler
+//    case socialButterfly
+//    case baller
+//    case boujee
+//    case buzzer
+//    case hunter
+//    case bouncy
+//    case smith
+//    case wolf
+//    case gambit
+//    case pirate
+//    
+//    init?(code: String, mainBadgeCode: String, subBadgeCode: String) {
+//        
+//        let keys = mainBadgeCode.split(separator: ",").map { String($0)}
+//        let values = subBadgeCode.split(separator: ",").map { String($0)}
+//        
+//        let badgesDictionary = Dictionary(uniqueKeysWithValues: zip(keys, values.prefix(keys.count)))
+//        
+//        let badgeCategory = badgesDictionary.filter({$0.key == code}).first?.value
+//
+//        switch code {
+//            case "1": self = .hustler
+//            case "2": self = .socialButterfly
+//            case "3": self = .baller
+//            case "4": self = .boujee
+//            case "5": self = .buzzer
+//            case "6": self = .hunter
+//            case "7": self = .bouncy
+//            case "8": self = .smith
+//            case "9": self = .wolf
+//            case "10": self = .gambit
+//            case "11": self = .pirate
+//            default: return nil
+//        }
+//    }
+//    
+//    func categorizeBadge(code: String, mainBadgeCode: String, subBadgeCode: String) -> badges {
+//        // if sub badge == 1 this is bronze
+//        // if sub badge == 2 this is silver
+//        // if sub badge == 3 this is gold
+//        // if sub badge == 4 this is plat
+//        // if sub badge == 5 this is diamond
+//        
+//        
+//    }
+//    
+//    var badgeImage: String {
+//        switch self {
+//            case .hustler: return "ic_hustler_disabled"
+//            case .socialButterfly: return "ic_socialButterfly_disabled"
+//            case .baller: return "ic_baller_disabled"
+//            case .boujee: return "ic_boujee_disabled"
+//            case .buzzer: return "ic_buzzer_disabled"
+//            case .hunter: return "ic_hunter_disabled"
+//            case .bouncy: return "ic_bouncy_disabled"
+//            case .smith: return "ic_smith_disabled"
+//            case .wolf: return "ic_wolf_disabled"
+//            case .gambit: return "ic_gambit_disabled"
+//            case .pirate: return "ic_pirate_disabled"
+//        }
+//    }
+//    
+//    var badgeImagesBronze: String {
+//        switch self {
+//            case .hustler: return "ic_hustler_bronze"
+//            case .socialButterfly: return "ic_socialButterfly_bronze"
+//            case .baller: return "ic_baller_bronze"
+//            case .boujee: return "ic_boujee_bronze"
+//            case .buzzer: return "ic_buzzer_bronze"
+//            case .hunter: return "ic_hunter_bronze"
+//            case .bouncy: return "ic_bouncy_bronze"
+//            case .smith: return "ic_smith_bronze"
+//            case .wolf: return "ic_wolf_bronze"
+//            case .gambit: return "ic_gambit_bronze"
+//            case .pirate: return "ic_pirate_bronze"
+//        }
+//    }
+//    
+//    var badgeImagesSilver: String {
+//        switch self {
+//            case .hustler: return "ic_hustler_silver"
+//            case .socialButterfly: return "ic_socialButterfly_silver"
+//            case .baller: return "ic_baller_silver"
+//            case .boujee: return "ic_boujee_silver"
+//            case .buzzer: return "ic_buzzer_silver"
+//            case .hunter: return "ic_hunter_silver"
+//            case .bouncy: return "ic_bouncy_silver"
+//            case .smith: return "ic_smith_silver"
+//            case .wolf: return "ic_wolf_silver"
+//            case .gambit: return "ic_gambit_silver"
+//            case .pirate: return "ic_pirate_silver"
+//        }
+//    }
+//    
+//    var badgeImagesGold: String {
+//        switch self {
+//            case .hustler: return "ic_hustler_gold"
+//            case .socialButterfly: return "ic_socialButterfly_gold"
+//            case .baller: return "ic_baller_gold"
+//            case .boujee: return "ic_boujee_gold"
+//            case .buzzer: return "ic_buzzer_gold"
+//            case .hunter: return "ic_hunter_gold"
+//            case .bouncy: return "ic_bouncy_gold"
+//            case .smith: return "ic_smith_gold"
+//            case .wolf: return "ic_wolf_gold"
+//            case .gambit: return "ic_gambit_gold"
+//            case .pirate: return "ic_pirate_gold"
+//        }
+//    }
+//
+//    var badgeImagesPlat: String {
+//        switch self {
+//            case .hustler: return "ic_hustler_plat"
+//            case .socialButterfly: return "ic_socialButterfly_plat"
+//            case .baller: return "ic_baller_plat"
+//            case .boujee: return "ic_boujee_plat"
+//            case .buzzer: return "ic_buzzer_plat"
+//            case .hunter: return "ic_hunter_plat"
+//            case .bouncy: return "ic_bouncy_plat"
+//            case .smith: return "ic_smith_plat"
+//            case .wolf: return "ic_wolf_plat"
+//            case .gambit: return "ic_gambit_plat"
+//            case .pirate: return "ic_pirate_plat"
+//        }
+//    }
+//
+//    var badgeImagesDiamond: String {
+//        switch self {
+//            case .hustler: return "ic_hustler_diamond"
+//            case .socialButterfly: return "ic_socialButterfly_diamond"
+//            case .baller: return "ic_baller_diamond"
+//            case .boujee: return "ic_boujee_diamond"
+//            case .buzzer: return "ic_buzzer_diamond"
+//            case .hunter: return "ic_hunter_diamond"
+//            case .bouncy: return "ic_bouncy_diamond"
+//            case .smith: return "ic_smith_diamond"
+//            case .wolf: return "ic_wolf_diamond"
+//            case .gambit: return "ic_gambit_diamond"
+//            case .pirate: return "ic_pirate_diamond"
+//        }
+//    }
+//
+//
+//}
+//
+//enum badgeCategory {
+//    case bronze
+//    case silver
+//    case gold
+//    case plat
+//    case diamond
+//    
+//    init?(subBadgeCode: String) {
+//        
+//        switch subBadgeCode {
+//            case "1": self = .bronze
+//            case "2": self = .silver
+//            case "3": self = .gold
+//            case "4": self = .plat
+//            case "5": self = .diamond
+//            default: return nil
+//        }
+//    }
+//}
+
+
+enum Badge: String, CaseIterable {
+    case hustler = "1"
+    case socialButterfly = "2"
+    case baller = "3"
+    case boujee = "4"
+    case buzzer = "5"
+    case hunter = "6"
+    case bouncy = "7"
+    case smith = "8"
+    case wolf = "9"
+    case gambit = "10"
+    case pirate = "11"
+    
+    func getSubBadgeCode(code: String) -> String {
+        let keys = UserDefaultController().mainBadgeCodes?.split(separator: ",").map { String($0) } ?? []
+        let values = UserDefaultController().subBadgeCodes?.split(separator: ",").map { String($0) } ?? []
+        
+        let dict = Dictionary(uniqueKeysWithValues: zip(keys, values))
+        
+        return dict.filter{$0.key == code}.first?.value ?? ""
+    }
+
+    func image(for category: BadgeCategory?) -> String {
+        guard let category = category else {
+            return "ic_\(self)_disabled"
+        }
+        
+        switch category {
+        case .bronze: return "ic_\(self)_bronze"
+        case .silver: return "ic_\(self)_silver"
+        case .gold: return "ic_\(self)_gold"
+        case .plat: return "ic_\(self)_plat"
+        case .diamond: return "ic_\(self)_diamond"
+        }
+    }
+    
+    func name(for category: BadgeCategory?) -> String {
+        guard let category = category else {
+            return "locked".localized
+        }
+        
+        switch category {
+        case .bronze: return "bronze".localized
+        case .silver: return "silver".localized
+        case .gold: return "gold".localized
+        case .plat: return "plat".localized
+        case .diamond: return "diamond".localized
+        }
+
+    }
+    
+    func nextImage(for category: BadgeCategory?) -> String {
+        guard let category = category else {
+            return "ic_\(self)_bronze"
+        }
+        
+        switch category {
+        case .bronze: return "ic_\(self)_silver"
+        case .silver: return "ic_\(self)_gold"
+        case .gold: return "ic_\(self)_plat"
+        case .plat: return "ic_\(self)_diamond"
+        case .diamond: return "ic_\(self)_diamond"
+        }
+    }
+    
+    func nextName(for category: BadgeCategory?) -> String {
+        guard let category = category else {
+            return "bronze".localized
+        }
+        
+        switch category {
+        case .bronze: return "silver".localized
+        case .silver: return "gold".localized
+        case .gold: return "plat".localized
+        case .plat: return "diamond".localized
+        case .diamond: return "diamond".localized
+        }
+
+    }
+
+
+}
+
+enum BadgeCategory {
+    case bronze
+    case silver
+    case gold
+    case plat
+    case diamond
+    
+    init?(subBadgeCode:String) {
+        switch subBadgeCode {
+            case "1": self = .bronze
+            case "2": self = .silver
+            case "3": self = .gold
+            case "4": self = .plat
+            case "5": self = .diamond
+            default: return nil
+        }
+    }
+}
+
+
+enum NotificationsTabs{
+    case news
+    case orders
 }

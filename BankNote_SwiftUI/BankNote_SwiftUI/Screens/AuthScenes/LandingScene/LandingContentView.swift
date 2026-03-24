@@ -162,11 +162,13 @@ struct LandingContentView: View {
                         SecureField("password".localized, text: $password)
                             .font(.cairoFont(.semiBold, size: 12))
                             .foregroundStyle(Color(hex: "#1C1C1C"))
-
+                            .textInputAutocapitalization(.never)
+                        
                     } else {
                         TextField("password".localized, text: $password)
                             .font(.cairoFont(.semiBold, size: 12))
                             .foregroundStyle(Color(hex: "#1C1C1C"))
+                            .textInputAutocapitalization(.never)
 
                     }
                     

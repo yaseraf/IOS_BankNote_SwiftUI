@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 
 struct HeaderView: View {
+    
+    @StateObject private var userDefaultController = UserDefaultController.instance
+
     var body: some View {
         HStack {
             VStack(spacing: 0) {
@@ -24,15 +27,29 @@ struct HeaderView: View {
             
             Spacer()
             
-            Circle()
-                .fill(.white)
-                .frame(width: 40, height: 40)
-                .overlay(
-                    Image("ic_notification")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                )
+            Image("ic_globe")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+//                .foregroundStyle(userDefaultController.marketStatusCode == "0003" ? Color.colorPositive : Color.colorNegative)
+                .foregroundStyle(userDefaultController.isSignalRConnected ?? false ? Color.colorPositive : Color.colorNegative)
+                .frame(width: 30, height: 30)
+
+            Button {
+                SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.openNotificationsScreen()
+            } label: {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 40, height: 40)
+                    .overlay(
+                        Image("ic_notification")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                    )
+            }
+
+            
         }
         .padding(.horizontal, 18)
     }

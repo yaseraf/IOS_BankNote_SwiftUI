@@ -13,6 +13,7 @@ struct WatchlistContentView: View {
     
     var watchlistData: Binding<[GetMarketWatchByProfileIDUIModel]?>
 
+    var onWatchlistTap:(GetMarketWatchByProfileIDUIModel)->Void
     var onBackTap:()->Void
     
     var body: some View {
@@ -65,8 +66,14 @@ struct WatchlistContentView: View {
     private var watchlistView: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 12) {
-                ForEach(Array((watchlistData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in
-                    WatchlistAllCell(watchlistData: element)
+                ForEach(watchlistData.wrappedValue ?? [], id: \.id) { item in
+                    Button {
+                        onWatchlistTap(item)
+                    } label: {
+                        WatchlistAllCell(watchlistData: item)
+                    }
+                    .buttonStyle(.plain)
+
                 }
             }
         }
@@ -81,7 +88,7 @@ struct WatchlistAllCell: View {
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(watchlistData.symbol).png")) { phase in
+                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(watchlistData.symbol ?? "").png")) { phase in
                     switch phase {
                     case .success(let image):
                         image
@@ -113,9 +120,12 @@ struct WatchlistAllCell: View {
                 }
 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
+                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameArabic ?? "" : watchlistData.symbolNameEnglish ?? "")")
                         .font(.cairoFont(.semiBold, size: 14))
-                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(2)
+
+                    Text("\(watchlistData.symbol ?? "")")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
             }

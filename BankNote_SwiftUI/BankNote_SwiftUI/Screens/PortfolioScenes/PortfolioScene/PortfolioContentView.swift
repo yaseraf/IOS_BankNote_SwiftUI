@@ -252,11 +252,12 @@ struct PieChartView: View {
                             .multilineTextAlignment(.center)
                         if showPercentages {
                             let pct = total > 0 ? selected.value / total * 100 : 0
-                            Text(String(format: "%.1f%%", pct))
+//                            Text(String(format: "%.1f%%", pct))
+                            Text(String(format: "%.2f%%", pct))
                                 .font(.cairoFont(.semiBold, size: 14))
                                 .foregroundColor(.secondary)
                         } else {
-                            Text("\(Int(selected.value))")
+                            Text("\(Double(selected.value))")
                                 .font(.cairoFont(.semiBold, size: 14))
                                 .foregroundColor(.secondary)
                         }
@@ -276,12 +277,13 @@ struct PieChartView: View {
                     ForEach(angles(), id: \.data.id) { item in
                         if showPercentages {
                             let mid = (item.start + item.end) / 2
-                            let radius = size * 0.42
+                            let radius = size * 0.3
                             let angleRad = (mid - 90) * .pi / 180
                             let x = center.x + cos(angleRad) * radius
                             let y = center.y + sin(angleRad) * radius
                             let pct = total > 0 ? item.data.value / total * 100 : 0
-                            Text(String(format: "%.0f%%", pct))
+//                            Text(String(format: "%.0f%%", pct))
+                            Text(String(format: "%.2f%%", pct))
                                 .font(.cairoFont(.semiBold, size: 14))
                                 .bold()
                                 .position(x: x, y: y)
@@ -318,7 +320,7 @@ struct PieChartView: View {
                         
                         ZStack {
 //                            Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
-                            Text("4")
+                            Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
                                 .font(.cairoFont(.semiBold, size: 12))
                         }
                         .padding(.horizontal, 4)

@@ -15,30 +15,39 @@ struct TopUpContentView: View {
     @State var totalAmount: Double = 0
     
     var transactionType: Binding<TransactionTypes?>
+    @Binding var viewController: UIViewController?
+
     
-    
-    var onContinueTap:()->Void
+    var onContinueTap:(Double)->Void
     var onBackTap:()->Void
     
     var body: some View {
-        VStack {
-            HeaderView()
-            
-            dismissView
-            
-            amountView
-            
-            if transactionType.wrappedValue == .topUp {
-                serviceFeesView
+        ZStack {
+            VStack {
+                HeaderView()
                 
-                totalAmountView
-            } else {
+                dismissView
+                
+                amountView
+                
+                if transactionType.wrappedValue == .topUp {
+                    serviceFeesView
+                    
+                    totalAmountView
+                } else {
+                    Spacer()
+                }
+
+                numberPadView
+                
                 Spacer()
             }
-
-            numberPadView
             
-            Spacer()
+            ViewControllerResolver { vc in
+                self.viewController = vc
+            }
+            .frame(width: 0, height: 0)
+
         }
     }
         
@@ -61,7 +70,7 @@ struct TopUpContentView: View {
     
     private var amountView: some View {
         VStack(spacing: 0) {
-            Text(transactionType.wrappedValue == .topUp ? "top_up_balance".localized : "balance".localized)
+            Text(transactionType.wrappedValue == .topUp ? "top_up_balance".localized : "withdrawal".localized)
                 .font(.cairoFont(.bold, size: 32))
                 .foregroundStyle(.black)
             
@@ -301,7 +310,7 @@ struct TopUpContentView: View {
             }
             
             Button {
-                onContinueTap()
+                onContinueTap(Double(topUpBalance) ?? 0)
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -316,10 +325,10 @@ struct TopUpContentView: View {
     }
 }
 
-#Preview {
-    TopUpContentView(transactionType: .constant(.withdrawal), onContinueTap: {
-        
-    }, onBackTap: {
-        
-    })
-}
+//#Preview {
+//    TopUpContentView(transactionType: .constant(.withdrawal), onContinueTap: {
+//        
+//    }, onBackTap: {
+//        
+//    })
+//}

@@ -132,8 +132,19 @@ extension HomeCoordinator:HomeCoordinatorProtocol{
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func openNotificationsScreen() {
+        let lookupsUseCase = LookupsUseCase()
+        let viewModel = NotificationsViewModel(coordinator: self, tabSelect: .orders, lookupsUseCase: lookupsUseCase)
+        let view = NotificationsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    
     func openTopUpScene(transactionType: TransactionTypes) {
-        let viewModel = TopUpViewModel(coordinator: self, transactionTypes: transactionType)
+        let homeUseCase = HomeUseCase()
+        let viewModel = TopUpViewModel(coordinator: self, transactionTypes: transactionType, homeUseCase: homeUseCase)
         let view = TopUpScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -143,6 +154,15 @@ extension HomeCoordinator:HomeCoordinatorProtocol{
     func openPaymentMethodScene(transactionType: TransactionTypes) {
         let viewModel = PaymentMethodViewModel(coordinator: self, transactionType: transactionType)
         let view = PaymentMethodScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func openTransactionHistoryScene() {
+        let useCase = HomeUseCase()
+        let viewModel = TransactionHistoryViewModel(coordinator: self, useCase: useCase)
+        let view = TransactionHistoryScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)

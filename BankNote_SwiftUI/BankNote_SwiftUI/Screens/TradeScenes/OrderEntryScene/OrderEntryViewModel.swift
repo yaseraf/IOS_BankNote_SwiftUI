@@ -25,13 +25,22 @@ class OrderEntryViewModel: ObservableObject {
     @Published var newMarketSymbol:GetALLMarketWatchBySymbolUIModel?
     @Published var orderDetails: OrderListUIModel?
     @Published var riskManagementData: GetRiskManagementUIModel?
+    @Published var availableAmount: String?
     @Published var isEditOrder: Bool = false
     @Published var flagMessage: String = ""
+    @Published var isRiskManagementLoading: Bool = false
+    @Published var portfolioData: GetPortfolioUIModel?
+
+    @Published var arrayOfQuantities: [ArrayOfQuantities] = []
+    struct ArrayOfQuantities {
+        var quantity: Double
+    }
 
     @Published var getAllMarketWatchBySymbolAPIResult:APIResultType<GetALLMarketWatchBySymbolUIModel>?
     @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
     @Published var getCompaniesLookupsAPIResult:APIResultType<[GetCompaniesLookupsUIModel]>?
     @Published var getRiskManagementAPIResult:APIResultType<GetRiskManagementUIModel>?
+    @Published var getPortfolioAPIResult:APIResultType<GetPortfolioUIModel>?
 
     init(coordinator: OrdersCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol, orderDetails: OrderListUIModel, placeOrderType: PlaceOrderType, isEditOrder: Bool) {
         self.coordinator = coordinator
@@ -41,6 +50,9 @@ class OrderEntryViewModel: ObservableObject {
         self.placeOrderType = placeOrderType
         self.isEditOrder = isEditOrder
         
+        Connection_Hub.shared.marketWatchDelegate = self
+        Connection_Hub.shared.notifyOrderDelegate = self
+
         if isEditOrder {
             shares = orderDetails.TotalVolume ?? ""
             price = orderDetails.Price ?? ""
@@ -73,6 +85,7 @@ extension OrderEntryViewModel {
             AccountNameE: UserDefaultController().selectedUserAccount?.ClientNameE ?? "",
             AvgExePrice: "",
             ClientID: KeyChainController.shared().clientID ?? "",
+//            ClientID: "-1",
             CompanyShortNameA: "",
             CompanyShortNameE: "",
             EntryDate: isEditOrder ? orderDetails?.EntryDate ?? "" : Date().toString(dateFormat: .ddMMyyyyHHmmss),
@@ -108,6 +121,7 @@ extension OrderEntryViewModel {
             SmartOrderID: "",
             Sett_type: "2",
             CustodianID: UserDefaultController().CUSTODYID ?? "",
+//            CustodianID: "-1",
             cur_Code: "",
             TrxnID: isEditOrder ? orderDetails?.TrxnID ?? "0" : "0",
             SymbolCode: UserDefaultController().selectedSymbolID ?? "",
@@ -224,7 +238,7 @@ extension OrderEntryViewModel {
             accountID: UserDefaultController().selectedUserAccount?.AccountID,
             clientID: KeyChainController.shared().clientID,
             compInit: KeyChainController.shared().compInit,
-            custodyID: UserDefaultController().CUSTODYID ?? "",
+            custodyID: "-1",
             includeFacil: "Y",
             includeMargin: "Y",
             leverage: "0",
@@ -245,25 +259,29 @@ extension OrderEntryViewModel {
             uCode: KeyChainController.shared().UCODE,
             userCat: KeyChainController.shared().userType,
             validity: Date().toString(dateFormat: .ddMMyyyyHHmmss),
-            validityCode: UserDefaultController().tifList?.filter({$0.id?.lowercased() == "0001"}).first?.id, // GTD
+//            validityCode: UserDefaultController().tifList?.filter({$0.id?.lowercased() == "0001"}).first?.id, // GTD
+            validityCode: "0001", // GTD
             settType: "2",
             webCode: KeyChainController.shared().webCode)
         
-//        debugPrint("risk management request: \(requestModel)")
-        
+        isRiskManagementLoading = true
         getRiskManagementAPIResult = .onLoading(show: true)
         
         Task.init {
             await useCase.GetRiskManagement(requestModel: requestModel) {[weak self] result in
+                self?.getRiskManagementAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
                     self?.getRiskManagementAPIResult = .onSuccess(response: success)
-                    
+                    self?.isRiskManagementLoading = false
                     self?.riskManagementData = success
+                    self?.availableAmount = success.buyPower ?? "0"
                     self?.orderValue = success.orderValue ?? ""
+                    self?.flagMessage = AppUtility.shared.isRTL ? success.flagMsgA ?? "" : success.flagMsgE ?? ""
                    
                 case .failure(let failure):
-                        self?.getRiskManagementAPIResult = .onFailure(error: failure)
+                    self?.getRiskManagementAPIResult = .onFailure(error: failure)
+                    self?.isRiskManagementLoading = false
                     debugPrint("risk management failure: \(failure)")
                 }
             }
@@ -271,6 +289,33 @@ extension OrderEntryViewModel {
 
     }
 
+    func callGetPortfolioAPI(success: Bool) {
+                
+        let requestModel = GetPortfolioRequestModel()
+        
+        getPortfolioAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await useCase.getPortfolio(requestModel: requestModel) {[weak self] result in
+                
+                self?.getPortfolioAPIResult = .onLoading(show: false)
+                
+                switch result {
+                case .success(let success):
+                    
+                    debugPrint("Success to get user portfolio")
+                        self?.getPortfolioAPIResult = .onSuccess(response: success)
+                    
+                    self?.portfolioData = success
+                    self?.prepareOrders()
+                    
+                case .failure(let failure):
+                        debugPrint("Failed to get user portfolio")
+                        self?.getPortfolioAPIResult = .onFailure(error: failure)
+                }
+            }
+        }
+    }
 
 }
 
@@ -285,7 +330,7 @@ extension OrderEntryViewModel {
         if Connection_Hub.shared.chatHub != nil {
             do {
                 printToLog("test invoke subscribeMarketWatchSymbols '\(self.stockData?.symbol ?? "")'")
-                try Connection_Hub.shared.chatHub?.invoke("SubscribeMarketWatchSymbols", arguments: [UserDefaultController().username ?? "", self.stockData?.symbol ?? ""]) { (result, error) in
+                try Connection_Hub.shared.chatHub?.invoke("SubscribeMarketWatchSymbols", arguments: [UserDefaultController().username ?? "", [self.stockData?.symbol ?? ""]]) { (result, error) in
                     if let e = error {
                         printToLog("SubscribeMarketWatchSymbols invoke '\(self.stockData?.symbol ?? "")' Error: \(e)")
                         self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
@@ -326,6 +371,27 @@ extension OrderEntryViewModel {
 
 // MARK: Functions
 extension OrderEntryViewModel {
+    func prepareOrders() {
+        for item in portfolioData?.portfolioes ?? [] {
+            if item.symbol == UserDefaultController().selectedSymbol {
+                arrayOfQuantities.append(ArrayOfQuantities(quantity: item.qty ?? 0))
+            }
+        }
+    }
+
+    func onMaxTap() {
+        if placeOrderType == .buy {
+            shares = availableAmount ?? ""
+        } else {
+            var allShares = 0
+            
+            for item in arrayOfQuantities {
+                allShares += Int(item.quantity)
+            }
+            
+            shares = String(allShares)
+        }
+    }
     func CheckPriceWithinRange() {
         if orderPriceType == .market {
             flagMessage = ""
@@ -333,7 +399,7 @@ extension OrderEntryViewModel {
             return
         }
         
-        if price >= newMarketSymbol?.minPrice ?? "" && price <= newMarketSymbol?.maxPrice ?? "" {
+        if Double(price) ?? 0 >= Double(newMarketSymbol?.minPrice ?? "") ?? 0 && Double(price) ?? 0 <= Double(newMarketSymbol?.maxPrice ?? "") ?? 0 {
             flagMessage = ""
             getRiskManagementAPI(success: true)
             return
@@ -351,6 +417,26 @@ extension OrderEntryViewModel: MarketWatchDelegate {
         self.stockData?.lastTradePrice = data.lastTradePrice
         self.stockData?.netChange = data.netChange
         self.stockData?.netChangePerc = data.netChangePerc
+        self.newMarketSymbol?.minPrice = data.minPrice
+        self.newMarketSymbol?.maxPrice = data.maxPrice
 
+    }
+}
+
+extension OrderEntryViewModel: NotifyOrderDelegate {
+    func onNotifyOrder(newOrder: SendOrdersUIModel) {
+        
+    }
+    
+    func onNewOrder(newOrder: OrderListUIModel) {
+        if orderDetails?.OrderID == newOrder.OrderID {
+            orderDetails = newOrder
+            
+            if newOrder.StatusCode == "s" || newOrder.StatusCode == "c" {
+                SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getTradeCoordinator().start()
+            } else {
+                getRiskManagementAPI(success: true)
+            }
+        }
     }
 }

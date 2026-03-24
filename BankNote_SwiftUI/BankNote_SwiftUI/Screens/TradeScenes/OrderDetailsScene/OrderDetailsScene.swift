@@ -21,13 +21,13 @@ struct OrderDetailsScene: BaseSceneType {
                 onCancelTap: {
                     viewModel.popViewController()
                 }, onPlaceOrderTap: {
-                    viewModel.setOrder()
+                    viewModel.trade()
                 }, onBackTap: {
                     viewModel.popViewController()
                 })
             })
             .onAppear {
-
+                
             }
         }, showLoading: .constant(viewTypeAction.showLoading))
         .onViewDidLoad {

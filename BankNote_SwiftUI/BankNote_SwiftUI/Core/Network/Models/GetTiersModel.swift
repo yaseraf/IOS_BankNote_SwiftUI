@@ -28,6 +28,7 @@ struct GetTiersDataModel: Codable {
     let REVENUE_PER_MONTH: String?
     let UPD_TIME: String?
     let USR_CODE: String?
+    let ALLOW_MARGIN: String?
 }
 
 struct GetTiersUIModel {
@@ -59,6 +60,7 @@ struct GetTiersItemUIModel {
     var revenuePerMonth: String?
     var updateTime: String?
     var userCode: String?
+    var ALLOW_MARGIN: String?
     
     static func map(_ model: GetTiersDataModel) -> Self {
         return GetTiersItemUIModel(
@@ -71,7 +73,8 @@ struct GetTiersItemUIModel {
             notes: model.NOTES,
             revenuePerMonth: model.REVENUE_PER_MONTH,
             updateTime: model.UPD_TIME,
-            userCode: model.USR_CODE
+            userCode: model.USR_CODE,
+            ALLOW_MARGIN: model.ALLOW_MARGIN
         )
     }
 }

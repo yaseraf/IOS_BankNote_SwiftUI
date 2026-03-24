@@ -16,10 +16,14 @@ protocol HomeRepositoryProtocol {
     func GetAllMarketNewsBySymbol(route: HomeRoute, completion: @escaping(Result<[GetAllMarketNewsBySymbolResponseModel], NetworkError>) -> Void) async
     func GetExpectedProfitLoss(route: HomeRoute, completion: @escaping(Result<[GetExpectedProfitLossResponseModel], NetworkError>) -> Void) async
     func GetRiskManagement(route: HomeRoute, completion: @escaping(Result<GetRiskManagementResponseModel, NetworkError>) -> Void) async
-    
+    func getInvoices(route: HomeRoute, completion: @escaping(Result<GetInvoicesResponseModel, NetworkError>) -> Void) async
+    func getStatementOfAccount(route: HomeRoute, completion: @escaping(Result<[GetStatementOfAccountResponseModel], NetworkError>) -> Void) async
+    func getTransactionSummary(route: HomeRoute, completion: @escaping(Result<[GetTransactionSummaryResponseModel], NetworkError>) -> Void) async
+
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     func GetBankNote(route: HomeRoute, completion: @escaping(Result<GetBankNoteResponseModel, NetworkError>) -> Void) async
     func GetTiers(route: HomeRoute, completion: @escaping(Result<GetTiersResponseModel, NetworkError>) -> Void) async
+    func UpdateTiersCode(route: HomeRoute, completion: @escaping(Result<UpdateTiersCodeResponseModel, NetworkError>) -> Void) async
     func GetBankNotesMainBadges(route: HomeRoute, completion: @escaping(Result<GetBankNotesMainBadgesResponseModel, NetworkError>) -> Void) async
     func GetBankNotesBadges(route: HomeRoute, completion: @escaping(Result<GetBankNotesBadgesResponseModel, NetworkError>) -> Void) async
     func GetTransactionsPackages(route: HomeRoute, completion: @escaping(Result<GetTransactionsPackagesResponseModel, NetworkError>) -> Void) async
@@ -32,11 +36,11 @@ protocol HomeRepositoryProtocol {
 
     // MARK: Paymob
 
-    func PaymobAuthorize(route: HomeRoute, completion: @escaping(Result<PaymobAuthorizeResponseModel, NetworkError>) -> Void) async
+    func PaymobGetSdkToken(route: HomeRoute, completion: @escaping(Result<PaymobGetSdkTokenResponseModel, NetworkError>) -> Void) async
 
 }
 
-class HomeRepository: HomeRepositoryProtocol {
+class HomeRepository: HomeRepositoryProtocol {    
     func getPortfolio(route: HomeRoute, completion: @escaping (Result<GetPortfolioResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: GetPortfolioResponseModel.self, completion: completion).requestApi()
     }
@@ -67,6 +71,18 @@ class HomeRepository: HomeRepositoryProtocol {
     func GetRiskManagement(route: HomeRoute, completion: @escaping (Result<GetRiskManagementResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: GetRiskManagementResponseModel.self, completion: completion).requestApi()
     }
+    func getInvoices(route: HomeRoute, completion: @escaping (Result<GetInvoicesResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: GetInvoicesResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func getStatementOfAccount(route: HomeRoute, completion: @escaping (Result<[GetStatementOfAccountResponseModel], NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: [GetStatementOfAccountResponseModel].self, completion: completion).requestApi()
+    }
+    
+    func getTransactionSummary(route: HomeRoute, completion: @escaping (Result<[GetTransactionSummaryResponseModel], NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: [GetTransactionSummaryResponseModel].self, completion: completion).requestApi()
+    }
+
     
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     func GetBankNote(route: HomeRoute, completion: @escaping (Result<GetBankNoteResponseModel, NetworkError>) -> Void) async {
@@ -74,6 +90,9 @@ class HomeRepository: HomeRepositoryProtocol {
     }
     func GetTiers(route: HomeRoute, completion: @escaping (Result<GetTiersResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: GetTiersResponseModel.self, completion: completion).requestApi()
+    }
+    func UpdateTiersCode(route: HomeRoute, completion: @escaping (Result<UpdateTiersCodeResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: UpdateTiersCodeResponseModel.self, completion: completion).requestApi()
     }
     func GetBankNotesMainBadges(route: HomeRoute, completion: @escaping (Result<GetBankNotesMainBadgesResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: GetBankNotesMainBadgesResponseModel.self, completion: completion).requestApi()
@@ -102,7 +121,7 @@ class HomeRepository: HomeRepositoryProtocol {
     func TransferAmountToAccounts(route: HomeRoute, completion: @escaping (Result<TransferAmountToAccountsResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route, responseType: TransferAmountToAccountsResponseModel.self, completion: completion).requestApi()
     }
-    func PaymobAuthorize(route: HomeRoute, completion: @escaping (Result<PaymobAuthorizeResponseModel, NetworkError>) -> Void) async {
-        await RequestApi(route: route, responseType: PaymobAuthorizeResponseModel.self, completion: completion).requestApi()
+    func PaymobGetSdkToken(route: HomeRoute, completion: @escaping (Result<PaymobGetSdkTokenResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: PaymobGetSdkTokenResponseModel.self, completion: completion).requestApi()
     }
 }

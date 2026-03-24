@@ -11,22 +11,38 @@ import SwiftUI
 struct TiersContentView: View {
     
     @Binding var tiersData: GetTiersUIModel
+    @Binding var clientBankNotes: String
+    @Binding var showInsufficientFunds: Bool
     @Binding var tiers: [Tier]
     
     var onBackTap:()->Void
+    var onTierPurchase:(String, String)->Void
+    var onTopupTap:()->Void
     
     var body: some View {
-        VStack {
-            titleView
-            
-            if tiers.count > 0 {
-                TierCarouselView(tiers: $tiers)                
+        ZStack {
+            VStack {
+                titleView
+                
+                if tiers.count > 0 {
+                    TierCarouselView(tiers: $tiers, clientBankNotes: $clientBankNotes, showInsufficientFunds: $showInsufficientFunds, onTierPurchase: onTierPurchase)
+                }
+                
+                Spacer()
             }
-            
-            bottomButtonView
-            
-            Spacer()
+            // Pop-up overlay
+            if showInsufficientFunds {
+                Color.black.opacity(0.4)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        showInsufficientFunds = false
+                        withAnimation {
+                        }
+                    }
+                insufficientFundsPopup
+            }
         }
+
     }
     
     private var titleView: some View {
@@ -57,26 +73,55 @@ struct TiersContentView: View {
         .padding(.top, 40)
     }
     
-    private var bottomButtonView: some View {
-        Button {
-            
-        } label: {
-            Text("buy_now".localized)
-                .font(.cairoFont(.semiBold, size: 18))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8.5)
-                .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#9C4EF7")))
-                .padding(.horizontal, 18)
-        }
+    private var insufficientFundsPopup: some View {
+        VStack(spacing: 16) {
+            VStack {
+                Text("insufficient_funds_top_up".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+                Text("to_continue_purchase".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+            }
+            .padding(.vertical, 23)
+            .padding(.horizontal, 38)
+            .frame(maxWidth: .infinity)
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(hex: "#AA1A1A"), lineWidth: 2)
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.white)
+                }
+            )
 
+            Button {
+                showInsufficientFunds = false
+                withAnimation {
+                }
+                onTopupTap()
+            } label: {
+                Text("top_up_now".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+                    .foregroundStyle(.white)
+            }
+            .padding(.vertical, 8.5)
+            .padding(.horizontal, 36.5)
+            .background(RoundedRectangle(cornerRadius: 4).fill(Color(hex: "#9C4EF7")))
+
+        }
+        .padding(.horizontal, 54)
+        .frame(maxWidth: .infinity)
+        .shadow(radius: 20)
+        .transition(.scale)
     }
+
 }
 
 struct Tier: Identifiable {
-    let id = UUID()
+    let id = UUID().uuidString
     let nameKey: String
+    let price: String
     let imageName: String
+    let tierCode: String
     let descriptionKeys: [String]
     let howToBecomeKeys: [String]?
     let benefitKeys: [String]
@@ -143,23 +188,32 @@ struct TierCarouselView: View {
     @State private var selectedIndex = 0
     
     @Binding var tiers: [Tier]
-    
+    @Binding var clientBankNotes: String
+    @Binding var showInsufficientFunds: Bool
+
+    var onTierPurchase:(String, String)->Void
+
     var body: some View {
         VStack(spacing: 20) {
             // Carousel
             TabView(selection: $selectedIndex) {
-                ForEach(Array(tiers.enumerated()), id: \.element.id) { index, tier in
-                    VStack {
-                        Image(tiersImages[index])
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 150, height: 150)
-                        
-//                        Text(tier.nameKey)
-//                            .font(.headline)
-//                            .foregroundColor(.purple)
+                if tiers.isEmpty == false {
+                    ForEach(Array(tiers.enumerated()), id: \.element.id) { index, tier in
+                        if index < tiersImages.count && index < tiersDisabledImages.count {
+                            VStack {
+                                Image(
+                                    UserDefaultController().tierCode?.isEmpty == false ?
+                                    (Double(tier.tierCode) ?? 0) <= (Double(UserDefaultController().tierCode ?? "") ?? 0) ?
+                                    tiersImages[index] : tiersDisabledImages[index]
+                                    : tiersDisabledImages[index]
+                                )
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 150, height: 150)
+                            }
+                            .tag(index)
+                        }
                     }
-                    .tag(index)
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -228,17 +282,40 @@ struct TierCarouselView: View {
                 .padding(.horizontal, 18)
                 .padding(.bottom, 20)
             }
+            
+            bottomButtonView
+                .opacity((Double(tiers[selectedIndex].tierCode) ?? 0) != (Double(UserDefaultController().tierCode ?? "") ?? 0) ? 1 : 0)
+            
         }
         .padding(.top)
     }
-}
-
-#Preview {
-    TiersContentView(
-        tiersData: .constant(.initializer()),
-        tiers: .constant([]),
-        onBackTap: {
-        
+    
+    private var bottomButtonView: some View {
+        Button {
+            if (Double(clientBankNotes) ?? 0) >= (Double(tiers[selectedIndex].price) ?? 0) {
+                onTierPurchase(tiers[selectedIndex].price, tiers[selectedIndex].tierCode)
+            } else {
+                showInsufficientFunds.toggle()
+            }
+            debugPrint("Clicked buy now")
+        } label: {
+            Text("buy_now".localized)
+                .font(.cairoFont(.semiBold, size: 18))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8.5)
+                .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#9C4EF7")))
+                .padding(.horizontal, 18)
         }
-    )
+    }
 }
+//
+//#Preview {
+//    TiersContentView(
+//        tiersData: .constant(.initializer()),
+//        tiers: .constant([]),
+//        onBackTap: {
+//        
+//        }
+//    )
+//}

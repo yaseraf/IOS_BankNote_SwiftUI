@@ -19,10 +19,9 @@ struct HelpContentView: View {
     // An array of FAQ items to display.
     let faqs: [FAQ] = [
         FAQ(question: "How To Top-Up My Balance", answer: "Go to the Home Page. Click on the Top-Up Button..."),
-        FAQ(question: "How To Top-Up My Balance", answer: "Go to the Home Page. Click on the Top-Up Button..."),
-        FAQ(question: "How To Top-Up My Balance", answer: "Go to the Home Page. Click on the Top-Up Button..."),
-        FAQ(question: "How To Top-Up My Balance", answer: "Go to the Home Page. Click on the Top-Up Button..."),
-        FAQ(question: "How To Top-Up My Balance", answer: "Go to the Home Page. Click on the Top-Up Button...")
+        FAQ(question: "How To Withdraw My Balance", answer: "Go to the Home Page. Click on the Withdraw Button..."),
+        FAQ(question: "How To Buy HSSLAYA Coins", answer: "Go to the Settings Page. Click on the HSSLAYA View Details Button..."),
+        FAQ(question: "How To Place Order", answer: "Go to the Trade Page. Select a symbol from watchlist, choose buy or sell..."),
     ]
     
     var onBackTap:()->Void

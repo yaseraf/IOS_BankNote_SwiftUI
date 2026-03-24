@@ -16,4 +16,6 @@ protocol SettingsCoordinatorProtocol: AnyObject,Coordinator {
     func openBuyTransactionsScene()
     func openHelpScene()
     func openBankNotesScene()
+    func openStatementsScene()
+    func openInvoicesScene()
 }

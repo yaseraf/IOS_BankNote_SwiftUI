@@ -8,15 +8,50 @@
 import Foundation
 import SwiftUI
 import SDWebImageSwiftUI
+import PaymobSDK
 
+struct ViewControllerResolver: UIViewControllerRepresentable {
+    
+    var onResolve: (UIViewController) -> Void
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        ResolverViewController(onResolve: onResolve)
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+}
+
+class ResolverViewController: UIViewController {
+    
+    var onResolve: (UIViewController) -> Void
+    
+    init(onResolve: @escaping (UIViewController) -> Void) {
+        self.onResolve = onResolve
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        onResolve(self)
+    }
+}
 struct HomeContentView: View {
     
+    @StateObject private var paymobViewController = PaymobViewController()
+    @Binding var viewController: UIViewController?
+
     var portfolioData:Binding<GetPortfolioUIModel?>
     @State var isBalanceHidden:Bool = false
     
     var onTopUpTap:()->Void
     var onStockTap:(String, String, String, String) -> Void
     var onWithdrawalTap:()->Void
+    var onViewHistoryTap:()->Void
+    var onPortfolioViewAllTap:()->Void
     
     var body: some View {
         ZStack {
@@ -37,8 +72,48 @@ struct HomeContentView: View {
                 
                 HomeBottomBarView(selectedItem: .home)
             }
+            
+            ViewControllerResolver { vc in
+                self.viewController = vc
+            }
+            .frame(width: 0, height: 0)
+
         }
+//        .onChange(of: paymobAuthKey) { newValue in
+//            if let newValue {
+//                presentPaymob(secret: newValue)
+//            }
+//        }
+
     }
+    
+//    func presentPaymob(secret: String) {
+//
+//        guard let rootVC = UIApplication.shared
+//            .connectedScenes
+//            .compactMap({ $0 as? UIWindowScene })
+//            .first?
+//            .windows
+//            .first?
+//            .rootViewController else { return }
+//
+//        let paymob = PaymobSDK()
+//        
+//        paymob.paymobSDKCustomization.appIcon = UIImage()
+//        paymob.paymobSDKCustomization.appName = "tester"
+//        paymob.paymobSDKCustomization.buttonBackgroundColor = UIColor.black
+//        paymob.paymobSDKCustomization.buttonTextColor = UIColor.white
+//        paymob.paymobSDKCustomization.showSaveCard = true
+//        paymob.paymobSDKCustomization.saveCardDefault = false
+//
+//        paymob.delegate = PaymobViewController.shared
+//
+//        try? paymob.presentPayVC(
+//            VC: rootVC,
+//            PublicKey: "1234",
+//            ClientSecret: "1234"
+//        )
+//    }
     
         
     private var totalInvestmentView: some View {
@@ -71,7 +146,11 @@ struct HomeContentView: View {
         let balance = Double(portfolioData.wrappedValue?.accountSummaries.balance ?? "0")
         
         let totalAsset: Double = (marketValue ?? 0) + (balance ?? 0)
-        let accountPnL = portfolioData.wrappedValue?.accountSummaries.expectedProfitLoss ?? ""
+        
+//        let accountPnL = portfolioData.wrappedValue?.accountSummaries.expectedProfitLoss ?? ""
+
+        let accountPnL = portfolioData.wrappedValue?.portfolioes.first?.totalExpectedProfitLoss ?? 0
+        let accountPnLPerc = portfolioData.wrappedValue?.portfolioes.first?.totalEPLossPerc ?? 0
 
         
         return VStack(spacing: 8) {
@@ -91,23 +170,24 @@ struct HomeContentView: View {
             }
             
             HStack {
-                Text("\(accountCurrency) \(AppUtility.shared.formatThousandSeparator(number: Double(accountPnL) ?? 0))")
+                Text("\(accountCurrency) \(AppUtility.shared.formatThousandSeparator(number: Double(accountPnL)))")
                     .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundStyle(Color(hex: "#1E961E"))
+                    .foregroundStyle(accountPnL > 0 ? Color.colorPositive : Color.colorNegative)
                 
                 ZStack {
-                    Text("+1.172")
+                    Text("\(AppUtility.shared.formatThousandSeparator(number: Double(accountPnLPerc)))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: "#1E961E"))
+                        .foregroundStyle(accountPnL > 0 ? Color.colorPositive : Color.colorNegative)
                 }
                 .padding(.vertical, 2)
                 .padding(.horizontal, 7)
-                .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#D4EBCF")))
+                .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: accountPnL > 0 ? "#D4EBCF" : "#EBCFCF")))
             }
             
             HStack(spacing: 21) {
                 Button {
                     onTopUpTap()
+//                    paymobViewController.presentPaymob(vc: viewController)
                 } label: {
                     VStack(spacing: 4) {
                         Image("ic_topUp")
@@ -143,9 +223,15 @@ struct HomeContentView: View {
                 }
             }
             
-            Text(viewHistoryAttribute)
-                .font(.cairoFont(.semiBold, size: 10))
-                .foregroundStyle(Color(hex: "#629AF9"))
+            Button {
+                onViewHistoryTap()
+            } label: {
+                Text(viewHistoryAttribute)
+                    .font(.cairoFont(.semiBold, size: 10))
+                    .foregroundStyle(Color(hex: "#629AF9"))
+            }
+
+            
         }
     }
     
@@ -157,7 +243,7 @@ struct HomeContentView: View {
                     .foregroundStyle(.black)
                 
                 ZStack {
-                    Text("4")
+                    Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
                 .padding(.horizontal, 4)
@@ -166,9 +252,14 @@ struct HomeContentView: View {
                 Spacer()
                 
                 ZStack {
-                    Text("view_all".localized)
-                        .font(.cairoFont(.semiBold, size: 14))
-                        .foregroundStyle(.black)
+                    Button {
+                        onPortfolioViewAllTap()
+                    } label: {
+                        Text("view_all".localized)
+                            .font(.cairoFont(.semiBold, size: 14))
+                            .foregroundStyle(.black)
+                    }
+
                 }
                 .padding(.vertical, 3)
                 .padding(.horizontal, 10)
@@ -273,12 +364,12 @@ struct PortfolioCell: View {
 
 
 
-#Preview {
-    HomeContentView(portfolioData: .constant(.initializer()), onTopUpTap: {
-        
-    }, onStockTap: { _,_,_,_ in
-        
-    }, onWithdrawalTap: {
-        
-    })
-}
+//#Preview {
+//    HomeContentView(paymobAuthKey: .constant(""), portfolioData: .constant(.initializer()), onTopUpTap: {
+//        
+//    }, onStockTap: { _,_,_,_ in
+//        
+//    }, onWithdrawalTap: {
+//        
+//    })
+//}

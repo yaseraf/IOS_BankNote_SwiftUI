@@ -18,6 +18,13 @@ struct BankNoteApp: App {
 //            LivenessCheckContentView {
 //                debugPrint("test")
 //            }
+//            HomeContentView(paymobAuthKey: .constant(""), portfolioData: .constant(.initializer()), onTopUpTap: {
+//                
+//            }, onStockTap: { _,_,_,_ in
+//                
+//            }, onWithdrawalTap: {
+//                
+//            })
          }
     }
 }

@@ -13,10 +13,14 @@ protocol HomeUseCaseProtocol{
     func GetAllMarketNewsBySymbol(requestModel: GetAllMarketNewsBySymbolRequestModel, completion: @escaping(Result<[GetAllMarketNewsBySymbolUIModel], NetworkError>) -> Void) async
     func GetExpectedProfitLoss(requestModel: GetExpectedProfitLossRequestModel, completion: @escaping(Result<[GetExpectedProfitLossUIModel], NetworkError>) -> Void) async
     func GetRiskManagement(requestModel: GetRiskManagementRequestModel, completion: @escaping(Result<GetRiskManagementUIModel, NetworkError>) -> Void) async
-    
+    func getInvoices(requestModel: GetInvoicesRequestModel, completion: @escaping(Result<GetInvoicesUIModel, NetworkError>) -> Void) async
+    func getStatementOfAccount(requestModel: GetStatementOfAccountRequestModel, completion: @escaping(Result<[GetStatementOfAccountUIModel], NetworkError>) -> Void) async
+    func getTransactionSummary(requestModel: GetTransactionSummaryRequestModel, completion: @escaping(Result<[GetTransactionSummaryUIModel], NetworkError>) -> Void) async
+
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     func GetBankNote(requestModel: GetBankNoteRequestModel, completion: @escaping(Result<GetBankNoteUIModel, NetworkError>) -> Void) async
     func GetTiers(requestModel: GetTiersRequestModel, completion: @escaping(Result<GetTiersUIModel, NetworkError>) -> Void) async
+    func UpdateTiersCode(requestModel: UpdateTiersCodeRequestModel, completion: @escaping(Result<UpdateTiersCodeUIModel, NetworkError>) -> Void) async
     func GetBankNotesMainBadges(requestModel: GetBankNotesMainBadgesRequestModel, completion: @escaping(Result<GetBankNotesMainBadgesUIModel, NetworkError>) -> Void) async
     func GetBankNotesBadges(requestModel: GetBankNotesBadgesRequestModel, completion: @escaping(Result<GetBankNotesBadgesUIModel, NetworkError>) -> Void) async
     func GetTransactionsPackages(requestModel: GetTransactionsPackagesRequestModel, completion: @escaping(Result<GetTransactionsPackagesUIModel, NetworkError>) -> Void) async
@@ -29,7 +33,7 @@ protocol HomeUseCaseProtocol{
     
     // MARK: Paymob
     
-    func PaymobAuthorize(requestModel: PaymobAuthorizeRequestModel, completion: @escaping(Result<PaymobAuthorizeUIModel, NetworkError>) -> Void) async
+    func PaymobGetSdkToken(requestModel: PaymobGetSdkTokenRequestModel, completion: @escaping(Result<PaymobGetSdkTokenUIModel, NetworkError>) -> Void) async
 
 }
 
@@ -132,6 +136,54 @@ extension HomeUseCase: HomeUseCaseProtocol {
         }
     }
     
+    func getInvoices(requestModel: GetInvoicesRequestModel, completion: @escaping (Result<GetInvoicesUIModel, NetworkError>) -> Void) async {
+        let route = HomeRoute.getInvoices(requestModel: requestModel)
+        await repository.getInvoices(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = GetInvoicesUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+        
+    func getStatementOfAccount(requestModel: GetStatementOfAccountRequestModel, completion: @escaping (Result<[GetStatementOfAccountUIModel], NetworkError>) -> Void) async {
+        let route = HomeRoute.getStatementOfAccount(requestModel: requestModel)
+        await repository.getStatementOfAccount(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel =    responseModel.map({
+                   GetStatementOfAccountUIModel.mapToUIModel($0)
+
+                })
+                completion(.success(uiModel))
+
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func getTransactionSummary(requestModel: GetTransactionSummaryRequestModel, completion: @escaping (Result<[GetTransactionSummaryUIModel], NetworkError>) -> Void) async {
+        let route = HomeRoute.GetTransactionSummary(requestModel: requestModel)
+        await repository.getTransactionSummary(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel =    responseModel.map({
+                   GetTransactionSummaryUIModel.mapToUIModel($0)
+
+                })
+                completion(.success(uiModel))
+
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
+    
     // MARK: Banknote / Tiers / Badges / Transactions Packages
 
     func GetBankNote(requestModel: GetBankNoteRequestModel, completion: @escaping (Result<GetBankNoteUIModel, NetworkError>) -> Void) async {
@@ -155,6 +207,21 @@ extension HomeUseCase: HomeUseCaseProtocol {
             switch result {
             case .success(let responseModel):
                 let uiModel = GetTiersUIModel.mapToUIModel(responseModel)
+                
+                completion(.success(uiModel))
+
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func UpdateTiersCode(requestModel: UpdateTiersCodeRequestModel, completion: @escaping (Result<UpdateTiersCodeUIModel, NetworkError>) -> Void) async {
+        let route = HomeRoute.UpdateTiersCode(requestModel: requestModel)
+        await repository.UpdateTiersCode(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = UpdateTiersCodeUIModel.mapToUIModel(responseModel)
                 
                 completion(.success(uiModel))
 
@@ -293,12 +360,12 @@ extension HomeUseCase: HomeUseCaseProtocol {
         }
     }
 
-    func PaymobAuthorize(requestModel: PaymobAuthorizeRequestModel, completion: @escaping (Result<PaymobAuthorizeUIModel, NetworkError>) -> Void) async {
-        let route = HomeRoute.PaymobAuthorize(requestModel: requestModel)
-        await repository.PaymobAuthorize(route: route) { result in
+    func PaymobGetSdkToken(requestModel: PaymobGetSdkTokenRequestModel, completion: @escaping (Result<PaymobGetSdkTokenUIModel, NetworkError>) -> Void) async {
+        let route = HomeRoute.PaymobGetSdkToken(requestModel: requestModel)
+        await repository.PaymobGetSdkToken(route: route) { result in
             switch result {
             case .success(let responseModel):
-                let uiModel = PaymobAuthorizeUIModel.mapToUIModel(m: responseModel)
+                let uiModel = PaymobGetSdkTokenUIModel.mapToUIModel(responseModel)
                 completion(.success(uiModel))
 
             case .failure(let failure):

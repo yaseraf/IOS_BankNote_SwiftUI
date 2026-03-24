@@ -17,7 +17,9 @@ class Connection_Hub {
     var topActivitiesDelegate: TopActivitiesDelegate?
     var orderListDelegate: OrderListDelegate?
     var exchangeSummaryDelegate: ExchangeSummaryDelegate?
-    
+    var notifyOrderDelegate: NotifyOrderDelegate?
+    var alertsDelegate: AlertsDelegate?
+
     var userDefaultController = UserDefaultController.instance
     
     @Published var getLookupsAPIResult:APIResultType<[GetLookupsUIModel]>?
@@ -42,6 +44,11 @@ class Connection_Hub {
             Connection_Hub.shared.setupHubSignalR()
         }
     }
+    
+    func resetOnGoingConnection() {
+        Connection_Hub.shared.setupHubSignalR()
+    }
+
 
     func isConnected()->Bool{
        return connection?.state == .connected
@@ -71,8 +78,8 @@ class Connection_Hub {
             , "password": "" //HubUtility.shared.password // "FIT"
             , "webCode": "" //Int(HubUtility.shared.WebCode) ?? 0
             , "baseurl": "123"
-            , "key":  "-"
-            , "value":  "-"
+            , "key":  "\(KeyChainController().loginCookieName ?? "-")"
+            , "value":  "\(KeyChainController().loginCookieValue ?? "-")"
             // , "cookies": cookieSession
         ]
 
@@ -384,9 +391,11 @@ class Connection_Hub {
 
         }
         
+        var orderList: [OrderListUIModel]?
         //MARK: Orders
         chatHub.onReceive(.sendOrders) { args in
-            
+            orderList = []
+
 //            debugPrint("Send orders args: \(args) ENDEND")
             debugPrint("Send orders args")
 
@@ -397,6 +406,8 @@ class Connection_Hub {
                 OrderListUIModel.mapToUIModel($0)
             })
             
+            orderList = uiModel
+
             self.orderListDelegate?.onOrderReceived(orders: uiModel ?? [])
             
         }
@@ -409,27 +420,75 @@ class Connection_Hub {
         chatHub.onReceive(.sendNotifyOrderObject) { args in
 //            printToLog("chatHub.onReceive sendNotifyOrderObject args")
 //            printToLog("chatHub.onReceive sendNotifyOrderObject args: \(args as Any)")
+            debugPrint("New notify order: \(args)")
+            let responseModel = HubUtility.shared.decodeToModel(from: args?.first, type: SendOrdersResponseModel.self)
             
-            
-            let responseModel =  HubUtility.shared.decodeToModel(from: args?.first, type: SendOrdersResponseModel.self)
+            let orderResponseModel = HubUtility.shared.decodeToModel(from: args?.first, type: OrderListResponseModel.self)
             
 //            printToLog("chatHub.onReceive sendNotifyOrderObject getting responseModel : \(responseModel)")
 
-//            let uiModel = SendOrdersUIModel.mapToUIModel(responseModel ?? .init())
+            let uiModel = SendOrdersUIModel.mapToUIModel(responseModel ?? .init())
+            let orderUiModel = OrderListUIModel.mapToUIModel(orderResponseModel ?? .init())
             
+//            self.accountDetailsDelegate?.refreshHomeScreen()
             
-
-//            if uiModel?.StatusCode?.lowercased() == "c" {
-//                showLocalNotification(title: "cancel_order".localized, body: "cancel_order_desc".localized)
+            if UserDefaultController().notifiedOrders?.contains(where: {$0.date == uiModel?.ModifyDate ?? ""}) == true {
+                return
+            }
+            
+            if UserDefaultController().notifiedOrders?.isEmpty == true || UserDefaultController().notifiedOrders == nil {
+                UserDefaultController().notifiedOrders = []
+                
+                UserDefaultController().notifiedOrders?.append(NotificationObject(symbol: uiModel?.Symbol ?? "", companyName: AppUtility.shared.isRTL ? uiModel?.CompanyShortNameA ?? "" : uiModel?.CompanyShortNameE ?? "", orderId: uiModel?.OrderID ?? "", quantity: uiModel?.TotalVolume ?? "", price: uiModel?.Price ?? "", statusCode: uiModel?.StatusCode ?? "", alertTitle: "", alertDesc: "", newsTitle: "", newsDesc: "", objectType: "o", date: uiModel?.ModifyDate ?? ""))
+            } else {
+                if let index = UserDefaultController().notifiedOrders?.firstIndex(where: {$0.orderId == uiModel?.OrderID}) {
+                    UserDefaultController().notifiedOrders?[index] = NotificationObject(symbol: uiModel?.Symbol ?? "", companyName: AppUtility.shared.isRTL ? uiModel?.CompanyShortNameA ?? "" : uiModel?.CompanyShortNameE ?? "", orderId: uiModel?.OrderID ?? "", quantity: uiModel?.TotalVolume ?? "", price: uiModel?.Price ?? "", statusCode: uiModel?.StatusCode ?? "", alertTitle: "", alertDesc: "", newsTitle: "", newsDesc: "", objectType: "o", date: uiModel?.ModifyDate ?? "")
+                } else {
+                    UserDefaultController().notifiedOrders?.append(NotificationObject(symbol: uiModel?.Symbol ?? "", companyName: AppUtility.shared.isRTL ? uiModel?.CompanyShortNameA ?? "" : uiModel?.CompanyShortNameE ?? "", orderId: uiModel?.OrderID ?? "", quantity: uiModel?.TotalVolume ?? "", price: uiModel?.Price ?? "", statusCode: uiModel?.StatusCode ?? "", alertTitle: "", alertDesc: "", newsTitle: "", newsDesc: "", objectType: "o", date: uiModel?.ModifyDate ?? ""))
+                }
+            }
+            
+            self.notifyOrderDelegate?.onNotifyOrder(newOrder: uiModel ?? .init())
+            self.notifyOrderDelegate?.onNewOrder(newOrder: orderUiModel ?? .init())
+            
+//            if UserDefaultController().isModifyOrderNotification == false || UserDefaultController().isModifyOrderNotification == nil {
+                if uiModel?.StatusCode?.lowercased() == "s" {
+                    showLocalNotification(title: "fully_filled_order".localized, body: "fully_filled_order_desc".localized)
+                } else if uiModel?.StatusCode?.lowercased() == "p" {
+                    if orderList?.contains(where: {$0.OrderID == uiModel?.OrderID && $0.ModifyDate != uiModel?.ModifyDate}) == true {
+                        // is modify order
+                        showLocalNotification(title: "modify_order".localized, body: "modify_order_desc".localized)
+                    } else {
+                        showLocalNotification(title: "partially_filled_order".localized, body: "partially_filled_order_desc".localized)
+                    }
+                } else if uiModel?.StatusCode?.lowercased() == "w" {
+                    if orderList?.contains(where: {$0.OrderID == uiModel?.OrderID && $0.ModifyDate != uiModel?.ModifyDate}) == true {
+                        // is modify order
+                        showLocalNotification(title: "modify_order".localized, body: "modify_order_desc".localized)
+                    } else {
+                        showLocalNotification(title: "waiting_order".localized, body: "waiting_order_desc".localized)
+                    }
+                } else if uiModel?.StatusCode?.lowercased() == "r" {
+                    showLocalNotification(title: "rejected_order".localized, body: "rejected_order_desc".localized)
+                } else if uiModel?.StatusCode?.lowercased() == "c" {
+                    showLocalNotification(title: "cancel_order".localized, body: "cancel_order_desc".localized)
+                } else if uiModel?.StatusCode?.lowercased() == "a" {
+                    if orderList?.contains(where: {$0.OrderID == uiModel?.OrderID && $0.ModifyDate != uiModel?.ModifyDate}) == true {
+                        // is modify order
+                        showLocalNotification(title: "modify_order".localized, body: "modify_order_desc".localized)
+                    } else {
+                        showLocalNotification(title: "active_order".localized, body: "active_order_desc".localized)
+                    }
+                } else if uiModel?.StatusCode?.lowercased() == "e" {
+                    showLocalNotification(title: "expired_order".localized, body: "expired_order_desc".localized)
+                } else if uiModel?.StatusCode?.lowercased() == "t" {
+                    showLocalNotification(title: "sent_order".localized, body: "sent_order_desc".localized)
+                }
 //            } else {
-//                if UserDefaultController().isModifyOrderNotification == true {
-//                    showLocalNotification(title: "modify_order".localized, body: "modify_order_desc".localized)
-//                } else {
-//                    showLocalNotification(title: "place_order".localized, body: "place_order_desc".localized)
-//                }
+//                showLocalNotification(title: "modify_order".localized, body: "modify_order_desc".localized)
 //            }
         }
-        
+
         chatHub.onReceive(.sendAddOrderRequest) { args in
 //            printToLog("chatHub.onReceive sendAddOrderRequest args \(args as Any)")
             //let orders = dataParser.parseOrderList(data: args)
@@ -457,8 +516,23 @@ class Connection_Hub {
 
         
         chatHub.onReceive(.sendNotifyMarketNewsObject) { args in
-//            printToLog("chatHub.onReceive sendNotifyMarketNewsObject args: \( args as Any)")
+            let uiModel =  HubUtility.shared.decodeToModel(from: args?.first, type: MarketNewsObject.self)
+                        
+//            self.notificationsDelegate?.onReceiveCount()
+            
+            if UserDefaultController().notifiedOrders?.isEmpty == true || UserDefaultController().notifiedOrders == nil {
+                UserDefaultController().notifiedOrders = []
+                
+                UserDefaultController().notifiedOrders?.append(NotificationObject(symbol: uiModel?.Symbol ?? "", companyName: "", orderId: "", quantity: "", price: "", statusCode: "", alertTitle: "", alertDesc: "", newsTitle: uiModel?.NotifyID ?? "", newsDesc: AppUtility.shared.isRTL ? uiModel?.NewsDescA ?? "" : uiModel?.NewsDescE ?? "", objectType: "n"))
+            } else {
+                UserDefaultController().notifiedOrders?.append(NotificationObject(symbol: uiModel?.Symbol ?? "", companyName: "", orderId: "", quantity: "", price: "", statusCode: "", alertTitle: "", alertDesc: "", newsTitle: uiModel?.NotifyID ?? "", newsDesc: AppUtility.shared.isRTL ? uiModel?.NewsDescA ?? "" : uiModel?.NewsDescE ?? "", objectType: "n"))
+            }
+            
+            showLocalNotification(title: "news".localized, body: "news_has_been_received".localized)
+
+            self.alertsDelegate?.onReceiveNews(model: uiModel ?? .init())
         }
+
         
         
         //MARK: Portfolio
@@ -546,7 +620,6 @@ extension Connection_Hub {
 }
 
 
-
 public enum MessageType: Int, Codable {
     case Invocation = 1
     case StreamItem = 2
@@ -555,4 +628,21 @@ public enum MessageType: Int, Codable {
     case CancelInvocation = 5
     case Ping = 6
     case Close = 7
+}
+
+func showLocalNotification(title: String, body: String) {
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.body = body
+    content.sound = .default
+    
+    // Fire immediately
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+    UNUserNotificationCenter.current().add(request) { error in
+        if let error = error {
+            debugPrint("Failed to show notification: \(error)")
+        }
+    }
 }

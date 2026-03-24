@@ -7,6 +7,7 @@
 //
 import Foundation
 import SwiftUI
+import CryptoKit
 
 class AppUtility {
     static  let shared: AppUtility = .init()
@@ -77,6 +78,47 @@ class AppUtility {
             }
         }
     }
+    
+    func encParam(item:String) -> String {
+        if item.isEmpty {
+            return ""
+        }
+        
+        let keyBase64 = "QfK0X0S8jz3k8HV3mQ4bnJ6Z6qA9KIMCE5TFs8FVbQY="
+        let nonceBase64 = "T0aXZtrI3JcH39bs"
+                 
+        let keyData = Data(base64Encoded: keyBase64)!
+        let nonceData = Data(base64Encoded: nonceBase64)!
+        let key = SymmetricKey(data: keyData)
+         
+        let nonce = try? AES.GCM.Nonce(data: nonceData)
+        let plaintextData = item.data(using: .utf8)!
+         
+        let sealedBox = try? AES.GCM.seal(plaintextData, using: key, nonce: nonce)
+         
+        let ciphertextBase64 = sealedBox?.ciphertext.base64EncodedString()
+        let tagBase64 = sealedBox?.tag.base64EncodedString()
+        
+        return "\(ciphertextBase64 ?? "")!\(tagBase64 ?? "")"
+    }
+    
+    func orderDateFromString(_ string: String?) -> Date? {
+        guard let string else { return nil }
+        
+        let formats = ["ddMMyyyyHHmmss", "dd-MM-yyyy HH:mm:ss"]
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        for format in formats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: string) {
+                return date
+            }
+        }
+        
+        return nil
+    }
+
 
     var currentAppTheme: ThemeType {
         return userDefaultController?.appTheme ?? .light

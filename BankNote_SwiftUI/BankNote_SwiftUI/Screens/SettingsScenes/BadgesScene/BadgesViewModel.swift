@@ -13,9 +13,11 @@ class BadgesViewModel: ObservableObject {
     
     @Published var getTiersAPIResult:APIResultType<GetTiersUIModel>?
     @Published var getBankNotesMainBadgesAPIResult:APIResultType<GetBankNotesMainBadgesUIModel>?
+    @Published var getBankNotesBadgesAPIResult:APIResultType<GetBankNotesBadgesUIModel>?
     
     @Published var tiersData: GetTiersUIModel = .initializer()
     @Published var badgesData: GetBankNotesMainBadgesUIModel = .initializer()
+    @Published var userBadgesData: GetBankNotesBadgesUIModel = .initializer()
 
     init(coordinator: SettingsCoordinatorProtocol, homeUseCase: HomeUseCaseProtocol) {
         self.coordinator = coordinator
@@ -73,6 +75,28 @@ extension BadgesViewModel {
                 case .failure(let failure):
                         self?.getBankNotesMainBadgesAPIResult = .onFailure(error: failure)
                     debugPrint("get bank notes main badges failed")
+                }
+            }
+        }
+    }
+    
+    func callGetBankNotesBadgesAPI(success:Bool) {
+        let requestModel = GetBankNotesBadgesRequestModel(WebCode: KeyChainController().webCode ?? "")
+        
+        getBankNotesBadgesAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await homeUseCase.GetBankNotesBadges(requestModel: requestModel) {[weak self] result in
+                self?.getBankNotesBadgesAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    self?.getBankNotesBadgesAPIResult = .onSuccess(response: success)
+                    debugPrint("get bank notes badges success")
+                    self?.userBadgesData = success
+                    
+                case .failure(let failure):
+                        self?.getBankNotesBadgesAPIResult = .onFailure(error: failure)
+                    debugPrint("get bank notes badges failed")
                 }
             }
         }

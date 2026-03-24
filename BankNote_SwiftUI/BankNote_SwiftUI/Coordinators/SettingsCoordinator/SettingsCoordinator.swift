@@ -84,4 +84,24 @@ extension SettingsCoordinator:SettingsCoordinatorProtocol{
         let viewController = UIHostingController(rootView: viewWithCoordinator)
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func openStatementsScene() {
+        let homeUseCase = HomeUseCase()
+        let viewModel = StatementsViewModel(coordinator: self, useCase: homeUseCase)
+        let view = StatementsScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func openInvoicesScene() {
+        let homeUseCase = HomeUseCase()
+        let viewModel = InvoicesViewModel(coordinator: self, useCase: homeUseCase)
+        let view = InvoicesScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+
+    
 }

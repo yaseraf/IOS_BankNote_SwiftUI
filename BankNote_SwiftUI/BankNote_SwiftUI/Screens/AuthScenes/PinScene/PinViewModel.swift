@@ -192,12 +192,16 @@ class PinViewModel:ObservableObject{
                 
         OTPModelAPIResult = .onLoading(show: true)
         Task.init {
-            await useCase.OTPMap(requestModel: OTPRequest) {[weak self] result in
+            await useCase.OTPMap(requestModel: OTPRequest) {[weak self] result, cookies in
                 self?.OTPModelAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
                     self?.userDefaultController?.username = success.userName
                     self?.OTPModelAPIResult = .onSuccess(response: success)
+                    
+                    KeyChainController().loginCookieName = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.name ?? ""
+                    KeyChainController().loginCookieValue = cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? ""
+
                     
                     KeyChainController.shared().webCode = success.webCode
                     UserDefaultController.instance.currentDate = self?.getCurrentDateString()

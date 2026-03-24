@@ -97,8 +97,8 @@ struct OrderDetailsContentView: View {
 
             VStack(spacing: 12) {
                 rowView(title: "type".localized, value: orderPreview.wrappedValue?.SellBuyFlag?.lowercased() == "s" ? "sell".localized : "buy".localized)
-                rowView(title: "account".localized, value: AppUtility.shared.isRTL ? orderPreview.wrappedValue?.AccountNameA ?? "" : orderPreview.wrappedValue?.AccountNameE ?? "")
-                rowView(title: "custodian".localized, value: orderPreview.wrappedValue?.CustodianID ?? "")
+//                rowView(title: "account".localized, value: AppUtility.shared.isRTL ? orderPreview.wrappedValue?.AccountNameA ?? "" : orderPreview.wrappedValue?.AccountNameE ?? "")
+//                rowView(title: "custodian".localized, value: orderPreview.wrappedValue?.CustodianID ?? "")
                 rowView(title: "quantity".localized, value: AppUtility.shared.formatThousandSeparator(number: Double(orderPreview.wrappedValue?.ExecQty ?? "") ?? 0))
                 rowView(title: "price".localized, value: orderPreview.wrappedValue?.Price == "0" ? "MKT" : AppUtility.shared.formatThousandSeparator(number: Double(orderPreview.wrappedValue?.Price ?? "") ?? 0))
                 rowView(title: "validity_date".localized, value: convertDateString(orderPreview.wrappedValue?.ValidityDate ?? ""))

@@ -81,7 +81,10 @@ struct LoginResponseModel: Codable {
     let enforceKYC: String?
     let isExpiredDocument, isIndividual: Bool?
     let isMigrationEligible, isTermsAndConditions, lockedSeconds: String?
-
+    let TIERS_CODE: String?
+    let MAIN_BADGES_CODE: String?
+    let SUB_BADGES_CODE: String?
+    
     enum CodingKeys: String, CodingKey {
         case brokerID = "BrokerID"
         case curCode = "CUR_CODE"
@@ -126,6 +129,9 @@ struct LoginResponseModel: Codable {
         case isMigrationEligible = "isMigrationEligible"
         case isTermsAndConditions = "isTermsAndConditions"
         case lockedSeconds = "lockedSeconds"
+        case TIERS_CODE = "TIERS_CODE"
+        case MAIN_BADGES_CODE = "MAIN_BADGES_CODE"
+        case SUB_BADGES_CODE = "SUB_BADGES_CODE"
     }
 }
 
@@ -163,13 +169,16 @@ struct LoginUIModel {
     let enforceKYC: String?
     let isExpiredDocument, isIndividual: Bool?
     let isMigrationEligible, isTermsAndConditions, lockedSeconds: String?
-    
+    let TIERS_CODE: String?
+    let MAIN_BADGES_CODE: String?
+    let SUB_BADGES_CODE: String?
+
     static func mapToUIModel(_ model:LoginResponseModel)->Self {
-        return LoginUIModel(brokerID: model.brokerID ?? "", curCode: model.curCode ?? "", compInit: model.compInit ?? "", email: model.email ?? "", errorMsg: model.errorMsg ?? "", groupCode: model.groupCode ?? "", isAgreed: model.isAgreed ?? "", isBiometric: model.isBiometric ?? "", isDeleted: model.isDeleted ?? "", isEnableOMSPLUS: model.isEnableOMSPLUS ?? "", isFirstLogin: model.isFirstLogin ?? "", isRenewed: model.isRenewed ?? "", lastLoginDate: model.lastLoginDate ?? "", mainClientID: model.mainClientID ?? "", mobID: model.mobID ?? "", mobType: model.mobType ?? "", mobileNo: model.mobileNo ?? "", nameFullNameA: model.nameFullNameA ?? "", nameFullNameE: model.nameFullNameE ?? "", otp: model.otp ?? "", passwordPolicy: model.passwordPolicy ?? PasswordPolicy(enforceSpecialChar: model.passwordPolicy?.enforceSpecialChar ?? "", enforceStartWithAlpha: model.passwordPolicy?.enforceStartWithAlpha ?? "", enforeAlphanumeric: model.passwordPolicy?.enforeAlphanumeric ?? "", minlength: model.passwordPolicy?.minlength ?? "", numCapitalChar: model.passwordPolicy?.numCapitalChar ?? "", numSmallChar: model.passwordPolicy?.numSmallChar ?? "", numSpecialChar: model.passwordPolicy?.numSpecialChar ?? "", passComplexity: model.passwordPolicy?.passComplexity ?? ""), registrationID: model.registrationID ?? "", sessionID: model.sessionID ?? "", status: model.status ?? "", subscribedMarkets: model.subscribedMarkets ?? [], subscriptionDaysNotify: model.subscriptionDaysNotify ?? "", subscriptionDaysRemaining: model.subscriptionDaysRemaining ?? "", subscriptionFeeAmt: model.subscriptionFeeAmt ?? "", subscriptionFrom: model.subscriptionFrom ?? "", subscriptionTo: model.subscriptionTo ?? "", trialsNumber: model.trialsNumber ?? "", uCode: model.uCode ?? "", updateInfo: model.updateInfo ?? "", userName: model.userName ?? "", userType: model.userType ?? "", webCode: model.webCode ?? "", enforceChangePassword: model.enforceChangePassword ?? "", enforceKYC: model.enforceKYC ?? "", isExpiredDocument: model.isExpiredDocument ?? false, isIndividual: model.isIndividual ?? false, isMigrationEligible: model.isMigrationEligible ?? "", isTermsAndConditions: model.isTermsAndConditions ?? "", lockedSeconds: model.lockedSeconds ?? "")
+        return LoginUIModel(brokerID: model.brokerID ?? "", curCode: model.curCode ?? "", compInit: model.compInit ?? "", email: model.email ?? "", errorMsg: model.errorMsg ?? "", groupCode: model.groupCode ?? "", isAgreed: model.isAgreed ?? "", isBiometric: model.isBiometric ?? "", isDeleted: model.isDeleted ?? "", isEnableOMSPLUS: model.isEnableOMSPLUS ?? "", isFirstLogin: model.isFirstLogin ?? "", isRenewed: model.isRenewed ?? "", lastLoginDate: model.lastLoginDate ?? "", mainClientID: model.mainClientID ?? "", mobID: model.mobID ?? "", mobType: model.mobType ?? "", mobileNo: model.mobileNo ?? "", nameFullNameA: model.nameFullNameA ?? "", nameFullNameE: model.nameFullNameE ?? "", otp: model.otp ?? "", passwordPolicy: model.passwordPolicy ?? PasswordPolicy(enforceSpecialChar: model.passwordPolicy?.enforceSpecialChar ?? "", enforceStartWithAlpha: model.passwordPolicy?.enforceStartWithAlpha ?? "", enforeAlphanumeric: model.passwordPolicy?.enforeAlphanumeric ?? "", minlength: model.passwordPolicy?.minlength ?? "", numCapitalChar: model.passwordPolicy?.numCapitalChar ?? "", numSmallChar: model.passwordPolicy?.numSmallChar ?? "", numSpecialChar: model.passwordPolicy?.numSpecialChar ?? "", passComplexity: model.passwordPolicy?.passComplexity ?? ""), registrationID: model.registrationID ?? "", sessionID: model.sessionID ?? "", status: model.status ?? "", subscribedMarkets: model.subscribedMarkets ?? [], subscriptionDaysNotify: model.subscriptionDaysNotify ?? "", subscriptionDaysRemaining: model.subscriptionDaysRemaining ?? "", subscriptionFeeAmt: model.subscriptionFeeAmt ?? "", subscriptionFrom: model.subscriptionFrom ?? "", subscriptionTo: model.subscriptionTo ?? "", trialsNumber: model.trialsNumber ?? "", uCode: model.uCode ?? "", updateInfo: model.updateInfo ?? "", userName: model.userName ?? "", userType: model.userType ?? "", webCode: model.webCode ?? "", enforceChangePassword: model.enforceChangePassword ?? "", enforceKYC: model.enforceKYC ?? "", isExpiredDocument: model.isExpiredDocument ?? false, isIndividual: model.isIndividual ?? false, isMigrationEligible: model.isMigrationEligible ?? "", isTermsAndConditions: model.isTermsAndConditions ?? "", lockedSeconds: model.lockedSeconds ?? "", TIERS_CODE: model.TIERS_CODE ?? "", MAIN_BADGES_CODE: model.MAIN_BADGES_CODE ?? "", SUB_BADGES_CODE: model.SUB_BADGES_CODE ?? "")
     }
     
     static func initializer() -> Self {
-    return LoginUIModel(brokerID: "", curCode: "", compInit: "", email: "", errorMsg: "", groupCode: "", isAgreed: "", isBiometric: "", isDeleted: "", isEnableOMSPLUS: "", isFirstLogin: "", isRenewed: "", lastLoginDate: "", mainClientID: "", mobID: "", mobType: "", mobileNo: "", nameFullNameA: "", nameFullNameE: "", otp: "", passwordPolicy: PasswordPolicy(enforceSpecialChar: "", enforceStartWithAlpha: "", enforeAlphanumeric: "", minlength: "", numCapitalChar: "", numSmallChar: "", numSpecialChar: "", passComplexity: ""), registrationID: "", sessionID: "", status: "", subscribedMarkets: [], subscriptionDaysNotify: "", subscriptionDaysRemaining: "", subscriptionFeeAmt: "", subscriptionFrom: "", subscriptionTo: "", trialsNumber: "", uCode: "", updateInfo: "", userName: "", userType: "", webCode: "", enforceChangePassword: "", enforceKYC: "", isExpiredDocument: false, isIndividual: false, isMigrationEligible: "", isTermsAndConditions: "", lockedSeconds: "")
+    return LoginUIModel(brokerID: "", curCode: "", compInit: "", email: "", errorMsg: "", groupCode: "", isAgreed: "", isBiometric: "", isDeleted: "", isEnableOMSPLUS: "", isFirstLogin: "", isRenewed: "", lastLoginDate: "", mainClientID: "", mobID: "", mobType: "", mobileNo: "", nameFullNameA: "", nameFullNameE: "", otp: "", passwordPolicy: PasswordPolicy(enforceSpecialChar: "", enforceStartWithAlpha: "", enforeAlphanumeric: "", minlength: "", numCapitalChar: "", numSmallChar: "", numSpecialChar: "", passComplexity: ""), registrationID: "", sessionID: "", status: "", subscribedMarkets: [], subscriptionDaysNotify: "", subscriptionDaysRemaining: "", subscriptionFeeAmt: "", subscriptionFrom: "", subscriptionTo: "", trialsNumber: "", uCode: "", updateInfo: "", userName: "", userType: "", webCode: "", enforceChangePassword: "", enforceKYC: "", isExpiredDocument: false, isIndividual: false, isMigrationEligible: "", isTermsAndConditions: "", lockedSeconds: "", TIERS_CODE: "", MAIN_BADGES_CODE: "", SUB_BADGES_CODE: "")
     }
 
 }

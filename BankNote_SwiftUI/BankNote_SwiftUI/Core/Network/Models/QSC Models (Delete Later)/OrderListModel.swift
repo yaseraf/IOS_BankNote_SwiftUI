@@ -95,6 +95,7 @@ struct OrderListResponseModel:Codable {
 }
 
 struct OrderListUIModel: Codable{
+    var id = UUID().uuidString
     var AccountID: String? = ""
     var AccountNameA: String? = ""
     var AccountNameE: String? = ""

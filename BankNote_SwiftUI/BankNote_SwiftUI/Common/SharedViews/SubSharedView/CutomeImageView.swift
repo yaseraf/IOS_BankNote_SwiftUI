@@ -10,9 +10,10 @@ import Foundation
 import SwiftUI
 struct BackCustomView: View {
     var body: some View {
-        Image(AppUtility.shared.isRTL ? "ic_rightArrow2" :"ic_rightArrow2Reversed")
-            .frame(width: 20)
-            .frame(height: 20)
+        Image(AppUtility.shared.isRTL ? "ic_rightArrow" :"ic_leftArrow")
+            .resizable()
+            .frame(width: 24)
+            .frame(height: 24)
             .foregroundStyle(Color.colorFGPrimary)
             .padding(6)
             .background(
@@ -25,7 +26,7 @@ struct BackCustomView: View {
 
 struct RightImageView:View {
     var body: some View {
-        Image(AppUtility.shared.isRTL ?  "ic_rightArrow2Reversed" : "ic_rightArrow2")
+        Image(AppUtility.shared.isRTL ?  "ic_leftArrow" : "ic_rightArrow")
             .resizable()
             .renderingMode(.template)
 

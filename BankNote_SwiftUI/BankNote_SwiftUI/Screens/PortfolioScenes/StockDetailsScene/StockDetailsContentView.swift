@@ -54,6 +54,7 @@ struct StockDetailsContentView: View {
     @State private var selectedSegment: StockSegment = .details
     @StateObject var webViewStore = WebViewStore()
 
+    var ordersData:Binding<[OrderListUIModel]?>
     var stockData:Binding<GetALLMarketWatchBySymbolUIModel?>
     var chartLoaded:Binding<Bool?>
     var marketNews:Binding<[GetAllMarketNewsBySymbolUIModel]?>
@@ -91,11 +92,11 @@ struct StockDetailsContentView: View {
 
                         Spacer()
                         
-                        Image(systemName: "bookmark")
-                            .font(.title2)
-                        Image(systemName: "bell")
-                            .font(.title2)
-                            .padding(.leading, 10)
+//                        Image(systemName: "bookmark")
+//                            .font(.title2)
+//                        Image(systemName: "bell")
+//                            .font(.title2)
+//                            .padding(.leading, 10)
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 12)
@@ -174,64 +175,66 @@ struct StockDetailsContentView: View {
                 }
                 .padding(.bottom, 20)
                 
-                chartView
-                
-                // Segmented control.
-                HStack(spacing: 0) {
-                    ForEach(StockSegment.allCases, id: \.self) { segment in
-                        VStack(spacing: 0) {
-                            if selectedSegment == segment {
-                                AppUtility.shared.APP_GRADIENT
-                                .frame(maxHeight: 50)
-                                .mask(
-                                    HStack(alignment: .center, spacing: 4) {
-                                        Circle()
-                                            .scaledToFit()
-                                            .frame(width: 5, height: 5)
-                                            
-                                        Text(segment.rawValue.localized)
-                                            .font(.cairoFont(.semiBold, size: 12))
-                                    }
-                                )
-                            } else {
-                                Text(segment.rawValue.localized)
-                                    .font(.cairoFont(.semiBold, size: 12))
-                                    .foregroundColor(.secondary)
-                            }
-                            
-//                            if selectedSegment == segment {
-//                                RoundedRectangle(cornerRadius: 1)
-//                                    .frame(height: 2)
-//                                    .foregroundColor(.purple)
-//                            }
-                        }
-//                        .padding(.vertical, 10)
-                        .frame(maxWidth: .infinity)
-                        .onTapGesture {
-                            withAnimation {
-                                self.selectedSegment = segment
-                            }
-                        }
-                    }
-                }
-                .padding(.top)
-                
-                // Dynamic content based on selected segment.
                 ScrollView {
-                    VStack(alignment: .leading) {
-                        switch selectedSegment {
-                        case .details:
-                            DetailsView(stockData: stockData, marketNews: marketNews)
-                        case .myPosition:
-                            MyPositionView(stockData: stockData, ownedShares: ownedShares)
-                        case .orders:
-                            OrdersView()
-                        case .research:
-                            ResearchView()
+                    chartView
+                    
+                    // Segmented control.
+                    HStack(spacing: 0) {
+                        ForEach(StockSegment.allCases, id: \.self) { segment in
+                            VStack(spacing: 0) {
+                                if selectedSegment == segment {
+                                    AppUtility.shared.APP_GRADIENT
+                                    .frame(maxHeight: 50)
+                                    .mask(
+                                        HStack(alignment: .center, spacing: 4) {
+                                            Circle()
+                                                .scaledToFit()
+                                                .frame(width: 5, height: 5)
+                                                
+                                            Text(segment.rawValue.localized)
+                                                .font(.cairoFont(.semiBold, size: 12))
+                                        }
+                                    )
+                                } else {
+                                    Text(segment.rawValue.localized)
+                                        .font(.cairoFont(.semiBold, size: 12))
+                                        .foregroundColor(.secondary)
+                                }
+                                
+    //                            if selectedSegment == segment {
+    //                                RoundedRectangle(cornerRadius: 1)
+    //                                    .frame(height: 2)
+    //                                    .foregroundColor(.purple)
+    //                            }
+                            }
+    //                        .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                            .onTapGesture {
+                                withAnimation {
+                                    self.selectedSegment = segment
+                                }
+                            }
+                        }
+                    }
+                    .padding(.top)
+                    
+                    // Dynamic content based on selected segment.
+                    ScrollView {
+                        VStack(alignment: .leading) {
+                            switch selectedSegment {
+                            case .details:
+                                DetailsView(stockData: stockData, marketNews: marketNews)
+                            case .myPosition:
+                                MyPositionView(stockData: stockData, ownedShares: ownedShares)
+                            case .orders:
+                                OrdersView(ordersData: ordersData)
+                            case .research:
+                                ResearchView()
+                            }
                         }
                     }
                 }
-                
+
                 Spacer()
                 
                 // Buy/Sell buttons.
@@ -278,12 +281,15 @@ struct StockDetailsContentView: View {
     }
     
     private var chartView: some View {
-        let chartURL:String = "https://mahfaztyplus.cicapital.com/MobileServices/tradingView/mobile_Green.html?symbol=\(UserDefaultController().selectedSymbol ?? "")&theme=\(AppUtility.shared.isDarkTheme ? "NIGHT" : "DAY")&ChartType=mountain&period=1D&color=\(Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0 > 0 ? "B" : "R")"
-
+        let chartURL:String = "https://trade.rol.com.eg/tradingView/index.html?symbol=\(UserDefaultController().selectedSymbol ?? "")&theme=\(AppUtility.shared.isDarkTheme ? "NIGHT" : "DAY")&ChartType=mountain&period=1D&color=\(Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0 > 0 ? "B" : "R")"
+        
+        debugPrint("Chart View: \(chartURL)")
+        
         return VStack {
             WebView(store: webViewStore, chartLoaded: chartLoaded, url: URL(string: chartURL)!)
         }
-        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 200,  alignment: .center)
+        .frame(height: 350)
+        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,  alignment: .center)
         .padding(.horizontal, 18)
 
 
@@ -438,7 +444,7 @@ struct MyPositionView: View {
                             .scaledToFit()
                             .frame(width: 20, height: 20)
                             .foregroundColor(Color(hex: "#1E961E"))
-                        Text("\("egp".localized) +115.5 (+5.6%)")
+                        Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChange ?? "") ?? 0)) (\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0))%)")
                             .font(.cairoFont(.semiBold, size: 18))
                             .foregroundColor(Color(hex: "#1E961E"))
 
@@ -455,6 +461,23 @@ struct MyPositionView: View {
 
 // MARK: - Orders View
 struct OrdersView: View {
+    var ordersData:Binding<[OrderListUIModel]?>
+    
+    func formatDate(dateString: String) -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "ddMMyyyyHHmmss"
+        inputFormatter.locale = Locale(identifier: "en")
+        
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MMM d, yyyy - h:mm a"
+        
+        guard let date = inputFormatter.date(from: dateString) else {
+            return "expected date in format: ddMMyyyyHHmmss, but got: \(dateString)"
+        }
+        
+        return outputFormatter.string(from: date)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("today".localized)
@@ -462,15 +485,21 @@ struct OrdersView: View {
                 .foregroundStyle(.secondary)
             
             VStack(spacing: 0) {
-                OrderRow(status: "Completed", action: "Buy", shares: "100 Shares", price: "22.3", total: "2,230", date: "Apr 30, 2025 - 11:20 AM", isCompleted: true)
-                
-                Divider()
-                
-                OrderRow(status: "Completed", action: "Buy", shares: "8 Shares", price: "22.3", total: "178.4", date: "Apr 30, 2025 - 10:20 AM", isCompleted: true)
-                
-                Divider()
-                
-                OrderRow(status: "Canceled", action: "Buy", shares: "10 Shares", price: "22.1", total: "221.0", date: "Apr 30, 2025 - 10:20 AM", isCompleted: false)
+                ForEach(ordersData.wrappedValue ?? [], id: \.id) { item in
+                    
+                    OrderRow(
+                        orderItem: item,
+                        status: getStatusDescE(m: item),
+                        action: item.SellBuyFlag?.lowercased() == "b" ? "buy".localized : "sell".localized,
+                        shares: "\(AppUtility.shared.formatThousandSeparator(number: Double(item.Remaining ?? "") ?? 0)) \("shares".localized)",
+                        price: "\(AppUtility.shared.formatThousandSeparator(number: Double(item.Price ?? "0") ?? 0))",
+                        total: "\(AppUtility.shared.formatThousandSeparator(number: Double(item.LocalValue ?? "0") ?? 0))",
+                        date: formatDate(dateString: item.EntryDate ?? ""),
+                    )
+                    
+                    Divider()
+
+                }
             }
             .background(Color.white.opacity(0.8))
             .cornerRadius(10)
@@ -645,20 +674,20 @@ struct NewsRow: View {
 
 // A row for displaying an order.
 struct OrderRow: View {
+    let orderItem: OrderListUIModel
     let status: String
     let action: String
     let shares: String
     let price: String
     let total: String
     let date: String
-    let isCompleted: Bool
     
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(status)
                     .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundColor(isCompleted ? Color(hex: "#1E961E") : Color(hex: "#AA1A1A"))
+                    .foregroundColor(getForegroundColor(m: orderItem))
                 
                 HStack(spacing: 5) {
                     Text(action)
@@ -667,6 +696,7 @@ struct OrderRow: View {
                     Text(shares)
                         .font(.cairoFont(.semiBold, size: 18))
                 }
+                .padding(.bottom, 8)
                 
                 Text(date)
                     .font(.cairoFont(.light, size: 12))
@@ -677,7 +707,7 @@ struct OrderRow: View {
             VStack(alignment: .trailing, spacing: 0) {
                 Text(status)
                     .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundColor(isCompleted ? Color(hex: "#1E961E") : Color(hex: "#AA1A1A"))
+                    .foregroundColor(getForegroundColor(m: orderItem))
                     .opacity(0)
                 
                 HStack(spacing: 0) {
@@ -702,12 +732,13 @@ struct OrderRow: View {
 
 
 
-#Preview {
-    StockDetailsContentView(stockData: .constant(.initializer()), chartLoaded: .constant(false), marketNews: .constant([]), ownedShares: .constant(0), onBackTap: {
-        
-    }, onBuyTap: {
-        
-    }, onSellTap: {
-        
-    })
-}
+//
+//#Preview {
+//    StockDetailsContentView(stockData: .constant(.initializer()), chartLoaded: .constant(false), marketNews: .constant([]), ownedShares: .constant(0), onBackTap: {
+//        
+//    }, onBuyTap: {
+//        
+//    }, onSellTap: {
+//        
+//    })
+//}

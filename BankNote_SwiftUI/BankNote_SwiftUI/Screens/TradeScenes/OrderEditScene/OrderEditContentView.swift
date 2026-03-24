@@ -74,17 +74,23 @@ struct OrderEditContentView: View {
             }
 
             HStack(spacing: 8) {
-                OrderDetailsInfoCard(title: "order_type".localized, value: orderDetails.wrappedValue?.OrderTypeCode ?? "" == "1" ? "market_order".localized : "limit_order".localized)
-                OrderDetailsInfoCard(title: "good_till".localized, value: AppUtility.shared.isRTL ? UserDefaultController().tifList?.filter({$0.id == "000\(orderDetails.wrappedValue?.ValidityCode ?? "")"}).first?.descA ?? "" :
-                    UserDefaultController().tifList?.filter({$0.id == "000\(orderDetails.wrappedValue?.ValidityCode ?? "")"}).first?.descE ?? "" )
+                OrderDetailsInfoCard(title: "price".localized, value: orderDetails.wrappedValue?.Price ?? "")
+//                OrderDetailsInfoCard(title: "good_till".localized, value: AppUtility.shared.isRTL ? UserDefaultController().tifList?.filter({$0.id == "000\(orderDetails.wrappedValue?.ValidityCode ?? "")"}).first?.descA ?? "" :
+                OrderDetailsInfoCard(title: "remaining".localized, value: orderDetails.wrappedValue?.Remaining ?? "")
             }
+            
+            HStack(spacing: 8) {
+                OrderDetailsInfoCard(title: "order_type".localized, value: orderDetails.wrappedValue?.OrderTypeCode ?? "" == "1" ? "market_order".localized : "limit_order".localized)
+                OrderDetailsInfoCard(title: "good_till".localized, value: "one_day".localized)
+            }
+
             
             VStack(spacing: 0) {
                 Text("rejection_reason".localized)
                     .font(.apply(.regular, size: 14))
                 Text(orderDetails.wrappedValue?.RejectReason ?? "")
                     .font(.apply(.semiBold, size: 16))
-                    .lineLimit(2)
+//                    .lineLimit(2)
                     .minimumScaleFactor(0.5)
             }
             .frame(maxHeight: 68)

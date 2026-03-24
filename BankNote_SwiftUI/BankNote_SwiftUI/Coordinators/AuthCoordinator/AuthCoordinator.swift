@@ -54,7 +54,8 @@ class AuthCoordinator:  ObservableObject {
 extension AuthCoordinator: AuthCoordinatorProtocol {
     func openLandingScene() {
         let useCase = AuthUseCase()
-        let viewModel = LandingViewModel(coordinator: self, useCase: useCase)
+        let homeUseCase = HomeUseCase()
+        let viewModel = LandingViewModel(coordinator: self, useCase: useCase, homeUseCase: homeUseCase)
         let view = LandingScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -70,8 +71,10 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         viewController.modalPresentationStyle = .pageSheet
         SceneDelegate.getAppCoordinator()?.topViewController()?.present(viewController, animated: true)
     }
+    
     func openForgotPasswordScene(forgotType: ForgotDataEnum) {
-        let viewModel = ForgotPasswordViewModel(coordinator: self, forgotType: forgotType)
+        let useCase = AuthUseCase()
+        let viewModel = ForgotPasswordViewModel(coordinator: self, useCase: useCase, forgotType: forgotType)
         let view = ForgotPasswordScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -79,7 +82,8 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
     }
     
     func openConfirmOtpScene(forgotType: ForgotDataEnum) {
-        let viewModel = ConfirmOtpPopupViewModel(coordinator: self, forgotType: forgotType)
+        let useCase = AuthUseCase()
+        let viewModel = ConfirmOtpPopupViewModel(coordinator: self, useCase: useCase, forgotType: forgotType)
         let view = ConfirmOtpPopupScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)
@@ -88,10 +92,10 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         viewController.sheetPresentationController?.detents = [.medium()]
         self.navigationController.topViewController?.present(viewController, animated: true)
     }
-    
         
     func openChangePasswordScene() {
-        let viewModel = ChangePasswordViewModel(coordinator: self)
+        let useCase = AuthUseCase()
+        let viewModel = ChangePasswordViewModel(coordinator: self, useCase: useCase)
         let view = ChangePasswordScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

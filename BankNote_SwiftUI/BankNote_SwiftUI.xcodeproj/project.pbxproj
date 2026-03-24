@@ -14,6 +14,7 @@
 		4811EA8C2E6831CD0010D8F6 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4811EA8B2E6831CD0010D8F6 /* SDWebImageSwiftUI */; };
 		4811EA8F2E6831D80010D8F6 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 4811EA8E2E6831D80010D8F6 /* SwiftUICharts */; };
 		4811EA922E6831EA0010D8F6 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 4811EA912E6831EA0010D8F6 /* Swinject */; };
+		487799112F56C63B0008CFA8 /* PaymobSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4877990A2F55B5940008CFA8 /* PaymobSDK.xcframework */; };
 		F381021684CF9693AE519C34 /* Pods_BankNote_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA36E952934633B8875E49EC /* Pods_BankNote_SwiftUI.framework */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +22,7 @@
 		31DF322247AF7809E5052681 /* Pods-BankNote_SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankNote_SwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		37996734E9E1713DC373F640 /* Pods-BankNote_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankNote_SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		4811E33C2E68312A0010D8F6 /* BankNote_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BankNote_SwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4877990A2F55B5940008CFA8 /* PaymobSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = PaymobSDK.xcframework; path = Pods/Paymob/PaymobSDK/Classes/PaymobSDK.xcframework; sourceTree = "<group>"; };
 		DA36E952934633B8875E49EC /* Pods_BankNote_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BankNote_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -37,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				487799112F56C63B0008CFA8 /* PaymobSDK.xcframework in Frameworks */,
 				4811EA8C2E6831CD0010D8F6 /* SDWebImageSwiftUI in Frameworks */,
 				4811EA8F2E6831D80010D8F6 /* SwiftUICharts in Frameworks */,
 				4811EA7E2E68317F0010D8F6 /* FlagAndCountryCode in Frameworks */,
@@ -54,6 +57,7 @@
 		280CE6C00EDE2B3D1614277E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4877990A2F55B5940008CFA8 /* PaymobSDK.xcframework */,
 				DA36E952934633B8875E49EC /* Pods_BankNote_SwiftUI.framework */,
 			);
 			name = Frameworks;
@@ -358,6 +362,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = H4YC3YVWTW;
@@ -392,6 +397,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = H4YC3YVWTW;

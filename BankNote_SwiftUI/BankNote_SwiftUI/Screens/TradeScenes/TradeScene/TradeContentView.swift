@@ -23,7 +23,8 @@ struct TradeContentView: View {
     @State var selectedNewsType: SelectedNewsType = .all
     
     var onIndexViewAllTap:()->Void
-    var onWatchlistViewAllTap:()->Void
+    var onWatchlistViewAllTap:([GetMarketWatchByProfileIDUIModel])->Void
+    var onWatchlistTap:(GetMarketWatchByProfileIDUIModel)->Void
     var onNewsViewAllTap:()->Void
     
     
@@ -89,7 +90,7 @@ struct TradeContentView: View {
                 Spacer()
                 
                 Button {
-                    onWatchlistViewAllTap()
+                    onWatchlistViewAllTap(watchlistData.wrappedValue ?? [])
                 } label: {
                     Text("view_all".localized)
                         .font(.cairoFont(.semiBold, size: 14))
@@ -103,12 +104,16 @@ struct TradeContentView: View {
             
             if watchlistData.wrappedValue?.isEmpty == false {
                 ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(0...3, id: \.self) { id in
-                        WatchlistCell(watchlistData: watchlistData.wrappedValue?[id] ?? .initializer())
+                    ForEach(Array(watchlistData.wrappedValue?.prefix(3) ?? []), id: \.id) { item in
+                        Button {
+                            onWatchlistTap(item)
+                        } label: {
+                            WatchlistCell(watchlistData: item)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
-            
         }
     }
     
@@ -248,7 +253,7 @@ struct WatchlistCell: View {
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 16) {
-                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(watchlistData.symbol).png")) { phase in
+                WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(watchlistData.symbol ?? "").png")) { phase in
                     switch phase {
                     case .success(let image):
                         image
@@ -280,9 +285,11 @@ struct WatchlistCell: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
+                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameArabic ?? "" : watchlistData.symbolNameEnglish ?? "")")
                         .font(.cairoFont(.semiBold, size: 14))
-                    Text("\(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")")
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(2)
+                    Text("\(watchlistData.symbol ?? "")")
                         .font(.cairoFont(.semiBold, size: 12))
                 }
             }
@@ -369,12 +376,12 @@ struct newsCell: View {
 }
 
 
-#Preview {
-    TradeContentView(indexData: .constant([]), watchlistData: .constant([]), newsData: .constant([]), onIndexViewAllTap: {
-        
-    }, onWatchlistViewAllTap: {
-        
-    }, onNewsViewAllTap: {
-        
-    })
-}
+//#Preview {
+//    TradeContentView(indexData: .constant([]), watchlistData: .constant([]), newsData: .constant([]), onIndexViewAllTap: {
+//        
+//    }, onWatchlistViewAllTap: {
+//        
+//    }, onNewsViewAllTap: {
+//        
+//    })
+//}

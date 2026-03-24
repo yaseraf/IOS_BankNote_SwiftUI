@@ -20,12 +20,31 @@
 "loading" = "Loading";
 "invalid_username_password" = "Invalid Username or Password";
 
+// MARK: - OTP Screen
+"invalid_pin" = "Invalid Pin";
+
 // MARK: Forgot Password Screen
 "please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "Please Enter your Phone Number and we'll send you a link to change Password";
+"please_enter_your_phone_number" = "Please Enter your Phone Number";
+"please_enter_your_email" = "Please Enter your Email";
+"email_address" = "Email address";
 "resend_link" = "Resend link";
 "click_to_resend_otp" = "Click to resend OTP";
 "continue_with_email" = "Continue with E-mail";
 "continue_with_phone_number" = "Continue with Phone Number";
+"please_enter_your_otp_to_confirm" = "Please enter your otp to confirm";
+"resend_otp" = "Resend otp";
+"verify" = "Verify";
+"incorrect_email_entered" = "Incorrect email entered";
+"incorrect_phone_entered" = "Incorrect mobile number entered";
+
+
+// MARK: Change password screen
+"change_password" = "Change Password";
+"old_password" = "Old Password";
+"new_password" = "New Password";
+"confirm_new_password" = "Confirm new password";
+
 
 // MARK: Payment Method Screen
 "payment_method" = "Payment Method";
@@ -51,6 +70,29 @@
 "my_portfolio" = "My Portfolio";
 "view_all" = "View All";
 "egp" = "EGP";
+
+// MARK: - Transaction History Screen
+"symbol" = "Symbol";
+"transaction_history" = "Transaction History";
+"date" = "Date";
+"currency" = "Currency";
+"buy_qty" = "Buy Qty";
+"sell_qty" = "Sell Qty";
+"buy_value" = "Buy Value";
+"sell_value" = "Sell Value";
+"sell_cost" = "Sell Cost";
+"delay_pnl" = "Delay PnL";
+"share_balance" = "Share Balance";
+"total_cost" = "Total Cost";
+"share_cost" = "Share Cost";
+"pnl" = "PnL%";
+
+// MARK: Notifications Screen
+"notifications" = "Notifications";
+"order_id" = "Order ID";
+"status" = "Status";
+"news" = "News";
+"news_has_been_received" = "News has been received";
 
 // MARK: Top Up Screen
 "top_up_balance" = "TopUp Balance";
@@ -86,6 +128,25 @@
 "all" = "All";
 "stocks" = "Stocks";
 "markets" = "Markets";
+"modify_order" = "Modify Order";
+"modify_order_desc" = "Your order has been modified";
+"fully_filled_order" = "Fully Filled Order";
+"fully_filled_order_desc" = "Your order is fully filled";
+"partially_filled_order" = "Partially Filled Order";
+"partially_filled_order_desc" = "Your order is partially filled";
+"waiting_order" = "Waiting Order";
+"waiting_order_desc" = "Your order is waiting";
+"rejected_order" = "Rejected Order";
+"rejected_order_desc" = "Your order is rejected";
+"cancel_order" = "Cancel Order";
+"cancel_order_desc" = "Your order is cancelled";
+"active_order" = "Active Order";
+"active_order_desc" = "Your order is active";
+"expired_order" = "Expired Order";
+"expired_order_desc" = "Your order is expired";
+"sent_order" = "Sent Order";
+"sent_order_desc" = "Your order is sent";
+
 
 // MARK: Orders Screen
 "pending" = "Pending";
@@ -98,6 +159,7 @@
 "limit_price" = "Limit Price";
 "available_amount" = "Available Amount";
 "cash" = "Cash";
+"one_day" = "One Day";
 
 // MARK: Order Details Screen
 "order_details" = "Order Details";
@@ -107,6 +169,7 @@
 "quantity" = "Quantity";
 "execution_type" = "Execution Type";
 "price" = "Price";
+"remaining" = "Remaining";
 "execution_rule" = "Execution Rule";
 "validity_date" = "Validity Date";
 "order_value" = "Order Value";
@@ -142,10 +205,35 @@
 "about_us" = "About us";
 "help" = "Help";
 "rating_app" = "Rating app";
+"buy_transactions" = "Buy Transactions";
 
+// MARK: Statements Screen
+"statements" = "Statements";
+"credit" = "Credit";
+"debit" = "Debit";
+"balance" = "Balance";
+"remarks" = "Remarks";
+"starting_balance" = "Starting Balance";
+"ending_balance" = "Ending Balance";
+
+// MARK: Invoices Screen
+"invoices" = "Invoices";
+"avg_price" = "Avg. Price";
+"qty" = "QTY.";
 
 // MARK: Tiers Screen
 "buy_now" = "Buy Now";
+"notes" = "Notes";
+
+// MARK: Badges Screen
+"unlock_badges_and_elevate_your_game" = "Unlock Badges and elevate your game.";
+"how_to" = "How to";
+"locked" = "Locked";
+"bronze" = "Bronze";
+"silver" = "Silver";
+"gold" = "Gold";
+"plat" = "Platinum";
+"diamond" = "Diamond";
 
 // Tier names
 "tier_rookie" = "Rookie";

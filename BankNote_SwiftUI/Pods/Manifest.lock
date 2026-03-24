@@ -1,24 +1,28 @@
 PODS:
+  - Paymob (1.2.2)
   - Toast-Swift (5.0.1)
   - VIDVLiveness (4.1.0)
   - VIDVOCR (3.1.0)
 
 DEPENDENCIES:
+  - Paymob
   - Toast-Swift (= 5.0.1)
   - VIDVLiveness (= 4.1.0)
   - VIDVOCR (= 3.1.0)
 
 SPEC REPOS:
   trunk:
+    - Paymob
     - Toast-Swift
     - VIDVLiveness
     - VIDVOCR
 
 SPEC CHECKSUMS:
+  Paymob: fcd57df021d0b94a63682d0d02982ed688559048
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   VIDVLiveness: d1ec9770ef8ccf86bea5b4a977b5ac62273fb249
   VIDVOCR: 8a829257942cc7d365dd06c0c9a1ae21319c8cc1
 
-PODFILE CHECKSUM: 9fd235e14cf6d6df53afd62ec76954b7d193d3c1
+PODFILE CHECKSUM: 23f802853fae97f8279f90303a32bd33ee4e69fa
 
 COCOAPODS: 1.16.2

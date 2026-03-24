@@ -57,6 +57,7 @@ struct GetBankNotesMainBadgesUIModel {
 }
 
 struct GetBankNotesMainBadgesItemUIModel {
+    var id = UUID().uuidString
     var banknotes: String?
     var bronze: String?
     var bronzeImageType: String?

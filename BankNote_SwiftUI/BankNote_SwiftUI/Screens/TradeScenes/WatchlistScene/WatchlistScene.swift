@@ -15,19 +15,33 @@ struct WatchlistScene: BaseSceneType {
     @State var viewTypeAction:BaseSceneViewType = DefaultBaseSceneViewType()
     
     var body: some View {
-        BaseScene(backgroundType: .clear, contentView: {
-            BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                WatchlistContentView(watchlistData: $viewModel.list, onBackTap: {
-                    viewModel.popViewController()
-                })
-            })
-            .onAppear {
-                viewModel.GetMarketWatchByProfileIDAPI(success: true)
-            }
-            .onDisappear {
-                viewModel.UnSubscribleMarketWatchSymbols()
-            }
-        }, showLoading: .constant(viewTypeAction.showLoading))
+        BaseScene(
+            backgroundType: .clear,
+            contentView: {
+                BaseContentView(
+                    withScroll:false,
+                    paddingValue: 0,
+                    backgroundType: .gradient,
+                    content: {
+                        WatchlistContentView(
+                            watchlistData: $viewModel.list,
+                            onWatchlistTap: { watchlist in
+                                viewModel.openStockDetailsScene(symbol: watchlist.symbol ?? "", marketType: watchlist.marketType ?? "")
+                            }, onBackTap: {
+                                viewModel.popViewController()
+                            }
+                        )
+                    }
+                )
+                .onAppear {
+                    viewModel.getSubscribeMarketWatchSymbols()
+                }
+                .onDisappear {
+                    viewModel.UnSubscribleMarketWatchSymbols()
+                }
+            },
+            showLoading: .constant(viewTypeAction.showLoading)
+        )
         .onViewDidLoad {
             WatchlistAPI()
         }

@@ -19,10 +19,14 @@ enum HomeRoute:APITargetType{
     case GetAllMarketNewsBySymbol(requestModel: GetAllMarketNewsBySymbolRequestModel)
     case GetExpectedProfitLoss(requestModel: GetExpectedProfitLossRequestModel)
     case GetRiskManagement(requestModel: GetRiskManagementRequestModel)
-    
+    case getInvoices(requestModel: GetInvoicesRequestModel)
+    case getStatementOfAccount(requestModel: GetStatementOfAccountRequestModel)
+    case GetTransactionSummary(requestModel: GetTransactionSummaryRequestModel)
+
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     case GetBankNote(requestModel: GetBankNoteRequestModel)
     case GetTiers(requestModel: GetTiersRequestModel)
+    case UpdateTiersCode(requestModel: UpdateTiersCodeRequestModel)
     case GetBankNotesMainBadges(requestModel: GetBankNotesMainBadgesRequestModel)
     case GetBankNotesBadges(requestModel: GetBankNotesBadgesRequestModel)
     case GetTransactionsPackages(requestModel: GetTransactionsPackagesRequestModel)
@@ -34,7 +38,7 @@ enum HomeRoute:APITargetType{
     case TransferAmountToAccounts(requestModel: TransferAmountToAccountsRequestModel)
     
     // MARK: Paymob
-    case PaymobAuthorize(requestModel: PaymobAuthorizeRequestModel)
+    case PaymobGetSdkToken(requestModel: PaymobGetSdkTokenRequestModel)
     
     var baseURL: URL{
         get{
@@ -68,7 +72,8 @@ enum HomeRoute:APITargetType{
         case .getUserAccounts:
             return "GeneralWServices/GetUserAccounts/\(KeyChainController().webCode ?? "")"
         case .getPortfolio:
-            return "FinancialWServices/GetPortfolioAndAccSumAndChart/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().clientID ?? "")/\(KeyChainController().webCode ?? "")/\(UserDefaultController().currentDate ?? "")/\(KeyChainController().brokerID ?? "")/\(KeyChainController().UCODE ?? "")"
+//            return "FinancialWServices/GetPortfolioAndAccSumAndChart/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().clientID ?? "")/\(KeyChainController().webCode ?? "")/\(UserDefaultController().currentDate ?? "")/\(KeyChainController().brokerID ?? "")/\(KeyChainController().UCODE ?? "")"
+            return "FinancialWServices/GetPortfolioAndAccSumAndChart/\(KeyChainController().mainClientID ?? "")/-1/\(KeyChainController().webCode ?? "")/\(UserDefaultController().currentDate ?? "")/\(KeyChainController().brokerID ?? "")/\(KeyChainController().UCODE ?? "")"
         case .GetAllProfilesLookupsByUserCode:
             return "MarektWServices/GetAllProfilesLookupsByUSerCode/\(KeyChainController().webCode ?? "")"
         case .GetMarketWatchByProfileID:
@@ -85,6 +90,12 @@ enum HomeRoute:APITargetType{
             return "FinancialWServices/GetExpectedProfitLoss/\(KeyChainController.shared().mainClientID ?? "")/\(KeyChainController.shared().clientID ?? "")/\(KeyChainController.shared().webCode ?? "")/\(getCurrentDateString())/\(KeyChainController.shared().brokerID ?? "")"
         case .GetRiskManagement:
             return "TradingWServices/GetRiskManagment"
+        case .getInvoices:
+            return "GeneralWServices/GetInvoices"
+        case .getStatementOfAccount:
+            return "FinancialWServices/GetGroupedStatmentOfAccount/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().clientID ?? "")/\(KeyChainController().webCode ?? "")/\(UserDefaultController().dateFrom ?? "")/\(UserDefaultController().dateTo ?? "")"
+        case .GetTransactionSummary:
+            return "FinancialWServices/GetTransactionSummary/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().clientID ?? "")/-1/\(KeyChainController().webCode ?? "")/\(UserDefaultController().dateFrom ?? "")/\(UserDefaultController().dateTo ?? "")"
             
             // MARK: Banknote / Tiers / Badges / Transactions Packages
 
@@ -92,6 +103,8 @@ enum HomeRoute:APITargetType{
             return "GeneralWservices/GetBankNote"
         case .GetTiers:
             return "GeneralWServices/GetTiers"
+        case .UpdateTiersCode:
+            return "GeneralWServices/UpdateTiersCode"
         case .GetBankNotesMainBadges:
             return "GeneralWServices/GetBankNotesMainBadges"
         case .GetBankNotesBadges:
@@ -113,17 +126,17 @@ enum HomeRoute:APITargetType{
             
             // MARK: Paymob
             
-        case .PaymobAuthorize:
-            return "GeneralWServices/PaymobAuthorize"
+        case .PaymobGetSdkToken:
+            return "GeneralWServices/PaymobGetSdkToken"
         }
     }
     
     var method: APIMethodType{
         get{
             switch self {
-            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
+            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss, .getStatementOfAccount, .GetTransactionSummary:
                 return .get
-            case .GetRiskManagement, .GetBankNote, .GetTiers, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts, .PaymobAuthorize:
+            case .GetRiskManagement, .GetBankNote, .GetTiers, .UpdateTiersCode, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts, .PaymobGetSdkToken, .getInvoices:
                 return .post
             }
         }
@@ -131,14 +144,18 @@ enum HomeRoute:APITargetType{
     
     var requestType: APITypeOfRequest{
         switch self {
-        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss:
+        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss, .getStatementOfAccount ,.GetTransactionSummary:
                 .requestPlain
             
         case .GetRiskManagement(let requestModel):
                 .requestJsonEncodable(requestModel)
+        case .getInvoices(let requestModel):
+                .requestJsonEncodable(requestModel)
         case .GetBankNote(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .GetTiers(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .UpdateTiersCode(let requestModel):
                 .requestJsonEncodable(requestModel)
         case .GetBankNotesMainBadges(let requestModel):
                 .requestJsonEncodable(requestModel)
@@ -158,7 +175,7 @@ enum HomeRoute:APITargetType{
                 .requestJsonEncodable(requestModel)
         case .TransferAmountToAccounts(let requestModel):
                 .requestJsonEncodable(requestModel)
-        case .PaymobAuthorize(let requestModel):
+        case .PaymobGetSdkToken(let requestModel):
                 .requestJsonEncodable(requestModel)
         }
     }

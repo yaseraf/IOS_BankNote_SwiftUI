@@ -13,13 +13,16 @@ class WatchlistViewModel: ObservableObject {
 
     @Published var watchlistData: [WatchlistUIModel]?
     @Published var list:[GetMarketWatchByProfileIDUIModel]?
-
+    @Published var portfolioData: GetPortfolioUIModel?
+    
     @Published var getMarketWatchByProfileIDAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
     @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
 
-    init(coordinator: TradeCoordinator, useCase: TradeUseCaseProtocol) {
+    init(coordinator: TradeCoordinator, useCase: TradeUseCaseProtocol, watchlist: [GetMarketWatchByProfileIDUIModel], portfolioData: GetPortfolioUIModel) {
         self.coordinator = coordinator
         self.useCase = useCase
+        self.list = watchlist
+        self.portfolioData = portfolioData
         
         Connection_Hub.shared.marketWatchDelegate = self
         
@@ -33,6 +36,21 @@ class WatchlistViewModel: ObservableObject {
 extension WatchlistViewModel {
     func popViewController() {
         coordinator.popViewController()
+    }
+    
+    func openStockDetailsScene(symbol: String, marketType: String) {
+        
+        let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == UserDefaultController().selectedSymbol ?? ""}).first ?? .testUIModel()
+
+        let portfolioSymbol = portfolioData?.portfolioes.filter({$0.symbol == symbol}).first
+
+        UserDefaultController().selectedSymbol = symbol
+        UserDefaultController().selectedSymbolID = selectedStock.symbolID
+        UserDefaultController().selectedSymbolType = marketType
+        UserDefaultController().selectedCustodian = portfolioSymbol?.custodianID ?? "-1"
+        UserDefaultController().CUSTODYID = portfolioSymbol?.custodianID ?? "-1"
+        UserDefaultController().selectedCustodianName = AppUtility.shared.isRTL ? portfolioSymbol?.custodianA ?? "" : portfolioSymbol?.custodianE ?? ""
+        SceneDelegate.getAppCoordinator()?.currentHomeCoordinator?.getPortfolioCoordinator().openStockDetailsScene(symbol: symbol, marketType: marketType)
     }
 }
 
@@ -49,30 +67,30 @@ extension WatchlistViewModel {
 
 // MARK: API Calls
 extension WatchlistViewModel {
-    func GetMarketWatchByProfileIDAPI(success:Bool) {
-        let requestModel = GetMarketWatchByProfileIDRequestModel()
-        getMarketWatchByProfileIDAPIResult = .onLoading(show: true)
-        
-        UserDefaultController().profileID = "2"
-        
-        Task.init {
-            await useCase.GetMarketWatchByProfileID(requestModel: requestModel) {[weak self] result in
-                self?.getMarketWatchByProfileIDAPIResult = .onLoading(show: false)
-                switch result {
-                case .success(let success):
-                    self?.getMarketWatchByProfileIDAPIResult = .onSuccess(response: success)
-                    debugPrint("market overview stocks success")
-                    self?.list = success
-                    
-                    self?.getSubscribeMarketWatchSymbols()
-
-                case .failure(let failure):
-                        self?.getMarketWatchByProfileIDAPIResult = .onFailure(error: failure)
-                    debugPrint("market overview stocks failure: \(failure)")
-                }
-            }
-        }
-    }
+//    func GetMarketWatchByProfileIDAPI(success:Bool) {
+//        let requestModel = GetMarketWatchByProfileIDRequestModel()
+//        getMarketWatchByProfileIDAPIResult = .onLoading(show: true)
+//        
+//        UserDefaultController().profileID = "2"
+//        
+//        Task.init {
+//            await useCase.GetMarketWatchByProfileID(requestModel: requestModel) {[weak self] result in
+//                self?.getMarketWatchByProfileIDAPIResult = .onLoading(show: false)
+//                switch result {
+//                case .success(let success):
+//                    self?.getMarketWatchByProfileIDAPIResult = .onSuccess(response: success)
+//                    debugPrint("market overview stocks success")
+//                    self?.list = success
+//                    
+//                    self?.getSubscribeMarketWatchSymbols()
+//
+//                case .failure(let failure):
+//                        self?.getMarketWatchByProfileIDAPIResult = .onFailure(error: failure)
+//                    debugPrint("market overview stocks failure: \(failure)")
+//                }
+//            }
+//        }
+//    }
 
 }
 
@@ -95,18 +113,18 @@ extension WatchlistViewModel {
     
         if Connection_Hub.shared.chatHub != nil {
             do {
-                printToLog("test invoke subscribeMarketWatchSymbols '\(arraySymbols)'")
+                debugPrint("test invoke subscribeMarketWatchSymbols '\(arraySymbols)'")
                 try Connection_Hub.shared.chatHub?.invoke("SubscribeMarketWatchSymbols", arguments: [UserDefaultController().username ?? "", arraySymbols]) { (result, error) in
                     if let e = error {
-                        printToLog("SubscribeMarketWatchSymbols invoke '\(arraySymbols)' Error: \(e)")
+                        debugPrint("SubscribeMarketWatchSymbols invoke '\(arraySymbols)' Error: \(e)")
                         self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
                     } else {
-                        printToLog("SubscribeMarketWatchSymbols invoke '\(arraySymbols)' Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+                        debugPrint("SubscribeMarketWatchSymbols invoke '\(arraySymbols)' Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
                         self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
                     }
                 }
             } catch let error {
-                printToLog("SubscribeMarketWatchSymbols chatHub '\(arraySymbols)' error: \(error.localizedDescription)")
+                debugPrint("SubscribeMarketWatchSymbols chatHub '\(arraySymbols)' error: \(error.localizedDescription)")
                 self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
 
             }
@@ -118,17 +136,17 @@ extension WatchlistViewModel {
         
         if Connection_Hub.shared.chatHub != nil {
             do {
-                printToLog("test invoke unSubscribeMarketWatchSymbols")
+                debugPrint("test invoke unSubscribeMarketWatchSymbols")
                 try Connection_Hub.shared.chatHub?.invoke(HubMethodType.unSubscribeMarketWatchSymbols.rawValue, arguments: [UserDefaultController().username ?? ""]) { (result, error) in
                     if let e = error {
-                        printToLog("unSubscribeMarketWatchSymbols invoke Error: \(e)")
+                        debugPrint("unSubscribeMarketWatchSymbols invoke Error: \(e)")
                     } else {
-                        printToLog("unSubscribeMarketWatchSymbols invoke Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
-                        printToLog("unSubscribeMarketWatchSymbols invoke result: \(result)")
+                        debugPrint("unSubscribeMarketWatchSymbols invoke Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+                        debugPrint("unSubscribeMarketWatchSymbols invoke result: \(result)")
                     }
                 }
             } catch let error {
-                printToLog("unSubscribeMarketWatchSymbols chatHub error: \(error.localizedDescription)")
+                debugPrint("unSubscribeMarketWatchSymbols chatHub error: \(error.localizedDescription)")
             }
         }
     }

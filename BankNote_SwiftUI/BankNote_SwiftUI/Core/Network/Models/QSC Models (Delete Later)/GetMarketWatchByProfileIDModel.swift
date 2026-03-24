@@ -167,6 +167,8 @@ struct GetMarketWatchByProfileIDResponseModel: Codable {
 }
 
 struct GetMarketWatchByProfileIDUIModel: Comparable{
+    var id = UUID().uuidString
+    
     var accumlossFlags: String?
     var allowdBuyLimit: String?
     var avgPrice: String?

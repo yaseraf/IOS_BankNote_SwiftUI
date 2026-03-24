@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		7C361DC349C14D5B5D387902CE03F51A /* Paymob */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = CA3C236CDEDA87D4247C2A043EE90B46 /* Build configuration list for PBXAggregateTarget "Paymob" */;
+			buildPhases = (
+				49C7C3CF8D22996F9F63A8154F5CE7E1 /* [CP] Copy XCFrameworks */,
+			);
+			dependencies = (
+			);
+			name = Paymob;
+			productName = Paymob;
+		};
 		D0FF5996F2A00B72836687B3B4E82283 /* VIDVLiveness */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = FC05C8D54705A4E18A48D7AF44D8E59C /* Build configuration list for PBXAggregateTarget "VIDVLiveness" */;
@@ -32,70 +43,81 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		00193BBE2803F61A55D5400FB3F497E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A9FECC1FDAD9F26B079096EFC42AB3 /* Foundation.framework */; };
-		383295A9BBB5F6E006B9DF89343D950C /* Toast-Swift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B284E572C32BEBC6773223F5C9C3C70 /* Toast-Swift-dummy.m */; };
+		383295A9BBB5F6E006B9DF89343D950C /* Toast-Swift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBDAE962E2C6B434DA504A7F8F3D220 /* Toast-Swift-dummy.m */; };
+		63C22FAD97DE0544BA5C7BB441D65CAE /* Pods-BankNote_SwiftUI-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E136D4662622FD78AF0B45F3B5A74BC /* Pods-BankNote_SwiftUI-dummy.m */; };
 		8AF726AD5FAC43FC80CBDB57D294F3CD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44E31BFCE69A3A4BEC13CE3C15C09F41 /* QuartzCore.framework */; };
-		8FA77DE970FBCD7AD67DB023A97EBDEF /* Pods-BankNote_SwiftUI-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E136D4662622FD78AF0B45F3B5A74BC /* Pods-BankNote_SwiftUI-dummy.m */; };
 		B2767D765D72B570A5F6F701D85F35B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A9FECC1FDAD9F26B079096EFC42AB3 /* Foundation.framework */; };
-		D7FF92A971F36AF0B0D0D34CD925E7E0 /* Toast-Swift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E8600573F2F16194BE09C189360241 /* Toast-Swift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D88CDE8CBECA6DC2C16A8A1D6E0CBF1D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E90EF511912C540F488EF38BB4B460 /* Toast.swift */; };
-		E08BB48B8EF288FA1308A89D7ED3B792 /* Pods-BankNote_SwiftUI-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D5938D418EF2E6C74A46D8561C43F30 /* Pods-BankNote_SwiftUI-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA468D0CCBF9064A7E9D2D7CF014197E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A9FECC1FDAD9F26B079096EFC42AB3 /* Foundation.framework */; };
+		CAD8695F74C091246A114B557D1AB7B7 /* Pods-BankNote_SwiftUI-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D5938D418EF2E6C74A46D8561C43F30 /* Pods-BankNote_SwiftUI-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D7FF92A971F36AF0B0D0D34CD925E7E0 /* Toast-Swift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B372B77352985CF88EA71D3FAE6604C /* Toast-Swift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D88CDE8CBECA6DC2C16A8A1D6E0CBF1D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838AE3F4EB2FF9101DCD22FE98586DB3 /* Toast.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		56F3AD859395198ACD5F97B913EF7705 /* PBXContainerItemProxy */ = {
+		1EF0277DA6CA3DB9F7ACC192642E7504 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = B990BD87169C76A3ED3FE8A9258D91A3;
-			remoteInfo = "Toast-Swift";
+			remoteGlobalIDString = 7C361DC349C14D5B5D387902CE03F51A;
+			remoteInfo = Paymob;
 		};
-		9B18FD62EADBAA66F2F00CAF929A1FED /* PBXContainerItemProxy */ = {
+		920E929F47155F4D35391DEA526A876C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = EE59EC6606F7355200BDADFF45E9E661;
 			remoteInfo = VIDVOCR;
 		};
-		E8A2739EA653A7C4FF0BCED2E82098F9 /* PBXContainerItemProxy */ = {
+		C5824F79E5032E10263EA5FCE12BFE2C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = D0FF5996F2A00B72836687B3B4E82283;
 			remoteInfo = VIDVLiveness;
 		};
+		C9BDDB8A433B65C7C8F1307C2F004100 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B990BD87169C76A3ED3FE8A9258D91A3;
+			remoteInfo = "Toast-Swift";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		02BCD11C59522AC76B89FB07266AC9B3 /* Pods-BankNote_SwiftUI-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BankNote_SwiftUI-acknowledgements.plist"; sourceTree = "<group>"; };
-		07EFB4C800267CF15C91990BB49B8B02 /* Toast-Swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Toast-Swift.debug.xcconfig"; sourceTree = "<group>"; };
-		1D0F81E717B76A9DFEEAA63C66534573 /* VIDVOCR.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; path = VIDVOCR.xcframework; sourceTree = "<group>"; };
-		1E547F5C033E367A213CECA9B7A6A229 /* VIDVOCR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVOCR.debug.xcconfig; sourceTree = "<group>"; };
-		26A4AB8BD15FE8F58847CDB821803F1C /* VIDVLiveness.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVLiveness.debug.xcconfig; sourceTree = "<group>"; };
+		14A8AE0EEE7B928AC2C84729660CDEE4 /* Toast-Swift-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Toast-Swift-Info.plist"; sourceTree = "<group>"; };
+		1B372B77352985CF88EA71D3FAE6604C /* Toast-Swift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Toast-Swift-umbrella.h"; sourceTree = "<group>"; };
+		220133B4FD3111DFCA0E9A7FA33D238F /* VIDVOCR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVOCR.debug.xcconfig; sourceTree = "<group>"; };
+		27C45D60DA0CB679B418947566970AD5 /* Paymob-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Paymob-xcframeworks.sh"; sourceTree = "<group>"; };
+		2CCF87108C5CA7A46FFBF9E9A2230C85 /* Toast-Swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Toast-Swift.debug.xcconfig"; sourceTree = "<group>"; };
 		2D5938D418EF2E6C74A46D8561C43F30 /* Pods-BankNote_SwiftUI-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BankNote_SwiftUI-umbrella.h"; sourceTree = "<group>"; };
-		39737B78073E3F092669E23DE9F1C7D6 /* Toast-Swift-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Toast-Swift-Info.plist"; sourceTree = "<group>"; };
-		42E8600573F2F16194BE09C189360241 /* Toast-Swift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Toast-Swift-umbrella.h"; sourceTree = "<group>"; };
+		314C42595717E0FB5653BE6B612D5DD5 /* Toast-Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Toast-Swift.release.xcconfig"; sourceTree = "<group>"; };
+		315EC1F4B439B209FBC659EB799EC8CB /* VIDVLiveness.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVLiveness.debug.xcconfig; sourceTree = "<group>"; };
+		32BF7AD6D469C4BD83D26E57BE8A5324 /* Toast-Swift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Toast-Swift-prefix.pch"; sourceTree = "<group>"; };
+		3A17642C035DAB31513DBD4195F5A603 /* VIDVOCR-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "VIDVOCR-xcframeworks.sh"; sourceTree = "<group>"; };
+		3DC4416F49B896071649048280BAA122 /* VIDVOCR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVOCR.release.xcconfig; sourceTree = "<group>"; };
 		44E31BFCE69A3A4BEC13CE3C15C09F41 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		4DDCBE0CEF28FD2C9BBD181D5C366E97 /* VIDVLiveness-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "VIDVLiveness-xcframeworks.sh"; sourceTree = "<group>"; };
-		5E01122A8D209072B2A2C3A4358F7C73 /* VIDVLiveness.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVLiveness.release.xcconfig; sourceTree = "<group>"; };
-		5F2975E7BEB7FF7C02130C4E4ADF6457 /* VIDVLiveness.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; path = VIDVLiveness.xcframework; sourceTree = "<group>"; };
+		6013DD94520FC43991DF872C37B4F9A8 /* VIDVLiveness-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "VIDVLiveness-xcframeworks.sh"; sourceTree = "<group>"; };
 		69BE31332C483F3D3E9D42F18F50D66C /* Pods-BankNote_SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BankNote_SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
+		72EE0B9697CBDB0DFD704A810BB8B50D /* PaymobSDK.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; name = PaymobSDK.xcframework; path = PaymobSDK/Classes/PaymobSDK.xcframework; sourceTree = "<group>"; };
 		78B641F7E4D6294820170627A31D5CBB /* Pods-BankNote_SwiftUI-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BankNote_SwiftUI-Info.plist"; sourceTree = "<group>"; };
-		7B284E572C32BEBC6773223F5C9C3C70 /* Toast-Swift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Toast-Swift-dummy.m"; sourceTree = "<group>"; };
 		7E136D4662622FD78AF0B45F3B5A74BC /* Pods-BankNote_SwiftUI-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BankNote_SwiftUI-dummy.m"; sourceTree = "<group>"; };
-		92E6DB4422BD2F1F551F3B0DBAAC20C7 /* Toast-Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Toast-Swift.release.xcconfig"; sourceTree = "<group>"; };
+		838AE3F4EB2FF9101DCD22FE98586DB3 /* Toast.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Toast.swift; path = Toast/Toast.swift; sourceTree = "<group>"; };
 		9A04FEEFEC000CAF7C044EAC67324BB4 /* Pods-BankNote_SwiftUI-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BankNote_SwiftUI-frameworks.sh"; sourceTree = "<group>"; };
+		9B67A6C2EDC2E75081E44A436ECB8006 /* VIDVLiveness.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVLiveness.release.xcconfig; sourceTree = "<group>"; };
+		9CBDAE962E2C6B434DA504A7F8F3D220 /* Toast-Swift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Toast-Swift-dummy.m"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A1C0FC64C9DB896A241261BE52C4771B /* Pods-BankNote_SwiftUI-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BankNote_SwiftUI-acknowledgements.markdown"; sourceTree = "<group>"; };
 		A2D4BE648208835237D147A9E237A63D /* Pods_BankNote_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BankNote_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B33541359E1284DBA4617BDF63A2078C /* Toast-Swift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Toast-Swift-prefix.pch"; sourceTree = "<group>"; };
-		BF180A807EA5977375DAE8BF06EB380B /* Toast-Swift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Toast-Swift.modulemap"; sourceTree = "<group>"; };
-		D2E90EF511912C540F488EF38BB4B460 /* Toast.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Toast.swift; path = Toast/Toast.swift; sourceTree = "<group>"; };
+		C2C11B7EA989CE17A58A58270A0F6E0E /* Paymob.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Paymob.debug.xcconfig; sourceTree = "<group>"; };
+		CFB3C77F65BE60F30AA4E9C45EF84A4D /* Paymob.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Paymob.release.xcconfig; sourceTree = "<group>"; };
 		D3A9FECC1FDAD9F26B079096EFC42AB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		D6043471C96F93DC41F7DD1E0D7D8B35 /* Toast_Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Toast_Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D62BE8229305341F968AF4FDDDC23EA1 /* VIDVLiveness.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; path = VIDVLiveness.xcframework; sourceTree = "<group>"; };
 		D86D46D9292BE79D036DB4270DC88BB7 /* Pods-BankNote_SwiftUI.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BankNote_SwiftUI.modulemap"; sourceTree = "<group>"; };
-		EEC311AFA34D07058A673F53F704783D /* VIDVOCR-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "VIDVOCR-xcframeworks.sh"; sourceTree = "<group>"; };
-		F5E0F55CF39AEEE9880274A5B9E7EB03 /* VIDVOCR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = VIDVOCR.release.xcconfig; sourceTree = "<group>"; };
+		EA77B3D6B77F2FFB4E09F4F068EDEDF6 /* VIDVOCR.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; path = VIDVOCR.xcframework; sourceTree = "<group>"; };
+		F950F7701EA56771C259158CB2AB6079 /* Toast-Swift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Toast-Swift.modulemap"; sourceTree = "<group>"; };
 		FDCB8D6EEDE013E8142C8D81528CB36F /* Pods-BankNote_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BankNote_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,28 +131,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B70015598726E9D5031254AC36E6632A /* Frameworks */ = {
+		72342A139C0CAF81FADD0C409F2C0D91 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00193BBE2803F61A55D5400FB3F497E6 /* Foundation.framework in Frameworks */,
+				BA468D0CCBF9064A7E9D2D7CF014197E /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		05275CF8180D3F3D5469BCC876D5E1DA /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				EEC311AFA34D07058A673F53F704783D /* VIDVOCR-xcframeworks.sh */,
-				1E547F5C033E367A213CECA9B7A6A229 /* VIDVOCR.debug.xcconfig */,
-				F5E0F55CF39AEEE9880274A5B9E7EB03 /* VIDVOCR.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/VIDVOCR";
-			sourceTree = "<group>";
-		};
 		1628BF05B4CAFDCC3549A101F5A10A17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,13 +150,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		1910DA1BE5102900FA1EFA45FAA7A52D /* VIDVLiveness */ = {
+		2244AAFA474B35D3DC7107A073C17794 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F56671F5F8737CE739972102F879E136 /* Frameworks */,
-				32AA1AF7E870E076C11104855CD1ECC6 /* Support Files */,
+				3F67C4AF33D40B624DF0B11A8DE12B5B /* Paymob */,
+				F3AAFBCDFCD7D11425F30C134BBC718A /* Toast-Swift */,
+				3DD9744ACBEB7DDBF390D4BEAE39FB81 /* VIDVLiveness */,
+				8198ED940311AE5C94A66ED6EBD8FFDF /* VIDVOCR */,
 			);
-			path = VIDVLiveness;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		244C856017D940842462DFD79CD0549E /* Products */ = {
@@ -157,30 +170,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		32AA1AF7E870E076C11104855CD1ECC6 /* Support Files */ = {
+		3DD9744ACBEB7DDBF390D4BEAE39FB81 /* VIDVLiveness */ = {
 			isa = PBXGroup;
 			children = (
-				4DDCBE0CEF28FD2C9BBD181D5C366E97 /* VIDVLiveness-xcframeworks.sh */,
-				26A4AB8BD15FE8F58847CDB821803F1C /* VIDVLiveness.debug.xcconfig */,
-				5E01122A8D209072B2A2C3A4358F7C73 /* VIDVLiveness.release.xcconfig */,
+				76BF757F5BCD811434658663F4CF0804 /* Frameworks */,
+				A3E319CB13D85F799B14368CCC92A343 /* Support Files */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/VIDVLiveness";
+			path = VIDVLiveness;
 			sourceTree = "<group>";
 		};
-		43AFECE8A9E7713DFC021E5D4BC1E0A4 /* Support Files */ = {
+		3F67C4AF33D40B624DF0B11A8DE12B5B /* Paymob */ = {
 			isa = PBXGroup;
 			children = (
-				BF180A807EA5977375DAE8BF06EB380B /* Toast-Swift.modulemap */,
-				7B284E572C32BEBC6773223F5C9C3C70 /* Toast-Swift-dummy.m */,
-				39737B78073E3F092669E23DE9F1C7D6 /* Toast-Swift-Info.plist */,
-				B33541359E1284DBA4617BDF63A2078C /* Toast-Swift-prefix.pch */,
-				42E8600573F2F16194BE09C189360241 /* Toast-Swift-umbrella.h */,
-				07EFB4C800267CF15C91990BB49B8B02 /* Toast-Swift.debug.xcconfig */,
-				92E6DB4422BD2F1F551F3B0DBAAC20C7 /* Toast-Swift.release.xcconfig */,
+				70E874497A9F78EA57D3B15F9FE67D79 /* Frameworks */,
+				6C84A92E887C530443B45314D8B47D43 /* Support Files */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/Toast-Swift";
+			path = Paymob;
 			sourceTree = "<group>";
 		};
 		5A92115C7BBB47E23D4B252983F7DC51 /* Targets Support Files */ = {
@@ -191,23 +196,31 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		5E0C48731D4705B21934379DF43CFBD5 /* Toast-Swift */ = {
+		6C84A92E887C530443B45314D8B47D43 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				D2E90EF511912C540F488EF38BB4B460 /* Toast.swift */,
-				43AFECE8A9E7713DFC021E5D4BC1E0A4 /* Support Files */,
+				27C45D60DA0CB679B418947566970AD5 /* Paymob-xcframeworks.sh */,
+				C2C11B7EA989CE17A58A58270A0F6E0E /* Paymob.debug.xcconfig */,
+				CFB3C77F65BE60F30AA4E9C45EF84A4D /* Paymob.release.xcconfig */,
 			);
-			path = "Toast-Swift";
+			name = "Support Files";
+			path = "../Target Support Files/Paymob";
 			sourceTree = "<group>";
 		};
-		6214C79C46EEF8B20A6E750B83EAD43D /* Pods */ = {
+		70E874497A9F78EA57D3B15F9FE67D79 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5E0C48731D4705B21934379DF43CFBD5 /* Toast-Swift */,
-				1910DA1BE5102900FA1EFA45FAA7A52D /* VIDVLiveness */,
-				7FEB484A08B3EC214E98DE687E8E3710 /* VIDVOCR */,
+				72EE0B9697CBDB0DFD704A810BB8B50D /* PaymobSDK.xcframework */,
 			);
-			name = Pods;
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		76BF757F5BCD811434658663F4CF0804 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D62BE8229305341F968AF4FDDDC23EA1 /* VIDVLiveness.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7E621C5F3D3D50DF1BF57F5CC0295126 /* iOS */ = {
@@ -219,13 +232,43 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		7FEB484A08B3EC214E98DE687E8E3710 /* VIDVOCR */ = {
+		8198ED940311AE5C94A66ED6EBD8FFDF /* VIDVOCR */ = {
 			isa = PBXGroup;
 			children = (
-				EBBF6E83BCF37AF3A0B2CEEE789CFB93 /* Frameworks */,
-				05275CF8180D3F3D5469BCC876D5E1DA /* Support Files */,
+				CE6BC374BA55650E9AC14A71B5414BCF /* Frameworks */,
+				C29A82A396D96452EFBC48DBE2E3591D /* Support Files */,
 			);
 			path = VIDVOCR;
+			sourceTree = "<group>";
+		};
+		A3E319CB13D85F799B14368CCC92A343 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				6013DD94520FC43991DF872C37B4F9A8 /* VIDVLiveness-xcframeworks.sh */,
+				315EC1F4B439B209FBC659EB799EC8CB /* VIDVLiveness.debug.xcconfig */,
+				9B67A6C2EDC2E75081E44A436ECB8006 /* VIDVLiveness.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/VIDVLiveness";
+			sourceTree = "<group>";
+		};
+		C29A82A396D96452EFBC48DBE2E3591D /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				3A17642C035DAB31513DBD4195F5A603 /* VIDVOCR-xcframeworks.sh */,
+				220133B4FD3111DFCA0E9A7FA33D238F /* VIDVOCR.debug.xcconfig */,
+				3DC4416F49B896071649048280BAA122 /* VIDVOCR.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/VIDVOCR";
+			sourceTree = "<group>";
+		};
+		CE6BC374BA55650E9AC14A71B5414BCF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA77B3D6B77F2FFB4E09F4F068EDEDF6 /* VIDVOCR.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -233,7 +276,7 @@
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				1628BF05B4CAFDCC3549A101F5A10A17 /* Frameworks */,
-				6214C79C46EEF8B20A6E750B83EAD43D /* Pods */,
+				2244AAFA474B35D3DC7107A073C17794 /* Pods */,
 				244C856017D940842462DFD79CD0549E /* Products */,
 				5A92115C7BBB47E23D4B252983F7DC51 /* Targets Support Files */,
 			);
@@ -256,20 +299,28 @@
 			path = "Target Support Files/Pods-BankNote_SwiftUI";
 			sourceTree = "<group>";
 		};
-		EBBF6E83BCF37AF3A0B2CEEE789CFB93 /* Frameworks */ = {
+		F3AAFBCDFCD7D11425F30C134BBC718A /* Toast-Swift */ = {
 			isa = PBXGroup;
 			children = (
-				1D0F81E717B76A9DFEEAA63C66534573 /* VIDVOCR.xcframework */,
+				838AE3F4EB2FF9101DCD22FE98586DB3 /* Toast.swift */,
+				FB6BA1ACE6C1E995875C95C37D75730B /* Support Files */,
 			);
-			name = Frameworks;
+			path = "Toast-Swift";
 			sourceTree = "<group>";
 		};
-		F56671F5F8737CE739972102F879E136 /* Frameworks */ = {
+		FB6BA1ACE6C1E995875C95C37D75730B /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				5F2975E7BEB7FF7C02130C4E4ADF6457 /* VIDVLiveness.xcframework */,
+				F950F7701EA56771C259158CB2AB6079 /* Toast-Swift.modulemap */,
+				9CBDAE962E2C6B434DA504A7F8F3D220 /* Toast-Swift-dummy.m */,
+				14A8AE0EEE7B928AC2C84729660CDEE4 /* Toast-Swift-Info.plist */,
+				32BF7AD6D469C4BD83D26E57BE8A5324 /* Toast-Swift-prefix.pch */,
+				1B372B77352985CF88EA71D3FAE6604C /* Toast-Swift-umbrella.h */,
+				2CCF87108C5CA7A46FFBF9E9A2230C85 /* Toast-Swift.debug.xcconfig */,
+				314C42595717E0FB5653BE6B612D5DD5 /* Toast-Swift.release.xcconfig */,
 			);
-			name = Frameworks;
+			name = "Support Files";
+			path = "../Target Support Files/Toast-Swift";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,11 +334,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E23F0013E7B21B01BA12F5F0BDAAD58A /* Headers */ = {
+		B61A01269716EED9BB45D64713C6B0C3 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E08BB48B8EF288FA1308A89D7ED3B792 /* Pods-BankNote_SwiftUI-umbrella.h in Headers */,
+				CAD8695F74C091246A114B557D1AB7B7 /* Pods-BankNote_SwiftUI-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,19 +347,20 @@
 /* Begin PBXNativeTarget section */
 		419F996F5330A10F0CE3874F21B30B86 /* Pods-BankNote_SwiftUI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF7E44FED905466A4322CFE4352CAF58 /* Build configuration list for PBXNativeTarget "Pods-BankNote_SwiftUI" */;
+			buildConfigurationList = E5638C9B1A51D0EAABA82A3474113BC8 /* Build configuration list for PBXNativeTarget "Pods-BankNote_SwiftUI" */;
 			buildPhases = (
-				E23F0013E7B21B01BA12F5F0BDAAD58A /* Headers */,
-				E25B8E53DFB9C63B809EBDE9207DCB57 /* Sources */,
-				B70015598726E9D5031254AC36E6632A /* Frameworks */,
-				F027BF4861E463D7920C1051F605F66F /* Resources */,
+				B61A01269716EED9BB45D64713C6B0C3 /* Headers */,
+				DD455EDCDFFBD265A8F26310A2FC0E10 /* Sources */,
+				72342A139C0CAF81FADD0C409F2C0D91 /* Frameworks */,
+				0038EB6768C98BE00864F70D7B7099A4 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				E813BA04586460F1E3A6E890314C516C /* PBXTargetDependency */,
-				7554193297FB251CF484EFA83B641CE6 /* PBXTargetDependency */,
-				C0C44892257C457E5620A81D331D1D5D /* PBXTargetDependency */,
+				007B23265AFED0B821A909B837A9772E /* PBXTargetDependency */,
+				87A81E7A82D203EEC410D760E2C2B6E0 /* PBXTargetDependency */,
+				AE794CAAC466CBA9039EB586FC0015BD /* PBXTargetDependency */,
+				B5956547A707706D67D3D15D87144F98 /* PBXTargetDependency */,
 			);
 			name = "Pods-BankNote_SwiftUI";
 			productName = Pods_BankNote_SwiftUI;
@@ -355,6 +407,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				7C361DC349C14D5B5D387902CE03F51A /* Paymob */,
 				419F996F5330A10F0CE3874F21B30B86 /* Pods-BankNote_SwiftUI */,
 				B990BD87169C76A3ED3FE8A9258D91A3 /* Toast-Swift */,
 				D0FF5996F2A00B72836687B3B4E82283 /* VIDVLiveness */,
@@ -364,14 +417,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		96ECC46240973841B1735E723EB383A4 /* Resources */ = {
+		0038EB6768C98BE00864F70D7B7099A4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F027BF4861E463D7920C1051F605F66F /* Resources */ = {
+		96ECC46240973841B1735E723EB383A4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -381,6 +434,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		49C7C3CF8D22996F9F63A8154F5CE7E1 /* [CP] Copy XCFrameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Paymob/Paymob-xcframeworks-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy XCFrameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Paymob/Paymob-xcframeworks-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Paymob/Paymob-xcframeworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C107DC3B393E0FC6E0F294C0F9DF1571 /* [CP] Copy XCFrameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -435,41 +509,47 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E25B8E53DFB9C63B809EBDE9207DCB57 /* Sources */ = {
+		DD455EDCDFFBD265A8F26310A2FC0E10 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FA77DE970FBCD7AD67DB023A97EBDEF /* Pods-BankNote_SwiftUI-dummy.m in Sources */,
+				63C22FAD97DE0544BA5C7BB441D65CAE /* Pods-BankNote_SwiftUI-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7554193297FB251CF484EFA83B641CE6 /* PBXTargetDependency */ = {
+		007B23265AFED0B821A909B837A9772E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = VIDVLiveness;
-			target = D0FF5996F2A00B72836687B3B4E82283 /* VIDVLiveness */;
-			targetProxy = E8A2739EA653A7C4FF0BCED2E82098F9 /* PBXContainerItemProxy */;
+			name = Paymob;
+			target = 7C361DC349C14D5B5D387902CE03F51A /* Paymob */;
+			targetProxy = 1EF0277DA6CA3DB9F7ACC192642E7504 /* PBXContainerItemProxy */;
 		};
-		C0C44892257C457E5620A81D331D1D5D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = VIDVOCR;
-			target = EE59EC6606F7355200BDADFF45E9E661 /* VIDVOCR */;
-			targetProxy = 9B18FD62EADBAA66F2F00CAF929A1FED /* PBXContainerItemProxy */;
-		};
-		E813BA04586460F1E3A6E890314C516C /* PBXTargetDependency */ = {
+		87A81E7A82D203EEC410D760E2C2B6E0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Toast-Swift";
 			target = B990BD87169C76A3ED3FE8A9258D91A3 /* Toast-Swift */;
-			targetProxy = 56F3AD859395198ACD5F97B913EF7705 /* PBXContainerItemProxy */;
+			targetProxy = C9BDDB8A433B65C7C8F1307C2F004100 /* PBXContainerItemProxy */;
+		};
+		AE794CAAC466CBA9039EB586FC0015BD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VIDVLiveness;
+			target = D0FF5996F2A00B72836687B3B4E82283 /* VIDVLiveness */;
+			targetProxy = C5824F79E5032E10263EA5FCE12BFE2C /* PBXContainerItemProxy */;
+		};
+		B5956547A707706D67D3D15D87144F98 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VIDVOCR;
+			target = EE59EC6606F7355200BDADFF45E9E661 /* VIDVOCR */;
+			targetProxy = 920E929F47155F4D35391DEA526A876C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		002BD05C12A248B1350DD73DA5060AE4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E547F5C033E367A213CECA9B7A6A229 /* VIDVOCR.debug.xcconfig */;
+			baseConfigurationReference = 220133B4FD3111DFCA0E9A7FA33D238F /* VIDVOCR.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -485,9 +565,9 @@
 			};
 			name = Debug;
 		};
-		3EDF8B4CB9AD63971C13B636F75893D0 /* Release */ = {
+		05F3126A1B660B7817CCCB8E7626CA2F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5E01122A8D209072B2A2C3A4358F7C73 /* VIDVLiveness.release.xcconfig */;
+			baseConfigurationReference = CFB3C77F65BE60F30AA4E9C45EF84A4D /* Paymob.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -504,7 +584,66 @@
 			};
 			name = Release;
 		};
-		4A59EC03BA569E004646C054ECFE7A71 /* Debug */ = {
+		273D1B25A1BB6E5074F10C189679F295 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FDCB8D6EEDE013E8142C8D81528CB36F /* Pods-BankNote_SwiftUI.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		3EDF8B4CB9AD63971C13B636F75893D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B67A6C2EDC2E75081E44A436ECB8006 /* VIDVLiveness.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4E52A470225F5B6590EC479C54899F17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 69BE31332C483F3D3E9D42F18F50D66C /* Pods-BankNote_SwiftUI.debug.xcconfig */;
 			buildSettings = {
@@ -545,7 +684,7 @@
 		};
 		56812D3E38357623C73E437877DECBEC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 07EFB4C800267CF15C91990BB49B8B02 /* Toast-Swift.debug.xcconfig */;
+			baseConfigurationReference = 2CCF87108C5CA7A46FFBF9E9A2230C85 /* Toast-Swift.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -581,9 +720,27 @@
 			};
 			name = Debug;
 		};
+		5A38679056B269E22859F2BF53F70667 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2C11B7EA989CE17A58A58270A0F6E0E /* Paymob.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		7D5D06644971AE2C74EFB599E4937BE8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 92E6DB4422BD2F1F551F3B0DBAAC20C7 /* Toast-Swift.release.xcconfig */;
+			baseConfigurationReference = 314C42595717E0FB5653BE6B612D5DD5 /* Toast-Swift.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -613,46 +770,6 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		88A4871503AABF1C650AEE21C9F300D5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FDCB8D6EEDE013E8142C8D81528CB36F /* Pods-BankNote_SwiftUI.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = NO;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				INFOPLIST_FILE = "Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-BankNote_SwiftUI/Pods-BankNote_SwiftUI.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -724,7 +841,7 @@
 		};
 		B59711580C8232DA5CA69D1350790466 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 26A4AB8BD15FE8F58847CDB821803F1C /* VIDVLiveness.debug.xcconfig */;
+			baseConfigurationReference = 315EC1F4B439B209FBC659EB799EC8CB /* VIDVLiveness.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -742,7 +859,7 @@
 		};
 		D1D9EAC97888093606FE9BD569F34EC0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F5E0F55CF39AEEE9880274A5B9E7EB03 /* VIDVOCR.release.xcconfig */;
+			baseConfigurationReference = 3DC4416F49B896071649048280BAA122 /* VIDVOCR.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -837,11 +954,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		CA3C236CDEDA87D4247C2A043EE90B46 /* Build configuration list for PBXAggregateTarget "Paymob" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A38679056B269E22859F2BF53F70667 /* Debug */,
+				05F3126A1B660B7817CCCB8E7626CA2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E3381EFE767AE47F96327329EBDD8141 /* Build configuration list for PBXNativeTarget "Toast-Swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56812D3E38357623C73E437877DECBEC /* Debug */,
 				7D5D06644971AE2C74EFB599E4937BE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E5638C9B1A51D0EAABA82A3474113BC8 /* Build configuration list for PBXNativeTarget "Pods-BankNote_SwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E52A470225F5B6590EC479C54899F17 /* Debug */,
+				273D1B25A1BB6E5074F10C189679F295 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -860,15 +995,6 @@
 			buildConfigurations = (
 				002BD05C12A248B1350DD73DA5060AE4 /* Debug */,
 				D1D9EAC97888093606FE9BD569F34EC0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FF7E44FED905466A4322CFE4352CAF58 /* Build configuration list for PBXNativeTarget "Pods-BankNote_SwiftUI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4A59EC03BA569E004646C054ECFE7A71 /* Debug */,
-				88A4871503AABF1C650AEE21C9F300D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

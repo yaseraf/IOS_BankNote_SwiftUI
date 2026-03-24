@@ -15,17 +15,39 @@ struct BankNotesScene: BaseSceneType {
     @State var viewTypeAction:BaseSceneViewType = DefaultBaseSceneViewType()
     
     var body: some View {
-        BaseScene(backgroundType: .clear, contentView: {
-            BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                BankNotesContentView(bankNotesData: $viewModel.bankNotesData, clientBankNotes: $viewModel.clientBankNotes, topUpItems: $viewModel.topUpItems, rewardsItems: $viewModel.rewardsItems, onBackTap: {
-                    viewModel.popViewController()
-                }, onTopUpTap: {
-                    viewModel.openPaymentMethodScene()
-                })
-            })
-        }, showLoading: .constant(viewTypeAction.showLoading))
+        BaseScene(
+            backgroundType: .clear,
+            contentView: {
+                BaseContentView(
+                    withScroll: false,
+                    paddingValue: 0,
+                    backgroundType: .gradient,
+                    content: {
+                        BankNotesContentView(
+                            bankNotesData: $viewModel.bankNotesData,
+                            clientBankNotes: $viewModel.clientBankNotes,
+                            selectedPrice: $viewModel.selectedPrice,
+                            selectedQuantity: $viewModel.selectedQuantity,
+                            viewController: $viewModel.viewController,
+                            topUpItems: $viewModel.topUpItems,
+                            rewardsItems: $viewModel.rewardsItems,
+                            onBackTap: {
+                                viewModel.popViewController()
+                            }, onTopUpTap: {
+                                viewModel.openTopUpScene()
+                            }, onBuyBankNotes: { item in
+                                viewModel.callCreateBuyBankNotesJVAPI(success: true, price: item.price ?? "", qty: item.bankNoteQty ?? "")
+                            }
+                        )
+                    }
+                )
+            },
+            showLoading: .constant(viewTypeAction.showLoading)
+        )
         .onAppear {
             viewModel.callGetBankNotesAPI(success: true)
+            viewModel.callGetClientBankNotesAPI(success: true)
+//            viewModel.getRiskManagementAPI(success: true)
         }
         .onViewDidLoad {
             getBankNotesAPI()

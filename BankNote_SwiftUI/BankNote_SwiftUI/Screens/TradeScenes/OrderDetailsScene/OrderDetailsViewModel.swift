@@ -106,7 +106,7 @@ extension OrderDetailsViewModel {
 
     func callUpdateBankNotesTransQTYAPI(success:Bool, quantity: String) {
         let requestModel = UpdateBankNotesTransQTYRequestModel(
-            ClientID: "-1",
+            ClientID: KeyChainController().clientID ?? "",
             DOC_NO: "", // Empty
             MainClientID: KeyChainController().mainClientID ?? "",
             PORDER_ID: "", // Empty

@@ -102,6 +102,15 @@ extension AuthCoordinator: AuthCoordinatorProtocol {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func openCreatePinScene(cookies: [HTTPCookie]?) {
+        let authUseCase = AuthUseCase()
+        let viewModel = CreatePinViewModel(coordinator: self, useCase: authUseCase, cookies: cookies)
+        let view = CreatePinScene(viewModel: viewModel)
+        let viewWithCoordinator = view.withThemeEnvironment
+        let viewController = UIHostingController(rootView: viewWithCoordinator)
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
     func openChangePinScene() {
         let viewModel = ChangePinViewModel(coordinator: self)
         let view = ChangePinScene(viewModel: viewModel)

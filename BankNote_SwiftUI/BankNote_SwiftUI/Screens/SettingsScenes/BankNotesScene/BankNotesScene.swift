@@ -52,6 +52,7 @@ struct BankNotesScene: BaseSceneType {
         .onViewDidLoad {
             getBankNotesAPI()
             getClientBankNotesAPI()
+            CreateBuyBankNotesJVAPI()
         }
     }
     
@@ -69,6 +70,22 @@ struct BankNotesScene: BaseSceneType {
             }
         }.store(in: &anyCancellable)
     }
+    
+    private func CreateBuyBankNotesJVAPI() {
+        viewModel.$CreateBuyBanknotesJVAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                debugPrint("")
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let listResponse):
+                debugPrint("")
+            case .none:
+                break
+            }
+        }.store(in: &anyCancellable)
+    }
+
     
     private func getClientBankNotesAPI() {
         viewModel.$getClientBankNotesAPIResult.receive(on: DispatchQueue.main).sink { result  in

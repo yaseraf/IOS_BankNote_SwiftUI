@@ -46,6 +46,7 @@ struct HomeContentView: View {
 
     var portfolioData:Binding<GetPortfolioUIModel?>
     @State var isBalanceHidden:Bool = false
+    @State private var selectedOption: String = "Select an Option"
     
     var onTopUpTap:()->Void
     var onStockTap:(String, String, String, String) -> Void
@@ -62,7 +63,16 @@ struct HomeContentView: View {
                 
                 balanceView
                 
-                portfolioView
+                if portfolioData.wrappedValue?.portfolioes.isEmpty == true {
+                    Spacer()
+                    Text("no_portfolios_available".localized)
+                        .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
+                        .font(.cairoFont(.extraBold, size: 14))
+
+                } else {
+                    portfolioView
+                }
+
                 
                 Spacer()
                 
@@ -117,20 +127,31 @@ struct HomeContentView: View {
     
         
     private var totalInvestmentView: some View {
-        HStack {
-            Text("total_investment_value".localized)
-                .font(.cairoFont(.semiBold, size: 14))
-            
-            Image("ic_downArrow")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(Color(hex: "#9C4EF7"))
-                .frame(width: 10, height: 10)
-        }
-        .padding(.vertical, 5)
-        .padding(.horizontal, 10)
-        .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#DDDDDD")))
+        Menu(content: {
+            Button("Option 1", action: { selectedOption = "Option 1" })
+            Button("Option 2", action: { selectedOption = "Option 2" })
+
+        }, label: {
+            Label(selectedOption, systemImage: "chevron.down")
+                .padding()
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(8)
+
+        })
+//        HStack {
+//            Text("total_investment_value".localized)
+//                .font(.cairoFont(.semiBold, size: 14))
+//            
+//            Image("ic_downArrow")
+//                .renderingMode(.template)
+//                .resizable()
+//                .scaledToFit()
+//                .foregroundStyle(Color(hex: "#9C4EF7"))
+//                .frame(width: 10, height: 10)
+//        }
+//        .padding(.vertical, 5)
+//        .padding(.horizontal, 10)
+//        .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#DDDDDD")))
     }
     
     private var balanceView: some View {

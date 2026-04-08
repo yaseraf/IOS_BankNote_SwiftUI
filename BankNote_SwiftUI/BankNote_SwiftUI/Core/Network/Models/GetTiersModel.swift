@@ -50,6 +50,8 @@ struct GetTiersUIModel {
 }
 
 struct GetTiersItemUIModel {
+    var id = UUID().uuidString
+
     var age: String?
     var arabicDescription: String?
     var banknotesQty: String?

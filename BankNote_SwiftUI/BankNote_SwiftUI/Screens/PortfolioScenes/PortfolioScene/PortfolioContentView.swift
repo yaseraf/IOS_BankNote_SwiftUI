@@ -23,10 +23,28 @@ struct PortfolioContentView: View {
                 
                 HeaderView()
                 
-                PieChartView(data: pieChartData.wrappedValue ?? [], portfolioData: portfolioData)
-                    .frame(maxWidth: 250, maxHeight: 250)
+                if pieChartData.wrappedValue?.isEmpty == true {
+                    Spacer()
+                    Text("no_chart_data_available".localized)
+                        .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
+                        .font(.cairoFont(.extraBold, size: 14))
+                } else {
+                    PieChartView(data: pieChartData.wrappedValue ?? [], portfolioData: portfolioData)
+                        .frame(maxWidth: 250, maxHeight: 250)
+                }
                 
-                portfolioView
+                if portfolioData.wrappedValue?.portfolioes.isEmpty == true {
+                    Spacer()
+                    Text("no_portfolios_available".localized)
+                        .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
+                        .font(.cairoFont(.extraBold, size: 14))
+
+                } else {
+                    portfolioView
+                }
+
+
+                
 
                 Spacer()
                 

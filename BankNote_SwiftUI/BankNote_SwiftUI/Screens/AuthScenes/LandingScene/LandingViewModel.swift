@@ -85,7 +85,35 @@ extension LandingViewModel {
     func openPinScene() {
         coordinator.openPinScene()
     }
+    
+    func openCreatePinScene(cookies: [HTTPCookie]?) {
+        coordinator.openCreatePinScene(cookies: cookies)
+    }
 
+}
+
+// MARK: Functions
+extension LandingViewModel {
+    func getCurrentDateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "ddMMyyyyHHmmss"
+        var dateComponents = DateComponents()
+        dateComponents.day = -1
+        let currentDate = Date()
+        let dateString = dateFormatter.string(from: currentDate)
+        return dateString
+    }
+    
+    func getYesterdayDateString() -> String {
+        var dayComponent = DateComponents()
+            dayComponent.day = -365
+            let calendar = Calendar.current
+            let nextDay =  calendar.date(byAdding: dayComponent, to: Date())!
+            let formatter = DateFormatter()
+            formatter.locale = .current
+            formatter.dateFormat = "ddMMyyyyHHmmss"
+            return formatter.string(from: nextDay)
+    }
 }
 
 // MARK: API Calling
@@ -232,10 +260,17 @@ extension LandingViewModel {
 
                     
                     if success.isFirstLogin?.lowercased() ?? "" == "y" {
+                        
                         KeyChainController().resetPasswordCookies = "\(cookies?.filter({$0.name == ".ASPXAUTH"}).first?.name ?? "")=\(cookies?.filter({$0.name == ".ASPXAUTH"}).first?.value ?? "")"
                         KeyChainController().username = success.userName ?? ""
+                        KeyChainController().webCode = success.webCode ?? ""
                         
-                        UserDefaultController().isFirstLogin = true
+                        if success.status == "0" || success.status == "-3" {
+                            UserDefaultController().isFirstLogin = true
+                            self?.openCreatePinScene(cookies: cookies)
+                            
+                            return
+                        }
 
 //                        self?.openResetPasswordScene(cookies: cookies)
                     }
@@ -244,7 +279,9 @@ extension LandingViewModel {
                     UserDefaultController().tierCode = success.TIERS_CODE ?? ""
                     UserDefaultController().mainBadgeCodes = success.MAIN_BADGES_CODE ?? ""
                     UserDefaultController().subBadgeCodes = success.SUB_BADGES_CODE ?? ""
-                    
+                    UserDefaultController().birthdate = success.BIRTHDATE ?? ""
+                    UserDefaultController().gender = success.GENDER ?? ""
+
                     self?.callGetTiersAPI(success: true)
 
 //                    SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "login_success".localized)

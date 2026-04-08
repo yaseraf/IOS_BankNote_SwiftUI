@@ -70,6 +70,8 @@ enum CachingKey: String {
     case paymobSpecialRef
     case userBalance
     case isMarginableAccount
+    case birthdate
+    case gender
 
     // MARK: Other
     
@@ -142,6 +144,8 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.paymobSpecialRef) var paymobSpecialRef
     @CachingCodable<String>(.userBalance) var userBalance
     @CachingCodable<String>(.isMarginableAccount) var isMarginableAccount
+    @CachingCodable<String>(.birthdate) var birthdate
+    @CachingCodable<String>(.gender) var gender
 
     // MARK: Others
 
@@ -200,6 +204,8 @@ class UserDefaultController: ObservableObject {
         dateFrom = nil
         dateTo = nil
         userBalance = nil
+        birthdate = nil
+        gender = nil
     }
 }
 

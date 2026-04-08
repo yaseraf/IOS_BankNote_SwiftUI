@@ -236,7 +236,7 @@ struct TierCarouselView: View {
                     
 //                    Text("Who is \(tier.nameKey)")
                     Text("\(tier.nameKey)")
-                        .font(.cairoFont(.semiBold, size: 18))
+                        .font(.cairoFont(.extraBold, size: 24))
                         .frame(maxWidth: .infinity, alignment: .leading)
 
 //                    VStack(spacing: 6) {
@@ -263,9 +263,9 @@ struct TierCarouselView: View {
 //                    }
                     
 //                    Text("Benefits")
-                    Text("notes".localized)
-                        .font(.title3).bold()
-                    
+                    Text("benefits".localized)
+                        .font(.cairoFont(.semiBold, size: 16))
+
                     VStack(spacing: 6) {
                         ForEach(Array(tier.benefitKeys.enumerated()), id: \.offset) { index, benefit in
                             HStack(alignment: .top) {

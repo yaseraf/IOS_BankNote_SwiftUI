@@ -17,7 +17,7 @@ struct OrderEntryScene: BaseSceneType {
     var body: some View {
         BaseScene(backgroundType: .clear, contentView: {
             BaseContentView(withScroll:false, paddingValue: 0, backgroundType: .gradient, content: {
-                OrderEntryContentView(isRiskManagementLoading: $viewModel.isRiskManagementLoading, cashInputValue: $viewModel.price, stocksInputValue: $viewModel.shares, availableAmount: $viewModel.availableAmount, selectedOrderPriceType: $viewModel.orderPriceType, newMarketSymbol: $viewModel.newMarketSymbol, orderDetails: $viewModel.orderDetails, netChange: $viewModel.netChange, netChangePerc: $viewModel.netChangePerc, lastTradePrice: $viewModel.lastTradePrice, flagMessage: $viewModel.flagMessage, isEditOrder: $viewModel.isEditOrder, onMaxTap: {
+                OrderEntryContentView(isRiskManagementLoading: $viewModel.isRiskManagementLoading, cashInputValue: $viewModel.price, stocksInputValue: $viewModel.shares, availableAmount: $viewModel.availableAmount, selectedOrderPriceType: $viewModel.orderPriceType, newMarketSymbol: $viewModel.newMarketSymbol, orderDetails: $viewModel.orderDetails, netChange: $viewModel.netChange, netChangePerc: $viewModel.netChangePerc, lastTradePrice: $viewModel.lastTradePrice, flagMessage: $viewModel.flagMessage, isEditOrder: $viewModel.isEditOrder, placeOrderType: $viewModel.placeOrderType, onMaxTap: {
                     viewModel.onMaxTap()
                 }, onContinueTap: {
                     viewModel.openOrderDetailsScene()

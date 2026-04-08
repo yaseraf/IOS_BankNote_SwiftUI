@@ -25,7 +25,7 @@ class BankNotesViewModel:ObservableObject {
     
     @Published var getBankNotesAPIResult:APIResultType<GetBankNoteUIModel>?
     @Published var getClientBankNotesAPIResult:APIResultType<GetClientBankNotesUIModel>?
-    @Published var getCreateBuyBanknotesJVAPIResult:APIResultType<CreateBuyBankNotesJVUIModel>?
+    @Published var CreateBuyBanknotesJVAPIResult:APIResultType<CreateBuyBankNotesJVUIModel>?
     @Published var getRiskManagementAPIResult:APIResultType<GetRiskManagementUIModel>?
     @Published var getPaymobAPIResult:APIResultType<PaymobGetSdkTokenUIModel>?
 
@@ -176,18 +176,18 @@ extension BankNotesViewModel {
             WebCode: KeyChainController().webCode ?? ""
         )
         
-        getCreateBuyBanknotesJVAPIResult = .onLoading(show: true)
+        CreateBuyBanknotesJVAPIResult = .onLoading(show: true)
         
         Task.init {
             await homeUseCase.CreateBuyBankNotesJV(requestModel: requestModel) {[weak self] result in
-                self?.getCreateBuyBanknotesJVAPIResult = .onLoading(show: false)
+                self?.CreateBuyBanknotesJVAPIResult = .onLoading(show: false)
                 switch result {
                 case .success(let success):
-                    self?.getCreateBuyBanknotesJVAPIResult = .onSuccess(response: success)
+                    self?.CreateBuyBanknotesJVAPIResult = .onSuccess(response: success)
                     debugPrint("get Create Buy Banknotes JV success")
                     
                 case .failure(let failure):
-                        self?.getCreateBuyBanknotesJVAPIResult = .onFailure(error: failure)
+                        self?.CreateBuyBanknotesJVAPIResult = .onFailure(error: failure)
                     debugPrint("get Create Buy Banknotes JV failed")
                 }
             }

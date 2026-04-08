@@ -16,15 +16,15 @@ protocol AuthUseCaseProtocol{
     func UserAuthinticationAdvance(requestModel: UserAuthenticationAdvanceRequestModel, completion: @escaping(Result<UserAuthenticationAdvanceUIModel, NetworkError>) -> Void) async
     func RegistrationsOTPReset(requestModel: RegistrationsOTPResetRequestModel, completion: @escaping(Result<RegistrationsOTPResetUIModel, NetworkError>, [HTTPCookie]?) -> Void) async
     func ChangesPassword(requestModel: ChangePasswordRequestModel, completion: @escaping(Result<changePasswordUIModel, NetworkError>) -> Void) async
-
+    func ChangePin(requestModel: ChangePinRequestModel, completion: @escaping(Result<changePinUIModel, NetworkError>) -> Void) async
 }
-    
-    class AuthUseCase {
-        private let repository: AuthRepositoryProtocol
-        init(repository: AuthRepositoryProtocol = AuthRepository()) {
-            self.repository = repository
-        }
+
+class AuthUseCase {
+    private let repository: AuthRepositoryProtocol
+    init(repository: AuthRepositoryProtocol = AuthRepository()) {
+        self.repository = repository
     }
+}
 
 extension AuthUseCase: AuthUseCaseProtocol {
     
@@ -133,5 +133,19 @@ extension AuthUseCase: AuthUseCaseProtocol {
             }
         }
     }
+    
+    func ChangePin(requestModel: ChangePinRequestModel, completion: @escaping (Result<changePinUIModel, NetworkError>) -> Void) async {
+        let route = AuthRoute.ChangePin(requestModel: requestModel)
+        await repository.ChangePin(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = changePinUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
     
 }

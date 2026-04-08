@@ -24,7 +24,7 @@ struct ChangePasswordScene: BaseSceneType {
                 })
             })
         }, showLoading: .constant(viewTypeAction.showLoading))
-        .onViewDidLoad(){
+        .onViewDidLoad() {
             changePasswordAPI()
         }
     }

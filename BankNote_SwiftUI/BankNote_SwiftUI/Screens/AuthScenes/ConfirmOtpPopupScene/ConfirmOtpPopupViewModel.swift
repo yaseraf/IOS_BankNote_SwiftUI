@@ -45,8 +45,6 @@ class ConfirmOtpPopupViewModel: ObservableObject {
             coordinator.openChangePinScene()
         }
     }
-    
-    
 }
 
 // MARK: API Calls

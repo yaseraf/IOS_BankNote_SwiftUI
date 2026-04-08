@@ -95,6 +95,13 @@ struct LandingContentView: View {
         ZStack {
             VStack(spacing: 0) {
 //                ContentView()
+                HStack {
+                    LanguageHeaderView()
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: AppUtility.shared.isRTL ? .trailing : .leading)
+                .padding()
+                
                 logoView
                 
                 fieldsView
@@ -129,7 +136,7 @@ struct LandingContentView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 150, maxHeight: 150)
-                .padding(.top, 90)
+                .padding(.top, 70)
 
             Text(AppUtility.shared.APP_NAME)
                 .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))

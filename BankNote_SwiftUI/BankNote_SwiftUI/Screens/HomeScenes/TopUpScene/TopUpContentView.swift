@@ -30,13 +30,14 @@ struct TopUpContentView: View {
                 
                 amountView
                 
-                if transactionType.wrappedValue == .topUp {
-                    serviceFeesView
-                    
-                    totalAmountView
-                } else {
-                    Spacer()
-                }
+//                if transactionType.wrappedValue == .topUp {
+//                    serviceFeesView
+//                    
+//                    totalAmountView
+//                } else {
+//                }
+                
+                Spacer()
 
                 numberPadView
                 

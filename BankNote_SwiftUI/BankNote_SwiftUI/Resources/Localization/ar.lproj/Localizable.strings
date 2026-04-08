@@ -19,6 +19,10 @@
 "clear" = "احذف";
 "loading" = "تحميل";
 "invalid_username_password" = "اسم المستخدم أو كلمة المرور غير صحيحة";
+"create_your_pin" = "أنشئ رقمك السري";
+"pin" = "الرقم السري";
+"male" = "ذكر";
+"female" = "أنثى";
 
 // MARK: - OTP Screen
 "invalid_pin" = "الرمز غير صحيح";
@@ -67,6 +71,8 @@
 "my_portfolio" = "محفظتي";
 "view_all" = "عرض الكل";
 "egp" = "جنيه مصري";
+"no_portfolios_available" = "لا توجد محافظ متاحة.";
+"no_chart_data_available" = "لا توجد بيانات للرسم البياني.";
 
 // MARK: - Transaction History Screen
 "symbol" = "الرمز";
@@ -202,6 +208,7 @@
 "help" = "مساعدة";
 "rating_app" = "تقييم التطبيق";
 "buy_transactions" = "شراء معاملات";
+"language" = "اللغة";
 
 // MARK: Statements Screen
 "statements" = "كشف الحساب";
@@ -220,6 +227,7 @@
 // MARK: Tiers Screen
 "buy_now" = "اشتر الان";
 "notes" = "ملاحظات";
+"tier" = "مستوى";
 
 // MARK: Badges Screen
 "unlock_badges_and_elevate_your_game" = "افتح الشارات وارتقِ بأدائك";

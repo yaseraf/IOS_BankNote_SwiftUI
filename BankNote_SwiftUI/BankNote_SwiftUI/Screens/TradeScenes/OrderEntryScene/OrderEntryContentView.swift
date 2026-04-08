@@ -9,16 +9,6 @@ import Foundation
 import SwiftUI
 import SDWebImageSwiftUI
 
-enum TradingType {
-    case cash
-    case stocks
-}
-
-enum OrderPriceType {
-    case market
-    case limit
-}
-
 struct OrderEntryContentView: View {
     @State private var selectedTab: TradingType = .cash
     var isRiskManagementLoading:Binding<Bool>
@@ -33,6 +23,7 @@ struct OrderEntryContentView: View {
     var lastTradePrice:Binding<String>
     var flagMessage:Binding<String>
     var isEditOrder:Binding<Bool>
+    var placeOrderType:Binding<PlaceOrderType>
     
     var onMaxTap: () -> Void
     var onContinueTap: () -> Void
@@ -288,7 +279,7 @@ struct OrderEntryContentView: View {
                         .font(.cairoFont(.semiBold, size: 14))
                         .padding(.vertical, 4)
                         .frame(maxWidth: 85)
-                        .background(selectedTab == .cash ? Color(hex: "#9C4EF7") : Color(hex: "#DDDDDD"))
+                        .background(selectedTab == .cash ? placeOrderType.wrappedValue == .buy ? Color.colorPositive : Color.colorNegative /*Color(hex: "#9C4EF7")*/ : Color(hex: "#DDDDDD"))
                         .clipShape(Capsule())
                 }
                 .foregroundColor(selectedTab == .cash ? .white : Color(hex: "#828282"))
@@ -298,7 +289,7 @@ struct OrderEntryContentView: View {
                         .font(.cairoFont(.semiBold, size: 14))
                         .padding(.vertical, 4)
                         .frame(maxWidth: 85)
-                        .background(selectedTab == .stocks ? Color(hex: "#9C4EF7") : Color(hex: "#DDDDDD"))
+                        .background(selectedTab == .stocks ? placeOrderType.wrappedValue == .buy ? Color.colorPositive : Color.colorNegative /*Color(hex: "#9C4EF7")*/ : Color(hex: "#DDDDDD"))
                         .clipShape(Capsule())
                 }
                 .foregroundColor(selectedTab == .stocks ? .white : Color(hex: "#828282"))
@@ -446,7 +437,7 @@ struct OrderEntryContentView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 54)
-                .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: "#9C4EF7")))
+                .background(RoundedRectangle(cornerRadius: 99).fill(placeOrderType.wrappedValue == .buy ? Color.colorPositive : Color.colorNegative /*Color(hex: "#9C4EF7")*/))
         }
         .padding(.horizontal, 18)
         .disabled(!checkEnabledBtn())

@@ -97,7 +97,8 @@ struct BuyTransactionsContentView: View {
                 // Segmented control
                 HStack(spacing: 19) {
                     segmentButton(title: Segment.topUp.rawValue.localized, segment: .topUp)
-                    segmentButton(title: Segment.rewards.rawValue.localized, segment: .rewards)
+                        .disabled(true)
+//                    segmentButton(title: Segment.rewards.rawValue.localized, segment: .rewards)
                 }
                 .padding(.horizontal, 18)
                 .padding(.bottom, 22)

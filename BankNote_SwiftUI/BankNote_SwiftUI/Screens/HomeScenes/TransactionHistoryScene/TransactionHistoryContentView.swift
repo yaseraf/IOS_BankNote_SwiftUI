@@ -13,6 +13,10 @@ struct TransactionHistoryContentView: View {
     @Binding var transactionSummaryData: [GetTransactionSummaryUIModel]?
     
     @State private var labelMinWidth: CGFloat = 120
+    @State private var labelFontSize: CGFloat = 11
+    @State private var valueFontSize: CGFloat = 14
+    
+    @State private var selectedCardId: String = ""
     
     var onBackTap:()->Void
     
@@ -23,7 +27,7 @@ struct TransactionHistoryContentView: View {
             titleView
             
             contentView
-                .padding()
+                
             
             Spacer()
         }
@@ -62,185 +66,238 @@ struct TransactionHistoryContentView: View {
     }
     
     private var contentView: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("symbol".localized)
-                        .font(.apply(.semiBold,size:16))
+        ScrollView(.vertical, showsIndicators: false) {
+            ForEach(transactionSummaryData ?? [], id: \.id) { item in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("\(AppUtility.shared.isRTL ? item.scaLongName ?? "" : item.sceLongName ?? "")")
+                        .font(.apply(.semiBold, size: valueFontSize))
                         .frame(minWidth: labelMinWidth, alignment: .leading)
 
-                    Text("date".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
+                    HStack {
+                        Text("\(item.tickerID ?? "")")
+                            .font(.apply(.semiBold, size: valueFontSize))
+                            .frame(minWidth: labelMinWidth, alignment: .leading)
 
-                    Text("currency".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-                    
-                    Text("type".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                    Text("buy_qty".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-                    
-                    Text("sell_qty".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                    Text("share_balance".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-                    
-                    Text("price".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-                    
-                    Text("buy_value".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-                    
-                    Text("sell_value".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                    Text("total_cost".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                    Text("share_cost".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-                    
-                    Text("sell_cost".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-                    
-                    Text("delay_pnl".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                    Text("pnl".localized)
-                        .font(.apply(.semiBold,size:16))
-                        .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                }
-                .padding(4)
-                .padding(.horizontal, 2)
-                .frame(maxWidth: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.colorBGPrimary)
-                )
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.colorBorderSecondary,lineWidth: 1)
-                )
-
-                ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(transactionSummaryData ?? [], id: \.id) { item in
-                        HStack {
-                            
-                            // Symbol
-                            Text("\(item.tickerID ?? "")")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-                            
-                            // Date
+                        Spacer()
+                        HStack(spacing: 2) {
                             Text("\(formatDotNetDate(item.trDate ?? "") ?? "")")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                            // Currency
-                            Text("\(item.shareCurrency ?? "")")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
+                                .font(.apply(.semiBold, size: labelFontSize))
+                                .frame(minWidth: labelMinWidth, alignment: .center)
+                                .foregroundStyle(.gray)
                             
-                            // Type
-                            Text("\(item.eDesc ?? "")")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                            
-                            // buy qty (b_qty)
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.bQty ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-                                .foregroundStyle(Color.colorPositive)
-
-                            // sell qty (s_qty)
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.sQty ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-                                .foregroundStyle(Color.colorNegative)
-
-                            // Share Balance ()
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.bal ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                            // price ()
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.price ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-                            
-                            // Buy Value
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.bTotal ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                            // Sell Value
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.sTotal ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-                            
-                            // Total Cost
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.total ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
-
-                            // Share Cost
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.avCost ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-                            
-                            // Sell Cost
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.sellCost ?? 0))")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
-                            // Delay PnL
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.dResult ?? 0))%")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
-
-                            // Pnl
-                            Text("\(AppUtility.shared.formatThousandSeparator(number: item.profit ?? 0))%")
-                                .font(.apply(.semiBold,size:16))
-                                .frame(minWidth: labelMinWidth, alignment: .leading)
-
+                            Image("ic_downArrow")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 12, height: 12)
+                                .foregroundStyle(Color.colorPrimary)
+                                .rotationEffect(.degrees(selectedCardId == item.id ? 180 : 0))
                         }
-                        .padding(4)
-                        .padding(.horizontal, 2)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.colorBGPrimary)
-                        )
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.colorBorderSecondary,lineWidth: 1)
-                        )
+                    }
+                    
+                    if selectedCardId == item.id {
+                        VStack {
+                            Divider()
+                                .padding(.horizontal, 12)
+                            
+                            HStack(alignment: .top) {
+                                VStack {
+                                    // MARK: -
+                                    
+                                    // MARK: Type
+                                    VStack {
+                                        Text("type".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+                                        
+                                        Text("\(item.eDesc ?? "")")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+                                    
+                                    // MARK: Shares Balance
+                                    VStack {
+                                        Text("share_balance".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+                                        
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.bal ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+                                    
+                                    // MARK: Buy Value
+                                    VStack {
+                                        Text("buy_value".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.bTotal ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+
+                                    // MARK: Share Cost
+                                    VStack {
+                                        Text("share_cost".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.avCost ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+                                    
+                                    // MARK: Profit Loss
+                                    VStack {
+                                        Text("pnl".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.profit ?? 0))%")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle((item.profit ?? 0) >= 0 ? Color.colorPositive : Color.colorNegative)
+
+                                    }
+                                }
+                                
+                                VStack {
+                                    // MARK: -
+
+                                    // MARK: Currency
+                                    VStack {
+                                        Text("currency".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(item.shareCurrency ?? "")")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+                                    
+                                    // MARK: Buy Qty
+                                    VStack {
+                                        Text("buy_qty".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.bal ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(Color.colorPositive)
+
+                                    }
+                                    
+                                    // MARK: Sell Value
+                                    VStack {
+                                        Text("sell_value".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.sTotal ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+
+                                    // MARK: Sell Cost
+                                    VStack {
+                                        Text("sell_cost".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.sellCost ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+                                }
+                                
+                                VStack {
+                                    // MARK: -
+
+                                    // MARK: Price
+                                    VStack {
+                                        Text("price".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+                                        
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.price ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+                                    
+                                    // MARK: Sell Qty
+                                    VStack {
+                                        Text("sell_qty".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.bal ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(Color.colorNegative)
+
+                                    }
+                                    
+                                    // MARK: Total Cost
+                                    VStack {
+                                        Text("total_cost".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.total ?? 0))")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                    }
+
+                                    // MARK: Delay PnL
+                                    VStack {
+                                        Text("delay_pnl".localized)
+                                            .font(.apply(.regular, size: labelFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle(.gray)
+
+                                        Text("\(AppUtility.shared.formatThousandSeparator(number: item.dResult ?? 0))%")
+                                            .font(.apply(.semiBold, size: valueFontSize))
+                                            .frame(minWidth: labelMinWidth, alignment: .leading)
+                                            .foregroundStyle((item.dResult ?? 0) >= 0 ? Color.colorPositive : Color.colorNegative)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+                .padding(.horizontal, 12)
+                .background(RoundedRectangle(cornerRadius: 12).fill(.white))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 4)
+                .padding(.bottom, 4)
+                .onTapGesture {
+                    withAnimation {
+                        if selectedCardId != item.id {
+                            selectedCardId = item.id
+                        } else {
+                            selectedCardId = ""
+                        }
+                    }
+                }
+
             }
-            .padding(2)
         }
     }
-    
+            
     func formatDotNetDate(_ dateString: String) -> String? {
         // Extract milliseconds
         let pattern = #"\/Date\((\d+)"#

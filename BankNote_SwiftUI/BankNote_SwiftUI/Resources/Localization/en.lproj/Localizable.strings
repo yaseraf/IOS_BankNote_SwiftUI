@@ -19,6 +19,10 @@
 "clear" = "Clear";
 "loading" = "Loading";
 "invalid_username_password" = "Invalid Username or Password";
+"create_your_pin" = "Create your pin";
+"pin" = "Pin";
+"male" = "Male";
+"female" = "Female";
 
 // MARK: - OTP Screen
 "invalid_pin" = "Invalid Pin";
@@ -70,6 +74,8 @@
 "my_portfolio" = "My Portfolio";
 "view_all" = "View All";
 "egp" = "EGP";
+"no_portfolios_available" = "No portfolios available.";
+"no_chart_data_available" = "No chart data available.";
 
 // MARK: - Transaction History Screen
 "symbol" = "Symbol";
@@ -206,6 +212,7 @@
 "help" = "Help";
 "rating_app" = "Rating app";
 "buy_transactions" = "Buy Transactions";
+"language" = "Language";
 
 // MARK: Statements Screen
 "statements" = "Statements";
@@ -224,6 +231,7 @@
 // MARK: Tiers Screen
 "buy_now" = "Buy Now";
 "notes" = "Notes";
+"tier" = "Tier";
 
 // MARK: Badges Screen
 "unlock_badges_and_elevate_your_game" = "Unlock Badges and elevate your game.";

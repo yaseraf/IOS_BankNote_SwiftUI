@@ -17,10 +17,12 @@ protocol AuthRepositoryProtocol {
     func UserAuthinticationAdvance(route:AuthRoute, completion: @escaping(Result<UserAuthenticationAdvanceResponseModel, NetworkError>) -> Void) async
     func RegistrationsOTPReset(route:AuthRoute, completion: @escaping(Result<RegistrationsOTPResetResponseModel, NetworkError>) -> Void) async
     func ChangesPassword(route:AuthRoute, completion: @escaping(Result<ChangePasswordResponseModel, NetworkError>) -> Void) async
+    func ChangePin(route:AuthRoute, completion: @escaping(Result<ChangePinResponseModel, NetworkError>) -> Void) async
 
 }
 
 class AuthRepository: AuthRepositoryProtocol {
+    
     func urlIPAddress(route: AuthRoute, completion: @escaping (Result<UrlIPAddressResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: UrlIPAddressResponseModel.self, completion: completion).requestApi()
     }
@@ -52,6 +54,10 @@ class AuthRepository: AuthRepositoryProtocol {
     
     func ChangesPassword(route: AuthRoute, completion: @escaping (Result<ChangePasswordResponseModel, NetworkError>) -> Void) async {
         await RequestApi(route: route,responseType: ChangePasswordResponseModel.self, completion: completion).requestApi()
+    }
+    
+    func ChangePin(route: AuthRoute, completion: @escaping (Result<ChangePinResponseModel, NetworkError>) -> Void) async {
+        await RequestApi(route: route,responseType: ChangePinResponseModel.self, completion: completion).requestApi()
     }
 
 }

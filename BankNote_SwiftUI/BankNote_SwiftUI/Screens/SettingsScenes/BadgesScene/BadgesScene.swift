@@ -25,6 +25,7 @@ struct BadgesScene: BaseSceneType {
                         content: {
                         BadgesContentView(
                             badgesData: $viewModel.badgesData,
+                            tiersData: $viewModel.tiersData,
                             userBadgesData: $viewModel.userBadgesData,
                             onBackTap: {
                                 viewModel.popViewController()

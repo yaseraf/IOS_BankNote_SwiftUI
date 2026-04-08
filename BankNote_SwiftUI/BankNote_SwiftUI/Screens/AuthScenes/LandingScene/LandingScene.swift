@@ -143,7 +143,7 @@ struct LandingScene: BaseSceneType {
 //                      SceneDelegate.getAppCoordinator()?.showMessage(type: .success,msg)
    
                       if data.isFirstLogin?.lowercased() ?? "" == "y" {
-                          viewModel.openPinScene()
+//                          viewModel.openPinScene()
                       } else if data.isFirstLogin?.lowercased() ?? "" == "n" {
                           DispatchQueue.main.async {
                               viewModel.openPinScene()
@@ -160,6 +160,24 @@ struct LandingScene: BaseSceneType {
                       let newMsg = "success \(String(describing: Date().toString(dateFormat: .MMMdd_yyyy)))"
                       SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,msg)
                       
+                  } else {
+                      KeyChainController.shared().webCode = data.webCode
+                      UserDefaultController.instance.currentDate = viewModel.getCurrentDateString()
+                      UserDefaultController.instance.yesterdayDate = viewModel.getYesterdayDateString()
+                      KeyChainController.shared().brokerID = data.brokerID
+                      KeyChainController.shared().UCODE = data.uCode
+                      KeyChainController.shared().compInit = data.compInit
+                      KeyChainController.shared().email = data.email
+                      KeyChainController.shared().username = data.userName
+                      KeyChainController.shared().userType = data.userType
+                      UserDefaultController.instance.nameFullNameA = data.nameFullNameA
+                      UserDefaultController.instance.nameFullNameE = data.nameFullNameE
+                      KeyChainController.shared().mobileNo = data.mobileNo
+                      UserDefaultController().isLoggedIn = true
+                      UserDefaultController().isFirstLogin = false
+
+                      SceneDelegate.getAppCoordinator()?.showHomeFlow()
+                      Connection_Hub.shared.resetOnGoingConnection()
                   }
 
             case .none:

@@ -14,10 +14,13 @@ struct BadgesContentView: View {
     @State private var expandedBadgeName: String? = "Pioneer"
     
     @Binding var badgesData: GetBankNotesMainBadgesUIModel
+    @Binding var tiersData: GetTiersUIModel
     @Binding var userBadgesData: GetBankNotesBadgesUIModel
     
     @State private var showBadgePopup: Bool = false
+    @State private var showTierPopup: Bool = false
     @State private var selectedBadge: GetBankNotesMainBadgesItemUIModel = .init()
+    @State private var selectedTier: GetTiersItemUIModel = .init()
     
     let badgeSize: CGFloat = 100
     
@@ -33,14 +36,17 @@ struct BadgesContentView: View {
 
                 BadgeGridView(
                     badgesData: badgesData,
+                    tiersData: tiersData,
                     showBadgePopup: $showBadgePopup,
-                    selectedBadge: $selectedBadge
+                    showTierPopup: $showTierPopup,
+                    selectedBadge: $selectedBadge,
+                    selectedTier: $selectedTier
                 )
                 .padding()
                 
                 Spacer()
             }
-            .blur(radius: showBadgePopup ? 5 : 0)
+            .blur(radius: showBadgePopup ? 5 : showTierPopup ? 5 : 0)
             .overlay{
                 if showBadgePopup {
                     badgePopup
@@ -50,10 +56,20 @@ struct BadgesContentView: View {
                         }
                     }
                 }
+                
+                if showTierPopup {
+                    tierPopup
+                    .onTapGesture {
+                        withAnimation {
+                            showTierPopup = false
+                        }
+                    }
+                }
             }
             .onTapGesture {
                 withAnimation {
                     showBadgePopup = false
+                    showTierPopup = false
                 }
             }
         }
@@ -148,6 +164,38 @@ struct BadgesContentView: View {
         .padding(.horizontal, 16)
     }
     
+    private var tierPopup: some View {
+        VStack {
+            VStack {
+                Image("ic_\((selectedTier.englishDescription ?? "").lowercased())\((selectedTier.code ?? "") == (UserDefaultController().tierCode ?? "") ? "" : "Disable")")
+                .resizable()
+                .scaledToFit()
+                .frame(width: badgeSize, height: badgeSize)
+
+                Text("\(AppUtility.shared.isRTL ? selectedTier.arabicDescription ?? "" : selectedTier.englishDescription ?? "") \("tier".localized)")
+                .font(.cairoFont(.bold, size: 18))
+            }
+            
+            VStack(alignment: .leading) {
+                Text("\("benefits".localized):")
+                    .font(.cairoFont(.semiBold, size: 16))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Text(selectedTier.notes ?? "")
+                    .font(.cairoFont(.regular, size: 14))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .minimumScaleFactor(0.7)
+            }
+
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(RoundedRectangle(cornerRadius: 12).fill(.white))
+        .padding()
+        .padding(.horizontal, 16)
+    }
+
+    
     private var headerView: some View {
         HStack {
             Button {
@@ -218,11 +266,14 @@ struct BadgesContentView: View {
     // MARK: Badge Grid View
     struct BadgeGridView: View {
         let badgesData: GetBankNotesMainBadgesUIModel
+        let tiersData: GetTiersUIModel
                 
         let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 4)
 
         @Binding var showBadgePopup: Bool
+        @Binding var showTierPopup: Bool
         @Binding var selectedBadge: GetBankNotesMainBadgesItemUIModel
+        @Binding var selectedTier: GetTiersItemUIModel
 
         var body: some View {
             ZStack {
@@ -231,6 +282,7 @@ struct BadgesContentView: View {
                         Button {
                             withAnimation {
                                 showBadgePopup.toggle()
+                                showTierPopup = false
                             }
                             selectedBadge = badge
                         } label: {
@@ -238,10 +290,47 @@ struct BadgesContentView: View {
                         }
 
                     }
+
+                    ForEach(tiersData.data?.sorted {(Double($0.code ?? "") ?? 0) < (Double($1.code ?? "") ?? 0)} ?? [] , id:\.id) { tier in
+                        Button {
+                            withAnimation {
+                                showTierPopup.toggle()
+                                showBadgePopup = false
+                            }
+                            selectedTier = tier
+                        } label: {
+                            TierCard(tier: tier)
+                        }
+
+                    }
                 }
                 .padding(.horizontal, 12)
             }
         }
+    }
+
+    struct TierCard: View {
+        let tier: GetTiersItemUIModel
+
+        var body: some View {
+            ZStack(alignment: .top) {
+
+                VStack(spacing: 4) {
+                    
+                    // Icon
+//                    Image(badges(code: badge.code ?? "")?.badgeImage ?? "")
+                    Image("ic_\((tier.englishDescription ?? "").lowercased())\((tier.code ?? "") == (UserDefaultController().tierCode ?? "") ? "" : "Disable")")
+                    .resizable()
+                    .scaledToFit()
+//                        .frame(width: 32, height: 32)
+
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }
+        
+
+        
     }
 
 

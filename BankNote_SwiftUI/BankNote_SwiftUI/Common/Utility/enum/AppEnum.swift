@@ -995,8 +995,17 @@ enum BadgeCategory {
     }
 }
 
-
 enum NotificationsTabs{
     case news
     case orders
+}
+
+enum TradingType {
+    case cash
+    case stocks
+}
+
+enum OrderPriceType {
+    case market
+    case limit
 }

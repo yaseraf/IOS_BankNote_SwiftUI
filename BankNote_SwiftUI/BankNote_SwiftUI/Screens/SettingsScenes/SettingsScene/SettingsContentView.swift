@@ -50,6 +50,18 @@ struct SettingsContentView: View {
         }
     }
     
+    func formatDateOnly(_ dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/dd/yyyy hh:mm:ss a"
+        
+        guard let date = formatter.date(from: dateString) else { return dateString }
+        
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "M/dd/yyyy"
+        
+        return outputFormatter.string(from: date)
+    }
+    
     private var profileView: some View {
         VStack {
             VStack(spacing: 0) {
@@ -64,7 +76,7 @@ struct SettingsContentView: View {
                     }
                 
                 HStack {
-                    Text(AppUtility.shared.isRTL ? UserDefaultController().selectedUserAccount?.ClientNameA ?? "" : UserDefaultController().selectedUserAccount?.ClientNameE ?? "")
+                    Text(AppUtility.shared.isRTL ? UserDefaultController().selectedUserAccount?.MainClientNameA ?? "" : UserDefaultController().selectedUserAccount?.MainClientNameE ?? "")
                         .font(.cairoFont(.semiBold, size: 14))
                         .minimumScaleFactor(0.5)
                     
@@ -217,7 +229,7 @@ struct SettingsContentView: View {
                         Text("date_of_birth".localized)
                             .font(.cairoFont(.semiBold, size: 12))
                         
-                        Text("September 20, 1999".localized)
+                        Text("\(formatDateOnly(UserDefaultController().birthdate ?? ""))")
                             .font(.cairoFont(.semiBold, size: 14))
                     }
                     
@@ -242,7 +254,7 @@ struct SettingsContentView: View {
                         Text("gender".localized)
                             .font(.cairoFont(.semiBold, size: 12))
                         
-                        Text("male".localized)
+                        Text("\(UserDefaultController().gender?.lowercased() == "m" ? "male".localized : "female".localized)")
                             .font(.cairoFont(.semiBold, size: 14))
                     }
                     
@@ -252,6 +264,41 @@ struct SettingsContentView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
+                }
+                
+                Divider()
+                
+                // MARK: - Language
+                HStack(spacing: 17) {
+                    Image("ic_globe")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color.colorPrimary)
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("language".localized)
+                            .font(.cairoFont(.semiBold, size: 12))
+                        
+                        Text("\(AppUtility.shared.isRTL ? "عربي" : "English")")
+                            .font(.cairoFont(.semiBold, size: 14))
+                    }
+                    
+                    Spacer()
+                    
+                    Image("ic_rightArrow")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 22, height: 22)
+                }
+                .onTapGesture {
+                    if AppUtility.shared.isRTL {
+                        AppUtility.shared.updateAppLanguage(language: .english)
+                    } else {
+                        AppUtility.shared.updateAppLanguage(language: .arabic)
+                    }
+                    SceneDelegate.getAppCoordinator()?.restart()
                 }
                 
                 Divider()

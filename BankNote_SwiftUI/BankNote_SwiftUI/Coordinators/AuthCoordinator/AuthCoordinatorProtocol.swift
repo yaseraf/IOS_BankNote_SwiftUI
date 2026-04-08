@@ -16,6 +16,7 @@ protocol AuthCoordinatorProtocol: AnyObject,Coordinator {
     func openForgotPasswordScene(forgotType:ForgotDataEnum)
     func openConfirmOtpScene(forgotType:ForgotDataEnum)
     func openChangePasswordScene()
+    func openCreatePinScene(cookies: [HTTPCookie]?)
     func openChangePinScene()
     func openSignUpScene(verificationType: VerificationType, verifyWithEmail: Bool)
     func openVerifySignUpScene(verificationType: VerificationType, phone: String, email: String, otpExpirationTimer: Double, otpRequestID: String, transactionID: String, requestIDVlens: String, isVlens: Bool)

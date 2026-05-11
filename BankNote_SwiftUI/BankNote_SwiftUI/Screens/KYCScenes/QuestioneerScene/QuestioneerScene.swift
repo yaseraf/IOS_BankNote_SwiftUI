@@ -24,6 +24,7 @@ struct QuestioneerScene: BaseSceneType {
                 }, onContractsTap: {
                     viewModel.openContractsScene()
                 }, onEndContractSigning: {
+                    viewModel.getKYCCibcAPI(success: true, requestItems: [GetKYCCibcRequestItems(ID: "258", Value: "2")])
                     viewModel.openThanksForRegisteringScene()
                 })
             })

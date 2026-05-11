@@ -19,6 +19,7 @@ class Connection_Hub {
     var exchangeSummaryDelegate: ExchangeSummaryDelegate?
     var notifyOrderDelegate: NotifyOrderDelegate?
     var alertsDelegate: AlertsDelegate?
+    var keyStatisticsDelegate: KeyStatisticsDelegate?
 
     var userDefaultController = UserDefaultController.instance
     
@@ -202,7 +203,7 @@ class Connection_Hub {
         
         //MARK: Tops
         chatHub.onReceive(.sendTopGainerObject) { args in  //HubInvokes.SendTopGainerObject
-            printToLog("chatHub.onReceive SendTopGainerObject ") //args: ", args)
+            debugPrint("chatHub.onReceive SendTopGainerObject: \(args) ") //args: ", args)
 
 
             let responseModel =  HubUtility.shared.decodeToModel(from: args?.first, type: [TopActivitiesResponseModel].self)
@@ -217,8 +218,8 @@ class Connection_Hub {
         }
         
         chatHub.onReceive(.sendTopLoserObject) { args in
-            printToLog("chatHub.onReceive SendTopLoserObject ") //args: ", args)
-            
+            debugPrint("chatHub.onReceive SendTopLoserObject: \(args) ") //args: ", args)
+
             let responseModel =  HubUtility.shared.decodeToModel(from: args?.first, type: [TopActivitiesResponseModel].self)
             
             let uiModel =    responseModel?.compactMap({
@@ -243,7 +244,7 @@ class Connection_Hub {
         }
         
         chatHub.onReceive(.sendMostActiveObject) { args in
-            printToLog("chatHub.onReceive sendMostActiveObject ") //args: ", args)
+            debugPrint("chatHub.onReceive SendMostActiveObject: \(args) ") //args: ", args)
 
             let responseModel =  HubUtility.shared.decodeToModel(from: args?.first, type: [TopActivitiesResponseModel].self)
             
@@ -380,7 +381,16 @@ class Connection_Hub {
             
             let uiModel = GetMarketWatchByProfileIDUIModel.mapToUIModel(responseModel ?? .empty)
             
+            let responseModel2 =  HubUtility.shared.decodeToModel(from: args?.first, type: SubscribeMarketWatchSymbolsResponseModel.self)
+
+            let uiModel2 = responseModel2.map({
+                SubscribeMarketWatchSymbolsUIModel.mapToUIModel($0)
+
+            })
+
             self.marketWatchDelegate?.onWatchlistDataReceive(data: uiModel)
+            self.keyStatisticsDelegate?.onSubscribeMDSymbol(model: (uiModel2 ?? SubscribeMarketWatchSymbolsUIModel.testUIModel()))
+
 
         }
         

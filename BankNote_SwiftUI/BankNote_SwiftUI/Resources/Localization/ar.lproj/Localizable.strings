@@ -23,6 +23,7 @@
 "pin" = "الرقم السري";
 "male" = "ذكر";
 "female" = "أنثى";
+"request_rejected" = "تم رفض الطلب";
 
 // MARK: - OTP Screen
 "invalid_pin" = "الرمز غير صحيح";
@@ -31,10 +32,12 @@
 "please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "يرجى إدخال رقم هاتفك وسنرسل لك رابطًا لتغيير كلمة المرور";
 "please_enter_your_phone_number" = "يرجى إدخال رقم هاتفك";
 "please_enter_your_email" = "يرجى إدخال بريدك الإلكتروني";
+"enter_your_email" = "يرجى إدخال بريدك الإلكتروني";
 "email_address" = "البريد الإلكتروني";
 "resend_link" = "إعادة إرسال الرابط";
 "click_to_resend_otp" = "اضغط لإعادة إرسال رمز التحقق";
 "continue_with_email" = "المتابعة باستخدام البريد الإلكتروني";
+"continue_with_email2" = "المتابعة باستخدام البريد الإلكتروني";
 "continue_with_phone_number" = "المتابعة باستخدام رقم الهاتف";
 "please_enter_your_otp_to_confirm" = "يرجى إدخال رمز التحقق للتأكيد";
 "resend_otp" = "إعادة إرسال رمز التحقق";
@@ -65,14 +68,21 @@
 
 // MARK: Home Screen
 "total_investment_value" = "إجمالي قيمة الاستثمار";
+"total_available_balance" = "إجمالي الرصيد المتاح";
 "top_up" = "إيداع";
 "withdrawal" = "سحب";
+"withdraw" = "سحب";
 "view_history" = "عرض السجل";
 "my_portfolio" = "محفظتي";
 "view_all" = "عرض الكل";
 "egp" = "جنيه مصري";
 "no_portfolios_available" = "لا توجد محافظ متاحة.";
 "no_chart_data_available" = "لا توجد بيانات للرسم البياني.";
+"bid" = "الطلب";
+"ask" = "العرض";
+"bid_volume" = "حجم الطلب";
+"ask_volume" = "حجم العرض";
+
 
 // MARK: - Transaction History Screen
 "symbol" = "الرمز";
@@ -126,6 +136,7 @@
 "index" = "المؤشر";
 "view_all" = "عرض الكل";
 "watchlist" = "قائمة المراقبة";
+"my_watchlist" = "قائمة المراقبة الخاصة بي";
 "news" = "الأخبار";
 "all" = "الكل";
 "stocks" = "الأسهم";
@@ -148,6 +159,11 @@
 "expired_order_desc" = "انتهت صلاحية أمرك";
 "sent_order" = "أمر مُرسل";
 "sent_order_desc" = "تم إرسال أمرك";
+"no_results_for" = "لا توجد نتائج لـ \"%@\"";
+"search_symbol" = "بحث عن اسم السهم";
+"top_gainers" = "أعلى الرابحين";
+"top_losers" = "أعلى الخاسرون";
+"most_active" = "الأكثر نشاطا";
 
 // MARK: Orders Screen
 "pending" = "قيد الانتظار";
@@ -209,6 +225,19 @@
 "rating_app" = "تقييم التطبيق";
 "buy_transactions" = "شراء معاملات";
 "language" = "اللغة";
+"invite_a_friend" = "ادعُ صديقًا";
+"promo_codes" = "الرموز الترويجية";
+"promo_code" = "رمز ترويجي";
+"enter_your_promo_code" = "أدخل الرمز الترويجي";
+"submit" = "إرسال";
+"share_with_friends" = "شارك مع الأصدقاء";
+"earn_more_inviting_friends" = "اكسب المزيد بدعوة الأصدقاء";
+"share_your_link" = "شارك رابطك";
+"share_to" = "مشاركة إلى";
+"facebook" = "فيسبوك";
+"instagram" = "إنستغرام";
+"whatsapp" = "واتساب";
+"x" = "إكس";
 
 // MARK: Statements Screen
 "statements" = "كشف الحساب";
@@ -333,6 +362,7 @@
 "enter_code" = "أدخل الرمز";
 "enter_the_6_digit_verification_code_we_sent_to" = "أدخل رمز التحقق المكون من 6 أرقام الذي أرسلناه إلى";
 "confirm" = "تأكيد";
+"resend_code_status" = "تم إرسال رمز التحقق بنجاح";
 "please_choose_your_nationality" = "يرجى اختيار جنسيتك";
 "well_use_this_information_to_verify_your_identity" = "سنستخدم هذه المعلومات للتحقق من هويتك";
 "nationality" = "الجنسية";

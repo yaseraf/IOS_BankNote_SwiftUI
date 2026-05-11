@@ -124,6 +124,23 @@ extension AppCoordinator: AppCoordinatorProtocol {
         authCoordinator.start()
     }
     
+    func getTradeFlow() -> TradeCoordinator? {
+        let  tradeCoordinator:TradeCoordinator
+        if let childCoordinator = self.getChildCoordinator(coordinator: TradeCoordinator.self) as? TradeCoordinator {
+            tradeCoordinator = childCoordinator
+            
+            return childCoordinator
+
+        }else{
+            childCoordinator.removeAll()
+            tradeCoordinator = .init(navigationController: navigationController)
+            childCoordinator.append(tradeCoordinator)
+            
+            return tradeCoordinator
+        }
+    }
+
+    
     func showHomeFlow() {
         removeAllChildCoordinator()
 

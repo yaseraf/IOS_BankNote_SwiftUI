@@ -14,15 +14,17 @@ class WatchlistViewModel: ObservableObject {
     @Published var watchlistData: [WatchlistUIModel]?
     @Published var list:[GetMarketWatchByProfileIDUIModel]?
     @Published var portfolioData: GetPortfolioUIModel?
+    @Published var title: String?
     
     @Published var getMarketWatchByProfileIDAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
     @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
 
-    init(coordinator: TradeCoordinator, useCase: TradeUseCaseProtocol, watchlist: [GetMarketWatchByProfileIDUIModel], portfolioData: GetPortfolioUIModel) {
+    init(coordinator: TradeCoordinator, useCase: TradeUseCaseProtocol, watchlist: [GetMarketWatchByProfileIDUIModel], portfolioData: GetPortfolioUIModel, title: String) {
         self.coordinator = coordinator
         self.useCase = useCase
         self.list = watchlist
         self.portfolioData = portfolioData
+        self.title = title
         
         Connection_Hub.shared.marketWatchDelegate = self
         
@@ -40,13 +42,14 @@ extension WatchlistViewModel {
     
     func openStockDetailsScene(symbol: String, marketType: String) {
         
+        UserDefaultController().selectedSymbol = symbol
+        
         let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == UserDefaultController().selectedSymbol ?? ""}).first ?? .testUIModel()
 
         let portfolioSymbol = portfolioData?.portfolioes.filter({$0.symbol == symbol}).first
 
-        UserDefaultController().selectedSymbol = symbol
         UserDefaultController().selectedSymbolID = selectedStock.symbolID
-        UserDefaultController().selectedSymbolType = marketType
+        UserDefaultController().selectedSymbolType = selectedStock.marketType ?? ""
         UserDefaultController().selectedCustodian = portfolioSymbol?.custodianID ?? "-1"
         UserDefaultController().CUSTODYID = portfolioSymbol?.custodianID ?? "-1"
         UserDefaultController().selectedCustodianName = AppUtility.shared.isRTL ? portfolioSymbol?.custodianA ?? "" : portfolioSymbol?.custodianE ?? ""

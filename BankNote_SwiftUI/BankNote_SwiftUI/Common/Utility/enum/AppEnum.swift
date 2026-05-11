@@ -1009,3 +1009,27 @@ enum OrderPriceType {
     case market
     case limit
 }
+
+enum HomeTotalAssetsType {
+    case totalInvestmentValue
+    case totalAvailableBalance
+    
+    var name: String {
+        switch self {
+        case .totalInvestmentValue:
+            return "total_investment_value".localized
+        case .totalAvailableBalance:
+            return "total_available_balance".localized
+        }
+    }
+}
+
+enum IndexType {
+    case EGX30
+    case EGX70
+    case EGX100
+}
+
+enum HomePortfolioTab {
+    case portfolio, watchlist
+}

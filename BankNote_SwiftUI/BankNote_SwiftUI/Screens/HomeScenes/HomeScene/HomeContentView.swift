@@ -43,16 +43,19 @@ struct HomeContentView: View {
     
     @StateObject private var paymobViewController = PaymobViewController()
     @Binding var viewController: UIViewController?
-
+    var customWatchListData: Binding<[GetMarketWatchByProfileIDUIModel]?>
     var portfolioData:Binding<GetPortfolioUIModel?>
     @State var isBalanceHidden:Bool = false
-    @State private var selectedOption: String = "Select an Option"
+    @State private var selectedOption: HomeTotalAssetsType = .totalInvestmentValue
+    @State private var selectedTab: HomePortfolioTab = .portfolio
+    @State private var customWatchlistCellExpanded = false
     
     var onTopUpTap:()->Void
     var onStockTap:(String, String, String, String) -> Void
     var onWithdrawalTap:()->Void
     var onViewHistoryTap:()->Void
     var onPortfolioViewAllTap:()->Void
+    var onMyWatchlistViewAllTap:([GetMarketWatchByProfileIDUIModel])->Void
     
     var body: some View {
         ZStack {
@@ -128,16 +131,19 @@ struct HomeContentView: View {
         
     private var totalInvestmentView: some View {
         Menu(content: {
-            Button("Option 1", action: { selectedOption = "Option 1" })
-            Button("Option 2", action: { selectedOption = "Option 2" })
+            Button("total_investment_value".localized, action: { selectedOption = .totalInvestmentValue })
+            Button("total_available_balance".localized, action: { selectedOption = .totalAvailableBalance })
 
-        }, label: {
-            Label(selectedOption, systemImage: "chevron.down")
-                .padding()
-                .background(Color.blue.opacity(0.1))
-                .cornerRadius(8)
+            }, label: {
+                Label(selectedOption.name, systemImage: "chevron.down")
+                    .foregroundStyle(.black)
+                    .padding()
+//                    .background(Color.blue.opacity(0.1))
+                    .background(Color(hex: "#DDDDDD"))
+                    .cornerRadius(99)
 
-        })
+            }
+        )
 //        HStack {
 //            Text("total_investment_value".localized)
 //                .font(.cairoFont(.semiBold, size: 14))
@@ -176,7 +182,7 @@ struct HomeContentView: View {
         
         return VStack(spacing: 8) {
             HStack {
-                Text(isBalanceHidden ? "*******" : "\(accountCurrency) \(AppUtility.shared.formatThousandSeparator(number: totalAsset))")
+                Text(isBalanceHidden ? "*******" : "\(accountCurrency) \(selectedOption == .totalInvestmentValue ? AppUtility.shared.formatThousandSeparator(number: totalAsset) : String(balance ?? 0))")
                     .font(.cairoFont(.bold, size: 32))
                 
                 Image(isBalanceHidden ? "ic_eyeVisible" : "ic_eyeInvisible")
@@ -193,16 +199,17 @@ struct HomeContentView: View {
             HStack {
                 Text("\(accountCurrency) \(AppUtility.shared.formatThousandSeparator(number: Double(accountPnL)))")
                     .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundStyle(accountPnL > 0 ? Color.colorPositive : Color.colorNegative)
-                
+                    .foregroundStyle(accountPnL > 0 ? Color.colorPositive : accountPnL < 0 ? Color.colorNegative : Color.colorWarning600)
+
                 ZStack {
                     Text("\(AppUtility.shared.formatThousandSeparator(number: Double(accountPnLPerc)))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(accountPnL > 0 ? Color.colorPositive : Color.colorNegative)
+                        .foregroundStyle(accountPnLPerc > 0 ? Color.colorPositive : accountPnLPerc < 0 ? Color.colorNegative : Color.colorWarning600)
                 }
                 .padding(.vertical, 2)
                 .padding(.horizontal, 7)
-                .background(RoundedRectangle(cornerRadius: 99).fill(Color(hex: accountPnL > 0 ? "#D4EBCF" : "#EBCFCF")))
+                .background(RoundedRectangle(cornerRadius: 99).fill(accountPnLPerc > 0 ? Color(hex: "#D4EBCF") : accountPnLPerc < 0 ? Color(hex: "#EBCFCF") : Color.colorWarning50))
+                .background(RoundedRectangle(cornerRadius: 99).fill(accountPnLPerc > 0 ? Color(hex: "#D4EBCF") : accountPnLPerc < 0 ? Color(hex: "#EBCFCF") : Color.colorWarning200))
             }
             
             HStack(spacing: 21) {
@@ -234,7 +241,7 @@ struct HomeContentView: View {
                             .scaledToFit()
                             .frame(width: 24, height: 24)
                         
-                        Text("withdrawal".localized)
+                        Text("withdraw".localized)
                             .font(.cairoFont(.semiBold, size: 10))
                             .foregroundStyle(Color(hex: "#9C4EF7"))
                     }
@@ -259,52 +266,108 @@ struct HomeContentView: View {
     private var portfolioView: some View {
         VStack {
             HStack {
-                Text("my_portfolio".localized)
-                    .font(.cairoFont(.semiBold, size: 18))
-                    .foregroundStyle(.black)
-                
-                ZStack {
-                    Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
-                        .font(.cairoFont(.semiBold, size: 12))
+                // My Portfolio Tab
+                Button {
+                    selectedTab = .portfolio
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("my_portfolio".localized)
+                            .font(.cairoFont(.semiBold, size: selectedTab == .portfolio ? 18 : 14))
+                            .foregroundStyle(selectedTab == .portfolio ? .black : Color(hex: "#9C9C9C"))
+
+                        ZStack {
+                            Text("\(portfolioData.wrappedValue?.portfolioes.count ?? 0)")
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                        }
+                        .padding(.horizontal, 4)
+//                        .background(RoundedRectangle(cornerRadius: 2).fill(selectedTab == .portfolio ? .white : Color(hex: "#EEEEEE")))
+                        .background(RoundedRectangle(cornerRadius: 2).fill(.white))
+                    }
                 }
-                .padding(.horizontal, 4)
-                .background(RoundedRectangle(cornerRadius: 2).fill(.white))
-                
+                .opacity(selectedTab == .portfolio ? 1 : 0.5)
+
+                // Divider
+                Text("|")
+                    .foregroundStyle(Color(hex: "#CCCCCC"))
+                    .padding(.horizontal, 4)
+
+                // My Watchlist Tab
+                Button {
+                    selectedTab = .watchlist
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("my_watchlist".localized)
+                            .font(.cairoFont(.semiBold, size: selectedTab == .watchlist ? 18 : 14))
+                            .foregroundStyle(selectedTab == .watchlist ? .black : Color(hex: "#9C9C9C"))
+
+                        ZStack {
+                            Text("\(customWatchListData.wrappedValue?.count ?? 0)")
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                        }
+                        .padding(.horizontal, 4)
+//                        .background(RoundedRectangle(cornerRadius: 2).fill(selectedTab == .watchlist ? .white : Color(hex: "#EEEEEE")))
+                        .background(RoundedRectangle(cornerRadius: 2).fill(.white))
+                    }
+                }
+                .opacity(selectedTab == .watchlist ? 1 : 0.5)
+
                 Spacer()
-                
+
                 ZStack {
                     Button {
-                        onPortfolioViewAllTap()
+                        if selectedTab == .portfolio {
+                            onPortfolioViewAllTap()
+                        } else {
+                            onMyWatchlistViewAllTap(customWatchListData.wrappedValue ?? [])
+                        }
                     } label: {
                         Text("view_all".localized)
                             .font(.cairoFont(.semiBold, size: 14))
                             .foregroundStyle(.black)
                     }
-
                 }
                 .padding(.vertical, 3)
                 .padding(.horizontal, 10)
                 .background(RoundedRectangle(cornerRadius: 99).fill(.white))
             }
             .padding(.horizontal, 18)
-            
-            
-            if portfolioData.wrappedValue?.portfolioes.isEmpty == false{
-                ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(portfolioData.wrappedValue?.portfolioes ?? [], id:\.id) { item in
-                        Button {
-                            onStockTap(item.symbol ?? "", item.marketType ?? "", item.custodianID ?? "", AppUtility.shared.isRTL ? item.custodianA ?? "" : item.custodianE ?? "")
-                        } label: {
-                            PortfolioCell(portfolioData: item)
-                        }
 
+            if selectedTab == .portfolio {
+                if portfolioData.wrappedValue?.portfolioes.isEmpty == false {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        ForEach(portfolioData.wrappedValue?.portfolioes ?? [], id: \.id) { item in
+                            Button {
+                                onStockTap(item.symbol ?? "", item.marketType ?? "", item.custodianID ?? "", AppUtility.shared.isRTL ? item.custodianA ?? "" : item.custodianE ?? "")
+                            } label: {
+                                PortfolioCell(portfolioData: item)
+                            }
+                        }
                     }
+                    .padding(.bottom, 80)
                 }
-                .padding(.bottom, 80)
+            } else {
+                if customWatchListData.wrappedValue?.isEmpty == false {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        ForEach(customWatchListData.wrappedValue ?? [], id: \.id) { item in
+                            Button {
+                                onStockTap(item.symbol ?? "", item.marketType ?? "", "", "")
+                            } label: {
+                                CustomWatchlistCell(watchlistData: item, customWatchlistCellExpanded: $customWatchlistCellExpanded)
+                            }
+                        }
+                    }
+                    .padding(.bottom, 80)
+                } else {
+                    Spacer()
+                    Text("no_watchlist_available".localized)
+                        .foregroundStyle(Color(hex: AppUtility.shared.APP_MAIN_COLOR))
+                        .font(.cairoFont(.extraBold, size: 14))
+                }
             }
         }
     }
-    
 }
 
 struct PortfolioCell: View {
@@ -358,22 +421,159 @@ struct PortfolioCell: View {
             
             VStack(alignment: .trailing, spacing: 0) {
                 HStack(spacing: 4) {
-                    Image(portfolioData.pPerc ?? 0 >= 0 ? "ic_stockUp" : "ic_stockDown")
+                    Image(portfolioData.pPerc ?? 0 > 0 ? "ic_stockUp" : portfolioData.pPerc ?? 0 < 0 ? "ic_stockDown" : "")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     
-                    Text("\(portfolioData.pPerc ?? 0 >= 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pPerc ?? 0))%")
+                    Text("\(portfolioData.pPerc ?? 0 > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pPerc ?? 0))%")
                         .font(.cairoFont(.semiBold, size: 12))
-                        .foregroundStyle(Color(hex: portfolioData.pPerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                        .foregroundStyle(portfolioData.pPerc ?? 0 > 0 ? Color(hex: "#1E961E") : portfolioData.pPerc ?? 0 < 0 ? Color(hex: "#AA1A1A") : Color.colorWarning600 )
                 }
                 
                 
                 
-                Text("\("egp".localized) \(portfolioData.pProf ?? 0 >= 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pProf ?? 0))")
+                Text("\("egp".localized) \(portfolioData.pProf ?? 0 > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: portfolioData.pProf ?? 0))")
                     .font(.cairoFont(.semiBold, size: 12))
-                    .foregroundStyle(Color(hex: portfolioData.pPerc ?? 0 >= 0 ? "#1E961E" : "#AA1A1A" ))
+                    .foregroundStyle(portfolioData.pProf ?? 0 > 0 ? Color(hex: "#1E961E") : portfolioData.pProf ?? 0 < 0 ? Color(hex: "#AA1A1A") : Color.colorWarning600 )
 
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .background(RoundedRectangle(cornerRadius: 12).fill(.white))
+        .padding(.horizontal, 18)
+    }
+}
+
+struct CustomWatchlistCell: View {
+
+    var watchlistData: GetMarketWatchByProfileIDUIModel
+    @Binding var customWatchlistCellExpanded: Bool
+
+    var body: some View {
+        VStack {
+            HStack(spacing: 0) {
+                HStack(spacing: 16) {
+                    WebImage(url: URL(string: "\(UserDefaultController().iconPath ?? "")/\(watchlistData.symbol ?? "").png")) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 45, maxHeight: 45)
+                                .padding(.horizontal, 4)
+                        case .failure, .empty:
+                            Image("ic_selectStock")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 45, maxHeight: 45)
+                                .padding(.horizontal, 4)
+                                .foregroundStyle(.gray)
+                        @unknown default:
+                            Image("ic_selectStock")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 45, maxHeight: 45)
+                                .foregroundStyle(.gray)
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(watchlistData.symbol ?? "")
+                            .font(.cairoFont(.semiBold, size: 14))
+                        Text(AppUtility.shared.isRTL ? watchlistData.symbolNameA ?? "" : watchlistData.symbolNameE ?? "")
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(Color(hex: "#9C9C9C"))
+                    }
+                    .foregroundStyle(.black)
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 0) {
+                    let change = Double(watchlistData.netChange ?? "") ?? 0
+                    let changePerc = Double(watchlistData.netChangePerc ?? "") ?? 0
+                    
+                    Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: change))")
+                        .font(.cairoFont(.semiBold, size: 12))
+                        .foregroundStyle(.black)
+                    
+                    HStack(spacing: 4) {
+                        Image(changePerc > 0 ? "ic_stockUp" : changePerc < 0 ? "ic_stockDown" : "")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+
+                        Text("\(changePerc > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: Double(changePerc)))%")
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(changePerc > 0 ? Color(hex: "#1E961E") : changePerc < 0 ? Color(hex: "#AA1A1A") : Color.colorWarning600)
+                    }
+
+                }
+                
+                Image("ic_downArrow")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(Color(hex: "#9C4EF7"))
+                    .frame(width: 14, height: 14)
+                    .padding(.horizontal, 8)
+                    .onTapGesture {
+                        withAnimation {
+                            customWatchlistCellExpanded.toggle()
+                        }
+                    }
+                
+                
+            }
+            
+            if customWatchlistCellExpanded {
+                HStack {
+                    VStack(alignment: .leading) {
+                        
+                        VStack(alignment: .leading) {
+                            Text("bid".localized)
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                            Text("\(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.bidPrice ?? "") ?? 0))")
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("bid_volume".localized)
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                            Text("\(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.bidVolume ?? "") ?? 0))")
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+
+                        VStack(alignment: .leading) {
+                            Text("ask".localized)
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                            Text("\(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.offerPrice ?? "") ?? 0))")
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("ask_volume".localized)
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                            Text("\(AppUtility.shared.formatThousandSeparator(number: Double(watchlistData.offerVolume ?? "") ?? 0))")
+                                .font(.cairoFont(.semiBold, size: 12))
+                                .foregroundStyle(.black)
+                        }
+                    }
+                }
             }
         }
         .padding(.horizontal, 14)

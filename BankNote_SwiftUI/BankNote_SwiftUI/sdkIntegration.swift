@@ -153,14 +153,14 @@ class sdkIntegration: NSObject, ObservableObject, VIDVLivenessDelegate {
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness builderError, code: \(code), message: \(message)")
             
             let authCoordinator = SceneDelegate.getAppCoordinator()?.getChildCoordinator(coordinator: AuthCoordinator.self) as? AuthCoordinator
-            authCoordinator?.openLoginInformationScene()
+//            authCoordinator?.openLoginInformationScene()
 
         case .serviceFailure(let code, let message, let data):
             debugPrint("VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
             SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, "VidVLiveness serviceFailure, data: \(data), code: \(code), message: \(message)")
             
             let authCoordinator = SceneDelegate.getAppCoordinator()?.getChildCoordinator(coordinator: AuthCoordinator.self) as? AuthCoordinator
-            authCoordinator?.openLoginInformationScene()
+//            authCoordinator?.openLoginInformationScene()
             
         case .userExited(let data, let step):
             debugPrint("VidVLiveness userExit, data: \(data), step: \(step)")

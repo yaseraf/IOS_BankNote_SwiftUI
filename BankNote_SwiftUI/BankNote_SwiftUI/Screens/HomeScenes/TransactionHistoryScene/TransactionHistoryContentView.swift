@@ -311,7 +311,7 @@ struct TransactionHistoryContentView: View {
         let date = Date(timeIntervalSince1970: milliseconds / 1000)
 
         let formatter = DateFormatter()
-        formatter.dateFormat = "M/d/yyyy" // 2/8/2026
+        formatter.dateFormat = "M/d/yyyy" // 2/8/2026 // TODO: Need this format dd/mm/yyyy
         formatter.locale = Locale(identifier: "en_US_POSIX")
 
         return formatter.string(from: date)

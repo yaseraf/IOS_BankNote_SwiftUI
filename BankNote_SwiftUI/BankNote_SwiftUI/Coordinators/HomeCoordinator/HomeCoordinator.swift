@@ -124,8 +124,9 @@ extension HomeCoordinator:HomeCoordinatorProtocol{
 
     func openHomeScene() {
         let useCase = HomeUseCase()
+        let tradeUseCase = TradeUseCase()
         let lookupsUseCase = LookupsUseCase()
-        let viewModel = HomeViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase)
+        let viewModel = HomeViewModel(coordinator: self, useCase: useCase, lookupsUseCase: lookupsUseCase, tradeUseCase: tradeUseCase)
         let view = HomeScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

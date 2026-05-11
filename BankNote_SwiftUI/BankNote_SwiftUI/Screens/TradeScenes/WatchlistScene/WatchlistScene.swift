@@ -25,6 +25,7 @@ struct WatchlistScene: BaseSceneType {
                     content: {
                         WatchlistContentView(
                             watchlistData: $viewModel.list,
+                            title: $viewModel.title,
                             onWatchlistTap: { watchlist in
                                 viewModel.openStockDetailsScene(symbol: watchlist.symbol ?? "", marketType: watchlist.marketType ?? "")
                             }, onBackTap: {

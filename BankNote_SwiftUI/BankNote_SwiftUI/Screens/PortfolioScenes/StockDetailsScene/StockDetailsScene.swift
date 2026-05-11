@@ -29,7 +29,11 @@ struct StockDetailsScene: BaseSceneType {
                             chartLoaded: $viewModel.chartLoaded,
                             marketNews: $viewModel.marketNewsBySymbol,
                             ownedShares: $viewModel.ownedShares,
-                            onBackTap: {
+                            favoriteWatchlist: $viewModel.favoriteWatchlist,
+                            depthByPriceData: $viewModel.depthByPriceData,
+                            onFavoriteTap: { symbol in
+                                viewModel.GetAllProfilesLookupsByUserCodeAPI(success: true, selectedSymbol: symbol)
+                            }, onBackTap: {
                                 viewModel.popViewController()
                             }, onBuyTap: {
                                 viewModel.openOrderEntryScene(placeOrderType: .buy)
@@ -43,6 +47,8 @@ struct StockDetailsScene: BaseSceneType {
                     viewModel.GetAllMarketWatchBySymbolAPI(success: true)
                     viewModel.GetAllMarketNewsBySymbol(success: true)
                     viewModel.GetExpectedProfitLossAPI(success: true)
+                    viewModel.initialGetAllProfilesLookupsByUserCodeAPI(success: true)
+                    viewModel.subscribeMDSymbol()
                 }
                 .onDisappear {
                     viewModel.UnSubscribleMarketWatchSymbols()
@@ -53,6 +59,13 @@ struct StockDetailsScene: BaseSceneType {
         .onViewDidLoad {
             marketAPI()
             sendOrdersSignalR()
+            GetMarketWatchAPI()
+            GetAllProfilesLookupsByUserCodeAPI()
+            GetMarketWatchByProfileIDAPI()
+            AddMarketWatchProfileNameAPI()
+            AddMarketWatchProfileSymbolsAPI()
+            DeleteMarketWatchProfileSymbolsAPI()
+
         }
     }
     
@@ -86,5 +99,102 @@ struct StockDetailsScene: BaseSceneType {
             }
         }.store(in: &anyCancellable)
     }
+    
+    private func GetMarketWatchAPI() {
+        viewModel.$getAllMarketWatchBySymbolAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let data):
+                debugPrint("")
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func GetAllProfilesLookupsByUserCodeAPI() {
+        viewModel.$getAllProfilesLookupsByUserCodeAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let data):
+                debugPrint("")
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func GetMarketWatchByProfileIDAPI() {
+        viewModel.$getMarketWatchByProfileIDAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let data):
+                debugPrint("")
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+       
+    private func AddMarketWatchProfileNameAPI() {
+        viewModel.$addMarketWatchProfileNameAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let data):
+                debugPrint("")
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func AddMarketWatchProfileSymbolsAPI() {
+        viewModel.$AddMarketWatchProfileSymbolsAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let data):
+                debugPrint("")
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+    
+    private func DeleteMarketWatchProfileSymbolsAPI() {
+        viewModel.$DeleteMarketWatchProfileSymbolsAPIResult.receive(on: DispatchQueue.main).sink { result  in
+            switch result{
+            case .onFailure(let error):
+                SceneDelegate.getAppCoordinator()?.showMessage(type: .failure,error.text)
+            case.onLoading(let show):
+                viewTypeAction.showLoading = show
+            case.onSuccess(let data):
+                debugPrint("")
+            case .none:
+                break
+            }
+
+        }.store(in: &anyCancellable)
+    }
+
 
 }

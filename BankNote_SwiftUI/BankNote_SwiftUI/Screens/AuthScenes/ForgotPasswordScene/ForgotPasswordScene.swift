@@ -17,7 +17,7 @@ struct ForgotPasswordScene: BaseSceneType {
     var body: some View {
         BaseScene(contentView: {
             BaseContentView(withScroll:false, backgroundType: .gradient, content: {
-                ForgotPasswordContentView(forgotType: $viewModel.forgotType, authenticationType: $viewModel.authenticationType, nin: "", qid: "", phoneNumber: $viewModel.mobileInputValue, email: $viewModel.emailInputValue, onBack: {
+                ForgotPasswordContentView(forgotType: $viewModel.forgotType, authenticationType: $viewModel.authenticationType, nin: "", qid: "", phoneNumber: $viewModel.mobileInputValue, email: $viewModel.emailInputValue, resendSeconds: 200, onBack: {
                     viewModel.onBack()
                 }, onSubmit: {
                     viewModel.onSubmit()

@@ -7,11 +7,18 @@
 
 import Foundation
 import SwiftUI
+import StoreKit
+//import Inject
 
 struct SettingsContentView: View {
     
+//    @ObserveInjection var redraw
+
     @Binding var clientBankNotes: String
     @Binding var userTier: GetTiersItemUIModel?
+    
+    @State private var showInviteSheet = false
+    @State private var showPromoSheet = false
     
     var onBankNotesTap:()->Void
     var onTiersTap:()->Void
@@ -36,7 +43,7 @@ struct SettingsContentView: View {
                     appInfoView
                     
                 }
-                .padding(.bottom, 100)
+                .padding(.bottom, 75)
                 
                 Spacer()
                 
@@ -47,8 +54,44 @@ struct SettingsContentView: View {
                 
                 HomeBottomBarView(selectedItem: .settings)
             }
+            
+            if showInviteSheet || showPromoSheet {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showInviteSheet = false
+                        showPromoSheet = false
+                    }
+                
+                if showInviteSheet {
+                    InviteAFriendSheet {
+                        showInviteSheet = false
+                    }
+                    .padding(.horizontal, 24)
+                    .background(RoundedRectangle(cornerRadius: 20).fill(.white))
+                    .padding(.horizontal, 24)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .transition(.scale.combined(with: .opacity))
+                }
+                
+                if showPromoSheet {
+                    PromoCodeSheet {
+                        showPromoSheet = false
+                    }
+                    .padding(.horizontal, 24)
+                    .background(RoundedRectangle(cornerRadius: 20).fill(.white))
+                    .padding(.horizontal, 24)
+//                    .fixedSize(horizontal: false, vertical: true)
+                    .transition(.scale.combined(with: .opacity))
+                }
+            }
         }
+        .animation(.easeInOut(duration: 0.2), value: showInviteSheet)
+        .animation(.easeInOut(duration: 0.2), value: showPromoSheet)
+//        .enableInjection()
     }
+    
+
     
     func formatDateOnly(_ dateString: String) -> String {
         let formatter = DateFormatter()
@@ -101,7 +144,7 @@ struct SettingsContentView: View {
                         Text("HSSLAYA")
                             .font(.cairoFont(.semiBold, size: 18))
                         
-                        Text("\(clientBankNotes) B")
+                        Text("\(clientBankNotes) H")
                             .font(.cairoFont(.semiBold, size: 18))
                     }
                     .foregroundStyle(.black)
@@ -158,7 +201,7 @@ struct SettingsContentView: View {
                         
                         Spacer()
                         
-                        Image("ic_rightArrow")
+                        Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 22, height: 22)
@@ -185,10 +228,10 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
@@ -210,10 +253,10 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
@@ -235,10 +278,10 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
@@ -260,10 +303,10 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
@@ -287,7 +330,7 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
+                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
@@ -315,7 +358,7 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
+                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
@@ -338,7 +381,7 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
+                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
@@ -365,7 +408,7 @@ struct SettingsContentView: View {
                         
                         Spacer()
                         
-                        Image("ic_rightArrow")
+                        Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 22, height: 22)
@@ -390,7 +433,63 @@ struct SettingsContentView: View {
                         
                         Spacer()
                         
-                        Image("ic_rightArrow")
+                        Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                    }
+                }
+                
+                Divider()
+                
+                // Invite a friend
+                Button {
+//                    onInviteAFriendTap()
+                    showInviteSheet = true
+                    
+                } label: {
+                    HStack(spacing: 17) {
+                        Image("ic_inviteAFriend")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                        
+                        Text("invite_a_friend".localized)
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(.black)
+                        
+                        Spacer()
+                        
+                        Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                    }
+                }
+                
+                Divider()
+                
+                // Promo Code
+                Button {
+//                    onPromoCodeTap()
+                    showPromoSheet = true
+                    
+                } label: {
+                    HStack(spacing: 17) {
+                        Image(systemName: "ticket.fill")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                            .foregroundStyle(Color(hex: "#9C4EF7"))
+                        
+                        Text("promo_codes".localized)
+                            .font(.cairoFont(.semiBold, size: 12))
+                            .foregroundStyle(.black)
+                        
+                        Spacer()
+                        
+                        Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 22, height: 22)
@@ -433,7 +532,7 @@ struct SettingsContentView: View {
                         
                         Spacer()
                         
-                        Image("ic_rightArrow")
+                        Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 22, height: 22)
@@ -455,10 +554,10 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
@@ -475,15 +574,15 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
                 
-                // Privacy Policy
+                // About Us
                 HStack(spacing: 17) {
                     Image("ic_aboutUs")
                         .resizable()
@@ -495,10 +594,10 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
@@ -515,10 +614,10 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+//                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 22, height: 22)
                 }
                 
                 Divider()
@@ -535,10 +634,16 @@ struct SettingsContentView: View {
                     
                     Spacer()
                     
-                    Image("ic_rightArrow")
+                    Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
+                }
+                .onTapGesture {
+                    if let scene = UIApplication.shared.connectedScenes
+                        .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+                        SKStoreReviewController.requestReview(in: scene)
+                    }
                 }
                 
                 Divider()
@@ -561,7 +666,7 @@ struct SettingsContentView: View {
                         
                         Spacer()
                         
-                        Image("ic_rightArrow")
+                        Image(AppUtility.shared.isRTL ? "ic_leftArrow" : "ic_rightArrow")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 22, height: 22)
@@ -577,20 +682,192 @@ struct SettingsContentView: View {
         }
         .padding(.horizontal, 18)
     }
+    
 }
 
-//#Preview {
-//    SettingsContentView(clientBankNotes: .constant(""), onBankNotesTap: {
-//        
-//    }, onTiersTap: {
-//        
-//    }, onBadgesTap: {
-//        
-//    }, onTransactionsTap: {
-//        
-//    }, onHelpTap: {
-//        
-//    }, onLogoutTap: {
-//        
-//    })
-//}
+struct InviteAFriendSheet: View {
+
+    var onDismiss: () -> Void
+
+    @State private var copied = false
+    private let referralLink = "Https://\(UserDefaultController().username ?? "Username").Banknote"
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            VStack(spacing: 10) {
+                VStack(spacing: 0) {
+                    Text("share_with_friends".localized)
+                        .font(.cairoFont(.semiBold, size: 18))
+
+                    Text("earn_more_inviting_friends".localized)
+                        .font(.cairoFont(.medium, size: 14))
+                        .foregroundStyle(.gray)
+                }
+                .padding(.top, 25)
+
+                // Link row
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("share_your_link".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+
+                    HStack {
+                        Text(referralLink)
+                            .font(.cairoFont(.regular, size: 13))
+                            .foregroundStyle(.gray)
+                            .lineLimit(1)
+
+                        Spacer()
+
+                        Button {
+                            UIPasteboard.general.string = referralLink
+                            copied = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                copied = false
+                            }
+                        } label: {
+                            Image(systemName: copied ? "checkmark" : "doc.on.doc")
+                                .foregroundStyle(Color(hex: "#9C4EF7"))
+                                .font(.system(size: 18))
+                        }
+                    }
+                    .padding(12)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color(hex: "#F5F5F5")))
+                }
+
+                // Share to
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("share_to".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 20) {
+                        ShareIconButton(icon: "ic_facebook", label: "Facebook") {
+                            shareToApp(scheme: "fb://", url: "https://www.facebook.com/sharer/sharer.php?u=\(referralLink)")
+                        }
+                        ShareIconButton(icon: "ic_instagram", label: "Instagram") {
+                            shareToApp(scheme: "instagram://", url: "https://www.instagram.com")
+                        }
+                        ShareIconButton(icon: "ic_whatsapp", label: "WhatsApp") {
+                            shareToApp(scheme: "whatsapp://send?text=\(referralLink)", url: "https://wa.me/?text=\(referralLink)")
+                        }
+                        ShareIconButton(icon: "ic_x", label: "X") {
+                            shareToApp(scheme: "twitter://post?message=\(referralLink)", url: "https://twitter.com/intent/tweet?text=\(referralLink)")
+                        }
+                    }
+                }
+
+    //            Spacer()
+            }
+            .padding(24)
+            
+            // Icon
+            Circle()
+                .fill(Color(hex: "#EEEEEE"))
+                .shadow(radius: 3, y: 5)
+                .frame(width: 80, height: 80)
+                .overlay {
+                    Image(systemName: "person.2.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 44, height: 44)
+                        .foregroundStyle(Color(hex: "#9C4EF7"))
+                }
+                .background(Circle().fill(.white))
+                .offset(y: -35)
+
+        }
+    }
+
+    private func shareToApp(scheme: String, url: String) {
+        if let schemeURL = URL(string: scheme), UIApplication.shared.canOpenURL(schemeURL) {
+            UIApplication.shared.open(schemeURL)
+        } else if let fallbackURL = URL(string: url) {
+            UIApplication.shared.open(fallbackURL)
+        }
+    }
+}
+
+struct ShareIconButton: View {
+    let icon: String
+    let label: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                Image(icon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 28, height: 28)
+
+                Text(label)
+                    .font(.cairoFont(.regular, size: 7))
+                    .foregroundStyle(.black)
+            }
+        }
+    }
+}
+
+struct PromoCodeSheet: View {
+
+    @State private var promoCode = ""
+    var onDismiss: () -> Void
+    var onSubmit: ((String) -> Void)? = nil
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            VStack(spacing: 10) {
+
+                
+
+                Text("promo_code".localized)
+                    .font(.cairoFont(.bold, size: 18))
+
+                // Input row
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("enter_your_promo_code".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+
+                    HStack {
+                        TextField("promo_code".localized, text: $promoCode)
+                            .font(.cairoFont(.regular, size: 14))
+                            .foregroundStyle(.gray)
+
+                        Button {
+                            onSubmit?(promoCode)
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(Color(hex: "#9C4EF7"))
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                    }
+                    .padding(12)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color(hex: "#F5F5F5")))
+                }
+
+    //            Spacer()
+            }
+            .padding(24)
+            .padding(.top, 10)
+            
+            // Icon
+            Circle()
+                .fill(Color(hex: "#EEEEEE"))
+                .shadow(radius: 3, y: 5)
+                .frame(width: 70, height: 70)
+                .overlay {
+                    Image(systemName: "ticket.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 34, height: 34)
+                        .foregroundStyle(Color(hex: "#9C4EF7"))
+                }
+                .offset(y: -35)
+
+        }
+    }
+}
+
+#Preview {
+    SettingsContentView(clientBankNotes: .constant(""), userTier: .constant(.initializer()), onBankNotesTap: {}, onTiersTap: {}, onBadgesTap: {}, onStatementsTap: {}, onInvoicesTap: {}, onTransactionsTap: {}, onHelpTap: {}, onLogoutTap: {})
+}

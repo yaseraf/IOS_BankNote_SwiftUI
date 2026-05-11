@@ -166,13 +166,13 @@ struct LandingContentView: View {
             VStack(alignment: .leading) {
                 HStack {
                     if isPasswordHidden {
-                        SecureField("password".localized, text: $password)
+                        SecureField("enter_your_password".localized, text: $password)
                             .font(.cairoFont(.semiBold, size: 12))
                             .foregroundStyle(Color(hex: "#1C1C1C"))
                             .textInputAutocapitalization(.never)
                         
                     } else {
-                        TextField("password".localized, text: $password)
+                        TextField("enter_your_password".localized, text: $password)
                             .font(.cairoFont(.semiBold, size: 12))
                             .foregroundStyle(Color(hex: "#1C1C1C"))
                             .textInputAutocapitalization(.never)
@@ -180,9 +180,11 @@ struct LandingContentView: View {
                     }
                     
                     Image(isPasswordHidden ? "ic_eyeInvisible" : "ic_eyeVisible")
+                        .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
+                        .foregroundStyle(Color(hex: "#828282"))
                         .onTapGesture {
                             isPasswordHidden.toggle()
                         }

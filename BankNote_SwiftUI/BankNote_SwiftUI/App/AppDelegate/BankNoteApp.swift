@@ -26,5 +26,6 @@ struct BankNoteApp: App {
 //                
 //            })
          }
+        
     }
 }

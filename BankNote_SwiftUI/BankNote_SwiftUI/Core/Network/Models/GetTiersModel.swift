@@ -79,4 +79,8 @@ struct GetTiersItemUIModel {
             ALLOW_MARGIN: model.ALLOW_MARGIN
         )
     }
+    
+    static func initializer() -> Self {
+        return GetTiersItemUIModel(id: "", age: "", arabicDescription: "", banknotesQty: "", code: "", englishDescription: "", nav: "", notes: "", revenuePerMonth: "", updateTime: "", userCode: "", ALLOW_MARGIN: "")
+    }
 }

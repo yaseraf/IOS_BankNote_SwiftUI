@@ -54,9 +54,9 @@ public class APICaller{
 
 //        let urlSession = URLSession(configuration: configuration, delegate: NetworkManagerSessionDelegate(), delegateQueue: delegateQueue)
         
-//        let urlSession = URLSession(configuration: configuration, delegate: UnsafeSessionDelegate(), delegateQueue: delegateQueue)
+        let urlSession = URLSession(configuration: configuration, delegate: UnsafeSessionDelegate(), delegateQueue: delegateQueue)
         
-        let urlSession = URLSession(configuration: configuration)
+//        let urlSession = URLSession(configuration: configuration)
         
         return urlSession
     }

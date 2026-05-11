@@ -282,7 +282,7 @@ extension LandingViewModel {
                     UserDefaultController().birthdate = success.BIRTHDATE ?? ""
                     UserDefaultController().gender = success.GENDER ?? ""
 
-                    self?.callGetTiersAPI(success: true)
+//                    self?.callGetTiersAPI(success: true)
 
 //                    SceneDelegate.getAppCoordinator()?.showMessage(type: .success, "login_success".localized)
                     self?.LoginResponseModelAPIResult = .onSuccess(response: success)

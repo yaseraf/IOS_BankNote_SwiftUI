@@ -22,6 +22,9 @@ enum HomeRoute:APITargetType{
     case getInvoices(requestModel: GetInvoicesRequestModel)
     case getStatementOfAccount(requestModel: GetStatementOfAccountRequestModel)
     case GetTransactionSummary(requestModel: GetTransactionSummaryRequestModel)
+    case AddMarketWatchProfileName(requestModel: AddMarketWatchProfileNameRequestModel)
+    case AddMarketWatchProfileSymbols(requestModel: AddMarketWatchProfileSymbolsRequestModel)
+    case DeleteMarketWatchProfileSymbols(requestModel: DeleteMarketWatchProfileSymbolsRequestModel)
 
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     case GetBankNote(requestModel: GetBankNoteRequestModel)
@@ -96,7 +99,13 @@ enum HomeRoute:APITargetType{
             return "FinancialWServices/GetGroupedStatmentOfAccount/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().clientID ?? "")/\(KeyChainController().webCode ?? "")/\(UserDefaultController().dateFrom ?? "")/\(UserDefaultController().dateTo ?? "")"
         case .GetTransactionSummary:
             return "FinancialWServices/GetTransactionSummary/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().clientID ?? "")/-1/\(KeyChainController().webCode ?? "")/\(UserDefaultController().dateFrom ?? "")/\(UserDefaultController().dateTo ?? "")"
-            
+        case .AddMarketWatchProfileName:
+            return "MarektWServices/AddMarketWatchProfileName/\(KeyChainController().webCode ?? "")/\(UserDefaultController().profileName ?? "")"
+        case .AddMarketWatchProfileSymbols:
+            return "MarektWServices/AddMarketWatchProfileSymbols"
+        case .DeleteMarketWatchProfileSymbols:
+            return "MarektWServices/DeleteMarketWatchProfileSymbols"
+
             // MARK: Banknote / Tiers / Badges / Transactions Packages
 
         case .GetBankNote:
@@ -136,7 +145,7 @@ enum HomeRoute:APITargetType{
             switch self {
             case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss, .getStatementOfAccount, .GetTransactionSummary:
                 return .get
-            case .GetRiskManagement, .GetBankNote, .GetTiers, .UpdateTiersCode, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts, .PaymobGetSdkToken, .getInvoices:
+            case .GetRiskManagement, .GetBankNote, .GetTiers, .UpdateTiersCode, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts, .PaymobGetSdkToken, .getInvoices, .AddMarketWatchProfileName, .AddMarketWatchProfileSymbols, .DeleteMarketWatchProfileSymbols:
                 return .post
             }
         }
@@ -177,6 +186,13 @@ enum HomeRoute:APITargetType{
                 .requestJsonEncodable(requestModel)
         case .PaymobGetSdkToken(let requestModel):
                 .requestJsonEncodable(requestModel)
+        case .AddMarketWatchProfileName(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .AddMarketWatchProfileSymbols(let requestModel):
+                .requestJsonEncodable(requestModel)
+        case .DeleteMarketWatchProfileSymbols(let requestModel):
+                .requestJsonEncodable(requestModel)
+
         }
     }
 }

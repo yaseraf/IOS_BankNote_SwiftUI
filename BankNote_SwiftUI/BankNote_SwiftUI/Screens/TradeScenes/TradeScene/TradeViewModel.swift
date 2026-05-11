@@ -7,6 +7,7 @@
 
 import Foundation
 class TradeViewModel: ObservableObject {
+    
     private let coordinator: TradeCoordinatorProtocol
     private let useCase: TradeUseCaseProtocol
     private let homeUseCase: HomeUseCaseProtocol
@@ -19,6 +20,10 @@ class TradeViewModel: ObservableObject {
     @Published var list:[GetMarketWatchByProfileIDUIModel]?
     @Published var marketNews:[GetAllMarketNewsUIModel]?
     @Published var portfolioData: GetPortfolioUIModel?
+    
+    @Published var listTopGainers:[TopActivitiesUIModel]?
+    @Published var listTopLosers:[TopActivitiesUIModel]?
+    @Published var listMostActive:[TopActivitiesUIModel]?
 
     @Published var getExchangeSummaryAPIResult:APIResultType<[GetExchangeSummaryUIModel]>?
     @Published var getLookupsAPIResult:APIResultType<[GetLookupsUIModel]>?
@@ -36,12 +41,16 @@ class TradeViewModel: ObservableObject {
         
         Connection_Hub.shared.exchangeSummaryDelegate = self
         Connection_Hub.shared.marketWatchDelegate = self
+        Connection_Hub.shared.topActivitiesDelegate = self
         
         connectSignalR()
         
         watchlistData = []
         newsData = []
         listMarketOverView = []
+        listTopGainers = []
+        listTopLosers = []
+        listMostActive = []
     }
 }
 
@@ -77,23 +86,29 @@ extension TradeViewModel {
 
 // MARK: Routing
 extension TradeViewModel {
+    func openIndexDetailsScene(index: String) {
+        coordinator.openIndexDetailsScene(index: index, portfolioData: portfolioData ?? .initializer())
+    }
+
     func openIndexScene() {
         coordinator.openIndexScene()
     }
     
-    func openWatchlistScene(watchlist: [GetMarketWatchByProfileIDUIModel]) {
-        coordinator.openWatchlistScene(watchlist: watchlist, portfolioData: portfolioData ?? .initializer())
+    func openWatchlistScene(title: String, watchlist: [GetMarketWatchByProfileIDUIModel]) {
+        coordinator.openWatchlistScene(title: title, watchlist: watchlist, portfolioData: portfolioData ?? .initializer())
     }
     
     func openStockDetailsScene(symbol: String, marketType: String) {
         
+        UserDefaultController().selectedSymbol = symbol
+
         let selectedStock:GetCompaniesLookupsUIModel = AppUtility.shared.loadCompanies().filter({$0.symbol == UserDefaultController().selectedSymbol ?? ""}).first ?? .testUIModel()
 
         let portfolioSymbol = portfolioData?.portfolioes.filter({$0.symbol == symbol}).first
         
-        UserDefaultController().selectedSymbol = symbol
         UserDefaultController().selectedSymbolID = selectedStock.symbolID
-        UserDefaultController().selectedSymbolType = marketType
+//        UserDefaultController().selectedSymbolType = marketType
+        UserDefaultController().selectedSymbolType = selectedStock.marketType ?? ""
         UserDefaultController().selectedCustodian = portfolioSymbol?.custodianID ?? "-1"
         UserDefaultController().CUSTODYID = portfolioSymbol?.custodianID ?? "-1"
         UserDefaultController().selectedCustodianName = AppUtility.shared.isRTL ? portfolioSymbol?.custodianA ?? "" : portfolioSymbol?.custodianE ?? ""
@@ -319,6 +334,61 @@ extension TradeViewModel {
         }
     }
     
+    func sendTopGainerObject(){
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                debugPrint("test invoke SendTopGainerObject")
+                
+                try Connection_Hub.shared.chatHub?.invoke(HubMethodType.sendTopGainerObject.rawValue, arguments: ["EGX", UserDefaultController().username ?? ""]) { (result, error) in
+                    if let e = error {
+                        debugPrint("SendTopGainerObject invoke '\(UserDefaultController().selectedSymbol ?? "")' Error: \(e)")
+                    } else {
+                        debugPrint("SendTopGainerObject invoke '\(UserDefaultController().selectedSymbol ?? "")' Success!")
+                    }
+                }
+            } catch let error {
+                debugPrint("SendTopGainerObject chatHub '\(UserDefaultController().selectedSymbol ?? "")' error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func sendTopLoserObject(){
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                debugPrint("test invoke SendTopLoserObject")
+                
+                try Connection_Hub.shared.chatHub?.invoke(HubMethodType.sendTopLoserObject.rawValue, arguments: ["EGX", UserDefaultController().username ?? ""]) { (result, error) in
+                    if let e = error {
+                        debugPrint("SendTopLoserObject invoke '\(UserDefaultController().selectedSymbol ?? "")' Error: \(e)")
+                    } else {
+                        debugPrint("SendTopLoserObject invoke '\(UserDefaultController().selectedSymbol ?? "")' Success!")
+                    }
+                }
+            } catch let error {
+                debugPrint("SendTopLoserObject chatHub '\(UserDefaultController().selectedSymbol ?? "")' error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func sendMostActiveObject(){
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                debugPrint("test invoke sendMostActiveObject")
+                
+                try Connection_Hub.shared.chatHub?.invoke(HubMethodType.sendMostActiveObject.rawValue, arguments: ["EGX", UserDefaultController().username ?? ""]) { (result, error) in
+                    if let e = error {
+                        debugPrint("sendMostActiveObject invoke '\(UserDefaultController().selectedSymbol ?? "")' Error: \(e)")
+                    } else {
+                        debugPrint("sendMostActiveObject invoke '\(UserDefaultController().selectedSymbol ?? "")' Success!")
+                    }
+                }
+            } catch let error {
+                debugPrint("sendMostActiveObject chatHub '\(UserDefaultController().selectedSymbol ?? "")' error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
 }
 
 
@@ -355,7 +425,19 @@ extension TradeViewModel: MarketWatchDelegate {
     }
 }
 
+extension TradeViewModel: TopActivitiesDelegate {
+    func onTopGainerReceived(data: [TopActivitiesUIModel]) {
+        listTopGainers = data
+    }
+    
+    func onTopLoserReceived(data: [TopActivitiesUIModel]) {
+        listTopLosers = data
+    }
 
+    func onMostActiveReceived(data: [TopActivitiesUIModel]) {
+        listMostActive = data
+    }
+}
 
 // MARK: Functions
 extension TradeViewModel {

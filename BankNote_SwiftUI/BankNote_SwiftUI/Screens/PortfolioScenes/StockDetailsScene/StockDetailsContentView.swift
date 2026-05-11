@@ -59,6 +59,8 @@ struct StockDetailsContentView: View {
     var chartLoaded:Binding<Bool?>
     var marketNews:Binding<[GetAllMarketNewsBySymbolUIModel]?>
     var ownedShares:Binding<Int?>
+    var favoriteWatchlist: Binding<[GetMarketWatchByProfileIDUIModel]>
+    var depthByPriceData: Binding<[StatisticsMarketUIModel]?>
 
     enum selectedChartPeriod: String {
         case dayChart = "1D"
@@ -70,7 +72,7 @@ struct StockDetailsContentView: View {
     @State var selectedChartPeriod:selectedChartPeriod = .dayChart
 
 
-    
+    var onFavoriteTap: (String) -> Void
     var onBackTap:()->Void
     var onBuyTap:() -> Void
     var onSellTap:() -> Void
@@ -91,12 +93,18 @@ struct StockDetailsContentView: View {
                         }
 
                         Spacer()
-                        
-//                        Image(systemName: "bookmark")
-//                            .font(.title2)
-//                        Image(systemName: "bell")
-//                            .font(.title2)
-//                            .padding(.leading, 10)
+
+                        let isFavorite = favoriteWatchlist.wrappedValue.contains(where: { $0.symbol == stockData.wrappedValue?.symbol })
+
+                        Button {
+                            onFavoriteTap(stockData.wrappedValue?.symbol ?? "")
+                        } label: {
+                            Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(isFavorite ? Color(hex: "#9C4EF7") : .gray)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 12)
@@ -151,7 +159,6 @@ struct StockDetailsContentView: View {
                         
                         Text(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.lastTradePrice ?? "") ?? 0))
                             .font(.cairoFont(.bold, size: 32))
-
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
 
@@ -223,7 +230,7 @@ struct StockDetailsContentView: View {
                         VStack(alignment: .leading) {
                             switch selectedSegment {
                             case .details:
-                                DetailsView(stockData: stockData, marketNews: marketNews)
+                                DetailsView(stockData: stockData, marketNews: marketNews, depthByPriceData: depthByPriceData)
                             case .myPosition:
                                 MyPositionView(stockData: stockData, ownedShares: ownedShares)
                             case .orders:
@@ -281,7 +288,7 @@ struct StockDetailsContentView: View {
     }
     
     private var chartView: some View {
-        let chartURL:String = "https://trade.rol.com.eg/tradingView/index.html?symbol=\(UserDefaultController().selectedSymbol ?? "")&theme=\(AppUtility.shared.isDarkTheme ? "NIGHT" : "DAY")&ChartType=mountain&period=1D&color=\(Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0 > 0 ? "B" : "R")"
+        let chartURL:String = "https://trade.rol.com.eg/tradingView/index.html?symbol=\(UserDefaultController().selectedSymbol ?? "")&theme=\(AppUtility.shared.isDarkTheme ? "NIGHT" : "DAY")&ChartType=candle&period=5D&color=\(Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0 > 0 ? "B" : "R")"
         
         debugPrint("Chart View: \(chartURL)")
         
@@ -301,9 +308,21 @@ struct DetailsView: View {
     
     var stockData:Binding<GetALLMarketWatchBySymbolUIModel?>
     var marketNews:Binding<[GetAllMarketNewsBySymbolUIModel]?>
+    var depthByPriceData: Binding<[StatisticsMarketUIModel]?>
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
+            
+            // ── Market Depth ──────────────────────────────────────
+            Text("market_depth".localized)
+                .font(.cairoFont(.semiBold, size: 18))
+                .foregroundStyle(.secondary)
+                .padding(.top)
+            
+            MarketDepthView(rows: depthByPriceData.wrappedValue ?? .init())
+            if let depthRows = depthByPriceData.wrappedValue, !depthRows.isEmpty {
+            }
+            
             Text("\("about".localized) \(AppUtility.shared.isRTL ? stockData.wrappedValue?.symbolNameA ?? "" : stockData.wrappedValue?.symbolNameE ?? "")")
                 .font(.cairoFont(.semiBold, size: 18))
                 .foregroundStyle(.secondary)
@@ -415,6 +434,160 @@ struct DetailsView: View {
     }
 }
 
+
+// MARK: - Market Depth View
+
+struct MarketDepthView: View {
+    let rows: [StatisticsMarketUIModel]
+    private let displayCount = 5
+
+    private var maxBid: Double {
+        rows.prefix(displayCount).compactMap { Double($0.bidQty) }.max() ?? 1
+    }
+    private var maxAsk: Double {
+        rows.prefix(displayCount).compactMap { Double($0.askQty) }.max() ?? 1
+    }
+
+    // Totals for footer
+    private var totalBidQty: Double {
+        rows.prefix(displayCount).compactMap { Double($0.bidQty) }.reduce(0, +)
+    }
+    private var totalBidPrice: Double {
+        rows.prefix(displayCount).compactMap { Double($0.bid) }.reduce(0, +)
+    }
+    private var totalAskPrice: Double {
+        rows.prefix(displayCount).compactMap { Double($0.ask) }.reduce(0, +)
+    }
+    private var totalAskQty: Double {
+        rows.prefix(displayCount).compactMap { Double($0.askQty) }.reduce(0, +)
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            HStack(spacing: 0) {
+                Text("#")
+                    .frame(width: 28, alignment: .leading)
+                Text("Bid OTY")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Text("Bid")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Text("Offer")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Text("Offer OTY")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Text("#")
+                    .frame(width: 28, alignment: .trailing)
+            }
+            .font(.cairoFont(.semiBold, size: 11))
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+
+            Divider()
+
+            // Rows
+            let displayRows = Array(rows.prefix(displayCount).enumerated())
+            ForEach(displayRows, id: \.offset) { index, row in
+                MarketDepthRow(
+                    index: index + 1,
+                    row: row,
+                    bidPercent: (Double(row.bidQty) ?? 0) / (maxBid == 0 ? 1 : maxBid),
+                    askPercent: (Double(row.askQty) ?? 0) / (maxAsk == 0 ? 1 : maxAsk)
+                )
+                Divider()
+            }
+
+            // Footer totals
+            HStack(spacing: 0) {
+                Text(AppUtility.shared.formatThousandSeparator(number: totalBidQty))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("Total")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .font(.cairoFont(.semiBold, size: 13))
+                Text(AppUtility.shared.formatThousandSeparator(number: totalAskQty))
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            .font(.cairoFont(.semiBold, size: 12))
+            .foregroundStyle(Color.primary)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color.gray.opacity(0.12))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+        .background(Color.white.opacity(0.8))
+        .cornerRadius(10)
+    }
+}
+
+struct MarketDepthRow: View {
+    let index: Int
+    let row: StatisticsMarketUIModel
+    let bidPercent: Double
+    let askPercent: Double
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Left order count
+            Text("\(index)")
+                .font(.cairoFont(.semiBold, size: 12))
+                .foregroundStyle(.secondary)
+                .frame(width: 28, alignment: .leading)
+
+            // Bid Qty with green background bar
+            ZStack(alignment: .trailing) {
+                GeometryReader { geo in
+                    Rectangle()
+                        .fill(Color(hex: "#1E961E").opacity(0.12))
+                        .frame(width: geo.size.width * CGFloat(bidPercent))
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                Text(AppUtility.shared.formatThousandSeparator(number: Double(row.bidQty) ?? 0))
+                    .font(.cairoFont(.semiBold, size: 13))
+                    .foregroundStyle(Color(hex: "#1E961E"))
+                    .padding(.horizontal, 4)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 36)
+
+            // Bid price
+            Text(AppUtility.shared.formatThousandSeparator(number: Double(row.bid) ?? 0))
+                .font(.cairoFont(.semiBold, size: 13))
+                .foregroundStyle(Color(hex: "#1E961E"))
+                .frame(maxWidth: .infinity, alignment: .center)
+
+            // Ask price
+            Text(AppUtility.shared.formatThousandSeparator(number: Double(row.ask) ?? 0))
+                .font(.cairoFont(.semiBold, size: 13))
+                .foregroundStyle(Color(hex: "#D32F2F"))
+                .frame(maxWidth: .infinity, alignment: .center)
+
+            // Ask Qty with red background bar
+            ZStack(alignment: .leading) {
+                GeometryReader { geo in
+                    Rectangle()
+                        .fill(Color(hex: "#D32F2F").opacity(0.12))
+                        .frame(width: geo.size.width * CGFloat(askPercent))
+                }
+                Text(AppUtility.shared.formatThousandSeparator(number: Double(row.askQty) ?? 0))
+                    .font(.cairoFont(.semiBold, size: 13))
+                    .foregroundStyle(Color(hex: "#D32F2F"))
+                    .padding(.horizontal, 4)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 36)
+
+            // Right order count
+            Text("\(index)")
+                .font(.cairoFont(.semiBold, size: 12))
+                .foregroundStyle(.secondary)
+                .frame(width: 28, alignment: .trailing)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 2)
+    }
+}
+
 // MARK: - My Position View
 struct MyPositionView: View {
     
@@ -438,15 +611,22 @@ struct MyPositionView: View {
                         .font(.cairoFont(.semiBold, size: 12))
                     
                     HStack {
-                        Image("ic_topUp")
-                            .renderingMode(.template)
+                        Image((Double(stockData.wrappedValue?.netChange ?? "") ?? 0) > 0 ? "ic_stockUp" : (Double(stockData.wrappedValue?.netChange ?? "") ?? 0) < 0 ? "ic_stockDown" : "")
+//                            .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 20, height: 20)
-                            .foregroundColor(Color(hex: "#1E961E"))
-                        Text("\("egp".localized) \(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChange ?? "") ?? 0)) (\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0))%)")
+//                            .foregroundColor(Color(hex: "#1E961E"))
+                        
+                        Text("\("egp".localized) \((Double(stockData.wrappedValue?.netChange ?? "") ?? 0) > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChange ?? "") ?? 0))")
                             .font(.cairoFont(.semiBold, size: 18))
-                            .foregroundColor(Color(hex: "#1E961E"))
+                            .foregroundColor((Double(stockData.wrappedValue?.netChange ?? "") ?? 0) > 0 ? Color.colorPositive : (Double(stockData.wrappedValue?.netChange ?? "") ?? 0) < 0 ? Color.colorNegative : Color.colorWarning600)
+                        
+                        +
+                        
+                        Text("(\((Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0) > 0 ? "+" : "")\(AppUtility.shared.formatThousandSeparator(number: Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0))%)")
+                            .font(.cairoFont(.semiBold, size: 18))
+                            .foregroundColor((Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0) > 0 ? Color.colorPositive : (Double(stockData.wrappedValue?.netChangePerc ?? "") ?? 0) < 0 ? Color.colorNegative : Color.colorWarning600)
 
                     }
                 }
@@ -483,6 +663,7 @@ struct OrdersView: View {
             Text("today".localized)
                 .font(.cairoFont(.semiBold, size: 18))
                 .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             VStack(spacing: 0) {
                 ForEach(ordersData.wrappedValue ?? [], id: \.id) { item in

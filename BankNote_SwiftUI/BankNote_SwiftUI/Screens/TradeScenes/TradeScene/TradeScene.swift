@@ -26,13 +26,30 @@ struct TradeScene: BaseSceneType {
                         TradeContentView(
                             indexData: $viewModel.listMarketOverView,
                             watchlistData: $viewModel.list,
+                            topGainersData: $viewModel.listTopGainers,
+                            topLosersData: $viewModel.listTopLosers,
+                            mostActiveData: $viewModel.listMostActive,
                             newsData: $viewModel.marketNews,
-                            onIndexViewAllTap: {
+                            onIndexTap: { index in
+                                viewModel.openIndexDetailsScene(index: index)
+                            }, onIndexViewAllTap: {
                                 viewModel.openIndexScene()
                             }, onWatchlistViewAllTap: { watchlist in
-                                viewModel.openWatchlistScene(watchlist: watchlist)
+                                viewModel.openWatchlistScene(title: "watchlist".localized, watchlist: watchlist)
+                            }, onTopGainerViewAllTap: { watchlist in
+                                viewModel.openWatchlistScene(title: "top_gainers".localized, watchlist: watchlist.map {$0.toWatchlistUIModel()})
+                            }, onTopLoserViewAllTap: { watchlist in
+                                viewModel.openWatchlistScene(title: "top_losers".localized, watchlist: watchlist.map {$0.toWatchlistUIModel()})
+                            }, onMostActiveViewAllTap: { watchlist in
+                                viewModel.openWatchlistScene(title: "most_active".localized, watchlist: watchlist.map {$0.toWatchlistUIModel()})
                             }, onWatchlistTap: { watchlist in
                                 viewModel.openStockDetailsScene(symbol: watchlist.symbol ?? "", marketType: watchlist.marketType ?? "")
+                            }, onTopGainerTap: { symbol in
+                                viewModel.openStockDetailsScene(symbol: symbol, marketType: "")
+                            }, onTopLoserTap: { symbol in
+                                viewModel.openStockDetailsScene(symbol: symbol, marketType: "")
+                            }, onMostActiveTap: { symbol in
+                                viewModel.openStockDetailsScene(symbol: symbol, marketType: "")
                             }, onNewsViewAllTap: {
                                 viewModel.openNewsScene()
                             }
@@ -44,6 +61,10 @@ struct TradeScene: BaseSceneType {
                     viewModel.GetAllProfilesLookupsByUserCodeAPI(success: true)
                     viewModel.GetFullMarketNews(success: true)
                     viewModel.callGetPortfolioAPI(success: true)
+                    
+                    viewModel.sendTopGainerObject()
+                    viewModel.sendTopLoserObject()
+                    viewModel.sendMostActiveObject()
                 }
                 .onDisappear {
                     viewModel.UnSubscribleMarketWatchSymbols()

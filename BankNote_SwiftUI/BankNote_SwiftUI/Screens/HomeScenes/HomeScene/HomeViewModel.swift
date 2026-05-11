@@ -25,27 +25,35 @@ class HomeViewModel: ObservableObject, PaymobSDKDelegate {
     
     private let coordinator: HomeCoordinatorProtocol
     private let useCase: HomeUseCaseProtocol
+    private let tradeUseCase: TradeUseCaseProtocol
     private let lookupsUseCase: LookupsUseCaseProtocol
     
     @Published var portfolioData: GetPortfolioUIModel?
     @Published var transactionType: TransactionTypes?
-    
+    @Published var customWatchListData: [GetMarketWatchByProfileIDUIModel]?
+
     @Published var getUserAccountsAPIResult:APIResultType<[GetUserAccountsUIModel]>?
     @Published var getPortfolioAPIResult:APIResultType<GetPortfolioUIModel>?
     @Published var getPaymobAPIResult:APIResultType<PaymobGetSdkTokenUIModel>?
     @Published var getCompaniesLookupsAPIResult:APIResultType<[GetCompaniesLookupsUIModel]>?
+    @Published var getAllProfilesLookupsByUserCodeAPIResult:APIResultType<[GetAllProfilesLookupsByUserCodeUIModel]>?
+    @Published var getMarketWatchByProfileIDAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
+    @Published var subscribleMarketWatchSymbolsAPIResult:APIResultType<[GetMarketWatchByProfileIDUIModel]>?
 
     @Published var viewController: UIViewController?
     
-    init(coordinator: HomeCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol) {
+    init(coordinator: HomeCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol, tradeUseCase: TradeUseCaseProtocol) {
         self.coordinator = coordinator
         self.useCase = useCase
+        self.tradeUseCase = tradeUseCase
         self.lookupsUseCase = lookupsUseCase
         
         connectAndSetupSignalR()
         Connection_Hub.shared.notifyOrderDelegate = self
         PaymobViewController.shared.paymob.delegate = self
         Connection_Hub.shared.connectionDelegate = self
+        
+        customWatchListData = []
         
         UserDefaultController().allSubAccounts = []
 
@@ -79,6 +87,10 @@ extension HomeViewModel {
     func openTopUpScene(transactionType: TransactionTypes) {
         coordinator.openTopUpScene(transactionType: transactionType)
 //        callGetPaymobAPI(success: true)
+    }
+    
+    func openWatchlistScene(title: String, watchlist: [GetMarketWatchByProfileIDUIModel]) {
+        SceneDelegate.getAppCoordinator()?.getTradeFlow()?.openWatchlistScene(title: title, watchlist: watchlist, portfolioData: .initializer())
     }
     
     func openPortfolioScene() {
@@ -174,6 +186,8 @@ extension HomeViewModel {
                     
                     self?.portfolioData = success
                     
+//                    self?.SubscribeMarketWatchSymbolsSignalR(symbols: success.compactMap(\.symbol))
+                    
                     UserDefaultController().userBalance = success.accountSummaries.balance ?? ""
                     
                 case .failure(let failure):
@@ -203,6 +217,121 @@ extension HomeViewModel {
                     debugPrint("Edit watchlist list failure: \(failure)")
 
                 }
+            }
+        }
+    }
+    
+    func callGetAllProfilesLookupsByUserCodeAPI() {
+        
+        let requestModel = GetAllProfilesLookupsByUserCodeRequestModel()
+        
+        getAllProfilesLookupsByUserCodeAPIResult = .onLoading(show: true)
+        Task.init {
+            await tradeUseCase.GetAllProfilesLookupsByUserCode(requestModel: requestModel) {[weak self] result in
+                self?.getAllProfilesLookupsByUserCodeAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    if !success.isEmpty {
+                        for watchlist in success {
+                            if watchlist.profileName == "fav" {
+                                UserDefaultController().profileID = watchlist.profileID
+                                self?.callGetMarketWatchByProfileIDAPI()
+                                break
+                            }
+                        }
+                    }
+                    
+                    self?.getAllProfilesLookupsByUserCodeAPIResult = .onSuccess(response: success)
+                    
+                case .failure(let failure):
+
+                    self?.getAllProfilesLookupsByUserCodeAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+    }
+    
+    func callGetMarketWatchByProfileIDAPI() {
+        let requestModel = GetMarketWatchByProfileIDRequestModel()
+        
+        getMarketWatchByProfileIDAPIResult = .onLoading(show: true)
+        Task.init {
+            await tradeUseCase.GetMarketWatchByProfileID(requestModel: requestModel) {[weak self] result in
+                self?.getMarketWatchByProfileIDAPIResult = .onLoading(show: false)
+                switch result {
+                case .success(let success):
+                    
+                    self?.customWatchListData = success
+                                        
+                    self?.SubscribeMarketWatchSymbolsSignalR(symbols: success.compactMap(\.symbol))
+                    
+//                    self?.UnSubscribleMarketWatchSymbolsSignalR()
+
+
+                    self?.getMarketWatchByProfileIDAPIResult = .onSuccess(response: success)
+                    
+                case .failure(let failure):
+
+                    self?.getMarketWatchByProfileIDAPIResult = .onFailure(error: failure)
+               
+                }
+            }
+        }
+
+    }
+
+}
+
+// MARK: - SignalR
+extension HomeViewModel {
+    func SubscribeMarketWatchSymbolsSignalR(symbols: [String]) {
+        
+        subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  true)
+        
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                debugPrint("test invoke subscribeMarketWatchSymbols '\(symbols)'")
+
+                try Connection_Hub.shared.chatHub?.invoke(HubMethodType.subscribeMarketWatchSymbols.rawValue, arguments: [KeyChainController().username ?? "", symbols]) { (result, error) in
+                    if let e = error {
+                        debugPrint("SubscribeMarketWatchSymbols invoke '\(symbols)' Error: \(e)")
+                        self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
+
+                    } else {
+                        debugPrint("SubscribeMarketWatchSymbols invoke '\(symbols)' Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+                        self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
+                    }
+                }
+            } catch let error {
+                printToLog("SubscribeMarketWatchSymbols chatHub '\(symbols)' error: \(error.localizedDescription)")
+                self.subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  false)
+
+            }
+        } else {
+            debugPrint("Chathub is nil")
+        }
+    }
+
+    func UnSubscribleMarketWatchSymbolsSignalR(){
+        
+        subscribleMarketWatchSymbolsAPIResult = .onLoading(show:  true)
+        
+        if Connection_Hub.shared.chatHub != nil {
+            do {
+                debugPrint("test invoke unSubscribeMarketWatchSymbols")
+
+                try Connection_Hub.shared.chatHub?.invoke(HubMethodType.unSubscribeMarketWatchSymbols.rawValue, arguments: [KeyChainController().username ?? ""]) { (result, error) in
+                    if let e = error {
+                        debugPrint("unSubscribeMarketWatchSymbols invoke Error: \(e)")
+                    } else {
+                        debugPrint("unSubscribeMarketWatchSymbols invoke  Success!, appDelegate.userNameNotEncryptrd\("info3@fitmena.com")")
+//                        self.SubscribeMarketWatchSymbolsSignalR()
+                    }
+                }
+            } catch let error {
+                debugPrint("unSubscribeMarketWatchSymbols chatHub error: \(error.localizedDescription)")
             }
         }
     }

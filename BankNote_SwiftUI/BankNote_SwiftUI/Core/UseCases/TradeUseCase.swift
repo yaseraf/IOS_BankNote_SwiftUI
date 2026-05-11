@@ -11,6 +11,9 @@ protocol TradeUseCaseProtocol{
     func GetAllProfilesLookupsByUserCode(requestModel: GetAllProfilesLookupsByUserCodeRequestModel, completion: @escaping(Result<[GetAllProfilesLookupsByUserCodeUIModel], NetworkError>) -> Void) async
     func GetMarketWatchByProfileID(requestModel: GetMarketWatchByProfileIDRequestModel, completion: @escaping(Result<[GetMarketWatchByProfileIDUIModel], NetworkError>) -> Void) async
     func GetFullMarketNews(requestModel: GetAllMarketNewsRequestModel, completion: @escaping(Result<[GetAllMarketNewsUIModel], NetworkError>) -> Void) async
+    func AddMarketWatchProfileName(requestModel: AddMarketWatchProfileNameRequestModel, completion: @escaping(Result<AddMarketWatchProfileNameUIModel, NetworkError>) -> Void) async
+    func AddMarketWatchProfileSymbols(requestModel: AddMarketWatchProfileSymbolsRequestModel, completion: @escaping(Result<[AddMarketWatchProfileSymbolsUIModel], NetworkError>) -> Void) async
+    func DeleteMarketWatchProfileSymbols(requestModel: DeleteMarketWatchProfileSymbolsRequestModel, completion: @escaping(Result<DeleteMarketWatchProfileSymbolsUIModel, NetworkError>) -> Void) async
 
 }
 
@@ -86,5 +89,50 @@ extension TradeUseCase: TradeUseCaseProtocol {
             }
         }
     }
+    
+    func AddMarketWatchProfileName(requestModel: AddMarketWatchProfileNameRequestModel, completion: @escaping (Result<AddMarketWatchProfileNameUIModel, NetworkError>) -> Void) async {
+        let route = HomeRoute.AddMarketWatchProfileName(requestModel: requestModel)
+        await repository.AddMarketWatchProfileName(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = AddMarketWatchProfileNameUIModel.mapToUIModel(responseModel)
+                completion(.success(uiModel))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func AddMarketWatchProfileSymbols(requestModel: AddMarketWatchProfileSymbolsRequestModel, completion: @escaping (Result<[AddMarketWatchProfileSymbolsUIModel], NetworkError>) -> Void) async {
+        let route = HomeRoute.AddMarketWatchProfileSymbols(requestModel: requestModel)
+        await repository.AddMarketWatchProfileSymbols(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = responseModel.map({
+                    AddMarketWatchProfileSymbolsUIModel.mapToUIModel($0)
+                })
+                completion(.success(uiModel))
+
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func DeleteMarketWatchProfileSymbols(requestModel: DeleteMarketWatchProfileSymbolsRequestModel, completion: @escaping (Result<DeleteMarketWatchProfileSymbolsUIModel, NetworkError>) -> Void) async {
+        let route = HomeRoute.DeleteMarketWatchProfileSymbols(requestModel: requestModel)
+        await repository.DeleteMarketWatchProfileSymbols(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = DeleteMarketWatchProfileSymbolsUIModel.mapToUIModel(responseModel)
+
+                completion(.success(uiModel))
+
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+
 
 }

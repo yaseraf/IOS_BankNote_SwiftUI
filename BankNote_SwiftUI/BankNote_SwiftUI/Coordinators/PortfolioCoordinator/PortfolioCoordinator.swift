@@ -42,7 +42,8 @@ extension PortfolioCoordinator:PortfolioCoordinatorProtocol{
 
     func openStockDetailsScene(symbol: String, marketType: String) {
         let useCase = HomeUseCase()
-        let viewModel = StockDetailsViewModel(coordinator: self, useCase: useCase, symbol: symbol, marketType: marketType)
+        let tradeUseCase = TradeUseCase()
+        let viewModel = StockDetailsViewModel(coordinator: self, useCase: useCase, tradeUseCase: tradeUseCase, symbol: symbol, marketType: marketType)
         let view = StockDetailsScene(viewModel: viewModel)
         let viewWithCoordinator = view.withThemeEnvironment
         let viewController = UIHostingController(rootView: viewWithCoordinator)

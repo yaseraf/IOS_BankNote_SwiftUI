@@ -42,6 +42,7 @@ enum CachingKey: String {
     case nameFullNameE
     case nameFullNameA
     case profileID
+    case profileName
     case marketStatusTitle
     case selectedSymbol
     case selectedSymbolID
@@ -115,6 +116,7 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.nameFullNameA) var nameFullNameA
     @CachingCodable<String>(.nameFullNameE) var nameFullNameE
     @CachingCodable<String>(.profileID) var profileID
+    @CachingCodable<String>(.profileName) var profileName
     @CachingCodable<String>(.marketStatusTitle) var marketStatusTitle
     @CachingCodable<String>(.selectedSymbol) var selectedSymbol
     @CachingCodable<String>(.selectedSymbolID) var selectedSymbolID
@@ -165,6 +167,7 @@ class UserDefaultController: ObservableObject {
     func clearTempData(){
         userIPAddress = nil
         profileID = nil
+        profileName = nil
         signalRConnected = nil
         marketStatusTitle = nil
         selectedSymbol = nil

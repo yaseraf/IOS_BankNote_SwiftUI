@@ -25,19 +25,21 @@ struct HomeScene: BaseSceneType {
                     content: {
                         HomeContentView(
                             viewController: $viewModel.viewController,
+                            customWatchListData: $viewModel.customWatchListData,
                             portfolioData: $viewModel.portfolioData,
                             onTopUpTap: {
                                 viewModel.openTopUpScene(transactionType: .topUp)
                             },
                                 onStockTap: { symbol, marketType, custodianID, custodianName in
                                 viewModel.openStockDetailsScene(symbol: symbol, marketType: marketType, custodianID: custodianID, custodianName: custodianName)
-                            },
-                                onWithdrawalTap: {
+                            }, onWithdrawalTap: {
                                 viewModel.openTopUpScene(transactionType: .withdrawal)
                             }, onViewHistoryTap: {
                                 viewModel.openTransactionHistoryScene()
                             }, onPortfolioViewAllTap: {
                                 viewModel.openPortfolioScene()
+                            }, onMyWatchlistViewAllTap: { watchlist in
+                                viewModel.openWatchlistScene(title: "my_watchlist".localized, watchlist: watchlist)
                             }
                         )
                     }
@@ -45,6 +47,7 @@ struct HomeScene: BaseSceneType {
                 .onAppear {
                     viewModel.callGetUserAccountsAPI(success: true)
                     viewModel.GetCompaniesLookupsAPI(success: true)
+                    viewModel.callGetAllProfilesLookupsByUserCodeAPI()
                 }
             },
             showLoading: .constant(viewTypeAction.showLoading)

@@ -91,7 +91,7 @@ struct VerifySignUpContentView: View {
         VStack {
             Text("enter_code".localized)
                 .font(.cairoFont(.semiBold, size: 18))
-            Text("\("enter_the_6_digit_verification_code_we_sent_to".localized) \(verificationType.wrappedValue == .phone ? phone.wrappedValue : email.wrappedValue)")
+            Text("\("enter_the_6_digit_verification_code_we_sent_to".localized) \(verificationType.wrappedValue == .phone ? KeyChainController().phoneNumberEnteredWithPrefix ?? "" : email.wrappedValue)")
                 .font(.cairoFont(.light, size: 12))
                 .padding(.horizontal, 38)
                 .multilineTextAlignment(.center)
@@ -206,7 +206,7 @@ struct VerifySignUpContentView: View {
         let timeInt = timerObserve.wrappedValue?.0 ?? 0
 
         var resentAttribute: AttributedString {
-            var str = AttributedString(timeInt > 0 ? "\("resend_link".localized) in \(timeInt)" : "click_to_resend_otp".localized)
+            var str = AttributedString(timeInt > 0 ? "\("resend_code".localized) in \(timeInt)" : "click_to_resend_otp".localized)
             str.underlineStyle = .single
             return str
         }

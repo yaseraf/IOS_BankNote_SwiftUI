@@ -68,7 +68,7 @@ extension LoginValifyViewModel {
         
 //        let requestModel = LoginValifyRequestModel(lang: AppUtility.shared.isRTL ? "ar" : "en", password: password, phoneNumber: KeyChainController().phoneNumberEntered ?? "", reqID: KeyChainController().valifyRequestId ?? "")
         
-        let requestModel = LoginValifyRequestModel(deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "", deviceType: "IOS", ipAddress: "", lang: AppUtility.shared.isRTL ? "ar" : "en", latitude: latitude, longitude: longitude, password: password, phoneNumber: phone, timezone: "")
+        let requestModel = LoginValifyRequestModel(deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "", deviceType: "IOS", ipAddress: "", lang: AppUtility.shared.isRTL ? "ar" : "en", latitude: latitude, longitude: longitude, password: password, phoneNumber: "0\(phone)", timezone: "")
         
         loginValifyAPIResult = .onLoading(show: true)
 

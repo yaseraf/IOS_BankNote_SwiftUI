@@ -51,4 +51,24 @@ struct TopActivitiesUIModel:Codable {
 
         return TopActivitiesUIModel(Exchange: "", Symbol: "", LastTradePrice: "", NetChange: "", NetChangePerc: "", TotalVolume: "", TotalValue: "", Executed: "", SymbolNameE: "", SymbolNameA: "", SectorNameE: "", SectorNameA: "", Curr_Code: "", Low: "", High: "")
     }
+    
+    func toWatchlistUIModel() -> GetMarketWatchByProfileIDUIModel {
+            var model = GetMarketWatchByProfileIDUIModel()
+            model.symbol = self.Symbol
+            model.symbolNameEnglish = self.SymbolNameE
+            model.symbolNameArabic = self.SymbolNameA
+            model.netChange = self.NetChange
+            model.netChangePerc = self.NetChangePerc
+            model.lastTradePrice = self.LastTradePrice
+            model.totalVolume = self.TotalVolume
+            model.totalValue = self.TotalValue
+            model.executed = self.Executed
+            model.exchange = self.Exchange
+            model.sectorE = self.SectorNameE
+            model.sectorA = self.SectorNameA
+            model.curCode = self.Curr_Code
+            model.lowPrice = self.Low
+            model.highPrice = self.High
+            return model
+        }
 }

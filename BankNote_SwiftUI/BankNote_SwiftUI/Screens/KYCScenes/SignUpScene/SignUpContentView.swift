@@ -112,7 +112,7 @@ struct SignUpContentView: View {
         
     private var titleView: some View {
         VStack {
-            Text(verificationType.wrappedValue == .phone ? "continue_with_phone".localized : "continue_with_email".localized)
+            Text(verificationType.wrappedValue == .phone ? "continue_with_phone".localized : "continue_with_email2".localized)
                 .font(.cairoFont(.semiBold, size: 18))
             Text(verificationType.wrappedValue == .phone ? "well_send_a_6_digit_verification_code_to_this_number_to_verify_it".localized : "well_send_a_6_digit_verification_code_to_this_email_to_verify_it".localized)
                 .font(.cairoFont(.light, size: 12))

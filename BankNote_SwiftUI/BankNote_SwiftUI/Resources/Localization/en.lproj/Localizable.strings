@@ -23,6 +23,7 @@
 "pin" = "Pin";
 "male" = "Male";
 "female" = "Female";
+"request_rejected" = "Request Rejected";
 
 // MARK: - OTP Screen
 "invalid_pin" = "Invalid Pin";
@@ -30,11 +31,15 @@
 // MARK: Forgot Password Screen
 "please_enter_your_phone_number_and_well_send_you_a_link_to_change_password" = "Please Enter your Phone Number and we'll send you a link to change Password";
 "please_enter_your_phone_number" = "Please Enter your Phone Number";
+"please_enter_your_email_and_well_send_you_a_link_to_change_password" = "Please Enter your Email and we'll send you a link to change Password";
 "please_enter_your_email" = "Please Enter your Email";
+"enter_your_email" = "Enter your Email";
 "email_address" = "Email address";
 "resend_link" = "Resend link";
+"resend_code" = "Resend code";
 "click_to_resend_otp" = "Click to resend OTP";
 "continue_with_email" = "Continue with E-mail";
+"continue_with_email2" = "Continue with Email";
 "continue_with_phone_number" = "Continue with Phone Number";
 "please_enter_your_otp_to_confirm" = "Please enter your otp to confirm";
 "resend_otp" = "Resend otp";
@@ -68,14 +73,20 @@
 
 // MARK: Home Screen
 "total_investment_value" = "Total Investment Value";
+"total_available_balance" = "Total Available Balance";
 "top_up" = "TopUp";
 "withdrawal" = "Withdrawal";
+"withdraw" = "Withdraw";
 "view_history" = "View History";
 "my_portfolio" = "My Portfolio";
 "view_all" = "View All";
 "egp" = "EGP";
 "no_portfolios_available" = "No portfolios available.";
 "no_chart_data_available" = "No chart data available.";
+"bid" = "Bid";
+"ask" = "Ask";
+"bid_volume" = "Bid Volume";
+"ask_volume" = "Ask Volume";
 
 // MARK: - Transaction History Screen
 "symbol" = "Symbol";
@@ -118,8 +129,8 @@
 "ratio" = "Ratio";
 "volume" = "Volume";
 "dividend_yield" = "Dividend Yield";
-"52_week_high" = "52 Week High";
-"52_week_low" = "52 Week Low";
+"52_week_high" = "52-Week High";
+"52_week_low" = "52-Week Low";
 "you_own" = "You Own";
 "average_buy_price" = "Average Buy Price";
 "total_value" = "Total Value";
@@ -130,6 +141,7 @@
 "index" = "Index";
 "view_all" = "View All";
 "watchlist" = "Watchlist";
+"my_watchlist" = "My Watchlist";
 "news" = "News";
 "all" = "All";
 "stocks" = "Stocks";
@@ -152,7 +164,11 @@
 "expired_order_desc" = "Your order is expired";
 "sent_order" = "Sent Order";
 "sent_order_desc" = "Your order is sent";
-
+"no_results_for" = "No results for \"%@\"";
+"search_symbol" = "Search Symbol";
+"top_gainers" = "Top Gainers";
+"top_losers" = "Top Losers";
+"most_active" = "Most Active";
 
 // MARK: Orders Screen
 "pending" = "Pending";
@@ -213,6 +229,19 @@
 "rating_app" = "Rating app";
 "buy_transactions" = "Buy Transactions";
 "language" = "Language";
+"invite_a_friend" = "Invite A Friend";
+"promo_codes" = "Promo Codes";
+"promo_code" = "Promo Code";
+"enter_your_promo_code" = "Enter your promo code";
+"submit" = "Submit";
+"share_with_friends" = "Share With Friends";
+"earn_more_inviting_friends" = "Earn More by inviting friends";
+"share_your_link" = "Share your link";
+"share_to" = "Share to";
+"facebook" = "Facebook";
+"instagram" = "Instagram";
+"whatsapp" = "WhatsApp";
+"x" = "X";
 
 // MARK: Statements Screen
 "statements" = "Statements";
@@ -331,12 +360,13 @@
 
 // MARK: KYC Screens
 "continue_with_phone" = "Continue With Phone";
-"well_send_a_6_digit_verification_code_to_this_number_to_verify_it" = "We'll send a 6 digit verification code to this number to verify it";
-"well_send_a_6_digit_verification_code_to_this_email_to_verify_it" = "We'll send a 6 digit verification code to this email to verify it";
+"well_send_a_6_digit_verification_code_to_this_number_to_verify_it" = "We’ll send a 6-Digit Verification Code to this number to verify it.";
+"well_send_a_6_digit_verification_code_to_this_email_to_verify_it" = "We’ll send a 6-Digit Verification Code to this Email to verify it.";
 "phone_number" = "Phone Number";
 "enter_code" = "Enter Code";
-"enter_the_6_digit_verification_code_we_sent_to" = "Enter the 6 digit verification code we sent to";
+"enter_the_6_digit_verification_code_we_sent_to" = "Enter the 6-Digit Verification Code we sent to";
 "confirm" = "Confirm";
+"resend_code_status" = "Otp Sent Successfully.";
 "please_choose_your_nationality" = "Please choose your nationality";
 "well_use_this_information_to_verify_your_identity" = "We'll use this information to verify your identity";
 "nationality" = "Nationality";

@@ -175,6 +175,8 @@ struct LandingScene: BaseSceneType {
                       KeyChainController.shared().mobileNo = data.mobileNo
                       UserDefaultController().isLoggedIn = true
                       UserDefaultController().isFirstLogin = false
+                      
+                      viewModel.callGetTiersAPI(success: true)
 
                       SceneDelegate.getAppCoordinator()?.showHomeFlow()
                       Connection_Hub.shared.resetOnGoingConnection()

@@ -36,6 +36,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.onUserInteraction = {
             TimerManager.shared.resetTimer()
         }
+        
+#if DEBUG
+Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")?.load()
+//for tvOS:
+Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/tvOSInjection.bundle")?.load()
+//Or for macOS:
+Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/macOSInjection.bundle")?.load()
+#endif
 
         SceneDelegate.appCoordinator = AppCoordinator(window: window!)
         SceneDelegate.appCoordinator?.start()

@@ -14,7 +14,7 @@ class ForgotPasswordViewModel:ObservableObject {
     
     @Published var forgotType: ForgotDataEnum
     
-    @Published var authenticationType: AuthenticationViewType = .email
+    @Published var authenticationType: AuthenticationViewType = .phoneNumber
     
     @Published var emailInputValue: String = ""
     @Published var mobileInputValue: String = ""

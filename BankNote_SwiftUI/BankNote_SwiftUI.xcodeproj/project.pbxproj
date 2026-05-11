@@ -293,6 +293,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -383,6 +384,19 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"PaymobSDK\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Toast_Swift\"",
+					"-framework",
+					"\"VIDVLiveness\"",
+					"-framework",
+					"\"VIDVOCR\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fit.BankNote-SwiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -418,6 +432,19 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"PaymobSDK\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Toast_Swift\"",
+					"-framework",
+					"\"VIDVLiveness\"",
+					"-framework",
+					"\"VIDVOCR\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fit.BankNote-SwiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -203,7 +203,8 @@ class AppUtility {
     func formatThousandSeparator(number: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 3 // Remove decimal places
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 3
         formatter.locale = Locale(identifier: "en_US") // or "en_US_POSIX" for strict formatting
 
         // Format the double and add a thousand separator

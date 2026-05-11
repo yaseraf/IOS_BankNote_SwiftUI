@@ -46,8 +46,6 @@ class SignUpViewModel: ObservableObject {
         self.verifyWithEmail = verifyWithEmail
         self.selectCountry = AppConstants.defaultEgyptCountry
         checkLocationAuthorization()
-        
-
     }
     
     
@@ -64,7 +62,11 @@ extension SignUpViewModel {
     }
     
     func popViewController() {
-        coordinator.popViewController()
+        if verifyWithEmail == false {
+            coordinator.popViewController()
+        } else {
+            coordinator.popMultipleViews(count: 2)
+        }
     }
 }
 
@@ -74,9 +76,10 @@ extension SignUpViewModel {
     // MARK: VALIFY
     
     func sendPhoneOtpValifyAPI(phoneNumber: String) {
-        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: phoneNumber)
+        let requestModel = SendPhoneOtpValifyRequestModel(Lang: AppUtility.shared.isRTL ? "ar" : "en", PhoneNumber: "0\(phoneNumber)")
         
         KeyChainController().phoneNumberEntered = phoneNumber
+        KeyChainController().phoneNumberEnteredWithPrefix = "\(selectCountry?.dialCode ?? "")\(phoneNumber)"
         
         sendPhoneOtpValifyAPIResult = .onLoading(show: true)
         
@@ -87,9 +90,15 @@ extension SignUpViewModel {
                 case .success(let success):
                     
                     if success.isSuccessful ?? false {
-                        self?.openVerifySignUpScene(transactionID: success.transactionId ?? "", verifyWithEmail: self?.verifyWithEmail ?? false, phoneNumber: phoneNumber, email: "")
                         KeyChainController().valifyRequestId = success.requestId ?? ""
                         KeyChainController().loginAccessToken = success.accessToken ?? ""
+                        
+                        if success.actionID == "1" {
+                            self?.openVerifySignUpScene(transactionID: success.transactionId ?? "", verifyWithEmail: self?.verifyWithEmail ?? false, phoneNumber: phoneNumber, email: "")
+                        } else {
+                            self?.coordinator.openThanksForRegisteringScene()
+                        }
+                        
                     } else {
                         SceneDelegate.getAppCoordinator()?.showMessage(type: .failure, success.errorMsg ?? "")
                     }

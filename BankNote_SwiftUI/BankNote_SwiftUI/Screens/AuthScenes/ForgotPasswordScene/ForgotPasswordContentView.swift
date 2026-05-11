@@ -10,38 +10,45 @@ import SwiftUI
 
 struct ForgotPasswordContentView: View {
     
-    var forgotType:Binding<ForgotDataEnum>
-    var authenticationType:Binding<AuthenticationViewType>
-    @State var nin:String = ""
-    @State var qid:String = ""
+    var forgotType: Binding<ForgotDataEnum>
+    var authenticationType: Binding<AuthenticationViewType>
+    @State var nin: String = ""
+    @State var qid: String = ""
     @State var username: String = ""
     @Binding var phoneNumber: String
     @Binding var email: String
-    var onBack:()->Void
-    var onSubmit:()->Void
-    var onLoginTap:()->Void
-    var onCountryPickerTap:()->Void
-    var onResendLinkTap:()->Void
     
+    // ── Resend timer ──────────────────────────────────────────
+    /// Pass the seconds value you receive from the API response here.
+    /// e.g. if the API returns { "resend_after_seconds": 161 } → pass 161
+    var resendSeconds: Int = 161
+    @State private var resendCountdown: Int = 0
+    @State private var resendTimer: Timer? = nil
+    // ─────────────────────────────────────────────────────────
+
+    var onBack: () -> Void
+    var onSubmit: () -> Void
+    var onLoginTap: () -> Void
+    var onCountryPickerTap: () -> Void
+    var onResendLinkTap: () -> Void
     
     var body: some View {
         ZStack {
             VStack {
-                            
                 headerView
-                
                 logoView
-                
                 titleView
-                
                 fieldView
-                
                 bottomView
-                
                 Spacer()
             }
         }
+        .onDisappear {
+            stopTimer()
+        }
     }
+    
+    // MARK: - Subviews (unchanged)
     
     private var logoView: some View {
         VStack(spacing: 0) {
@@ -62,9 +69,7 @@ struct ForgotPasswordContentView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 38, height: 38)
-                .onTapGesture {
-                    onBack()
-                }
+                .onTapGesture { onBack() }
             Spacer()
         }
         .padding(.horizontal, 18)
@@ -76,13 +81,12 @@ struct ForgotPasswordContentView: View {
                 .font(.cairoFont(.semiBold, size: 18))
             
             if authenticationType.wrappedValue == .phoneNumber {
-//                Text("please_enter_your_phone_number_and_well_send_you_a_link_to_change_password")
-                Text("please_enter_your_phone_number")
+                Text("please_enter_your_phone_number_and_well_send_you_a_link_to_change_password".localized)
                     .font(.cairoFont(.light, size: 12))
                     .padding(.horizontal, 77)
                     .multilineTextAlignment(.center)
             } else if authenticationType.wrappedValue == .email {
-                Text("please_enter_your_email")
+                Text("please_enter_your_email_and_well_send_you_a_link_to_change_password".localized)
                     .font(.cairoFont(.light, size: 12))
                     .padding(.horizontal, 77)
                     .multilineTextAlignment(.center)
@@ -93,9 +97,7 @@ struct ForgotPasswordContentView: View {
     private var fieldView: some View {
         HStack(spacing: 8) {
             if authenticationType.wrappedValue == .phoneNumber {
-                Button(action: {
-                    onCountryPickerTap()
-                }, label: {
+                Button(action: { onCountryPickerTap() }) {
                     HStack {
                         Text("🇪🇬 +20")
                             .font(.cairoFont(.semiBold, size: 12))
@@ -109,7 +111,7 @@ struct ForgotPasswordContentView: View {
                     .frame(height: 56)
                     .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
                     .padding(.bottom, 24)
-                })
+                }
                 
                 TextField("phone_number".localized, text: $phoneNumber)
                     .font(.cairoFont(.semiBold, size: 12))
@@ -118,9 +120,9 @@ struct ForgotPasswordContentView: View {
                     .frame(height: 56)
                     .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
                     .padding(.bottom, 24)
-
+                
             } else if authenticationType.wrappedValue == .email {
-                TextField("email_address".localized, text: $email)
+                TextField("enter_your_email".localized, text: $email)
                     .font(.cairoFont(.semiBold, size: 12))
                     .textInputAutocapitalization(.never)
                     .foregroundStyle(Color(hex: "#1C1C1C"))
@@ -128,33 +130,29 @@ struct ForgotPasswordContentView: View {
                     .frame(height: 56)
                     .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#DDDDDD")).shadow(color: .black, radius: 0.3, x: 0, y: 1))
                     .padding(.bottom, 24)
-
             }
-            
-
-            
-
         }
         .padding(.horizontal, 18)
-
     }
     
+    // MARK: - Bottom View
+    
     private var bottomView: some View {
-        var resentAttribute: AttributedString {
-            var str = AttributedString("\("resend_link".localized) in 02:41")
-            str.underlineStyle = .single
-            return str
-        }
-        
         var continueWithPhoneNumberAttribute: AttributedString {
-            var str = AttributedString(authenticationType.wrappedValue == .phoneNumber ? "continue_with_email".localized : "continue_with_phone_number".localized)
+            var str = AttributedString(
+                authenticationType.wrappedValue == .phoneNumber
+                    ? "continue_with_email".localized
+                    : "continue_with_phone_number".localized
+            )
             str.underlineStyle = .single
             return str
         }
         
         return VStack {
+            // Continue button
             Button {
                 onSubmit()
+                startTimer(seconds: resendSeconds) // ← start timer after API call
             } label: {
                 Text("continue".localized)
                     .font(.cairoFont(.semiBold, size: 18))
@@ -165,21 +163,24 @@ struct ForgotPasswordContentView: View {
             
             Spacer().frame(height: 24)
             
+//            // ── Resend link button with countdown ─────────────────
 //            Button {
-//                onLoginTap()
+//                onResendLinkTap()
+//                startTimer(seconds: resendSeconds) // restart timer on resend
 //            } label: {
-//                Text(resentAttribute)
-//                    .font(.cairoFont(.semiBold, size: 14))
-//                    .foregroundStyle(Color(hex: "#828282"))
+//                resendLinkLabel
 //            }
-            
+//            .disabled(resendCountdown > 0)
+//            // ──────────────────────────────────────────────────────
+//            
 //            Spacer().frame(height: 34)
             
+            // Switch auth type
             Button {
                 withAnimation {
                     if authenticationType.wrappedValue == .phoneNumber {
                         authenticationType.wrappedValue = .email
-                    } else if authenticationType.wrappedValue == .email {
+                    } else {
                         authenticationType.wrappedValue = .phoneNumber
                     }
                 }
@@ -188,21 +189,59 @@ struct ForgotPasswordContentView: View {
                     .font(.cairoFont(.semiBold, size: 14))
                     .foregroundStyle(Color(hex: "#629AF9"))
             }
-
         }
     }
+    
+    /// Shows "Resend link in MM:SS" while counting down, plain "Resend link" when ready.
+    @ViewBuilder
+    private var resendLinkLabel: some View {
+        if resendCountdown > 0 {
+            // Countdown active — greyed out with timer
+            var attr: AttributedString {
+                var str = AttributedString("\("resend_link".localized) \("in".localized) \(formattedCountdown)")
+                str.underlineStyle = .single
+                return str
+            }
+            Text(attr)
+                .font(.cairoFont(.semiBold, size: 14))
+                .foregroundStyle(Color(hex: "#828282"))
+        } else {
+            // Countdown finished — tappable
+            var attr: AttributedString {
+                var str = AttributedString("resend_link".localized)
+                str.underlineStyle = .single
+                return str
+            }
+            Text(attr)
+                .font(.cairoFont(.semiBold, size: 14))
+                .foregroundStyle(Color(hex: "#629AF9"))
+        }
+    }
+    
+    // MARK: - Timer helpers
+    
+    /// Formats remaining seconds as MM:SS  (e.g. 161 → "02:41")
+    private var formattedCountdown: String {
+        let m = resendCountdown / 60
+        let s = resendCountdown % 60
+        return String(format: "%02d:%02d", m, s)
+    }
+    
+    /// Call this with the `resend_after_seconds` value from your API response.
+    func startTimer(seconds: Int) {
+        stopTimer()
+        resendCountdown = seconds
+        resendTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            if resendCountdown > 0 {
+                resendCountdown -= 1
+            } else {
+                stopTimer()
+            }
+        }
+    }
+    
+    private func stopTimer() {
+        resendTimer?.invalidate()
+        resendTimer = nil
+    }
 }
-
-//#Preview {
-//    ForgotPasswordContentView(forgotType: .constant(.forgotPassword), nin: "", qid: "", username: "", onBack: {
-//        
-//    }, onSubmit: {
-//        
-//    }, onLoginTap: {
-//        
-//    }, onCountryPickerTap: {
-//        
-//    }, onResendLinkTap: {
-//        
-//    })
-//}

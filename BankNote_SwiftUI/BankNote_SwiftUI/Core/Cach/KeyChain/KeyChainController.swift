@@ -36,6 +36,7 @@ class KeyChainController {
         case username
         case resetPasswordCookies
         case phoneNumberEntered
+        case phoneNumberEnteredWithPrefix
         case Password
         case email
         case mobileNo
@@ -74,6 +75,7 @@ class KeyChainController {
     @CachingKeyChainCodable<String>(.username) var username
     @CachingKeyChainCodable<String>(.resetPasswordCookies) var resetPasswordCookies
     @CachingKeyChainCodable<String>(.phoneNumberEntered) var phoneNumberEntered
+    @CachingKeyChainCodable<String>(.phoneNumberEnteredWithPrefix) var phoneNumberEnteredWithPrefix
     @CachingKeyChainCodable<String>(.Password) var password
     @CachingKeyChainCodable<String>(.email) var email
     @CachingKeyChainCodable<String>(.mobileNo) var mobileNo

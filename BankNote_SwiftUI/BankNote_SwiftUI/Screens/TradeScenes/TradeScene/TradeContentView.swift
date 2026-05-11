@@ -12,6 +12,9 @@ import SDWebImageSwiftUI
 struct TradeContentView: View {
     var indexData: Binding<[GetExchangeSummaryUIModel]?>
     var watchlistData: Binding<[GetMarketWatchByProfileIDUIModel]?>
+    var topGainersData: Binding<[TopActivitiesUIModel]?>
+    var topLosersData: Binding<[TopActivitiesUIModel]?>
+    var mostActiveData: Binding<[TopActivitiesUIModel]?>
     var newsData: Binding<[GetAllMarketNewsUIModel]?>
     
     enum SelectedNewsType {
@@ -22,9 +25,16 @@ struct TradeContentView: View {
     
     @State var selectedNewsType: SelectedNewsType = .all
     
+    var onIndexTap:(_ index: String)->Void
     var onIndexViewAllTap:()->Void
     var onWatchlistViewAllTap:([GetMarketWatchByProfileIDUIModel])->Void
+    var onTopGainerViewAllTap:([TopActivitiesUIModel])->Void
+    var onTopLoserViewAllTap:([TopActivitiesUIModel])->Void
+    var onMostActiveViewAllTap:([TopActivitiesUIModel])->Void
     var onWatchlistTap:(GetMarketWatchByProfileIDUIModel)->Void
+    var onTopGainerTap:(_ symbol: String)->Void
+    var onTopLoserTap:(_ symbol: String)->Void
+    var onMostActiveTap:(_ symbol: String)->Void
     var onNewsViewAllTap:()->Void
     
     
@@ -39,6 +49,16 @@ struct TradeContentView: View {
                 
                 watchlistView
                     .padding(.bottom, 32)
+                
+                topGainerView
+                    .padding(.bottom, 32)
+
+                topLoserView
+                    .padding(.bottom, 32)
+
+                mostActiveView
+                    .padding(.bottom, 32)
+
                 
                 newsView
             }
@@ -75,6 +95,9 @@ struct TradeContentView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 ForEach(Array((indexData.wrappedValue ?? []).enumerated()), id: \.offset) { idnex, element in
                     IndexCell(indexData: element)
+                        .onTapGesture {
+                            onIndexTap(element.eMName ?? "")
+                        }
                 }
             }
         }
@@ -116,6 +139,118 @@ struct TradeContentView: View {
             }
         }
     }
+    
+    private var topGainerView: some View {
+        VStack {
+            HStack {
+                Text("top_gainers".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+                    .foregroundStyle(.black)
+                
+                Spacer()
+                
+                Button {
+                    onTopGainerViewAllTap(topGainersData.wrappedValue ?? [])
+                } label: {
+                    Text("view_all".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                }
+            }
+            .padding(.horizontal, 18)
+            
+            if topGainersData.wrappedValue?.isEmpty == false {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(Array(topGainersData.wrappedValue?.prefix(3) ?? []), id: \.id) { item in
+                        Button {
+                            onTopGainerTap(item.Symbol ?? "")
+                        } label: {
+                            WatchlistCell(watchlistData: item.toWatchlistUIModel())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
+    private var topLoserView: some View {
+        VStack {
+            HStack {
+                Text("top_losers".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+                    .foregroundStyle(.black)
+                
+                Spacer()
+                
+                Button {
+                    onTopLoserViewAllTap(topLosersData.wrappedValue ?? [])
+                } label: {
+                    Text("view_all".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                }
+            }
+            .padding(.horizontal, 18)
+            
+            if topLosersData.wrappedValue?.isEmpty == false {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(Array(topLosersData.wrappedValue?.prefix(3) ?? []), id: \.id) { item in
+                        Button {
+                            onTopLoserTap(item.Symbol ?? "")
+                        } label: {
+                            WatchlistCell(watchlistData: item.toWatchlistUIModel())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
+    private var mostActiveView: some View {
+        VStack {
+            HStack {
+                Text("most_active".localized)
+                    .font(.cairoFont(.semiBold, size: 18))
+                    .foregroundStyle(.black)
+                
+                Spacer()
+                
+                Button {
+                    onMostActiveViewAllTap(mostActiveData.wrappedValue ?? [])
+                } label: {
+                    Text("view_all".localized)
+                        .font(.cairoFont(.semiBold, size: 14))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .background(RoundedRectangle(cornerRadius: 99).fill(.white))
+                }
+            }
+            .padding(.horizontal, 18)
+            
+            if mostActiveData.wrappedValue?.isEmpty == false {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach(Array(mostActiveData.wrappedValue?.prefix(3) ?? []), id: \.id) { item in
+                        Button {
+                            onMostActiveTap(item.Symbol ?? "")
+                        } label: {
+                            WatchlistCell(watchlistData: item.toWatchlistUIModel())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
     
     private var newsView: some View {
         VStack(spacing: 0) {

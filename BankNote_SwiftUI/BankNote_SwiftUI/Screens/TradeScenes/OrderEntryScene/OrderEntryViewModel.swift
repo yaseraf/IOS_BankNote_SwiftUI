@@ -20,7 +20,7 @@ class OrderEntryViewModel: ObservableObject {
     @Published var shares: String = "0"
     @Published var orderValue: String = ""
     @Published var placeOrderType: PlaceOrderType = .buy
-    @Published var orderPriceType: OrderPriceType = .limit
+    @Published var orderPriceType: OrderPriceType = .market
     @Published var stockData:GetALLMarketWatchBySymbolUIModel?
     @Published var newMarketSymbol:GetALLMarketWatchBySymbolUIModel?
     @Published var orderDetails: OrderListUIModel?
@@ -190,6 +190,8 @@ extension OrderEntryViewModel {
                     self?.netChangePerc = success.netChangePerc ?? ""
                     self?.lastTradePrice = success.lastTradePrice ?? ""
                     
+                    self?.getRiskManagementAPI(success: true)
+                    
                     self?.getSubscribeMarketWatchSymbols()
                     
                     debugPrint("market Symbol success: ")
@@ -231,8 +233,8 @@ extension OrderEntryViewModel {
 //    }
     
     func getRiskManagementAPI(success: Bool) {
-        let totalVolume = Double(orderDetails?.TotalVolume ?? "") ?? 0 // Modify
-        let remaining = Double(orderDetails?.Remaining ?? "") ?? 0 // Modify
+//        let totalVolume = Double(orderDetails?.TotalVolume ?? "") ?? 0 // Modify
+//        let remaining = Double(orderDetails?.Remaining ?? "") ?? 0 // Modify
         
         let requestModel = GetRiskManagementRequestModel(
             accountID: UserDefaultController().selectedUserAccount?.AccountID,

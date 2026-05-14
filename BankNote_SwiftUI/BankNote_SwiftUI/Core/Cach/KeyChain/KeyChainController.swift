@@ -56,6 +56,7 @@ class KeyChainController {
         case valifyTransactionId
         case valifyAccessToken
         case loginAccessToken
+        case nin
      }
 
     @CachingKeyChainCodable<String>(.refreshToken) var refreshToken
@@ -95,6 +96,7 @@ class KeyChainController {
     @CachingKeyChainCodable<String>(.valifyTransactionId) var valifyTransactionId
     @CachingKeyChainCodable<String>(.valifyAccessToken) var valifyAccessToken
     @CachingKeyChainCodable<String>(.loginAccessToken) var loginAccessToken
+    @CachingKeyChainCodable<String>(.nin) var nin
 
     func clearData() {
         refreshToken = nil
@@ -113,6 +115,7 @@ class KeyChainController {
         clientID = nil
         mainClientID = nil
         username = nil
+        nin = nil
 
     }
 }

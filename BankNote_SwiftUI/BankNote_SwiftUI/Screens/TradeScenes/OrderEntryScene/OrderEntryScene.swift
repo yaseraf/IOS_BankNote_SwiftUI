@@ -25,7 +25,7 @@ struct OrderEntryScene: BaseSceneType {
                     content: {
                         OrderEntryContentView(
                             isRiskManagementLoading: $viewModel.isRiskManagementLoading,
-                            cashInputValue: $viewModel.price,
+                            cashInputValue: $viewModel.cashInput,
                             stocksInputValue: $viewModel.shares,
                             availableAmount: $viewModel.availableAmount,
                             selectedOrderPriceType: $viewModel.orderPriceType,
@@ -37,12 +37,18 @@ struct OrderEntryScene: BaseSceneType {
                             flagMessage: $viewModel.flagMessage,
                             isEditOrder: $viewModel.isEditOrder,
                             placeOrderType: $viewModel.placeOrderType,
+                            setPriceValue: $viewModel.price,
+                            totalAmount: $viewModel.orderValue,
                             onMaxTap: {
                                 viewModel.onMaxTap()
                             }, onContinueTap: {
                                 viewModel.openOrderDetailsScene()
                             }, onValuesChange: {
                                 viewModel.CheckPriceWithinRange()
+                            }, onCashInputChange: {
+                                viewModel.onCashInputChange()
+                            }, onStocksInputChange: {
+                                viewModel.onStocksInputChange()
                             }, onBackTap: {
                                 viewModel.popViewController()
                             }

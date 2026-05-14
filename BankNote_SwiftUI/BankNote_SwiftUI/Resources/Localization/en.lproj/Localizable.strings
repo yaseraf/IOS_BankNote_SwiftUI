@@ -182,6 +182,8 @@
 "available_amount" = "Available Amount";
 "cash" = "Cash";
 "one_day" = "One Day";
+"set_price" = "Set Price";
+"total_stocks" = "Total Stocks";
 
 // MARK: Order Details Screen
 "order_details" = "Order Details";

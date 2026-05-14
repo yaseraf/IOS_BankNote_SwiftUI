@@ -177,6 +177,8 @@
 "available_amount" = "الكمية المتاحة";
 "cash" = "نقدي";
 "one_day" = "يوم واحد";
+"set_price" = "تحديد السعر";
+"total_stocks" = "إجمالي الأسهم";
 
 // MARK: Order Details Screen
 "order_details" = "تفاصيل الطلب";

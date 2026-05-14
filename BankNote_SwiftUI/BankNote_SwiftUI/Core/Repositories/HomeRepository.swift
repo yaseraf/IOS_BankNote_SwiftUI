@@ -19,6 +19,7 @@ protocol HomeRepositoryProtocol {
     func getInvoices(route: HomeRoute, completion: @escaping(Result<GetInvoicesResponseModel, NetworkError>) -> Void) async
     func getStatementOfAccount(route: HomeRoute, completion: @escaping(Result<[GetStatementOfAccountResponseModel], NetworkError>) -> Void) async
     func getTransactionSummary(route: HomeRoute, completion: @escaping(Result<[GetTransactionSummaryResponseModel], NetworkError>) -> Void) async
+    func CalculatesShares(route: HomeRoute, completion: @escaping(Result<String, NetworkError>) -> Void) async
 
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     func GetBankNote(route: HomeRoute, completion: @escaping(Result<GetBankNoteResponseModel, NetworkError>) -> Void) async
@@ -83,6 +84,9 @@ class HomeRepository: HomeRepositoryProtocol {
         await RequestApi(route: route, responseType: [GetTransactionSummaryResponseModel].self, completion: completion).requestApi()
     }
 
+    func CalculatesShares(route: HomeRoute, completion: @escaping (Result<String, NetworkError>) -> Void) async {
+        await RequestApi(route: route, responseType: String.self, completion: completion).requestApi()
+    }
     
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     func GetBankNote(route: HomeRoute, completion: @escaping (Result<GetBankNoteResponseModel, NetworkError>) -> Void) async {

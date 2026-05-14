@@ -16,6 +16,7 @@ protocol HomeUseCaseProtocol{
     func getInvoices(requestModel: GetInvoicesRequestModel, completion: @escaping(Result<GetInvoicesUIModel, NetworkError>) -> Void) async
     func getStatementOfAccount(requestModel: GetStatementOfAccountRequestModel, completion: @escaping(Result<[GetStatementOfAccountUIModel], NetworkError>) -> Void) async
     func getTransactionSummary(requestModel: GetTransactionSummaryRequestModel, completion: @escaping(Result<[GetTransactionSummaryUIModel], NetworkError>) -> Void) async
+    func CalculatesShares(requestModel: String, completion: @escaping(Result<String, NetworkError>) -> Void) async
 
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     func GetBankNote(requestModel: GetBankNoteRequestModel, completion: @escaping(Result<GetBankNoteUIModel, NetworkError>) -> Void) async
@@ -175,6 +176,20 @@ extension HomeUseCase: HomeUseCaseProtocol {
                    GetTransactionSummaryUIModel.mapToUIModel($0)
 
                 })
+                completion(.success(uiModel))
+
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    func CalculatesShares(requestModel: String, completion: @escaping (Result<String, NetworkError>) -> Void) async {
+        let route = HomeRoute.CalculatesShares(requestModel: requestModel)
+        await repository.CalculatesShares(route: route) { result in
+            switch result {
+            case .success(let responseModel):
+                let uiModel = responseModel
                 completion(.success(uiModel))
 
             case .failure(let failure):

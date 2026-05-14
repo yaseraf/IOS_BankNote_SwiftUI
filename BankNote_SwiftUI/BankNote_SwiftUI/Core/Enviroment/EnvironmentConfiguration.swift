@@ -56,6 +56,12 @@ class NetworkConfiguration{
       basePath: "https://trade.rol.com.eg/MobileServices/", signalRDomain:  "https://trade.rol.com.eg/"
       
       
+      
+      
+      
+      
+      
+      
 //      basePath: "https://tfit.pioneers-securities.com/MobileServicesRoya/", signalRDomain:  "https://tfit.pioneers-securities.com/"
 
     )

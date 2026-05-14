@@ -148,7 +148,12 @@ extension HomeViewModel {
                                 UserDefaultController().selectedUserAccount = item
                                 KeyChainController.shared().clientID = item.ClientID
                                 KeyChainController.shared().mainClientID = item.MainClientID
-                                KeyChainController.shared().accountID = item.AccountID
+                                if item.AccountDesc == "HADEEL ABU ZAYED / N" {
+                                    KeyChainController.shared().accountID = item.AccountID?.dropLast(1).description
+                                } else {
+                                    KeyChainController.shared().accountID = item.AccountID
+                                }
+                                KeyChainController.shared().nin = item.NIN
                                 self?.callGetPortfolioAPI(success: true)
                                 debugPrint("Calling portfolio 2")
                             }
@@ -163,8 +168,6 @@ extension HomeViewModel {
                 }
             }
         }
-        
-        
     }
     
     func callGetPortfolioAPI(success: Bool) {

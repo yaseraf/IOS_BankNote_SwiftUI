@@ -16,7 +16,8 @@ class OrderEntryViewModel: ObservableObject {
     @Published var netChange:String = ""
     @Published var netChangePerc:String = ""
     @Published var lastTradePrice:String = ""
-    @Published var price: String = "0"
+    @Published var price: String = ""
+    @Published var cashInput: String = "0"
     @Published var shares: String = "0"
     @Published var orderValue: String = ""
     @Published var placeOrderType: PlaceOrderType = .buy
@@ -32,6 +33,7 @@ class OrderEntryViewModel: ObservableObject {
     @Published var portfolioData: GetPortfolioUIModel?
 
     @Published var arrayOfQuantities: [ArrayOfQuantities] = []
+    
     struct ArrayOfQuantities {
         var quantity: Double
     }
@@ -41,6 +43,7 @@ class OrderEntryViewModel: ObservableObject {
     @Published var getCompaniesLookupsAPIResult:APIResultType<[GetCompaniesLookupsUIModel]>?
     @Published var getRiskManagementAPIResult:APIResultType<GetRiskManagementUIModel>?
     @Published var getPortfolioAPIResult:APIResultType<GetPortfolioUIModel>?
+    @Published var calculatesSharesAPIResult:APIResultType<String>?
 
     init(coordinator: OrdersCoordinatorProtocol, useCase: HomeUseCaseProtocol, lookupsUseCase: LookupsUseCaseProtocol, orderDetails: OrderListUIModel, placeOrderType: PlaceOrderType, isEditOrder: Bool) {
         self.coordinator = coordinator
@@ -54,11 +57,15 @@ class OrderEntryViewModel: ObservableObject {
         Connection_Hub.shared.notifyOrderDelegate = self
 
         if isEditOrder {
+            UserDefaultController().orderId = orderDetails.OrderID ?? ""
+            
             shares = orderDetails.TotalVolume ?? ""
             price = orderDetails.Price ?? ""
             
             orderPriceType = orderDetails.OrderTypeCode == "1" ? .market : .limit
             self.placeOrderType = orderDetails.SellBuyFlag?.lowercased() == "b" ? .buy : .sell
+        } else {
+            UserDefaultController().orderId = "-1"
         }
     }
 }
@@ -237,7 +244,7 @@ extension OrderEntryViewModel {
 //        let remaining = Double(orderDetails?.Remaining ?? "") ?? 0 // Modify
         
         let requestModel = GetRiskManagementRequestModel(
-            accountID: UserDefaultController().selectedUserAccount?.AccountID,
+            accountID: KeyChainController.shared().accountID,
             clientID: KeyChainController.shared().clientID,
             compInit: KeyChainController.shared().compInit,
             custodyID: "-1",
@@ -264,7 +271,8 @@ extension OrderEntryViewModel {
 //            validityCode: UserDefaultController().tifList?.filter({$0.id?.lowercased() == "0001"}).first?.id, // GTD
             validityCode: "0001", // GTD
             settType: "2",
-            webCode: KeyChainController.shared().webCode)
+            webCode: KeyChainController.shared().webCode
+        )
         
         isRiskManagementLoading = true
         getRiskManagementAPIResult = .onLoading(show: true)
@@ -278,6 +286,7 @@ extension OrderEntryViewModel {
                     self?.isRiskManagementLoading = false
                     self?.riskManagementData = success
                     self?.availableAmount = success.buyPower ?? "0"
+                    UserDefaultController().cash = success.buyPower ?? "0"
                     self?.orderValue = success.orderValue ?? ""
                     self?.flagMessage = AppUtility.shared.isRTL ? success.flagMsgA ?? "" : success.flagMsgE ?? ""
                    
@@ -318,7 +327,34 @@ extension OrderEntryViewModel {
             }
         }
     }
-
+    
+    func CalculatesShares(success: Bool) {
+                
+        let requestModel = ""
+        
+        calculatesSharesAPIResult = .onLoading(show: true)
+        
+        Task.init {
+            await useCase.CalculatesShares(requestModel: requestModel) {[weak self] result in
+                
+                self?.calculatesSharesAPIResult = .onLoading(show: false)
+                
+                switch result {
+                case .success(let success):
+                    
+                    debugPrint("Success to get user portfolio")
+                        self?.calculatesSharesAPIResult = .onSuccess(response: success)
+                    
+                    self?.shares = success
+                    self?.getRiskManagementAPI(success: true)
+                    
+                case .failure(let failure):
+                        debugPrint("Failed to get user portfolio")
+                        self?.calculatesSharesAPIResult = .onFailure(error: failure)
+                }
+            }
+        }
+    }
 }
 
 // MARK: SignalR
@@ -408,6 +444,18 @@ extension OrderEntryViewModel {
         } else {
             flagMessage = AppUtility.shared.isRTL ? "يجب أن يكون السعر المحدد بين \(newMarketSymbol?.minPrice ?? "") و \(newMarketSymbol?.maxPrice ?? "")" : "Limit price must be between \(newMarketSymbol?.minPrice ?? "") and \(newMarketSymbol?.maxPrice ?? "")"
         }
+    }
+    
+    func onCashInputChange() {
+        UserDefaultController().orderType = placeOrderType == .buy ? "B" : "S"
+        UserDefaultController().cash = cashInput
+        UserDefaultController().orderPrice = price
+        
+        CalculatesShares(success: true)
+    }
+    
+    func onStocksInputChange() {
+        getRiskManagementAPI(success: true)
     }
 }
 

@@ -73,6 +73,10 @@ enum CachingKey: String {
     case isMarginableAccount
     case birthdate
     case gender
+    case orderType
+    case cash
+    case orderPrice
+    case orderId
 
     // MARK: Other
     
@@ -148,6 +152,10 @@ class UserDefaultController: ObservableObject {
     @CachingCodable<String>(.isMarginableAccount) var isMarginableAccount
     @CachingCodable<String>(.birthdate) var birthdate
     @CachingCodable<String>(.gender) var gender
+    @CachingCodable<String>(.orderType) var orderType
+    @CachingCodable<String>(.cash) var cash
+    @CachingCodable<String>(.orderPrice) var orderPrice
+    @CachingCodable<String>(.orderId) var orderId
 
     // MARK: Others
 
@@ -209,6 +217,10 @@ class UserDefaultController: ObservableObject {
         userBalance = nil
         birthdate = nil
         gender = nil
+        orderType = nil
+        cash = nil
+        orderPrice = nil
+        orderId = nil
     }
 }
 

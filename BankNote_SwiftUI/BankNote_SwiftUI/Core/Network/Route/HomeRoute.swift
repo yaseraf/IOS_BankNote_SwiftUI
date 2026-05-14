@@ -25,6 +25,7 @@ enum HomeRoute:APITargetType{
     case AddMarketWatchProfileName(requestModel: AddMarketWatchProfileNameRequestModel)
     case AddMarketWatchProfileSymbols(requestModel: AddMarketWatchProfileSymbolsRequestModel)
     case DeleteMarketWatchProfileSymbols(requestModel: DeleteMarketWatchProfileSymbolsRequestModel)
+    case CalculatesShares(requestModel: String)
 
     // MARK: Banknote / Tiers / Badges / Transactions Packages
     case GetBankNote(requestModel: GetBankNoteRequestModel)
@@ -105,6 +106,9 @@ enum HomeRoute:APITargetType{
             return "MarektWServices/AddMarketWatchProfileSymbols"
         case .DeleteMarketWatchProfileSymbols:
             return "MarektWServices/DeleteMarketWatchProfileSymbols"
+        case .CalculatesShares:
+            return "TradingWServices/CalculatesShares/\(KeyChainController().mainClientID ?? "")/\(KeyChainController().accountID ?? "")/\(KeyChainController().nin ?? "")/\(UserDefaultController().selectedSymbol ?? "")/\(UserDefaultController().orderType ?? "")/\(UserDefaultController().cash ?? "")/\(UserDefaultController().orderPrice ?? "")/\(UserDefaultController().orderId ?? "")/\(KeyChainController().userType ?? "")/\(KeyChainController().UCODE ?? "")/\(KeyChainController().brokerID ?? "")/\(KeyChainController().brokerID ?? "")/\(KeyChainController().compInit ?? "")/\(KeyChainController().clientID ?? "")/\(UserDefaultController().selectedSymbolType ?? "")/-1/-1/\(UserDefaultController().orderType ?? "")/\(KeyChainController().webCode ?? "")"
+        
 
             // MARK: Banknote / Tiers / Badges / Transactions Packages
 
@@ -143,7 +147,7 @@ enum HomeRoute:APITargetType{
     var method: APIMethodType{
         get{
             switch self {
-            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss, .getStatementOfAccount, .GetTransactionSummary:
+            case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss, .getStatementOfAccount, .GetTransactionSummary,  .CalculatesShares:
                 return .get
             case .GetRiskManagement, .GetBankNote, .GetTiers, .UpdateTiersCode, .GetBankNotesMainBadges,  .GetBankNotesBadges, .GetTransactionsPackages, .CreateBuyBankNotesJV, .UpdateBankNotesTransQTY, .GetClientBankNotes, .GetClientTransActionsPackages, .CalcFreeSubBadgesBankNotes, .TransferAmountToAccounts, .PaymobGetSdkToken, .getInvoices, .AddMarketWatchProfileName, .AddMarketWatchProfileSymbols, .DeleteMarketWatchProfileSymbols:
                 return .post
@@ -153,7 +157,7 @@ enum HomeRoute:APITargetType{
     
     var requestType: APITypeOfRequest{
         switch self {
-        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss, .getStatementOfAccount ,.GetTransactionSummary:
+        case .GetAllProfilesLookupsByUserCode, .GetMarketWatchByProfileID, .GetExchangeSummary, .getUserAccounts, .getPortfolio, .GetCompaniesLookups, .GetALLMarketWatchBySymbol, .GetAllMarketNewsBySymbol, .GetExpectedProfitLoss, .getStatementOfAccount ,.GetTransactionSummary, .CalculatesShares:
                 .requestPlain
             
         case .GetRiskManagement(let requestModel):

@@ -48,8 +48,8 @@ struct HomeContentView: View {
     @State var isBalanceHidden:Bool = false
     @State private var selectedOption: HomeTotalAssetsType = .totalInvestmentValue
     @State private var selectedTab: HomePortfolioTab = .portfolio
-    @State private var customWatchlistCellExpanded = false
-    
+    @State private var expandedWatchlistID: String? = ""
+
     var onTopUpTap:()->Void
     var onStockTap:(String, String, String, String) -> Void
     var onWithdrawalTap:()->Void
@@ -182,7 +182,7 @@ struct HomeContentView: View {
         
         return VStack(spacing: 8) {
             HStack {
-                Text(isBalanceHidden ? "*******" : "\(accountCurrency) \(selectedOption == .totalInvestmentValue ? AppUtility.shared.formatThousandSeparator(number: totalAsset) : String(balance ?? 0))")
+                Text(isBalanceHidden ? "*******" : "\(accountCurrency) \(selectedOption == .totalInvestmentValue ? AppUtility.shared.formatThousandSeparator(number: totalAsset) : AppUtility.shared.formatThousandSeparator(number: balance ?? 0))")
                     .font(.cairoFont(.bold, size: 32))
                 
                 Image(isBalanceHidden ? "ic_eyeVisible" : "ic_eyeInvisible")
@@ -354,7 +354,15 @@ struct HomeContentView: View {
                             Button {
                                 onStockTap(item.symbol ?? "", item.marketType ?? "", "", "")
                             } label: {
-                                CustomWatchlistCell(watchlistData: item, customWatchlistCellExpanded: $customWatchlistCellExpanded)
+                                CustomWatchlistCell(
+                                    watchlistData: item,
+                                    isExpanded: Binding(
+                                        get: { expandedWatchlistID == item.id },
+                                        set: { isExpanded in
+                                            expandedWatchlistID = isExpanded ? item.id : nil
+                                        }
+                                    )
+                                )
                             }
                         }
                     }
@@ -449,7 +457,7 @@ struct PortfolioCell: View {
 struct CustomWatchlistCell: View {
 
     var watchlistData: GetMarketWatchByProfileIDUIModel
-    @Binding var customWatchlistCellExpanded: Bool
+    @Binding var isExpanded: Bool
 
     var body: some View {
         VStack {
@@ -509,7 +517,6 @@ struct CustomWatchlistCell: View {
                             .font(.cairoFont(.semiBold, size: 12))
                             .foregroundStyle(changePerc > 0 ? Color(hex: "#1E961E") : changePerc < 0 ? Color(hex: "#AA1A1A") : Color.colorWarning600)
                     }
-
                 }
                 
                 Image("ic_downArrow")
@@ -521,14 +528,14 @@ struct CustomWatchlistCell: View {
                     .padding(.horizontal, 8)
                     .onTapGesture {
                         withAnimation {
-                            customWatchlistCellExpanded.toggle()
+                            isExpanded.toggle()
                         }
                     }
                 
                 
             }
             
-            if customWatchlistCellExpanded {
+            if isExpanded {
                 HStack {
                     VStack(alignment: .leading) {
                         

@@ -386,6 +386,7 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Nonisolated",
               "Override"
             ],
             "init_kind": "Designated"
@@ -448,6 +449,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -551,6 +553,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -646,6 +649,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -733,6 +737,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -836,6 +841,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -939,6 +945,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -1042,6 +1049,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -1126,6 +1134,7 @@
         "moduleName": "VIDVLiveness",
         "objc_name": "VIDVLivenessEventsLogEntity",
         "declAttributes": [
+          "Nonisolated",
           "AccessControl",
           "ObjC"
         ],
@@ -1220,6 +1229,20 @@
             ],
             "usr": "s:7Combine16ObservableObjectP",
             "mangledName": "$s7Combine16ObservableObjectP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -5719,6 +5742,7 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Nonisolated",
               "Override"
             ],
             "init_kind": "Designated"
@@ -5773,6 +5797,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -5860,6 +5885,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -5963,6 +5989,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -6058,6 +6085,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -6145,6 +6173,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -6248,6 +6277,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -6351,6 +6381,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -6435,6 +6466,7 @@
         "moduleName": "VIDVLiveness",
         "objc_name": "VIDVLivenessErrorLogEntity",
         "declAttributes": [
+          "Nonisolated",
           "AccessControl",
           "ObjC"
         ],
@@ -6529,6 +6561,20 @@
             ],
             "usr": "s:7Combine16ObservableObjectP",
             "mangledName": "$s7Combine16ObservableObjectP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -8920,6 +8966,7 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Nonisolated",
               "Override"
             ],
             "init_kind": "Designated"
@@ -8982,6 +9029,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9085,6 +9133,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9188,6 +9237,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9283,6 +9333,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9370,6 +9421,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9473,6 +9525,7 @@
             "moduleName": "VIDVLiveness",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9574,6 +9627,7 @@
             "objc_name": "addEventsObject:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9605,6 +9659,7 @@
             "objc_name": "removeEventsObject:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9636,6 +9691,7 @@
             "objc_name": "addEvents:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9667,6 +9723,7 @@
             "objc_name": "removeEvents:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9698,6 +9755,7 @@
             "objc_name": "addErrorsObject:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9729,6 +9787,7 @@
             "objc_name": "removeErrorsObject:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9760,6 +9819,7 @@
             "objc_name": "addErrors:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9791,6 +9851,7 @@
             "objc_name": "removeErrors:",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -9805,6 +9866,7 @@
         "moduleName": "VIDVLiveness",
         "objc_name": "VIDVLivenessSessionEntity",
         "declAttributes": [
+          "Nonisolated",
           "AccessControl",
           "ObjC"
         ],
@@ -9899,6 +9961,20 @@
             ],
             "usr": "s:7Combine16ObservableObjectP",
             "mangledName": "$s7Combine16ObservableObjectP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -11995,6 +12071,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -15648,6 +15731,13 @@
           },
           {
             "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
             "name": "_ExpressibleByImageLiteral",
             "printedName": "_ExpressibleByImageLiteral",
             "usr": "s:s26_ExpressibleByImageLiteralP",
@@ -15967,6 +16057,13 @@
             "printedName": "CustomDebugStringConvertible",
             "usr": "s:s28CustomDebugStringConvertibleP",
             "mangledName": "$ss28CustomDebugStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       }
@@ -17376,36 +17473,43 @@
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1554,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "FloatLiteral",
-      "offset": 2578,
+      "offset": 2617,
       "length": 3,
       "value": "0.0"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "FloatLiteral",
-      "offset": 2603,
+      "offset": 2642,
       "length": 3,
       "value": "0.0"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "FloatLiteral",
-      "offset": 2641,
+      "offset": 2680,
       "length": 3,
       "value": "0.0"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "StringLiteral",
-      "offset": 3929,
+      "offset": 3968,
       "length": 15,
       "value": "\"session queue\""
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/AntispoofingVC.swift",
       "kind": "IntegerLiteral",
-      "offset": 3969,
+      "offset": 4008,
       "length": 1,
       "value": "1"
     },
@@ -17664,14 +17768,14 @@
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/TaskMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 20408,
+      "offset": 23330,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/sayedobaid\/Sayed\/work\/Valify\/SDKsDevelopment\/VIDV\/ios-VIDVLivenessSDK\/ValifyiOSFramework\/Antispoofing\/AntispoofingControllers\/TaskMethods.swift",
       "kind": "BooleanLiteral",
-      "offset": 21251,
+      "offset": 24173,
       "length": 4,
       "value": "true"
     },

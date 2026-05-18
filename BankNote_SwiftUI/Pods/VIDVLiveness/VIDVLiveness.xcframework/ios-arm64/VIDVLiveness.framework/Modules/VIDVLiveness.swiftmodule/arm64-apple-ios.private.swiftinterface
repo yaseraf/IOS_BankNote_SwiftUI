@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
-// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name VIDVLiveness
-// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+// swift-compiler-version: Apple Swift version 6.2.4 effective-5.10 (swiftlang-6.2.4.1.4 clang-1700.6.4.2)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name VIDVLiveness
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2.4
 import AVFoundation
 import AudioToolbox
 import CommonCrypto
@@ -25,34 +25,46 @@ import _SwiftConcurrencyShims
 import ObjectiveC.runtime
 extension VIDVLiveness.VIDVLivenessEventsLogEntity {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<VIDVLiveness.VIDVLivenessEventsLogEntity>
-  @objc @NSManaged dynamic public var key: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var key: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var type: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var type: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var timestamp: Swift.Int64 {
+  #endif
+  @objc @NSManaged nonisolated dynamic public var timestamp: Swift.Int64 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var date: Foundation.Date? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var date: Foundation.Date? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var screen: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var screen: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var payload: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var payload: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var session: VIDVLiveness.VIDVLivenessSessionEntity? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var session: VIDVLiveness.VIDVLivenessSessionEntity? {
     @objc get
     @objc set
   }
+  #endif
 }
 public struct RegisterTrialRequest : Swift.Codable {
   public func encode(to encoder: any Swift.Encoder) throws
@@ -62,8 +74,10 @@ public struct Instruction : Swift.Codable {
   public func encode(to encoder: any Swift.Encoder) throws
   public init(from decoder: any Swift.Decoder) throws
 }
-@_inheritsConvenienceInitializers @objc(VIDVLivenessEventsLogEntity) public class VIDVLivenessEventsLogEntity : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+@_inheritsConvenienceInitializers @objc(VIDVLivenessEventsLogEntity) nonisolated public class VIDVLivenessEventsLogEntity : CoreData.NSManagedObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc override nonisolated dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  #endif
   @objc deinit
 }
 public class VIDVCustomLivenessAssets {
@@ -123,9 +137,15 @@ public class VIDVCustomLivenessStrings {
 }
 @available(iOS 12.0, *)
 extension UIKit.UIImage {
+  #if compiler(>=5.3) && $NonescapableTypes
   public class func gifImageWithData(_ data: Foundation.Data) -> UIKit.UIImage?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public class func gifImageWithURL(_ gifUrl: Swift.String) -> UIKit.UIImage?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public class func gifImageWithName(_ name: Swift.String) -> UIKit.UIImage?
+  #endif
 }
 extension UIKit.UIDevice {
   @_Concurrency.MainActor @preconcurrency public static let modelName: Swift.String
@@ -147,14 +167,18 @@ public class VIDVLivenessFlow {
   @objc deinit
 }
 extension UIKit.UIFont {
+  #if compiler(>=5.3) && $NonescapableTypes
   convenience public init?(familyName: Swift.String)
+  #endif
 }
 @_hasMissingDesignatedInitializers @available(iOS 12.0, *)
 public class CoreDataManager {
   @objc deinit
 }
-@_inheritsConvenienceInitializers @objc(VIDVLivenessErrorLogEntity) public class VIDVLivenessErrorLogEntity : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+@_inheritsConvenienceInitializers @objc(VIDVLivenessErrorLogEntity) nonisolated public class VIDVLivenessErrorLogEntity : CoreData.NSManagedObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc override nonisolated dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  #endif
   @objc deinit
 }
 public class VIDVLivenessResult : Swift.Codable {
@@ -166,7 +190,9 @@ public class VIDVLivenessResult : Swift.Codable {
   public var facematchTransactionID: Swift.String?
   public var livenessTransactionID: Swift.String?
   public var hmacDataList: [VIDVLiveness.HMACData]?
+  #if compiler(>=5.3) && $NonescapableTypes
   public init(livenessSuccess: Swift.Bool?, facematchSuccess: Swift.Bool?, capturedImage: Swift.String?, auditingCaseCreated: Swift.Bool? = false, auditingRequired: Swift.Bool? = false, facematchTransactionID: Swift.String?, livenessTransactionID: Swift.String? = nil, hmacDataList: [VIDVLiveness.HMACData]?)
+  #endif
   @objc deinit
   public func encode(to encoder: any Swift.Encoder) throws
   required public init(from decoder: any Swift.Decoder) throws
@@ -175,7 +201,9 @@ public class HMACData : Swift.Codable {
   public var serviceID: Swift.String?
   public var hmacDigest: Swift.String?
   public var rawResponse: Swift.String?
+  #if compiler(>=5.3) && $NonescapableTypes
   public init(serviceID: Swift.String?, hmacDigest: Swift.String?, rawResponse: Swift.String?)
+  #endif
   @objc deinit
   public func encode(to encoder: any Swift.Encoder) throws
   required public init(from decoder: any Swift.Decoder) throws
@@ -193,45 +221,57 @@ public class VIDVDetectedFace : Swift.Codable {
 @available(iOS 12.0, *)
 extension VIDVLiveness.VIDVLivenessSessionEntity {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<VIDVLiveness.VIDVLivenessSessionEntity>
-  @objc @NSManaged dynamic public var bundleKey: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var bundleKey: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var service: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var service: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var id: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var id: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var timestamp: Swift.Int64 {
+  #endif
+  @objc @NSManaged nonisolated dynamic public var timestamp: Swift.Int64 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var events: Foundation.NSSet? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var events: Foundation.NSSet? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var errors: Foundation.NSSet? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var errors: Foundation.NSSet? {
     @objc get
     @objc set
   }
+  #endif
 }
 extension VIDVLiveness.VIDVLivenessSessionEntity {
-  @objc(addEventsObject:) @NSManaged dynamic public func addToEvents(_ value: VIDVLiveness.VIDVLivenessEventsLogEntity)
-  @objc(removeEventsObject:) @NSManaged dynamic public func removeFromEvents(_ value: VIDVLiveness.VIDVLivenessEventsLogEntity)
-  @objc(addEvents:) @NSManaged dynamic public func addToEvents(_ values: Foundation.NSSet)
-  @objc(removeEvents:) @NSManaged dynamic public func removeFromEvents(_ values: Foundation.NSSet)
+  @objc(addEventsObject:) @NSManaged nonisolated dynamic public func addToEvents(_ value: VIDVLiveness.VIDVLivenessEventsLogEntity)
+  @objc(removeEventsObject:) @NSManaged nonisolated dynamic public func removeFromEvents(_ value: VIDVLiveness.VIDVLivenessEventsLogEntity)
+  @objc(addEvents:) @NSManaged nonisolated dynamic public func addToEvents(_ values: Foundation.NSSet)
+  @objc(removeEvents:) @NSManaged nonisolated dynamic public func removeFromEvents(_ values: Foundation.NSSet)
 }
 extension VIDVLiveness.VIDVLivenessSessionEntity {
-  @objc(addErrorsObject:) @NSManaged dynamic public func addToErrors(_ value: VIDVLiveness.VIDVLivenessErrorLogEntity)
-  @objc(removeErrorsObject:) @NSManaged dynamic public func removeFromErrors(_ value: VIDVLiveness.VIDVLivenessErrorLogEntity)
-  @objc(addErrors:) @NSManaged dynamic public func addToErrors(_ values: Foundation.NSSet)
-  @objc(removeErrors:) @NSManaged dynamic public func removeFromErrors(_ values: Foundation.NSSet)
+  @objc(addErrorsObject:) @NSManaged nonisolated dynamic public func addToErrors(_ value: VIDVLiveness.VIDVLivenessErrorLogEntity)
+  @objc(removeErrorsObject:) @NSManaged nonisolated dynamic public func removeFromErrors(_ value: VIDVLiveness.VIDVLivenessErrorLogEntity)
+  @objc(addErrors:) @NSManaged nonisolated dynamic public func addToErrors(_ values: Foundation.NSSet)
+  @objc(removeErrors:) @NSManaged nonisolated dynamic public func removeFromErrors(_ values: Foundation.NSSet)
 }
-@_inheritsConvenienceInitializers @objc(VIDVLivenessSessionEntity) public class VIDVLivenessSessionEntity : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+@_inheritsConvenienceInitializers @objc(VIDVLivenessSessionEntity) nonisolated public class VIDVLivenessSessionEntity : CoreData.NSManagedObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc override nonisolated dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  #endif
   @objc deinit
 }
 public class BuilderValidation {
@@ -258,7 +298,9 @@ public enum VIDVLivenessLanguage : Swift.String, Swift.CaseIterable {
   case arabic
   case english
   case french
+  #if compiler(>=5.3) && $NonescapableTypes
   public init?(rawValue: Swift.String)
+  #endif
   public typealias AllCases = [VIDVLiveness.VIDVLivenessLanguage]
   public typealias RawValue = Swift.String
   nonisolated public static var allCases: [VIDVLiveness.VIDVLivenessLanguage] {
@@ -307,34 +349,44 @@ public enum SafeURLError : Swift.Error {
 }
 extension VIDVLiveness.VIDVLivenessErrorLogEntity {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<VIDVLiveness.VIDVLivenessErrorLogEntity>
-  @objc @NSManaged dynamic public var code: Swift.Int16 {
+  @objc @NSManaged nonisolated dynamic public var code: Swift.Int16 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var message: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var message: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var date: Foundation.Date? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var date: Foundation.Date? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var timestamp: Swift.Int64 {
+  #endif
+  @objc @NSManaged nonisolated dynamic public var timestamp: Swift.Int64 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var screen: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var screen: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var type: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var type: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var session: VIDVLiveness.VIDVLivenessSessionEntity? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var session: VIDVLiveness.VIDVLivenessSessionEntity? {
     @objc get
     @objc set
   }
+  #endif
 }
 @_hasMissingDesignatedInitializers public class VIDVLivenessEvent : Swift.Codable {
   public var key: Swift.String?
@@ -372,8 +424,12 @@ public class VIDVLivenessBuilder {
   @available(*, deprecated, message: "This function is deprecated.And will be removed in the future.")
   public func setFailTrials(_ failTrials: Swift.Int) -> VIDVLiveness.VIDVLivenessBuilder
   public func setInstructionTimer(_ instructionTimer: Swift.Int) -> VIDVLiveness.VIDVLivenessBuilder
+  #if compiler(>=5.3) && $NonescapableTypes
   public func setFaceMatchImage(_ faceMatchImage: UIKit.UIImage?) -> VIDVLiveness.VIDVLivenessBuilder
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public func setFrontTransactionID(_ frontTransactionID: Swift.String?) -> VIDVLiveness.VIDVLivenessBuilder
+  #endif
   public func setLogsDelegate(_ delegate: any VIDVLiveness.VIDVLivenessLogsDelegate) -> VIDVLiveness.VIDVLivenessBuilder
   public func withoutLookRight() -> VIDVLiveness.VIDVLivenessBuilder
   public func withoutLookLeft() -> VIDVLiveness.VIDVLivenessBuilder
